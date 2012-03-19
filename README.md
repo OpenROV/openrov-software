@@ -24,7 +24,8 @@ Requirements
 - Node.js:  [http://nodejs.org/](http://nodejs.org/)
 - Socket.io:  [http://socket.io/](http://socket.io/)
 
-###For installation### (pre-OpenROV-custom-image):
+###For installation
+(pre-OpenROV-custom-image):
 
 - g++
 - make
