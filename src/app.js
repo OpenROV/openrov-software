@@ -1,7 +1,7 @@
 /* 
  * Created for OpenROV:  www.openrov.com
  * Author:  Bran Sorem (www.bransorem.com)
- * Date: 03/19/12
+ * Date: 04/21/12
  * 
  * Description:
  * This script is the Node.js server for OpenROV.  It creates a server and instantiates an OpenROV
@@ -17,12 +17,19 @@
 var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app)
   , fs = require('fs')
+//  , serialPort = require('serialport').SerialPort
+//  , serial = new serialPort('/dev/ttyACM0', { baud: 9600 })
+//  , serial = new serialPort('/dev/ttyUSB0', { baud: 9600 })
   , OpenROV = require('./OpenROV.js');
+
+// Serial controls Arduino.  TODO: cut out Arduino and use BeagleBone for PWM
+// ACM0 - Uno
+// USB0 - Duemillanove
 
 // Globals =================
 var mutex = 0;
 var rov = new OpenROV();
-var DELAY = 200;  // delay between frame grabs in milliseconds (roughly)
+var DELAY = 67;
 var PORT = 8080;
 
 // no debug messages
@@ -47,15 +54,20 @@ function handler (req, res) {
 io.sockets.on('connection', function (socket) {
   socket.send('initialize');  // opens socket with client
 
-  // when frame emits, send it over socket
+//  socket.on('key', function(key){
+//    serial.write(key);
+//  });
+
+  // when frame emits, send it
   rov.on('frame', function(img){
-    socket.emit('frame', img);
+    socket.volatile.emit('frame', img);
   });
 
-  // only run one instance
+  // run one instance, but push frames to all clients
   if (mutex == 0){
     rov.init();
     rov.capture({'delay' : DELAY});
+//    serial.write('1');
   }
   mutex++;
 });
@@ -67,3 +79,4 @@ io.sockets.on('disconnect', function(socket){
     rov.close();  // no need to keep running the process, no one is watching
   }
 });
+

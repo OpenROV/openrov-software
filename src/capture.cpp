@@ -1,7 +1,7 @@
 /* 
  * Created for OpenROV:  www.openrov.com
  * Author:  Bran Sorem (www.bransorem.com)
- * Date: 03/19/12
+ * Date: 04/21/12
  * 
  * Description:
  * This program takes a folder (with trailing /) as an argument to determine where to store images.
@@ -31,6 +31,9 @@ int main(int argc, char* argv[]){
 
   VideoCapture cap(0);
 
+  cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+  cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+
   if (!cap.isOpened()) return -1;
 
   // respond with success
@@ -38,6 +41,7 @@ int main(int argc, char* argv[]){
 
   std::string input;
   Mat frame;
+//  Mat framesm;
   // run until input -> 'exit'
   for (;;){
     std::cin >> input;  // file name (including extension)
@@ -47,8 +51,13 @@ int main(int argc, char* argv[]){
     cap >> frame;
     string output = file + input;
     imwrite(output, frame);
+
+//    output = file + input;
+//    resize(frame, framesm, Size(320, 240), 0, 0, INTER_LINEAR);
+//    imwrite(output, framesm);
     std::cout << input;  // respond with file name, signifies save finished (causes emitter to respond)
   }
 
   return 0;
 }
+
