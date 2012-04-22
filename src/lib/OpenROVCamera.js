@@ -77,7 +77,7 @@ var OpenROVCamera = function (options) {
 
     path.exists(options.device, function (exists) {
       // uh-oh, no camera connected!
-      if (!exists) return camera.emit('error.device', new Error('no device (' + self.opts.device + ').'));
+      if (!exists) return camera.emit('error.device', new Error('no device (' + options.device + ').'));
       capture_process.stdin.write(getTime() + format + '\n\r');
     });
   };
@@ -90,6 +90,7 @@ var OpenROVCamera = function (options) {
 
     // open file from system, then emit to server
     fs.readFile(imgFile, 'base64', function(err, img) {
+      console.error('error reading ' +  imgFile, err);
       if (!err) camera.emit('frame', img);
       else console.error(err);
       fs.unlink(imgFile);  // comment out this line to store footage on ROV (warning: takes up lots of space)
