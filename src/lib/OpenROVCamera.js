@@ -85,6 +85,8 @@ var OpenROVCamera = function (options) {
         _captured = true;
         if (CONFIG.debug) console.log('starting capture loop with interval:', options.delay);
 
+        callback();
+
         // loop based on delay in milliseconds
         setInterval(grab, options.delay);
       });
