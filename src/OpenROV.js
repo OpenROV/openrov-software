@@ -40,7 +40,7 @@ if (CONFIG.production) serial = new serialPort('/dev/ttyUSB0', { baud: 9600 }) /
 
 // Create dir (current date) to save images into
 var time = new Date();
-var location = time.getFullYear() +
+var location = __dirname + '/../' + time.getFullYear() +
     '-' + time.getMonth() +
     '-' + time.getDate() + '/';
 
