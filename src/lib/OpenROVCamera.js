@@ -34,9 +34,9 @@ var OpenROVCamera = function (options) {
   var capture_process;
   // Create dir (current date) to save images into
   var time = new Date();
-  var location = __dirname + '/../../' + time.getFullYear() +
+  var location = path.resolve(__dirname + '/../../' + time.getFullYear() +
       '-' + time.getMonth() +
-      '-' + time.getDate() + '/';
+      '-' + time.getDate() + '/');
 
   // Open capture app as a child process
   var cmd = './capture';  // rename to correspond with your C++ compilation
