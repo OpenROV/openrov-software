@@ -1,0 +1,16 @@
+body { text-align: center; }
+
+#video {
+  width: 640px;
+  height: 480px;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.red {
+  color:red;
+}
+
+.green {
+  color:green;
+}
