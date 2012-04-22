@@ -26,6 +26,8 @@ var socket = require('socket.io'),
   fs = require('fs'),
   path = require('path');
 
+var CONFIG = require('./config');
+
 // var serialPort = require('serialport').SerialPort
 //    , serial = new serialPort('/dev/ttyACM0', { baud: 9600 })
 //    , serial = new serialPort('/dev/ttyUSB0', { baud: 9600 })
@@ -69,7 +71,7 @@ OpenROV.prototype.sendCommand = function(throttle, yaw, lift) {
   right = Math.round(limit(right, -127, 127)) + OFFSET;
   lift = Math.round(lift) + 128;
   var command = left + ',' + right + ',' + lift + ';';
-  if(process.env.NODE_DEBUG) console.error("DEBUG: command", command);
+  if(CONFIG.debug) console.error("command", command);
   // serialPort.write(command);
 }
 

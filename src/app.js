@@ -21,6 +21,11 @@ var app = express.createServer(express.static('static'))
   , fs = require('fs')
   , OpenROV = require('./OpenROV.js');
 
+var CONFIG = require('./config');
+
+app.get('/config.js', function(req, res) {
+  res.send('var CONFIG = ' + JSON.stringify(CONFIG));
+});
 
 // Globals =================
 var rov = new OpenROV();

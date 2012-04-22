@@ -19,12 +19,13 @@
   <div id="gamepad"></div>
   <img src="" alt="OpenROV" id="video" />
   <script src="/js/jquery-1.7.2.min.js"></script>
+  <script src="/config.js"></script>
   <script src="/js/gamepad.js"></script>
   <script src="/js/keypad.js"></script>
   <script>
-    var DEBUG = false;
+    var DEBUG = CONFIG.debug;
     $(function() {
-      var SAMPLE_FREQ = 3; // Hz
+      var SAMPLE_FREQ = CONFIG.sample_freq; // Hz
       var SAMPLE_PERIOD = 1000 / SAMPLE_FREQ; //ms
 
       var gp = new GamePad();
@@ -48,7 +49,7 @@
         socket.emit('control_update', controls);
       }, SAMPLE_PERIOD);
 
-      var DEAD_ZONE = 10;
+      var DEAD_ZONE = CONFIG.dead_zone;
       var MAX = 127;
       function deaden(val) {
         var sign = val / Math.abs(val);
