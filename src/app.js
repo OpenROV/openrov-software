@@ -63,7 +63,7 @@ io.sockets.on('disconnect', function(socket){
 });
 
 camera.on('error.device', function(err) {
-  console.error(err);
+  console.error('camera emitted an error:', err);
 });
 
 process.on('SIGTERM', function() {
