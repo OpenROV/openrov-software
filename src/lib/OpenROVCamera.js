@@ -107,12 +107,12 @@ var OpenROVCamera = function (options) {
     // remove any trailing newline chars
     var file = response.toString().replace(/(\r\n|\n|\r)/gm, '');
     if (file === location) return console.log('initialized capture process.');
-    if (CONFIG.debug) console.log('Reading', file);
+    // if (CONFIG.debug) console.log('Reading', file);
 
     // open file from system, then emit to server
     fs.readFile(file, 'base64', function(err, img) {
       if (err) return console.error('error reading file', file, err);
-      if (CONFIG.debug) console.log('read file', file);
+      // if (CONFIG.debug) console.log('read file', file);
       camera.emit('frame', img);
       fs.unlink(file);  // comment out this line to store footage on ROV (warning: takes up lots of space)
     });
