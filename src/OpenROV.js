@@ -117,7 +117,7 @@ OpenROV.prototype.close = function(){
 // Captures a frame from camera and emits it as 'frame'
 // ====================================================
 OpenROV.prototype.capture = function (options, callback){
-  if(this._capturing) return process.nextTick(callback);
+  if(this._capturing) return (callback? process.nextTick(callback): '');
   this._capturing = true;
   this.opts = mixin(options, this.opts);
   var rov = this;
