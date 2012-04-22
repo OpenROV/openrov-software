@@ -57,6 +57,11 @@ io.sockets.on('connection', function (socket) {
 //    serial.write('1');
   }
   mutex++;
+
+  socket.on('control_update', function(controls) {
+    rov.sendCommand(controls.throttle, controls.yaw, controls.lift);
+  });
+
 });
 
 // SOCKET disconnection ==============================
@@ -66,6 +71,5 @@ io.sockets.on('disconnect', function(socket){
     rov.close();  // no need to keep running the process, no one is watching
   }
 });
-
 
 app.listen(PORT);

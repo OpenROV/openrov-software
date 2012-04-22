@@ -258,7 +258,10 @@ body { text-align: center; }
 <script src="/js/gamepad.js"></script>
 <script>
 $(function() {
-  console.log('hello!')
+  var DEBUG = false;
+  var SAMPLE_FREQ = 30; // Hz
+  var SAMPLE_PERIOD = 1000 / SAMPLE_FREQ; //ms
+
   var gp = new GamePad();
   setInterval(function() {
     var send = '';
@@ -268,17 +271,28 @@ $(function() {
     var yaw = axes[0] * 127;
     var lift = axes[3] * -127;
     var controls = {
-      throttle: throttle,  // -127 == aft, 127 == forward
-      yaw: yaw, // -127 == full left, 127 == full right
-      lift: lift // -127 == fall, 127 == rise
+      throttle: deaden(throttle),  // -127 == aft, 127 == forward
+      yaw: deaden(yaw), // -127 == full left, 127 == full right
+      lift: deaden(lift) // -127 == fall, 127 == rise
     };
-    // console.error("DEBUG: throttle", throttle);
-    // console.error("DEBUG: yaw", yaw);
-    // console.error("DEBUG: lift", lift);
+    if(DEBUG) {
+      console.error("DEBUG: throttle", throttle);
+      console.error("DEBUG: yaw", yaw);
+      console.error("DEBUG: lift", lift);
+    }
     socket.emit('control_update', controls);
-    // socket.emit('key', 'throttle(' + throttle + ');');
-  },1000);
+  }, SAMPLE_PERIOD);
 
+  var DEAD_ZONE = 10;
+  var MAX = 127;
+  function deaden(val) {
+    var sign = val / Math.abs(val);
+    val = Math.abs(val);
+    if (val < DEAD_ZONE) return 0;
+    var m = (MAX + DEAD_ZONE) / (MAX - DEAD_ZONE);
+    val = m * (val - DEAD_ZONE) - DEAD_ZONE;
+    return sign * val;
+  }
 });
 </script>
 </body>

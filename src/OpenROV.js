@@ -26,6 +26,10 @@ var socket = require('socket.io'),
   fs = require('fs'),
   path = require('path');
 
+// var serialPort = require('serialport').SerialPort
+//    , serial = new serialPort('/dev/ttyACM0', { baud: 9600 })
+//    , serial = new serialPort('/dev/ttyUSB0', { baud: 9600 })
+
 // Create dir (current date) to save images into
 var time = new Date();
 var location = time.getFullYear() +
@@ -48,6 +52,25 @@ var OpenROV = function (options){
   return this;
 };
 sys.inherits(OpenROV, events.EventEmitter);
+
+var OFFSET = 128;
+OpenROV.prototype.sendCommand = function(throttle, yaw, lift) {
+  var left = 0,
+      right = 0;
+  left = right = throttle;
+  left += yaw;
+  right -= yaw;
+  left = Math.round(limit(left, -127, 127)) + OFFSET;
+  right = Math.round(limit(right, -127, 127)) + OFFSET;
+  lift = Math.round(lift) + 128;
+  var command = left + ',' + right + ',' + lift + ';';
+  // console.error("DEBUG: command", command);
+  // serialPort.write(command);
+}
+
+function limit(value, l, h) {
+  return Math.max(l, Math.min(h, value));
+}
 
 // ============ init() ============
 // create directory to store photos

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "express": "",
+    "serialport": "",
     "socket.io": ""
   },
   "devDependencies": {},
