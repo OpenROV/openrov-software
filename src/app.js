@@ -62,6 +62,16 @@ io.sockets.on('disconnect', function(socket){
   if(connections === 0) rov.close();
 });
 
+process.on('SIGTERM', function() {
+  rov.close();
+  process.exit(0);
+});
+
+process.on('SIGINT', function() {
+  rov.close();
+  process.exit(0);
+})
+
 process.on('uncaughtException', function(err) {
   rov.close();
   throw err;
