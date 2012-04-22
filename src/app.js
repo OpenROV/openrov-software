@@ -53,6 +53,8 @@ io.sockets.on('connection', function (socket) {
       camera.close();
       return console.error('couldn\'t initialize camera. got:', err);
     }
+
+    console.log('initialized camera, adding listener for \'frame\' event');
     // when frame emits, send it
     camera.on('frame', function(img){
       if (CONFIG.debug) console.log('emitting frame')
