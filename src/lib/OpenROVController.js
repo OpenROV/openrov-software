@@ -22,7 +22,7 @@ var OpenROVController = function() {
     left = map(left);
     right = map(right);
     lift = Math.round(exp(lift)) + 128;
-    var command = left + ',' + right + ',' + lift + ';';
+    var command = 'go(' + left + ',' + right + ',' + lift + ');';
     if(CONFIG.debug) console.error("command", command);
     if(CONFIG.production) serial.write(command);
   }
