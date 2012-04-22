@@ -1,0 +1,18 @@
+{
+  "author": "",
+  "name": "openrov-software",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/OpenROV/openrov-software.git"
+  },
+  "dependencies": {
+    "express": "",
+    "socket.io": ""
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}

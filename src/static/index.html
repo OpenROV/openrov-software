@@ -3,6 +3,9 @@
 <head><title>OpenROV</title>
 
 <script src="/socket.io/socket.io.js"></script>
+<script>
+
+</script>
 
 <script>
 var socket = io.connect();
@@ -102,7 +105,7 @@ socket.on('frame', function(data) {
           }
         }
       }
-	}
+  }
   };
 
   // unset modifier keys on keyup
@@ -227,9 +230,9 @@ key('=',     function(){ socket.emit('key', 'move_up;'); });
 key('-',     function(){ socket.emit('key', 'move_down;'); });
 key('h',     function(){ socket.emit('key', 'h'); });
 key('l',     function(){ socket.emit('key', 'l'); });
-key('1',     function(){ socket.emit('key', 'throttle_low;'); });
-key('2',     function(){ socket.emit('key', 'throttle_med;'); });
-key('3',     function(){ socket.emit('key', 'throttle_high;'); });
+key('1',     function(){ socket.emit('key', 'throttle(x);'); });
+key('2',     function(){ socket.emit('key', 'throttle(x);'); });
+key('3',     function(){ socket.emit('key', 'throttle(x);'); });
 key('q',     function(){ socket.emit('key', 'q'); });
 key('a',     function(){ socket.emit('key', 'a'); });
 key('z',     function(){ socket.emit('key', 'z'); });
@@ -251,6 +254,32 @@ body { text-align: center; }
 <body>
 
 <img src="" alt="OpenROV" id="video" />
+<script src="/js/jquery-1.7.2.min.js"></script>
+<script src="/js/gamepad.js"></script>
+<script>
+$(function() {
+  console.log('hello!')
+  var gp = new GamePad();
+  setInterval(function() {
+    var send = '';
+    var buttons = gp.getButtons();
+    var axes = gp.getAxes();
+    var throttle = axes[1] * -127;
+    var yaw = axes[0] * 127;
+    var lift = axes[3] * -127;
+    var controls = {
+      throttle: throttle,  // -127 == aft, 127 == forward
+      yaw: yaw, // -127 == full left, 127 == full right
+      lift: lift // -127 == fall, 127 == rise
+    };
+    // console.error("DEBUG: throttle", throttle);
+    // console.error("DEBUG: yaw", yaw);
+    // console.error("DEBUG: lift", lift);
+    socket.emit('control_update', controls);
+    // socket.emit('key', 'throttle(' + throttle + ');');
+  },1000);
 
+});
+</script>
 </body>
 </html>
