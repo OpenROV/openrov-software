@@ -72,16 +72,19 @@ camera.on('error.device', function(err) {
 });
 
 process.on('SIGTERM', function() {
+  console.error('got SIGTERM, shutting down...');
   camera.close();
   process.exit(0);
 });
 
 process.on('SIGINT', function() {
+  console.error('got SIGINT, shutting down...');
   camera.close();
   process.exit(0);
 })
 
 process.on('uncaughtException', function(err) {
+  console.error('Uncaught Exception:', err);
   camera.close();
   throw err;
   process.exit(1);
