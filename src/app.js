@@ -29,8 +29,7 @@ app.get('/config.js', function(req, res) {
 
 // Globals =================
 var rov = new OpenROV();
-var DELAY = 67;
-var PORT = 8080;
+var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 
 // no debug messages
 io.configure(function(){ io.set('log level', 1); });
@@ -67,4 +66,4 @@ process.on('uncaughtException', function(err) {
   process.exit(1);
 });
 
-app.listen(PORT);
+app.listen(CONFIG.port);

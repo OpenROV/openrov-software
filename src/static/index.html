@@ -16,8 +16,7 @@
     <script src="/js/keypad.js"></script>
     <script>
       $(function() {
-        var SAMPLE_FREQ = CONFIG.sample_freq; // Hz
-        var SAMPLE_PERIOD = 1000 / SAMPLE_FREQ; //ms
+        var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms
 
         var gp = new GamePad();
         var kp = new KeyPad();
