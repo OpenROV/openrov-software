@@ -86,7 +86,7 @@ process.on('SIGINT', function() {
 process.on('uncaughtException', function(err) {
   console.error('Uncaught Exception:', err);
   camera.close();
-  throw err;
+  // throw err;
   process.exit(1);
 });
 
