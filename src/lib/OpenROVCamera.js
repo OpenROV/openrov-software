@@ -34,7 +34,7 @@ var OpenROVCamera = function (options) {
   var capture_process;
   // Create dir (current date) to save images into
   var time = new Date();
-  var location = __dirname + '/../' + time.getFullYear() +
+  var location = __dirname + '/../../' + time.getFullYear() +
       '-' + time.getMonth() +
       '-' + time.getDate() + '/';
 
@@ -85,6 +85,7 @@ var OpenROVCamera = function (options) {
   function handleCaptureData(response) {
     // remove any trailing newline chars
     var file = response.toString().replace(/(\r\n|\n|\r)/gm, '');
+    console.error("DEBUG: file", file);
     var imgFile = location + file;
 
     if (CONFIG.debug) console.log('Sending: ' + file);
