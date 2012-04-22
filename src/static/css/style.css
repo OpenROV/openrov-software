@@ -4,7 +4,7 @@ body {
 }
 #video {
   width: 640px;
-  height: 480px;
+  min-height: 480px;
   margin-top: 40px;
 }
 
