@@ -19,14 +19,15 @@ var express = require('express');
 var app = express.createServer(express.static(__dirname + '/static'))
   , io = require('socket.io').listen(app)
   , fs = require('fs')
-  , OpenROV = require('./OpenROV.js');
+  , OpenROVCamera = require('./lib/OpenROVCamera')
+  , OpenROVController = require('./lib/OpenROVController')
+  ;
 
-var CONFIG = require('./config');
+var CONFIG = require('./lib/config');
 
-
-// Globals =================
-var rov = new OpenROV();
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
+var camera = new OpenROVCamera({delay : DELAY});
+var controller = new OpenROVController();
 
 
 app.get('/config.js', function(req, res) {
@@ -40,17 +41,16 @@ var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
   connections++;
-  rov.init();
-  rov.capture({'delay' : DELAY});
+  camera.capture();
   socket.send('initialize');  // opens socket with client
 
   // when frame emits, send it
-  rov.on('frame', function(img){
+  camera.on('frame', function(img){
     socket.volatile.emit('frame', img);
   });
 
   socket.on('control_update', function(controls) {
-    rov.sendCommand(controls.throttle, controls.yaw, controls.lift);
+    controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
   });
 
 });
@@ -62,18 +62,22 @@ io.sockets.on('disconnect', function(socket){
   if(connections === 0) rov.close();
 });
 
+camera.on('error.device', function(err) {
+  console.error(err);
+});
+
 process.on('SIGTERM', function() {
-  rov.close();
+  camera.close();
   process.exit(0);
 });
 
 process.on('SIGINT', function() {
-  rov.close();
+  camera.close();
   process.exit(0);
 })
 
 process.on('uncaughtException', function(err) {
-  rov.close();
+  camera.close();
   throw err;
   process.exit(1);
 });
