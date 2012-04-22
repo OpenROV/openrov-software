@@ -109,7 +109,7 @@ var OpenROVCamera = function (options) {
 
     // open file from system, then emit to server
     fs.readFile(file, 'base64', function(err, img) {
-      if (!err) return console.error('error reading file', file, err);
+      if (err) return console.error('error reading file', file, err);
       if (CONFIG.debug) console.log('read file', file);
       camera.emit('frame', img);
       fs.unlink(file);  // comment out this line to store footage on ROV (warning: takes up lots of space)
