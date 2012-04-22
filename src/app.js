@@ -41,18 +41,23 @@ var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
   connections++;
-  camera.capture();
-  socket.send('initialize');  // opens socket with client
+  camera.capture(function(err) {
+    if (err) {
+      connections--;
+      camera.close();
+      return console.error('couldn\'t initialize camera. got:', err);
+    }
+    socket.send('initialize');  // opens socket with client
 
-  // when frame emits, send it
-  camera.on('frame', function(img){
-    socket.volatile.emit('frame', img);
+    // when frame emits, send it
+    camera.on('frame', function(img){
+      socket.volatile.emit('frame', img);
+    });
+
+    socket.on('control_update', function(controls) {
+      controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
+    });
   });
-
-  socket.on('control_update', function(controls) {
-    controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
-  });
-
 });
 
 
