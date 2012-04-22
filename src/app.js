@@ -57,7 +57,7 @@ io.sockets.on('connection', function (socket) {
     console.log('initialized camera, adding listener for \'frame\' event');
     // when frame emits, send it
     camera.on('frame', function(img){
-      if (CONFIG.debug) console.log('emitting frame')
+      // if (CONFIG.debug) console.log('emitting frame')
       socket.volatile.emit('frame', img);
     });
   });
