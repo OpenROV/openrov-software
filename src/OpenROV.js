@@ -32,7 +32,7 @@ var serialPort = require('serialport').SerialPort
 //    , serial = new serialPort('/dev/ttyACM0', { baud: 9600 })
    , serial;
 
-if (!CONFIG.debug) serial = new serialPort('/dev/ttyUSB0', { baud: 9600 }) // Arduino Duemilanove
+if (CONFIG.production) serial = new serialPort('/dev/ttyUSB0', { baud: 9600 }) // Arduino Duemilanove
 
 // Serial controls Arduino.  TODO: cut out Arduino and use BeagleBone for PWM
 // ACM0 - Uno
@@ -74,7 +74,7 @@ OpenROV.prototype.sendCommand = function(throttle, yaw, lift) {
   lift = Math.round(lift) + 128;
   var command = left + ',' + right + ',' + lift + ';';
   if(CONFIG.debug) console.error("command", command);
-  else serial.write(command);
+  if(CONFIG.production) serial.write(command);
 }
 
 function limit(value, l, h) {

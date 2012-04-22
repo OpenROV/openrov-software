@@ -15,7 +15,6 @@
     <script src="/js/gamepad.js"></script>
     <script src="/js/keypad.js"></script>
     <script>
-      var DEBUG = CONFIG.debug;
       $(function() {
         var SAMPLE_FREQ = CONFIG.sample_freq; // Hz
         var SAMPLE_PERIOD = 1000 / SAMPLE_FREQ; //ms
@@ -33,7 +32,7 @@
           }
           var controls = {};
           for(var i in positions) controls[i] = deaden(positions[i] * 127);
-          if(DEBUG) {
+          if(CONFIG.debug) {
             console.error("DEBUG: throttle", controls.throttle);
             console.error("DEBUG: yaw", controls.yaw);
             console.error("DEBUG: lift", controls.lift);
