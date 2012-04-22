@@ -16,20 +16,22 @@
 
 var express = require('express');
 
-var app = express.createServer(express.static('static'))
+var app = express.createServer(express.static(__dirname + '/static'))
   , io = require('socket.io').listen(app)
   , fs = require('fs')
   , OpenROV = require('./OpenROV.js');
 
 var CONFIG = require('./config');
 
-app.get('/config.js', function(req, res) {
-  res.send('var CONFIG = ' + JSON.stringify(CONFIG));
-});
 
 // Globals =================
 var rov = new OpenROV();
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
+
+
+app.get('/config.js', function(req, res) {
+  res.send('var CONFIG = ' + JSON.stringify(CONFIG));
+});
 
 // no debug messages
 io.configure(function(){ io.set('log level', 1); });
