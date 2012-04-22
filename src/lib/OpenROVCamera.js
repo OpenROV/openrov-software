@@ -49,24 +49,32 @@ var OpenROVCamera = function (options) {
 
   camera.close = function() {
     if (!_capturing) return;
+    if (CONFIG.debug) console.log('closing camera on', options.device);
     _capturing = false;
+    if (CONFIG.debug) console.log('writing \'exit\' to capture process');
     capture_process.stdin.write('exit');
+    if (CONFIG.debug) console.log('sending SIGHUP to capture process');
     process.kill(capture_process.pid, 'SIGHUP');
   }
 
   camera.capture = function (callback) {
     if (_capturing) return process.nextTick(callback);
+    if (CONFIG.debug) console.log('initiating camera on', options.device);
+    if (CONFIG.debug) console.log('writing images to ', location);
 
     if (!path.existsSync(location)) fs.mkdirSync(location, 0755);
 
     path.exists(options.device, function(exists) {
       if (!exists) return callback(new Error(options.device + ' does not exist'));
+      if (CONFIG.debug) console.log(options.device, 'found');
       _capturing = true;
+      if (CONFIG.debug) console.log('spawning capture process...');
       capture_process = spawn(cmd, [location]);
 
       // when ./capture responds, image has been saved
       capture_process.stdout.on('data', handleCaptureData);
 
+      if (CONFIG.debug) console.log('starting capture loop with interval:', options.delay);
       // loop based on delay in milliseconds
       setInterval(grab, options.delay);
     });
@@ -85,7 +93,7 @@ var OpenROVCamera = function (options) {
   function handleCaptureData(response) {
     // remove any trailing newline chars
     var file = response.toString().replace(/(\r\n|\n|\r)/gm, '');
-    if (CONFIG.debug) console.error("got file back:", file);
+    if (CONFIG.debug) console.error('got file back:', file);
     var imgFile = path.resolve(location + file);
     if (CONFIG.debug) console.log('Sending: ' + imgFile);
 
