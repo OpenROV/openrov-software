@@ -106,11 +106,10 @@ var OpenROVCamera = function (options) {
     var file = response.toString().replace(/(\r\n|\n|\r)/gm, '');
     if (file === location) return console.log('initialized capture process.');
     if (CONFIG.debug) console.error('got file back:', file);
-    var imgFile = path.resolve(location + file);
-    if (CONFIG.debug) console.log('Sending: ' + imgFile);
+    if (CONFIG.debug) console.log('Sending: ' + file);
 
     // open file from system, then emit to server
-    fs.readFile(imgFile, 'base64', function(err, img) {
+    fs.readFile(file, 'base64', function(err, img) {
       if (!err) camera.emit('frame', img);
       else console.error(err);
       fs.unlink(imgFile);  // comment out this line to store footage on ROV (warning: takes up lots of space)
