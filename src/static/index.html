@@ -1,65 +1,57 @@
 <!DOCTYPE html>
 <html>
-<head><title>OpenROV</title>
+  <head>
+    <title>OpenROV</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery-1.7.2.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
 
-<script src="/socket.io/socket.io.js"></script>
-<link rel="stylesheet" href="/css/style.css">
-<script>
-  var socket = io.connect();
+  <body>
+    <div id="gamepad"></div>
+    <img src="" alt="OpenROV" id="video" />
+    <script src="/config.js"></script>
+    <script src="/js/frame.js"></script>
+    <script src="/js/gamepad.js"></script>
+    <script src="/js/keypad.js"></script>
+    <script>
+      var DEBUG = CONFIG.debug;
+      $(function() {
+        var SAMPLE_FREQ = CONFIG.sample_freq; // Hz
+        var SAMPLE_PERIOD = 1000 / SAMPLE_FREQ; //ms
 
-  // =====================================================
-  // Handle video input
-  socket.on('frame', function(data) {
-    document.getElementById('video').src = 'data:image/jpeg;base64,' + data;
-  });
-</script>
+        var gp = new GamePad();
+        var kp = new KeyPad();
+        setInterval(function() {
+          var positions;
+          if(gp.isAvailable()) {
+            $("#gamepad").html('Game pad is attached').removeClass('red').addClass('green');
+            positions = gp.getPositions();
+          } else {
+            $("#gamepad").html('Game pad is not attached (use keyboard)').removeClass('green').addClass('red');
+            positions = kp.getPositions();
+          }
+          var controls = {};
+          for(var i in positions) controls[i] = deaden(positions[i] * 127);
+          if(DEBUG) {
+            console.error("DEBUG: throttle", controls.throttle);
+            console.error("DEBUG: yaw", controls.yaw);
+            console.error("DEBUG: lift", controls.lift);
+          }
+          socket.emit('control_update', controls);
+        }, SAMPLE_PERIOD);
 
-</head>
-<body>
-  <div id="gamepad"></div>
-  <img src="" alt="OpenROV" id="video" />
-  <script src="/js/jquery-1.7.2.min.js"></script>
-  <script src="/config.js"></script>
-  <script src="/js/gamepad.js"></script>
-  <script src="/js/keypad.js"></script>
-  <script>
-    var DEBUG = CONFIG.debug;
-    $(function() {
-      var SAMPLE_FREQ = CONFIG.sample_freq; // Hz
-      var SAMPLE_PERIOD = 1000 / SAMPLE_FREQ; //ms
-
-      var gp = new GamePad();
-      var kp = new KeyPad();
-      setInterval(function() {
-        var positions;
-        if(gp.isAvailable()) {
-          $("#gamepad").html('Game pad is attached').removeClass('red').addClass('green');
-          positions = gp.getPositions();
-        } else {
-          $("#gamepad").html('Game pad is not attached (use keyboard)').removeClass('green').addClass('red');
-          positions = kp.getPositions();
+        var DEAD_ZONE = CONFIG.dead_zone;
+        var MAX = 127;
+        function deaden(val) {
+          var sign = val / Math.abs(val);
+          val = Math.abs(val);
+          if (val < DEAD_ZONE) return 0;
+          var m = (MAX + DEAD_ZONE) / (MAX - DEAD_ZONE);
+          val = m * (val - DEAD_ZONE) - DEAD_ZONE;
+          return sign * val;
         }
-        var controls = {};
-        for(var i in positions) controls[i] = deaden(positions[i] * 127);
-        if(DEBUG) {
-          console.error("DEBUG: throttle", controls.throttle);
-          console.error("DEBUG: yaw", controls.yaw);
-          console.error("DEBUG: lift", controls.lift);
-        }
-        socket.emit('control_update', controls);
-      }, SAMPLE_PERIOD);
-
-      var DEAD_ZONE = CONFIG.dead_zone;
-      var MAX = 127;
-      function deaden(val) {
-        var sign = val / Math.abs(val);
-        val = Math.abs(val);
-        if (val < DEAD_ZONE) return 0;
-        var m = (MAX + DEAD_ZONE) / (MAX - DEAD_ZONE);
-        val = m * (val - DEAD_ZONE) - DEAD_ZONE;
-        return sign * val;
-      }
-    });
-  </script>
-</body>
+      });
+    </script>
+  </body>
 </html>

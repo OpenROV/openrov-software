@@ -1,10 +1,15 @@
-body { text-align: center; }
-
+body {
+  padding-left: 30px;
+  font-family: "Arial";
+}
 #video {
   width: 640px;
   height: 480px;
-  margin: auto;
-  margin-top: 50px;
+  margin-top: 40px;
+}
+
+#gamepad {
+  margin-top:20px;
 }
 
 .red {
