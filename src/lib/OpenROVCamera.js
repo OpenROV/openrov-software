@@ -72,8 +72,13 @@ var OpenROVCamera = function (options) {
       capture_process = spawn(cmd, [location]);
 
       // when ./capture responds, image has been saved
+      capture_process.stderr.on('data', function(data) {
+        console.error('capture err:', data);
+      });
       capture_process.stdout.on('data', handleCaptureData);
-
+      capture_process.on('exit', function(something) {
+        console.error('capture exited:', something);
+      });
       var _captured = false;
       capture_process.stdout.on('data', function() {
         if(_captured) return;
