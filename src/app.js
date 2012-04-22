@@ -63,8 +63,8 @@ io.sockets.on('disconnect', function(socket){
 });
 
 process.on('uncaughtException', function(err) {
-  console.error('uncaughtException', err);
   rov.close();
+  throw err;
   process.exit(1);
 });
 
