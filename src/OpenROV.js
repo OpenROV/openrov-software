@@ -69,19 +69,29 @@ OpenROV.prototype.sendCommand = function(throttle, yaw, lift) {
   left = right = throttle;
   left += yaw;
   right -= yaw;
-  left = Math.round(limit(left, -127, 127));
-  left = (left/Math.abs(left)) * Math.pow(127, Math.abs)left/127);
-  left += OFFSET;
-  right = Math.round(limit(right, -127, 127));
-  right = Math.pow(127, right/127);
-  right += OFFSET;
-  lift = Math.round(lift) + 128;
+  left = map(left);
+  right = map(right);
+  lift = Math.round(exp(lift)) + 128;
   var command = left + ',' + right + ',' + lift + ';';
   if(CONFIG.debug) console.error("command", command);
   if(CONFIG.production) serial.write(command);
 }
 
-function limit(value, l, h) {
+function map(val) {
+  val = limit(val, -127, 127);
+  val = Math.round(exp(val));
+  val += OFFSET;
+  return val;
+}
+
+function exp(val) {
+  if(val === 0) return 0;
+  var sign = val / Math.abs(val);
+  var adj = Math.pow(127, Math.abs(val) / 127);
+  return sign * adj;
+}
+
+function limit(value, l, h) { // truncate anything that goes outside of -127, 127
   return Math.max(l, Math.min(h, value));
 }
 
