@@ -41,21 +41,21 @@ var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
   connections++;
+
+  socket.send('initialize');  // opens socket with client
+
+  socket.on('control_update', function(controls) {
+    controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
+  });
   camera.capture(function(err) {
     if (err) {
       connections--;
       camera.close();
       return console.error('couldn\'t initialize camera. got:', err);
     }
-    socket.send('initialize');  // opens socket with client
-
     // when frame emits, send it
     camera.on('frame', function(img){
       socket.volatile.emit('frame', img);
-    });
-
-    socket.on('control_update', function(controls) {
-      controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
     });
   });
 });
@@ -82,12 +82,5 @@ process.on('SIGINT', function() {
   camera.close();
   process.exit(0);
 })
-
-process.on('uncaughtException', function(err) {
-  console.error('Uncaught Exception:', err);
-  camera.close();
-  // throw err;
-  process.exit(1);
-});
 
 app.listen(CONFIG.port);

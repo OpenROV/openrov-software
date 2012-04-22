@@ -74,9 +74,15 @@ var OpenROVCamera = function (options) {
       // when ./capture responds, image has been saved
       capture_process.stdout.on('data', handleCaptureData);
 
-      if (CONFIG.debug) console.log('starting capture loop with interval:', options.delay);
-      // loop based on delay in milliseconds
-      setInterval(grab, options.delay);
+      var _captured = false;
+      capture_process.stdout.on('data', function() {
+        if(_captured) return;
+        _captured = true;
+        if (CONFIG.debug) console.log('starting capture loop with interval:', options.delay);
+
+        // loop based on delay in milliseconds
+        setInterval(grab, options.delay);
+      });
     });
   };
 
