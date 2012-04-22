@@ -19,17 +19,10 @@ var express = require('express');
 var app = express.createServer(express.static('static'))
   , io = require('socket.io').listen(app)
   , fs = require('fs')
-//  , serialPort = require('serialport').SerialPort
-//  , serial = new serialPort('/dev/ttyACM0', { baud: 9600 })
-//  , serial = new serialPort('/dev/ttyUSB0', { baud: 9600 })
   , OpenROV = require('./OpenROV.js');
 
-// Serial controls Arduino.  TODO: cut out Arduino and use BeagleBone for PWM
-// ACM0 - Uno
-// USB0 - Duemillanove
 
 // Globals =================
-var mutex = 0;
 var rov = new OpenROV();
 var DELAY = 67;
 var PORT = 8080;
@@ -37,26 +30,18 @@ var PORT = 8080;
 // no debug messages
 io.configure(function(){ io.set('log level', 1); });
 
+var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
+  connections++;
+  rov.init();
+  rov.capture({'delay' : DELAY});
   socket.send('initialize');  // opens socket with client
-
-//  socket.on('key', function(key){
-//    serial.write(key);
-//  });
 
   // when frame emits, send it
   rov.on('frame', function(img){
     socket.volatile.emit('frame', img);
   });
-
-  // run one instance, but push frames to all clients
-  if (mutex == 0){
-    rov.init();
-    rov.capture({'delay' : DELAY});
-//    serial.write('1');
-  }
-  mutex++;
 
   socket.on('control_update', function(controls) {
     rov.sendCommand(controls.throttle, controls.yaw, controls.lift);
@@ -66,10 +51,8 @@ io.sockets.on('connection', function (socket) {
 
 // SOCKET disconnection ==============================
 io.sockets.on('disconnect', function(socket){
-  mutex--;
-  if (mutex == 0){
-    rov.close();  // no need to keep running the process, no one is watching
-  }
+  connections--;
+  if(connections === 0) rov.close();
 });
 
 app.listen(PORT);

@@ -265,7 +265,7 @@ $(function() {
   var gp = new GamePad();
   setInterval(function() {
     var send = '';
-    var buttons = gp.getButtons();
+    // var buttons = gp.getButtons();
     var axes = gp.getAxes();
     var throttle = axes[1] * -127;
     var yaw = axes[0] * 127;

@@ -8,11 +8,11 @@ var GamePad = function() {
   }
 
   gp.getButtons = function() {
-    return navigator.webkitGamepads[0].buttons;
+    return navigator && navigator.webkitGamepads && navigator.webkitGamepads[0] && navigator.webkitGamepads[0].buttons;
   }
 
   gp.getAxes = function() {
-    return navigator.webkitGamepads[0].axes;
+    return navigator && navigator.webkitGamepads && navigator.webkitGamepads[0] && navigator.webkitGamepads[0].axes;
   }
 
   return gp;

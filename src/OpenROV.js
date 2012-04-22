@@ -21,7 +21,7 @@
 
 var socket = require('socket.io'),
   spawn = require('child_process').spawn,
-  sys = require('util'),
+  util = require('util'),
   events = require('events'),
   fs = require('fs'),
   path = require('path');
@@ -29,6 +29,10 @@ var socket = require('socket.io'),
 // var serialPort = require('serialport').SerialPort
 //    , serial = new serialPort('/dev/ttyACM0', { baud: 9600 })
 //    , serial = new serialPort('/dev/ttyUSB0', { baud: 9600 })
+
+// Serial controls Arduino.  TODO: cut out Arduino and use BeagleBone for PWM
+// ACM0 - Uno
+// USB0 - Duemillanove
 
 // Create dir (current date) to save images into
 var time = new Date();
@@ -49,9 +53,10 @@ var OpenROV = function (options){
   events.EventEmitter.call(this);
   this.emitter = events;
   this.opts = mixin(options, default_opts);
+  this._capturing = false;
   return this;
 };
-sys.inherits(OpenROV, events.EventEmitter);
+util.inherits(OpenROV, events.EventEmitter);
 
 var OFFSET = 128;
 OpenROV.prototype.sendCommand = function(throttle, yaw, lift) {
@@ -75,7 +80,9 @@ function limit(value, l, h) {
 // ============ init() ============
 // create directory to store photos
 // ================================
-OpenROV.prototype.init = function(){ fs.mkdir(location, 0755); };
+OpenROV.prototype.init = function() {
+  if(!path.existsSync(location)) fs.mkdirSync(location, 0755);
+};
 
 // ============ reset() ===============
 // reset the device to default settings
@@ -98,6 +105,8 @@ OpenROV.prototype.update = function (options){
 // close the camera and child process
 // ==================================
 OpenROV.prototype.close = function(){
+  if(!this._capturing) return;
+  this._capturing = false;
   capture_process.stdin.write('exit');
   process.kill(capture_process.pid, 'SIGHUP');
 };
@@ -108,61 +117,54 @@ OpenROV.prototype.close = function(){
 // Captures a frame from camera and emits it as 'frame'
 // ====================================================
 OpenROV.prototype.capture = function (options, callback){
-
+  if(this._capturing) return process.nextTick(callback);
+  this._capturing = true;
   this.opts = mixin(options, this.opts);
   var rov = this;
 
   // when ./capture responds, image has been saved
   capture_process.stdout.on('data', function(response){
+    // remove any trailing newline chars
+    var file = response.toString().replace(/(\r\n|\n|\r)/gm, '');
+    var imgFile = location + file;
 
-    try {
-      // remove any trailing newline chars
-      var file = response.toString().replace(/(\r\n|\n|\r)/gm, '');
-      var imgFile = location + file;
+    console.log('Sending: ' + file);
 
-      console.log('Sending: ' + file);
-
-      // open file from system, then emit to server
-      fs.readFile(imgFile, 'base64', function(err, img){
-        if (!err) rov.emit('frame', img);
-        fs.unlink(imgFile);  // comment out this line to store footage on ROV (warning: takes up lots of space)
-      });
-    }
-    catch (captureError){ console.log(captureError); }
+    // open file from system, then emit to server
+    fs.readFile(imgFile, 'base64', function(err, img){
+      if (!err) rov.emit('frame', img);
+      fs.unlink(imgFile);  // comment out this line to store footage on ROV (warning: takes up lots of space)
+    });
   });
 
   // this function loops, 'grabs' frame from camera (sends stdin to child process ./capture)
   var grab = function (){
-    try{
+    var self = this;
+    self.emitter = this.emitter;
+    self.arguments = [];
+    format = ".jpg";
 
-      var self = this;
-      self.emitter = this.emitter;
-      self.arguments = [];
-//      self.format = ".jpg";
-      format = ".jpg";
+    path.exists(rov.opts.device, function (exists){
 
-      path.exists(rov.opts.device, function (exists){
+      // only call this function if camera is connected
+      var alive = function (){
+        var file = getTime() + format + '\n\r';
+        capture_process.stdin.write(file);
+      }
 
-        // only call this function if camera is connected
-        var alive = function (){
-          var file = getTime() + format + '\n\r';
-          capture_process.stdin.write(file);
-        }
+      // uh-oh, no camera connected!
+      if (!exists){
+        var message = 'no device (' + self.opts.device + ').';
+        var err = new Error(message);
+        self.emit('error.device', err);
+        if (callback){ callback.call(err); }
+        // hope it changes
+        fs.watchFile(self.opts.device, function (curr, prev){ alive.apply(self); });
+        return;
+      }
+      alive.apply(self);
 
-        // uh-oh, no camera connected!
-        if (!exists){
-          var message = 'no device (' + self.opts.device + ').';
-          var err = new Error(message);
-          self.emit('error.device', err);
-          if (callback){ callback.call(err); }
-          // hope it changes
-          fs.watchFile(self.opts.device, function (curr, prev){ alive.apply(self); });
-          return;
-        }
-        alive.apply(self);
-
-      });
-    } catch (capError){ console.write(capError); }
+    });
   };
 
   // loop based on delay (if set) in milliseconds
