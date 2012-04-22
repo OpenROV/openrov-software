@@ -69,7 +69,7 @@ OpenROV.prototype.sendCommand = function(throttle, yaw, lift) {
   right = Math.round(limit(right, -127, 127)) + OFFSET;
   lift = Math.round(lift) + 128;
   var command = left + ',' + right + ',' + lift + ';';
-  // console.error("DEBUG: command", command);
+  if(process.env.NODE_DEBUG) console.error("DEBUG: command", command);
   // serialPort.write(command);
 }
 

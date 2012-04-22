@@ -49,10 +49,17 @@ io.sockets.on('connection', function (socket) {
 
 });
 
+
 // SOCKET disconnection ==============================
 io.sockets.on('disconnect', function(socket){
   connections--;
   if(connections === 0) rov.close();
+});
+
+process.on('uncaughtException', function(err) {
+  console.error('uncaughtException', err);
+  rov.close();
+  process.exit(1);
 });
 
 app.listen(PORT);
