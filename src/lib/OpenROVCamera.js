@@ -112,7 +112,7 @@ var OpenROVCamera = function (options) {
     fs.readFile(file, 'base64', function(err, img) {
       if (!err) camera.emit('frame', img);
       else console.error(err);
-      fs.unlink(imgFile);  // comment out this line to store footage on ROV (warning: takes up lots of space)
+      fs.unlink(file);  // comment out this line to store footage on ROV (warning: takes up lots of space)
     });
   }
 
