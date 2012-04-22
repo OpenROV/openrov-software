@@ -97,13 +97,14 @@ var OpenROVCamera = function (options) {
     path.exists(options.device, function (exists) {
       // uh-oh, no camera connected!
       if (!exists) return camera.emit('error.device', new Error('no device (' + options.device + ').'));
-      capture_process.stdin.write(getTime() + format + '\n\r');
+      capture_process.stdin.write(location + '/' + getTime() + format + '\n\r');
     });
   };
 
   function handleCaptureData(response) {
     // remove any trailing newline chars
     var file = response.toString().replace(/(\r\n|\n|\r)/gm, '');
+    if (file === location) return console.log('initialized capture process.');
     if (CONFIG.debug) console.error('got file back:', file);
     var imgFile = path.resolve(location + file);
     if (CONFIG.debug) console.log('Sending: ' + imgFile);
