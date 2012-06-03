@@ -1,5 +1,5 @@
-ROVision
-========
+OpenROV ROVision
+================
 
 "[OpenROV](http://openrov.com/) is a DIY telerobotics community centered around underwater exploration & adventure."  One goal of OpenROV is to have onboard video for live viewing as the user operates the ROV.  Enter: ROVision.
 
@@ -33,7 +33,6 @@ Requirements
 - svn
 - pkg-config
 - npm
-
 
 Installation
 ------------
@@ -76,15 +75,16 @@ Finally, download ROVision, then compile the C++ program using this command:
 
 To run,
 
-    $ node app.js
+    $ NODE_ENV=production node app.js
 
 
 
 Future
 ------
 
-As I mentioned earlier, one of our top future goals is getting a WebM (or maybe h.264) stream output from OpenCV.  However, we have so much more planned.  Imagine being able to track a fish, or map underwater environments in 3D, or coordinate multiple ROV's using vision, or whatever you can imagine!  Please fork & play.  We'd love to see what you create.
+As I mentioned earlier, one of our top future goals is getting a WebM (or maybe h.264) stream output from OpenCV (NOTE).  However, we have so much more planned.  Imagine being able to track a fish, or map underwater environments in 3D, or coordinate multiple ROV's using vision, or whatever you can imagine!  Please fork & play.  We'd love to see what you create.
 
+UPDATE:  we're sticking with a JPEG stream for the foreseeable future.
 
 License
 -------
