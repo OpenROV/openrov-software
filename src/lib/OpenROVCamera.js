@@ -1,7 +1,7 @@
 /*
  * Created for OpenROV:  www.openrov.com
  * Author:  Bran Sorem (www.bransorem.com)
- * Date: 04/21/12
+ * Date: 06/03/12
  *
  * Description:
  * This script creates a directory and sends that as an argument to a spawned process (capture.cpp).

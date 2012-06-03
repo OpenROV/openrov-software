@@ -1,5 +1,25 @@
+/*
+ * Created for OpenROV:  www.openrov.com
+ * Author:  Simon Murtha-Smith, Bran Sorem
+ * Date: 06/03/12
+ *
+ * Description:
+ * This file holds the controller logic.  It manages the connection to the Atmega328.
+ * TODO: must manually enable UART.  Fix this.
+ * >>$ echo 0 > /sys/kernel/debug/omap_mux/uart1_txd
+ * >>$ echo 20 > /sys/kernel/debug/omap_mux/uart1_rxd
+ * Note: RX not setup yet, needs to be added
+ *
+ * License
+ * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a
+ * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+ */
+
 var SerialPort = require('serialport').SerialPort;
 
+// TODO: needs attention
+// Not working, even when run as root...
 var setup_serial = function(){
   var fs = require('fs');
   fs.writeFile('/sys/kernel/debug/omap_mux/uart1_txd', 0, function(err){

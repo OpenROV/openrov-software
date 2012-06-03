@@ -1,7 +1,7 @@
 /*
  * Created for OpenROV:  www.openrov.com
  * Author:  Bran Sorem (www.bransorem.com)
- * Date: 04/21/12
+ * Date: 06/0312
  *
  * Description:
  * This program takes a folder (with trailing /) as an argument to determine where to store images.
