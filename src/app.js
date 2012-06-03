@@ -8,6 +8,8 @@
  * and sets the interval to grab frames.  The interval is set with the DELAY variable which is in
  * milliseconds.
  *
+ * Special thanks to smurthas on Github for helping refactor.
+ *
  * License
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a
@@ -25,6 +27,8 @@ var app = express.createServer(express.static(__dirname + '/static'))
 
 var CONFIG = require('./lib/config');
 
+process.env.NODE_ENV = true;
+
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({delay : DELAY});
 var controller = new OpenROVController();
@@ -38,18 +42,20 @@ app.get('/config.js', function(req, res) {
 io.configure(function(){ io.set('log level', 1); });
 
 var connections = 0;
+
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
-  connections++;
+  connections += 1;
 
   socket.send('initialize');  // opens socket with client
 
   socket.on('control_update', function(controls) {
     controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
   });
+
   camera.capture(function(err) {
     if (err) {
-      connections--;
+      connections -= 1;
       camera.close();
       return console.error('couldn\'t initialize camera. got:', err);
     }
@@ -66,7 +72,7 @@ io.sockets.on('connection', function (socket) {
 
 // SOCKET disconnection ==============================
 io.sockets.on('disconnect', function(socket){
-  connections--;
+  connections -= 1;
   if(connections === 0) rov.close();
 });
 
@@ -84,6 +90,6 @@ process.on('SIGINT', function() {
   console.error('got SIGINT, shutting down...');
   camera.close();
   process.exit(0);
-})
+});
 
 app.listen(CONFIG.port);

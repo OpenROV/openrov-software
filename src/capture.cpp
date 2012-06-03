@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
 
   std::string fileName;
   Mat frame;
-//  Mat framesm;
+
   // run until input -> 'exit'
   for (;;){
     std::cin >> fileName;  // full path to file to write to (including extension)
@@ -52,9 +52,6 @@ int main(int argc, char* argv[]){
     string output = fileName;
     imwrite(output, frame);
 
-//    output = file + input;
-//    resize(frame, framesm, Size(320, 240), 0, 0, INTER_LINEAR);
-//    imwrite(output, framesm);
     std::cout << fileName;  // respond with file name, signifies save finished (causes emitter to respond)
   }
 

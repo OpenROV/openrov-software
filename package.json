@@ -1,7 +1,7 @@
 {
-  "author": "",
-  "name": "openrov-software",
-  "version": "0.0.0",
+  "author": "Bran Sorem",
+  "name": "OpenROV ROVision",
+  "version": "0.5.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/OpenROV/openrov-software.git"
