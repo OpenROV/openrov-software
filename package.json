@@ -1,0 +1,19 @@
+{
+  "author": "Bran Sorem",
+  "name": "OpenROV ROVision",
+  "version": "0.5.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/OpenROV/openrov-software.git"
+  },
+  "dependencies": {
+    "express": "",
+    "serialport": "",
+    "socket.io": ""
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}

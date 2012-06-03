@@ -1,0 +1,21 @@
+body {
+  padding-left: 30px;
+  font-family: "Arial";
+}
+#video {
+  width: 640px;
+  min-height: 480px;
+  margin-top: 40px;
+}
+
+#gamepad {
+  margin-top:20px;
+}
+
+.red {
+  color:red;
+}
+
+.green {
+  color:green;
+}
