@@ -19,72 +19,216 @@ Requirements
 ------------
 - BeagleBone: [http://beagleboard.org/bone](http://beagleboard.org/bone)
 - USB webcam:  we're using the Microsoft LifeCam HD-5000
-- Ubuntu 11.10 for BeagleBone:  [http://elinux.org/BeagleBoardUbuntu#Demo_Image](http://elinux.org/BeagleBoardUbuntu#Demo_Image)
-- OpenCV 2.3:  [http://opencv.willowgarage.com/](http://opencv.willowgarage.com/)
-- Node.js:  [http://nodejs.org/](http://nodejs.org/)
+- Ubuntu 12.04 for BeagleBone:  [http://elinux.org/BeagleBoardUbuntu#Demo_Image](http://elinux.org/BeagleBoardUbuntu#Demo_Image)
+- OpenCV 2.4:  [http://opencv.willowgarage.com/](http://opencv.willowgarage.com/)
+- Node.js (v0.8.1):  [http://nodejs.org/](http://nodejs.org/)
 - Socket.io:  [http://socket.io/](http://socket.io/)
-
-###For installation
-(pre-OpenROV-custom-image):
-
-- g++
-- make
-- cmake
-- svn
-- pkg-config
-- npm
 
 Installation
 ------------
 
-*We WILL be making a custom image to bypass this difficult process in the future.*
+Step 1
+------
 
-I will warn you that this was a hairy process.  
+a)  Install 12.04 Ubuntu
+b)  Plug into router
+c)  Find IP address (look through your router or something...) - I'm calling it __IP__
 
-First, download and install Ubuntu (link above) onto a microSD card.  Then, put it in the BeagleBone and plug the BeagleBone into a router.  You need to SSH into the BeagleBone once it has booted:
+Step 2
+------
 
-    $ ssh -l ubuntu 192.168.1.100
+Change the user name and password.
 
-Where the IP address corresponds to the BeagleBone's current IP address.  The default password is listed on the Ubuntu download page (linked above).  It should be:  `temppwd`
+Login as default user (ubuntu):
+    ssh -l ubuntu __IP__
+    (pass) temppwd
+Then change to root:
+    su
+    (pass) root
+Add a temporary user:
+    useradd -m temp
+    passwd temp
+    (pass) temppwd
+    adduser temp sudo
 
-Make sure the BeagleBone has an Internet connection.  Install dependencies:
+Switch to temp user then change primary account name/password:
+    logout
 
-`$ sudo apt-get install g++`
-`$ sudo apt-get install make`
-`$ sudo apt-get install cmake`
-`$ sudo apt-get install subversion`
-`$ wget http://sourceforge.net/projects/numpy/files/NumPy/1.6.1/numpy-1.6.1.tar.gz` - untar then install
-`$ sudo apt-get install pkg-config`
+(if ubuntu still logged in:  su, then:  pkill -KILL -u ubuntu)
 
-OpenCV:
-- [http://opencv.willowgarage.com/wiki/InstallGuide](http://opencv.willowgarage.com/wiki/InstallGuide)
-- [http://thebitbangtheory.wordpress.com/2011/10/23/how-to-install-opencv-2-3-1-in-ubuntu-11-10-oneiric-ocelot-with-python-support/](http://thebitbangtheory.wordpress.com/2011/10/23/how-to-install-opencv-2-3-1-in-ubuntu-11-10-oneiric-ocelot-with-python-support/)
+    ssh -l temp __IP__
+    su
+    usermod -l rov -m -d /home/rov ubuntu
+    passwd rov
+    (pass) OpenROV
+    exit
+    exit
 
-Install Node.js from source (we used v0.6.12):
-[https://github.com/joyent/node/wiki/Installation](https://github.com/joyent/node/wiki/Installation)
+Login as new user (rov):
+    ssh -l rov __IP__
+    (pass) OpenROV
 
-`$ sudo apt-get install curl`
+Delete temporary user:
+    su
+    userdel -r temp
+    exit
 
-NPM:  [http://npmjs.org/](http://npmjs.org/)
-
-`$ sudo npm install -g socket.io`
-
-Finally, download ROVision, then compile the C++ program using this command:
-
-    $ g++ capture.cpp -o capture `pkg-config opencv --cflags --libs`
-
-To run,
-
-    $ NODE_ENV=production node app.js
+    su
+    vi /etc/hostname
+    (change to openrov)
+    vi /etc/hosts
+    (change to openrov)
+    reboot
 
 
+Step 3
+------
+
+Update/upgrade software and install rerequisits:
+
+    sudo apt-get update
+    sudo apt-get install g++ curl cmake pkg-config libv4l-dev libjpeg-dev git build-essential subversion libssl-dev vim
+
+
+Step 4
+------
+
+Install nvm (Node Version Manager):
+
+    git clone git://github.com/creationix/nvm.git ~/.nvm
+    echo ". ~/.nvm/nvm.sh" >> .bashrc
+    echo "export LD_LIBRARY_PATH=/usr/local/lib" >> .bashrc
+    echo "export PATH=$PATH:/opt/node/bin" >> .bashrc
+
+
+Step 5
+------
+
+Try to install Node.js (it will not compile V8 properly):
+
+    nvm install v0.8.1
+
+
+Step 6
+------
+
+Fix V8 to compile (very sketchy right now):
+
+==================================
+
+Find this file for editing:
+    ~/.nvm/src/node-v0.8.1/deps/v8/src/platform-linux.cc
+
+Make these changes (from red to green):
+    http://code.google.com/p/v8/source/diff?spec=svn11951&r=11951&format=side&path=/branches/bleeding_edge/src/platform-linux.cc
+
+
+comment out lines 1230...
+
+    /*
+    #ifdef __arm__
+      // When running on ARM hardware check that the EABI used by V8 and
+      // by the C code is the same.
+      bool hard_float = OS::ArmUsingHardFloat();
+      if (hard_float) {
+    #if !USE_EABI_HARDFLOAT
+        PrintF("ERROR: Binary compiled with -mfloat-abi=hard but without "
+               "-DUSE_EABI_HARDFLOAT\n");
+        exit(1);
+    #endif
+      } else {
+    #if USE_EABI_HARDFLOAT
+        PrintF("ERROR: Binary not compiled with -mfloat-abi=hard but with "
+               "-DUSE_EABI_HARDFLOAT\n");
+        exit(1);
+    #endif
+      }
+    #endif
+    */
+      SignalSender::SetUp();
+    }
+
+This is a very bad idea, but it works for now.  Bleeding edge can make you bleed sometimes.
+
+==================================
+
+
+Step 7
+------
+
+Actually install Node.js:
+
+    ./configure
+    make
+    sudo make install
+
+    echo "nvm use v0.8.1" >> .bashrc
+
+
+Step 8
+------
+
+Install OpenCV:
+
+Download OpenCV:
+    svn co http://code.opencv.org/svn/opencv/trunk/opencv
+
+Prepare OpenCV for make:
+    cd opencv
+    mkdir release && cd release
+
+Build OpenCV:
+    cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_TESTS=OFF -D BUILD_EXAMPLES=ON ..
+
+Make and install OpenCV:
+    make && sudo make install
+
+
+Step 9
+------
+
+Download OpenROV ROVision:
+
+    cd ~
+    git clone git://github.com/OpenROV/openrov-software.git
+    cd openrov-software/
+
+edit ~/.bashrc
+
+    export LD_LIBRARY_PATH=/usr/local/lib
+
+
+Step 10
+-------
+
+Fix SSL errors and download required Node.js modules:
+
+Fix SSL (just don't use secure connection...):
+    npm config set registry http://registry.npmjs.org/
+
+Download modules:
+    npm install express socket.io serialport
+
+
+Step 11
+-------
+
+Compile the capture C++ file:
+    cd src/
+    g++ capture.cpp -o capture `pkg-config opencv --cflags --libs`
+
+
+Step 12
+-------
+
+Try it out!
+
+    NODE_ENV=production node app.js
 
 Future
 ------
 
-As I mentioned earlier, one of our top future goals is getting a WebM (or maybe h.264) stream output from OpenCV (NOTE).  However, we have so much more planned.  Imagine being able to track a fish, or map underwater environments in 3D, or coordinate multiple ROV's using vision, or whatever you can imagine!  Please fork & play.  We'd love to see what you create.
-
-UPDATE:  we're sticking with a JPEG stream for the foreseeable future.
+Wwe have so much more planned.  Imagine being able to track a fish, or map underwater environments in 3D, or coordinate multiple ROV's using vision, or whatever you can imagine!  Please fork & play.  We'd love to see what you create.
 
 License
 -------

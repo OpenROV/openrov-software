@@ -31,8 +31,8 @@ int main(int argc, char* argv[]){
 
   VideoCapture cap(0);
 
-  cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-  cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+  cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+  cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
 
   if (!cap.isOpened()) return -1;
 
