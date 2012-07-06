@@ -12,7 +12,7 @@ We designed the onboard video platform using several key technologies:
 - [Node.js](http://nodejs.org/)
 - [Socket.io](http://socket.io/)
 
-Combining these great technologies provides a lot of power and room for future growth.  But is also provides well documented means to extend OpenROV.  With Node.js and Socket.io, not only are we able to stream video to a web browser by updating an image, but we are also able to control the ROV and view valuable sensor information.  This is just the beginning.  Ultimately, we would like to move to a WebM (or similar) video stream from OpenCV, but we need your help.  We're hoping that you, the community, are as excited as we are to explore the many uncharted areas underwater.  We have many exciting ideas for the future
+Combining these great technologies provides a lot of power and room for future growth.  But is also provides well documented means to extend OpenROV.  With Node.js and Socket.io, not only are we able to stream video to a web browser by updating an image, but we are also able to control the ROV and view valuable sensor information.  This is just the beginning.  
 
 
 Requirements
@@ -31,7 +31,9 @@ Step 1
 ------
 
 a)  Install 12.04 Ubuntu
+
 b)  Plug into router
+
 c)  Find IP address (look through your router or something...) - I'm calling it __IP__
 
 Step 2
@@ -40,18 +42,24 @@ Step 2
 Change the user name and password.
 
 Login as default user (ubuntu):
+
     ssh -l ubuntu __IP__
     (pass) temppwd
+    
 Then change to root:
+
     su
     (pass) root
+    
 Add a temporary user:
+
     useradd -m temp
     passwd temp
     (pass) temppwd
     adduser temp sudo
 
 Switch to temp user then change primary account name/password:
+
     logout
 
 (if ubuntu still logged in:  su, then:  pkill -KILL -u ubuntu)
@@ -65,10 +73,12 @@ Switch to temp user then change primary account name/password:
     exit
 
 Login as new user (rov):
+
     ssh -l rov __IP__
     (pass) OpenROV
 
 Delete temporary user:
+
     su
     userdel -r temp
     exit
@@ -117,9 +127,11 @@ Fix V8 to compile (very sketchy right now):
 ==================================
 
 Find this file for editing:
+
     ~/.nvm/src/node-v0.8.1/deps/v8/src/platform-linux.cc
 
 Make these changes (from red to green):
+
     http://code.google.com/p/v8/source/diff?spec=svn11951&r=11951&format=side&path=/branches/bleeding_edge/src/platform-linux.cc
 
 
@@ -171,16 +183,20 @@ Step 8
 Install OpenCV:
 
 Download OpenCV:
+
     svn co http://code.opencv.org/svn/opencv/trunk/opencv
 
 Prepare OpenCV for make:
+
     cd opencv
     mkdir release && cd release
 
 Build OpenCV:
+
     cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_TESTS=OFF -D BUILD_EXAMPLES=ON ..
 
 Make and install OpenCV:
+
     make && sudo make install
 
 
@@ -204,9 +220,11 @@ Step 10
 Fix SSL errors and download required Node.js modules:
 
 Fix SSL (just don't use secure connection...):
+
     npm config set registry http://registry.npmjs.org/
 
 Download modules:
+
     npm install express socket.io serialport
 
 
@@ -214,6 +232,7 @@ Step 11
 -------
 
 Compile the capture C++ file:
+
     cd src/
     g++ capture.cpp -o capture `pkg-config opencv --cflags --libs`
 
@@ -228,7 +247,7 @@ Try it out!
 Future
 ------
 
-Wwe have so much more planned.  Imagine being able to track a fish, or map underwater environments in 3D, or coordinate multiple ROV's using vision, or whatever you can imagine!  Please fork & play.  We'd love to see what you create.
+We have so much more planned.  Imagine being able to track a fish, or map underwater environments in 3D, or coordinate multiple ROV's using vision, or whatever you can imagine!  Please fork & play.  We'd love to see what you create.
 
 License
 -------
