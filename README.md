@@ -89,7 +89,7 @@ UPDATE:  we're sticking with a JPEG stream for the foreseeable future.
 License
 -------
 
-[http://www.gnu.org/copyleft/gpl.html] (GPLv3)
+[http://www.gnu.org/copyleft/gpl.html](GPLv3)
 
 ROVision is software for remotely operating an OpenROV vessel.
 Copyright (C) 2012  Bran Sorem
