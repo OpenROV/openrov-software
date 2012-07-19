@@ -18,7 +18,7 @@
 
 var express = require('express');
 
-var app = express.createServer(express.static(__dirname + '/static'))
+var app = express.createServer()
   , io = require('socket.io').listen(app)
   , fs = require('fs')
   , OpenROVCamera = require('./lib/OpenROVCamera')
@@ -26,13 +26,13 @@ var app = express.createServer(express.static(__dirname + '/static'))
   ;
 
 var CONFIG = require('./lib/config');
+app.use(express.static(__dirname + '/static/'));
 
 process.env.NODE_ENV = true;
 
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({delay : DELAY});
 var controller = new OpenROVController();
-
 
 app.get('/config.js', function(req, res) {
   res.send('var CONFIG = ' + JSON.stringify(CONFIG));
@@ -46,6 +46,8 @@ var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
   connections += 1;
+
+  console.log('New connection');
 
   socket.send('initialize');  // opens socket with client
 
@@ -92,4 +94,5 @@ process.on('SIGINT', function() {
   process.exit(0);
 });
 
+console.log('Start listening on port: ' + CONFIG.port);
 app.listen(CONFIG.port);
