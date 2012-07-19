@@ -24,7 +24,7 @@ var setup_serial = function(){
   var fs = require('fs');
   fs.writeFile('/sys/kernel/debug/omap_mux/uart1_txd', 0, function(err){
     if(err)
-      console.log(err);
+      console.log('There was an error setting the TX on UART1: ' +err);
     else 
       console.log('TX set');
   });
@@ -40,7 +40,11 @@ var OpenROVController = function() {
   setup_serial();
 
   // ATmega328p is connected to Beaglebone over UART1 (pins TX 24, RX 26)
-  if (CONFIG.production) serial = new SerialPort('/dev/ttyO1', { baud: 9600 });
+  if (CONFIG.production) 
+  {
+	  console.log('Initializing serial port');
+	  serial = new SerialPort('/dev/ttyO1', { baud: 9600 });
+  }
 
   var controller = {};
   controller.sendCommand = function(throttle, yaw, vertical) {
@@ -59,6 +63,7 @@ var OpenROVController = function() {
     if(CONFIG.debug) console.error("command", command);
     if(CONFIG.production) serial.write(command);
   }
+  console.log('ROV controller initialized');
 
   return controller;
 }

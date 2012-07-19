@@ -40,7 +40,7 @@ var OpenROVCamera = function (options) {
   var month = time.getMonth();
   var date = time.getDate();
   if (month < 10) month = '0' + month;
-  if (date < 10) day = '0' + day;
+  if (date < 10) date = '0' + date;
   // /dev/shm/ is in-memory resource on Linux
   // location will look something like:  /dev/shm/1970-01-01/
   var location = path.resolve('/dev/shm/' + time.getFullYear() +
