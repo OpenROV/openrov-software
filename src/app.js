@@ -16,23 +16,22 @@
  * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 
-var express = require('express');
-
-var app = express.createServer(express.static(__dirname + '/static'))
-  , io = require('socket.io').listen(app)
-  , fs = require('fs')
+var CONFIG = require('./lib/config')
+  , express = require('express')
+  , app = express.createServer()
+  , server = app.listen(CONFIG.port)
+  , io = require('socket.io').listen(server)
   , OpenROVCamera = require('./lib/OpenROVCamera')
   , OpenROVController = require('./lib/OpenROVController')
   ;
 
-var CONFIG = require('./lib/config');
+app.use(express.static(__dirname + '/static/'));
 
 process.env.NODE_ENV = true;
 
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({delay : DELAY});
 var controller = new OpenROVController();
-
 
 app.get('/config.js', function(req, res) {
   res.send('var CONFIG = ' + JSON.stringify(CONFIG));
@@ -92,4 +91,4 @@ process.on('SIGINT', function() {
   process.exit(0);
 });
 
-app.listen(CONFIG.port);
+console.log('Started listening on port: ' + CONFIG.port);
