@@ -138,8 +138,8 @@ Add (around line 330):
       # This is to silence warnings about ABI changes that some versions of the
       # CodeSourcery G++ tool chain produce for each occurrence of varargs.
       'WARNINGFLAGS': ['-Wno-abi']
-+      'CCFLAGS':      ['$DIALECTFLAGS', '$WARNINGFLAGS', '-march=armv5tej', '-mthumb-interwork'],
-+      'CXXFLAGS':     ['-fno-rtti', '-fno-exceptions', '-march=armv5tej', '-mthumb-interwork'],
++      'CCFLAGS':      ['-march=armv5tej', '-mthumb-interwork'],
++      'CXXFLAGS':     ['-march=armv5tej', '-mthumb-interwork'],
     },
 ```
 
