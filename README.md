@@ -141,6 +141,8 @@ Add (around line 330):
 +      'CCFLAGS':      ['$DIALECTFLAGS', '$WARNINGFLAGS', '-march=armv5tej', '-mthumb-interwork'],
 +      'CXXFLAGS':     ['-fno-rtti', '-fno-exceptions', '-march=armv5tej', '-mthumb-interwork'],
     },
+```
+
 
 Find this file for editing:
 
@@ -154,7 +156,7 @@ Add:
 +        'armv7%': '1',
 +        'arm_neon%': '1',
         'use_system_v8%': 0,
-
+```
 
 
 ==================================
