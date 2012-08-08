@@ -85,9 +85,13 @@ Delete temporary user:
 
     su
     vi /etc/hostname
-    (change to openrov)
+
+Change from "omap" (without quotes) to "openrov-XXXX" (without quotes) - where XXXX is your serial number.
+
     vi /etc/hosts
-    (change to openrov)
+
+Change from "omap" (without quotes) to "openrov-XXXX" (without quotes) - where XXXX is your serial number.
+
     reboot
 
 
