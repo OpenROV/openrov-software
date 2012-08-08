@@ -18,7 +18,7 @@
 
 var CONFIG = require('./lib/config')
   , express = require('express')
-  , app = express.createServer()
+  , app = express()
   , server = app.listen(CONFIG.port)
   , io = require('socket.io').listen(server)
   , OpenROVCamera = require('./lib/OpenROVCamera')
