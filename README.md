@@ -21,7 +21,7 @@ Requirements
 - USB webcam:  we're using the Microsoft LifeCam HD-5000
 - Ubuntu 12.04 for BeagleBone:  [http://elinux.org/BeagleBoardUbuntu#Demo_Image](http://elinux.org/BeagleBoardUbuntu#Demo_Image)
 - OpenCV 2.4:  [http://opencv.willowgarage.com/](http://opencv.willowgarage.com/)
-- Node.js (v0.8.1):  [http://nodejs.org/](http://nodejs.org/)
+- Node.js (v0.8.5):  [http://nodejs.org/](http://nodejs.org/)
 - Socket.io:  [http://socket.io/](http://socket.io/)
 
 Installation
@@ -116,7 +116,7 @@ Step 5
 
 Try to install Node.js (it will not compile V8 properly):
 
-    nvm install v0.8.1
+    nvm install v0.8.5
 
 
 Step 6
@@ -128,39 +128,34 @@ Fix V8 to compile (very sketchy right now):
 
 Find this file for editing:
 
-    ~/.nvm/src/node-v0.8.1/deps/v8/src/platform-linux.cc
+    ~/.nvm/src/node-v0.8.5/deps/v8/src/platform-linux.cc
+    ~/.nvm/src/node-v0.8.5/deps/v8/SConstruct
 
-Make these changes (from red to green):
+Add (around line 330):
 
-    http://code.google.com/p/v8/source/diff?spec=svn11951&r=11951&format=side&path=/branches/bleeding_edge/src/platform-linux.cc
+```diff
+    'arch:arm': {
+      # This is to silence warnings about ABI changes that some versions of the
+      # CodeSourcery G++ tool chain produce for each occurrence of varargs.
+      'WARNINGFLAGS': ['-Wno-abi']
++      'CCFLAGS':      ['$DIALECTFLAGS', '$WARNINGFLAGS', '-march=armv5tej', '-mthumb-interwork'],
++      'CXXFLAGS':     ['-fno-rtti', '-fno-exceptions', '-march=armv5tej', '-mthumb-interwork'],
+    },
+
+Find this file for editing:
+
+    ~/.nvm/src/node-v0.8.5/deps/v8/build/common.gypi
+
+Add:
+
+```diff
+    {
+      'variables': {
++        'armv7%': '1',
++        'arm_neon%': '1',
+        'use_system_v8%': 0,
 
 
-comment out lines 1230...
-
-    /*
-    #ifdef __arm__
-      // When running on ARM hardware check that the EABI used by V8 and
-      // by the C code is the same.
-      bool hard_float = OS::ArmUsingHardFloat();
-      if (hard_float) {
-    #if !USE_EABI_HARDFLOAT
-        PrintF("ERROR: Binary compiled with -mfloat-abi=hard but without "
-               "-DUSE_EABI_HARDFLOAT\n");
-        exit(1);
-    #endif
-      } else {
-    #if USE_EABI_HARDFLOAT
-        PrintF("ERROR: Binary not compiled with -mfloat-abi=hard but with "
-               "-DUSE_EABI_HARDFLOAT\n");
-        exit(1);
-    #endif
-      }
-    #endif
-    */
-      SignalSender::SetUp();
-    }
-
-This is a very bad idea, but it works for now.  Bleeding edge can make you bleed sometimes.
 
 ==================================
 
@@ -174,7 +169,7 @@ Actually install Node.js:
     make
     sudo make install
 
-    echo "nvm use v0.8.1" >> .bashrc
+    echo "nvm use v0.8.5" >> .bashrc
 
 
 Step 8
@@ -209,10 +204,17 @@ Download OpenROV ROVision:
     git clone git://github.com/OpenROV/openrov-software.git
     cd openrov-software/
 
-edit ~/.bashrc
+Change to development branch:
+
+    git checkout development
+
+edit ~/.bashrc, add:
 
     export LD_LIBRARY_PATH=/usr/local/lib
 
+You'll need to restart your shell:
+
+    source ~/.bashrc
 
 Step 10
 -------
@@ -242,7 +244,7 @@ Step 12
 
 Try it out!
 
-    NODE_ENV=production node app.js
+    node app.js
 
 Future
 ------
