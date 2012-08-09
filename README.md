@@ -173,7 +173,7 @@ Add:
 Step 7
 ------
 
-Actually install Node.js:
+From ~/.nvm/src/node-v0.8.5 directory, actually install Node.js:
 
     ./configure
     make
