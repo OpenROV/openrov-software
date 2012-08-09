@@ -115,6 +115,11 @@ Install nvm (Node Version Manager):
     echo "export PATH=$PATH:/opt/node/bin" >> .bashrc
 
 
+And make those changes work now:
+
+    source ~/.bashrc
+
+
 Step 5
 ------
 
@@ -132,7 +137,6 @@ Fix V8 to compile (very sketchy right now):
 
 Find this file for editing:
 
-    ~/.nvm/src/node-v0.8.5/deps/v8/src/platform-linux.cc
     ~/.nvm/src/node-v0.8.5/deps/v8/SConstruct
 
 Add (around line 330):
