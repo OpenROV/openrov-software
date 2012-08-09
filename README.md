@@ -101,7 +101,7 @@ Step 3
 Update/upgrade software and install rerequisits:
 
     sudo apt-get update
-    sudo apt-get install g++ curl cmake pkg-config libv4l-dev libjpeg-dev git build-essential subversion libssl-dev vim
+    sudo apt-get install g++ curl cmake pkg-config libv4l-dev libjpeg-dev git build-essential libssl-dev vim
 
 
 Step 4
@@ -185,7 +185,7 @@ Install OpenCV:
 
 Download OpenCV:
 
-    svn co http://code.opencv.org/svn/opencv/trunk/opencv
+     git clone git://code.opencv.org/opencv.git
 
 Prepare OpenCV for make:
 
