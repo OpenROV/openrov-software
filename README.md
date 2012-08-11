@@ -259,7 +259,7 @@ Enable UART1.  Unfortunately, you need to do this every time the BeagleBone rebo
     echo 0 > /sys/kernel/debug/omap_mux/uart1_txd
 
 
-Step 12
+Step 13
 -------
 
 Try it out!
