@@ -252,6 +252,16 @@ Compile the capture C++ file:
 Step 12
 -------
 
+Enable UART1.  Unfortunately, you need to do this every time the BeagleBone reboots.
+
+    su
+    echo 20 > /sys/kernel/debug/omap_mux/uart1_rxd
+    echo 0 > /sys/kernel/debug/omap_mux/uart1_txd
+
+
+Step 12
+-------
+
 Try it out!
 
     node app.js
