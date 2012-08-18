@@ -1,2 +1,3 @@
+#this enables that everyone can execute these scripts with sudo
 rov ALL=NOPASSWD: /home/rov/openrov/openrov-software/linux/reset.sh
 rov ALL=NOPASSWD: /home/rov/openrov/openrov-software/linux/setuart.sh
