@@ -1,0 +1,2 @@
+rov ALL=NOPASSWD: /home/rov/openrov/openrov-software/linux/reset.sh
+rov ALL=NOPASSWD: /home/rov/openrov/openrov-software/linux/setuart.sh
