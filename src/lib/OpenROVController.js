@@ -16,17 +16,18 @@
  * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 
-var SerialPort = require('serialport').SerialPort;
+var SerialPort = require('serialport').SerialPort
+  , spawn = require('child_process').spawn;
 
-// TODO: needs attention
-// Not working, even when run as root...
 var setup_serial = function(){
-  var fs = require('fs');
-  fs.writeFile('/sys/kernel/debug/omap_mux/uart1_txd', 0, function(err){
-    if(err)
-      console.log(err);
-    else 
-      console.log('TX set');
+    var location = path.resolve('../../linux')
+    if (CONFIG.debug) console.log('Starting the script from ' + location +' to setup UART1...');
+    var setuart_process = spawn('sudo ' + location +'/setuart.sh', [location]);
+
+    capture_process.on('exit', function(something) {
+        console.log('script ended:', something);
+      });
+
   });
 };
 
