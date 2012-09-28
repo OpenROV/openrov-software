@@ -18,10 +18,10 @@ Combining these great technologies provides a lot of power and room for future g
 Requirements
 ------------
 - BeagleBone: [http://beagleboard.org/bone](http://beagleboard.org/bone)
-- USB webcam:  we're using the Microsoft LifeCam HD-5000
+- USB webcam:  we're using the Genius F100 HD
 - Ubuntu 12.04 for BeagleBone:  [http://elinux.org/BeagleBoardUbuntu#Demo_Image](http://elinux.org/BeagleBoardUbuntu#Demo_Image)
-- OpenCV 2.4:  [http://opencv.willowgarage.com/](http://opencv.willowgarage.com/)
-- Node.js (v0.8.5):  [http://nodejs.org/](http://nodejs.org/)
+- OpenCV 2.4.2:  [http://opencv.willowgarage.com/](http://opencv.willowgarage.com/)
+- Node.js (v0.8.11):  [http://nodejs.org/](http://nodejs.org/)
 - Socket.io:  [http://socket.io/](http://socket.io/)
 
 Installation
@@ -125,7 +125,7 @@ Step 5
 
 Try to install Node.js (it will not compile V8 properly):
 
-    nvm install v0.8.5
+    nvm install v0.8.11
 
 
 Step 6
@@ -137,7 +137,7 @@ Fix V8 to compile (very sketchy right now):
 
 Find this file for editing:
 
-    ~/.nvm/src/node-v0.8.5/deps/v8/SConstruct
+    ~/.nvm/src/node-v0.8.11/deps/v8/SConstruct
 
 Add (around line 330):
 
@@ -154,7 +154,7 @@ Add (around line 330):
 
 Find this file for editing:
 
-    ~/.nvm/src/node-v0.8.5/deps/v8/build/common.gypi
+    ~/.nvm/src/node-v0.8.11/deps/v8/build/common.gypi
 
 Add:
 
@@ -173,13 +173,13 @@ Add:
 Step 7
 ------
 
-From ~/.nvm/src/node-v0.8.5 directory, actually install Node.js:
+From ~/.nvm/src/node-v0.8.11 directory, actually install Node.js:
 
     ./configure
     make
     sudo make install
 
-    echo "nvm use v0.8.5" >> .bashrc
+    echo "nvm use v0.8.11" >> .bashrc
 
 
 Step 8
@@ -237,7 +237,7 @@ Fix SSL (just don't use secure connection...):
 
 Download modules:
 
-    npm install express socket.io serialport
+    npm install
 
 
 Step 11
@@ -252,19 +252,19 @@ Compile the capture C++ file:
 Step 12
 -------
 
-Enable UART1.  Unfortunately, you need to do this every time the BeagleBone reboots.
+To enable the UART1 on every boot, you need to add some lines to /etc/rc.local
 
-    su
-    echo 20 > /sys/kernel/debug/omap_mux/uart1_rxd
-    echo 0 > /sys/kernel/debug/omap_mux/uart1_txd
+    sudo echo "echo 20 > /sys/kernel/debug/omap_mux/uart1_rxd" > /etc/rc.local
+    sudo echo "echo 0 > /sys/kernel/debug/omap_mux/uart1_txd" > /etc/rc.local
 
+Go ahead and restart at this point.
 
 Step 13
 -------
 
 Try it out!
 
-    node app.js
+    node app
 
 Future
 ------
@@ -274,8 +274,12 @@ We have so much more planned.  Imagine being able to track a fish, or map underw
 License
 -------
 
-This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License. To view a copy of this license, visit <http://creativecommons.org/licenses/by-sa/3.0/> or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+MIT License
 
-*Some portions of code may be subject to different licensing agreements.
+Copyright (C) 2012 Bran Sorem
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

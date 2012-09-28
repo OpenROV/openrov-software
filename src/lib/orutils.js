@@ -1,13 +1,3 @@
-
-// ============ mixin (source, destination) ============
-// -source (obj)
-// -destination (obj)
-// combines parameters from source and destination
-// ============
-// special thanks to pdeschen for this function
-// originally created for Camelot:
-//    https://github.com/pdeschen/camelot
-// =====================================================
 exports.mixin = function (source, destination){
 
   if (typeof (source) == "object"){

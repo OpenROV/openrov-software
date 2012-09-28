@@ -1,19 +1,10 @@
 /*
- * Created for OpenROV:  www.openrov.com
- * Author:  Bran Sorem (www.bransorem.com)
- * Date: 06/03/12
  *
  * Description:
  * This script is the Node.js server for OpenROV.  It creates a server and instantiates an OpenROV
  * and sets the interval to grab frames.  The interval is set with the DELAY variable which is in
  * milliseconds.
  *
- * Special thanks to smurthas on Github for helping refactor.
- *
- * License
- * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a
- * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 
 var CONFIG = require('./lib/config')
