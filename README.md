@@ -86,11 +86,11 @@ Delete temporary user:
     su
     vi /etc/hostname
 
-Change from "omap" (without quotes) to "openrov-XXXX" (without quotes) - where XXXX is your serial number.
+Change from "arm" (without quotes) to "openrov-XXXX" (without quotes) - where XXXX is your serial number.
 
     vi /etc/hosts
 
-Change from "omap" (without quotes) to "openrov-XXXX" (without quotes) - where XXXX is your serial number.
+Change from "arm" (without quotes) to "openrov-XXXX" (without quotes) - where XXXX is your serial number.
 
     reboot
 
@@ -254,8 +254,9 @@ Step 12
 
 To enable the UART1 on every boot, you need to add some lines to /etc/rc.local
 
-    sudo echo "echo 20 > /sys/kernel/debug/omap_mux/uart1_rxd" > /etc/rc.local
-    sudo echo "echo 0 > /sys/kernel/debug/omap_mux/uart1_txd" > /etc/rc.local
+    su
+    echo "echo 20 > /sys/kernel/debug/omap_mux/uart1_rxd" >> /etc/rc.local
+    echo "echo 0 > /sys/kernel/debug/omap_mux/uart1_txd" >> /etc/rc.local
 
 Go ahead and restart at this point.
 
