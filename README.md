@@ -21,7 +21,7 @@ Requirements
 - USB webcam:  we're using the Genius F100 HD
 - Ubuntu 12.04 for BeagleBone:  [http://elinux.org/BeagleBoardUbuntu#Demo_Image](http://elinux.org/BeagleBoardUbuntu#Demo_Image)
 - OpenCV 2.4.2:  [http://opencv.willowgarage.com/](http://opencv.willowgarage.com/)
-- Node.js (v0.8.11):  [http://nodejs.org/](http://nodejs.org/)
+- Node.js (v0.6.14):  [http://nodejs.org/](http://nodejs.org/)
 - Socket.io:  [http://socket.io/](http://socket.io/)
 
 Installation
@@ -98,114 +98,13 @@ Change from "arm" (without quotes) to "openrov-XXXX" (without quotes) - where XX
 Step 3
 ------
 
-Update/upgrade software and install rerequisits:
+Update/upgrade software and install rerequisits (holy moly, there're packages!):
 
     sudo apt-get update
-    sudo apt-get install g++ curl cmake pkg-config libv4l-dev libjpeg-dev build-essential libssl-dev vim
+    sudo apt-get install g++ curl pkg-config libv4l-dev libjpeg-dev build-essential libssl-dev vim nodejs npm libopencv-dev
 
 
 Step 4
-------
-
-Install nvm (Node Version Manager):
-
-    git clone git://github.com/creationix/nvm.git ~/.nvm
-    echo ". ~/.nvm/nvm.sh" >> .bashrc
-    echo "export LD_LIBRARY_PATH=/usr/local/lib" >> .bashrc
-    echo "export PATH=$PATH:/opt/node/bin" >> .bashrc
-
-
-And make those changes work now:
-
-    source ~/.bashrc
-
-
-Step 5
-------
-
-Try to install Node.js (it will not compile V8 properly):
-
-    nvm install v0.8.11
-
-
-Step 6
-------
-
-Fix V8 to compile (very sketchy right now):
-
-==================================
-
-Find this file for editing:
-
-    ~/.nvm/src/node-v0.8.11/deps/v8/SConstruct
-
-Add (around line 330):
-
-```diff
-    'arch:arm': {
-      # This is to silence warnings about ABI changes that some versions of the
-      # CodeSourcery G++ tool chain produce for each occurrence of varargs.
-      'WARNINGFLAGS': ['-Wno-abi']
-+      'CCFLAGS':      ['-march=armv5tej', '-mthumb-interwork'],
-+      'CXXFLAGS':     ['-march=armv5tej', '-mthumb-interwork'],
-    },
-```
-
-
-Find this file for editing:
-
-    ~/.nvm/src/node-v0.8.11/deps/v8/build/common.gypi
-
-Add:
-
-```diff
-    {
-      'variables': {
-+        'armv7%': '1',
-+        'arm_neon%': '1',
-        'use_system_v8%': 0,
-```
-
-
-==================================
-
-
-Step 7
-------
-
-From ~/.nvm/src/node-v0.8.11 directory, actually install Node.js:
-
-    ./configure
-    make
-    sudo make install
-
-    echo "nvm use v0.8.11" >> .bashrc
-
-
-Step 8
-------
-
-Install OpenCV:
-
-Download OpenCV:
-
-     git clone git://code.opencv.org/opencv.git
-
-Prepare OpenCV for make:
-
-    cd opencv
-    mkdir release && cd release
-
-Build OpenCV:
-
-    cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_TESTS=OFF -D BUILD_EXAMPLES=ON ..
-
-Make and install OpenCV:
-
-    make && sudo make install
-
-
-Step 9
 ------
 
 Download OpenROV ROVision:
@@ -226,22 +125,16 @@ You'll need to restart your shell:
 
     source ~/.bashrc
 
-Step 10
--------
-
-Fix SSL errors and download required Node.js modules:
-
-Fix SSL (just don't use secure connection...):
-
-    npm config set registry http://registry.npmjs.org/
+Step 5
+------
 
 Download modules:
 
-    npm install
+    npm install express socket.io serialport
 
 
-Step 11
--------
+Step 6
+------
 
 Compile the capture C++ file:
 
@@ -249,8 +142,8 @@ Compile the capture C++ file:
     g++ capture.cpp -o capture `pkg-config opencv --cflags --libs`
 
 
-Step 12
--------
+Step 8
+------
 
 To enable the UART1 on every boot, you need to add some lines to /etc/rc.local
 
@@ -260,8 +153,8 @@ To enable the UART1 on every boot, you need to add some lines to /etc/rc.local
 
 Go ahead and restart at this point.
 
-Step 13
--------
+Step 9
+------
 
 Try it out!
 
