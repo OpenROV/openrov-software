@@ -13,6 +13,6 @@
   },
   "devDependencies": {},
   "engines": {
-    "node": ">= 0.8.11"
+    "node": ">= 0.6.12"
   }
 }
