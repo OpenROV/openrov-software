@@ -101,7 +101,7 @@ Step 3
 Update/upgrade software and install rerequisits:
 
     sudo apt-get update
-    sudo apt-get install g++ curl cmake pkg-config libv4l-dev libjpeg-dev git build-essential libssl-dev vim
+    sudo apt-get install g++ curl cmake pkg-config libv4l-dev libjpeg-dev build-essential libssl-dev vim
 
 
 Step 4
