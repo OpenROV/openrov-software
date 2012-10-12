@@ -239,7 +239,18 @@ Step 13
 Try it out!
 
     node app
-    
+
+Step 14 (optional)
+-------
+
+To start the node process on every boot, you can do the following:
+
+    sudo ln -s /opt/openrov/linux/openrov.service /etc/init.d/openrov
+    chmod +x /opt/openrov/linux/openrov.service
+    sudo update-rc.d openrov defaults
+
+(You have to adapt the path _/opt/openrov/linux_ to match your environment and change the paths in the _openrov.service_ file accordingly too)
+
 
 Future
 ------
@@ -258,3 +269,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
