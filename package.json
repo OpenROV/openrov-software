@@ -1,13 +1,14 @@
 {
-  "author": "Bran Sorem",
-  "name": "OpenROV ROVision",
-  "version": "0.1.1",
+  "name": "OpenROV-Cockpit",
+  "author": "OpenROV team (http://www.openrov.com): Bran Sorem, Simone Chiaretta, Dominik Fretz",
+  "description": "The UI and brain of the OpenROV Remotely Operated Vehicle",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/OpenROV/openrov-software.git"
   },
   "dependencies": {
-    "express": ">= 3.0.0",
+    "express": ">= 3.0.0rc5",
     "serialport": ">= 1.0.8",
     "socket.io": ""
   },
