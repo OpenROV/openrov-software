@@ -232,31 +232,11 @@ Step 12
 
 To enable the UART1 on every boot, you need to add some lines to __/etc/rc.local__ (you need to be su):
 
-    # Enable UART1
-    echo 20 > /sys/kernel/debug/omap_mux/uart1_rxd
-    echo 0 > /sys/kernel/debug/omap_mux/uart1_txd
-    # Remove udev persistence rule in file
-    echo "# No persist!" > /etc/udev/rules.d/70-persistent-net.rules
-    # Start server
-    node ~/openrov-software/src/app.js
+Copy etc/rc.local to your /etc/ and replace the one there.
 
 That will not only enable UART1 after boot, but also remove references to your MAC so you can swap the SD card to another BeagleBone (trust me, this is handy).
 
 Go ahead and restart at this point.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
