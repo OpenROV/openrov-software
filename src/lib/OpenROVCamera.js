@@ -1,23 +1,10 @@
 /*
- * Created for OpenROV:  www.openrov.com
- * Author:  Bran Sorem (www.bransorem.com)
- * Date: 06/03/12
  *
  * Description:
  * This script creates a directory and sends that as an argument to a spawned process (capture.cpp).
  * Then, it sends a request to capture a frame with file name of current time at a given interval.
  * Lastly, when (capture.cpp) responds with the file name (meaning save completed), it reads the file
  * and then emits the content to the Node.js server in base64 (string) format.
- *
- * Special thanks to smurthas on Github for helping refactor
- *
- * Special thanks to pdeschen (blog.rassemblr.com):
- * https://github.com/pdeschen/camelot
- *
- * License
- * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a
- * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  *
  */
 
@@ -73,10 +60,10 @@ var OpenROVCamera = function (options) {
     if (CONFIG.debug) console.log('initiating camera on', options.device);
     if (CONFIG.debug) console.log('writing images to ', location);
 
-    if (!path.existsSync(location)) fs.mkdirSync(location, 0755);
+    if (!fs.existsSync(location)) fs.mkdirSync(location, 0755);
 
     // if camera working, should be at options.device (most likely /dev/video0 or similar)
-    path.exists(options.device, function(exists) {
+    fs.exists(options.device, function(exists) {
       // no camera?!
       if (!exists) return callback(new Error(options.device + ' does not exist'));
       // wooooo!  camera!
@@ -111,7 +98,7 @@ var OpenROVCamera = function (options) {
   function grab() {
     var format = ".jpg";
 
-    path.exists(options.device, function (exists) {
+    fs.exists(options.device, function (exists) {
       // uh-oh, no camera connected!
       if (!exists) return camera.emit('error.device', new Error('no device (' + options.device + ').'));
       capture_process.stdin.write(location + '/' + getTime() + format + '\n\r');

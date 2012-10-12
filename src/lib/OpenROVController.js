@@ -1,47 +1,23 @@
 /*
- * Created for OpenROV:  www.openrov.com
- * Author:  Simon Murtha-Smith, Bran Sorem
- * Date: 06/03/12
  *
  * Description:
  * This file holds the controller logic.  It manages the connection to the Atmega328.
- * TODO: must manually enable UART.  Fix this.
- * >>$ echo 0 > /sys/kernel/debug/omap_mux/uart1_txd
- * >>$ echo 20 > /sys/kernel/debug/omap_mux/uart1_rxd
- * Note: RX not setup yet, needs to be added
  *
- * License
- * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a
- * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
+
+var path = require('path');
 
 var SerialPort = require('serialport').SerialPort
   , spawn = require('child_process').spawn;
 
-var setup_serial = function(){
-    var location = path.resolve('../../linux')
-    if (CONFIG.debug) console.log('Starting the script from ' + location +' to setup UART1...');
-    var setuart_process = spawn('sudo ' + location +'/setuart.sh', [location]);
-
-    capture_process.on('exit', function(something) {
-        console.log('script ended:', something);
-      });
-
-  });
-};
-
-
 var CONFIG = require('./config');
-var OFFSET = 128;
+
 
 var OpenROVController = function() {
   var serial;
-  
-  setup_serial();
 
   // ATmega328p is connected to Beaglebone over UART1 (pins TX 24, RX 26)
-  if (CONFIG.production) serial = new SerialPort('/dev/ttyO1', { baud: 9600 });
+  //if (CONFIG.production) serial = new SerialPort('/dev/ttyO1', { baud: 115200 });
 
   var controller = {};
   controller.sendCommand = function(throttle, yaw, vertical) {
@@ -58,7 +34,7 @@ var OpenROVController = function() {
     if (vertical < 30) vertical = 30;
     var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
     if(CONFIG.debug) console.error("command", command);
-    if(CONFIG.production) serial.write(command);
+    //if(CONFIG.production) serial.write(command);
   }
 
   return controller;
@@ -67,7 +43,6 @@ var OpenROVController = function() {
 function map(val) {
   val = limit(val, -127, 127);
   val = Math.round(exp(val));
-  val += OFFSET;
   return val;
 }
 

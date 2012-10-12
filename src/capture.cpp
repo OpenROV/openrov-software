@@ -1,18 +1,9 @@
 /*
- * Created for OpenROV:  www.openrov.com
- * Author:  Bran Sorem (www.bransorem.com)
- * Date: 06/0312
- *
  * Description:
  * This program takes a folder (with trailing /) as an argument to determine where to store images.
  * Then, it enters an infinite loop, until it receives 'exit' as input, where the input is a file
  * name including extension (i.e.: 03.15.39.106.jpg).  Then it captures an image and saves it with
  * the given file name in the given location.
- *
- * License
- * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a
- * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  */
 
 #include "cv.h"
