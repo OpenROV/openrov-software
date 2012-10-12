@@ -212,11 +212,6 @@ Download modules:
 
     npm install express socket.io serialport
 
-Had a lot of problems with serialport, hopefully it will work for you by the time you try installing yourself.  If it doesn't, try this:
-
-    sudo npm uninstall -g node-gyp
-    sudo npm install serialport
-
 
 Step 11
 -------
