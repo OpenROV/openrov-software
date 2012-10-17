@@ -13,7 +13,7 @@
  */
 
 var CONFIG = require('./config')
-//  , FirmwareInstaller = require(CONFIG.FirmwareInstaller)
+  , FirmwareInstaller = require('../' + CONFIG.FirmwareInstaller)
   , logger = require('./logger').create(CONFIG.debug)
   , path = require('path')
   , fs = require('fs');
@@ -23,11 +23,13 @@ var CONFIG = require('./config')
 var OpenROVArduinoFirmwareController = function() {
   
   var tempDirectory = "temp/";
-  var controller = {};
+  var controller = { socket: null };
   controller.files = {};
-  //var installer = new FirmwareInstaller();
+  controller.installer = new FirmwareInstaller();
 
   controller.initializeSocket = function(socket) {
+
+    controller.socket = socket;
 
     if (!path.existsSync(tempDirectory)) fs.mkdirSync(tempDirectory, 0755);
 
@@ -72,7 +74,7 @@ var OpenROVArduinoFirmwareController = function() {
         {
            fs.write(controller.files[Name]['Handler'], controller.files[Name]['Data'], null, 'Binary', function(err, Writen){
               socket.emit('arduinofirmware-uploaddone', { });
-              controller.hanleUploadedFile(socket, Name);
+              controller.handleUploadedFile(socket, Name);
            });
         }
         else if(controller.files[Name]['Data'].length > 10485760){ //If the Data Buffer reaches 10MB
@@ -95,14 +97,33 @@ var OpenROVArduinoFirmwareController = function() {
 
   }
 
-  controller.hanleUploadedFile = function(socket, filename) {
-    console.log("going to install the uploaded file: " + filename);
-    socket.emit("arduinoFirmware-status", { key : "unpacking", value : "true" });
-    setTimeout(function() { socket.emit("arduinoFirmware-status", { key : "unpacked", value : "true" }); }, 2000 );
-    setTimeout(function() { socket.emit("arduinoFirmware-status", { key : "compiling", value : "true" });}, 6000 );
-    setTimeout(function() { socket.emit("arduinoFirmware-status", { key : "compiled", value : "true" });}, 8000 );
-    setTimeout(function() { socket.emit("arduinoFirmware-status", { key : "arduinoUploading", value : "true" });}, 10000 );
-    setTimeout(function() { socket.emit("arduinoFirmware-status", { key : "arduinoUploaded", value : "true" });}, 12000 );
+  controller.installer.on('firmwareinstaller-unpacked',
+    function(directory) {
+      logger.log('Unpacked firmware file into ' + directory);
+      controller.socket.emit("arduinoFirmware-status", { key : "unpacked", value : "true" });
+      controller.socket.emit("arduinoFirmware-status", { key : "compiling", value : "true" });
+      controller.installer.compile(directory);
+    });
+
+  controller.installer.on('firmwareinstaller-compilled',
+    function(directory) {
+      logger.log('Compiled firmware in directory ' + directory);
+      controller.socket.emit("arduinoFirmware-status", { key : "compiled", value : "true" });
+      controller.socket.emit("arduinoFirmware-status", { key : "arduinoUploading", value : "true" });
+      controller.installer.upload(directory);
+    });
+
+  controller.installer.on('firmwareinstaller-uploaded', 
+    function(directory) {
+      logger.log('Uploaded firmware to arduino!' + directory);
+      controller.socket.emit("arduinoFirmware-status", { key : "compiled", value : "true" });
+      controller.socket.emit("arduinoFirmware-status", { key : "arduinoUploaded", value : "true" });
+    });
+
+  controller.handleUploadedFile = function(socket, filename) {
+    logger.log("going to install the uploaded file: " + filename);
+    controller.socket.emit("arduinoFirmware-status", { key : "unpacking", value : "true" });
+    controller.installer.unpack(filename);
   }
 
   return controller;
