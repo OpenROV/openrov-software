@@ -17,6 +17,20 @@ function ArduinoFirmwareViewModel(){
 	self.arduinoUploading = ko.observable(false);
 	self.arduinoUploaded = ko.observable(false);
 
+	self.reset = function() {
+		self.stepsDone(0);
+		self.selectedFile('');
+		self.uploadPercentage(0);
+		self.uploaded(false);
+		self.unpacked(false)
+		self.unpacking(false);
+		self.compiling(false);
+		self.compiled(false);
+		self.arduinoUploading(false);
+		self.arduinoUploaded(false);
+
+	};
+
     self.selectedFileName = ko.computed(function() {
     	if (self.selectedFile()){
     		return self.selectedFile().name;
@@ -39,6 +53,10 @@ function ArduinoFirmwareViewModel(){
 		console.log("percentage: " + numberOfSteps + " done: " + self.stepsDone());
 		return percentage;
 	});
+
+    self.inProgress = ko.computed(function() {
+    	return self.stepsDone() != 0;
+    });
 
     self.updateStatus = function(data){
     	if (data.errorMessage){ 

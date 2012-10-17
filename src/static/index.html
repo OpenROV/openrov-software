@@ -132,8 +132,9 @@
             </div>
           </div>
           <div class="modal-footer">
-            <a href="#" class="btn" data-toggle="modal" data-target="#firmware-upload-dialog">Cancel</a>
-            <a href="#" class="btn btn-primary" id="arduinoFirmware-startupload">Apply new firmware</a>
+            <a href="#" class="btn" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="css: { disabled: arduinoFirmwareVM.inProgress() }, visible: ! arduinoFirmwareVM.arduinoUploaded()">Cancel</a>
+            <a href="#" class="btn btn-primary" id="arduinoFirmware-startupload" data-bind="css: { disabled: arduinoFirmwareVM.inProgress() }, visible: ! arduinoFirmwareVM.arduinoUploaded()">Apply new firmware</a>
+            <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="visible: arduinoFirmwareVM.arduinoUploaded()">Close</a>
           </div>
         </div>
         
@@ -198,7 +199,10 @@
               }
               console.log("Starting upload: " + selectedFile.name)
               socket.emit('arduinofirmware-startupload', { 'filename' : selectedFile.name, 'size' : selectedFile.size });
-
+            });
+            $('#arduinoFirmware-closeupload').click(function() {
+              viewmodel.arduinoFirmwareVM.reset();
+              //$('#firmware-upload-dialog').modal('hide');
             });
 
             /* ------------------------------------------
@@ -223,11 +227,11 @@
 
               var controls = {};
               for(var i in positions) controls[i] = deaden(positions[i] * 90);
-              if(CONFIG.debug) {
+              /*if(CONFIG.debug) {
                 console.error("DEBUG: throttle", controls.throttle);
                 console.error("DEBUG: yaw", controls.yaw);
                 console.error("DEBUG: lift", controls.lift);
-              }
+              }*/
               socket.emit('control_update', controls);
             }, SAMPLE_PERIOD);
 
