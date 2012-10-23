@@ -1,21 +1,162 @@
+html { height: 100%; }
 body {
-  padding-left: 30px;
-  font-family: "Arial";
+  padding-top: 65px;
+  padding-bottom: 100px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
+
+* {
+  position: relative;
+  z-index: 1;
+}
+.sidebar-nav {
+}
+.container-fluid {
+      padding-right: 0px;
+      padding-left: 0px;
+  }
+.well {
+    margin-top: 1px;
+    margin-bottom: 0;
+}
+.control-element {
+  padding: 4px;
+  min-width: 50px;
+  border-right: 1px solid grey;
+  height: 100%;
+}
+.drop-in-right {
+  position: fixed;
+  display: none;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  width: 500px;
+  border: solid 1px #606060;
+  border-left: solid 4px #606060;
+  z-index: 1039;
+  background-color: white;
+  padding: 5px;
+  padding-left: 15px;
+
+}
+.drop-in-right h3 {
+  float: left;
+  clear: right;
+  margin-top: -4px;
+}
+
+.settings-block {
+  clear: left;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  top: -15px;
+  left: -15px;
+  cursor: pointer;
+  background-image: url('../img/back.png');
+  float: left;
+}
+
+.back-button:hover {
+  background-image:  url('../img/back_dark.png')
+}
+
+.logo {
+  margin-left: 15px;
+}
+
+.navbar-inner img, .navbar-inner a {
+  vertical-align: middle;
+}
+
+.navbar-fixed-bottom .navbar-inner {
+  /* IE10 Consumer Preview */ 
+  background-image: -ms-linear-gradient(top, #424242 0%, #141414 100%);
+
+  /* Mozilla Firefox */ 
+  background-image: -moz-linear-gradient(top, #424242 0%, #141414 100%);
+
+  /* Opera */ 
+  background-image: -o-linear-gradient(top, #424242 0%, #141414 100%);
+
+  /* Webkit (Safari/Chrome 10) */ 
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #424242), color-stop(1, #141414));
+
+  /* Webkit (Chrome 11+) */ 
+  background-image: -webkit-linear-gradient(top, #424242 0%, #141414 100%);
+
+  /* W3C Markup, IE10 Release Preview */ 
+  background-image: linear-gradient(to bottom, #424242 0%, #141414 100%);
+}
+
+.navbar-fixed-bottom h2 {
+  color: rgb(233, 233, 233);
+  text-shadow: 0.1em 0.1em 0.2em black;
+}
+
+.control-group {
+  margin-left: 20px;
+}
+
+.depth-listing {
+  clear: left;
+
+}
+#depth-gauge {
+  position: relative;
+  width: 40px;
+  height: 90px;
+  background-color: white;
+  
+}
+
+.controller img {
+    width: 64px;
+    height: 64px;
+}
+
+.center {
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+}
+
+img.center {
+    display: block;
+}
+
 #video {
   width: 640px;
   min-height: 480px;
-  margin-top: 40px;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: black;
 }
 
-#gamepad {
-  margin-top:20px;
+#main-row {
 }
 
-.red {
-  color:red;
+.full-height{
+  height: 100%;
 }
 
-.green {
-  color:green;
+#outher-videocontainer {
+  display: table;
+}
+
+#video-container {
+  display: table-cell;
+  vertical-align: middle; 
 }
