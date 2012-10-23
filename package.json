@@ -12,7 +12,11 @@
     "serialport": ">= 1.0.8",
     "socket.io": ""
   },
-  "devDependencies": {},
+ "bundleDependencies": [
+    "express",
+    "socket.io",
+     "serialport"
+  ],
   "engines": {
     "node": ">= 0.8.11"
   }
