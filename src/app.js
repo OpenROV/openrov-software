@@ -12,8 +12,11 @@ var CONFIG = require('./lib/config')
   , app = express()
   , server = app.listen(CONFIG.port)
   , io = require('socket.io').listen(server)
-  , OpenROVCamera = require('./lib/OpenROVCamera')
-  , OpenROVController = require('./lib/OpenROVController')
+  , OpenROVCamera = require(CONFIG.OpenROVCamera)
+  , OpenROVController = require(CONFIG.OpenROVController)
+  , OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController')  
+  , StatusReader = require('./lib/StatusReader')
+  , logger = require('./lib/logger').create(CONFIG.debug)
   ;
 
 app.use(express.static(__dirname + '/static/'));
@@ -23,6 +26,8 @@ process.env.NODE_ENV = true;
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({delay : DELAY});
 var controller = new OpenROVController();
+var statusReader = new StatusReader();
+var arduinoUploadController = new OpenROVArduinoFirmwareController();
 
 app.get('/config.js', function(req, res) {
   res.send('var CONFIG = ' + JSON.stringify(CONFIG));
@@ -39,8 +44,19 @@ io.sockets.on('connection', function (socket) {
 
   socket.send('initialize');  // opens socket with client
 
-  socket.on('control_update', function(controls) {
-    controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
+	socket.on('control_update', function(controls) {
+		controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
+	});
+
+	statusReader.getStatus(function() {
+		statusReader.on('status', function(data) {
+			socket.volatile.emit('status', data);
+		});
+	});
+
+  camera.on('started', function(){
+    socket.emit('videoStarted');
+    console.log("emitted 'videoStated'");
   });
 
   camera.capture(function(err) {
@@ -48,15 +64,9 @@ io.sockets.on('connection', function (socket) {
       connections -= 1;
       camera.close();
       return console.error('couldn\'t initialize camera. got:', err);
-    }
-
-    console.log('initialized camera, adding listener for \'frame\' event');
-    // when frame emits, send it
-    camera.on('frame', function(img){
-      // if (CONFIG.debug) console.log('emitting frame')
-      socket.volatile.emit('frame', img);
-    });
+      }
   });
+  arduinoUploadController.initializeSocket(socket);
 });
 
 
@@ -70,16 +80,18 @@ camera.on('error.device', function(err) {
   console.error('camera emitted an error:', err);
 });
 
-process.on('SIGTERM', function() {
-  console.error('got SIGTERM, shutting down...');
-  camera.close();
-  process.exit(0);
-});
+if (process.platform === 'linux') {
+  process.on('SIGTERM', function() {
+    console.error('got SIGTERM, shutting down...');
+    camera.close();
+    process.exit(0);
+  });
 
-process.on('SIGINT', function() {
-  console.error('got SIGINT, shutting down...');
-  camera.close();
-  process.exit(0);
-});
+  process.on('SIGINT', function() {
+    console.error('got SIGINT, shutting down...');
+    camera.close();
+    process.exit(0);
+  });
+}
 
 console.log('Started listening on port: ' + CONFIG.port);
