@@ -18,7 +18,7 @@ var EventEmitter = require('events').EventEmitter
 
 var FirmwareInstaller = function () {
   var installer = new EventEmitter();
-  var baseDirectory = path.join(__dirname, '..', '..', 'linux');
+  var baseDirectory = path.join(__dirname, '..', '..', 'linux', 'arduino');
 
   installer.unpack = function(filename) {
     var cmd =  path.join(baseDirectory, 'firmware-unpack.sh');
@@ -39,7 +39,7 @@ var FirmwareInstaller = function () {
 
   installer.compile = function(directory) {
 
-    var cmd =  path.join(baseDirectory, 'firmware-compile.sh');
+    var cmd =  path.join(baseDirectory, 'firmware-build.sh');
     var args = [ filename ];
 
     var process = spawn(cmd, args);
