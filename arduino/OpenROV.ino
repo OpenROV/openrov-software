@@ -24,7 +24,6 @@ void setup(){
   
   motors.reset();
   led.reset();
-  count = 0;
 }
 
 void loop(){
