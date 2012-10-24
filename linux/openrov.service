@@ -19,7 +19,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
 DESC="OpenROV NodeJS server"
 NAME=OpenROV
 DAEMON=/opt/node/bin/node
-DAEMON_ARGS="/opt/openrov/server.js"
+DAEMON_ARGS="/opt/openrov/src/app.js"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
