@@ -41,7 +41,7 @@ function ArduinoFirmwareViewModel(){
 	self.isValidFirmwareFile = ko.computed(function() {
 		var fileName = self.selectedFileName();
 	    var ext = fileName.split('.').pop().toLowerCase();
-	     return ($.inArray(ext, ['zip', 'ino']) != -1);
+	     return ($.inArray(ext, ['zip', 'ino' , 'gz']) != -1);
     });
 
     self.browserDoesSupportFileApi = ko.computed(function() {

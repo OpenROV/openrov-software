@@ -20,6 +20,10 @@ if test "$EXTENSION" = "zip"
 then
 	unzip $1  1>&2 	
 fi
+if test "$EXTENSION" = "gz"
+then
+	tar zxf $1 1>&2
+fi
 echo $BUILDDIR
 
 exit 0
