@@ -251,7 +251,17 @@
                viewmodel.arduinoFirmwareVM.uploadPercentage(data['Percent']);
                var Place = data['Place'] * 524288; //The Next Blocks Starting Position
                var NewFile; //The Variable that will hold the new Block of Data
-               NewFile = selectedFile.slice(Place, Place + Math.min(524288, (selectedFile.size-Place)));
+	       if (selectedFile.slice != undefined)
+	       {
+                 NewFile = selectedFile.slice(Place, Place + Math.min(524288, (selectedFile.size-Place)));
+               }
+	       else if (selectedFile.webkitSlice != undefined)
+ 	       {
+                 NewFile = selectedFile.webkitSlice(Place, Place + Math.min(524288, (selectedFile.size-Place)));
+               }
+
+
+
                fileReader.readAsBinaryString(NewFile);
             });
 

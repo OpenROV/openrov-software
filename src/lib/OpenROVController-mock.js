@@ -37,7 +37,7 @@ var OpenROVController = function() {
     if (starbord < 30) starbord = 30;
     if (vertical < 30) vertical = 30;
     var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
-    console.log("command", command);
+     if(CONFIG.debug_commands) console.log("command", command);
   }
 
   return controller;
