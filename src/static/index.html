@@ -92,7 +92,7 @@
               </label>
               <div class="alert alert-error" id="arduinoFirmware-error" data-bind="css: { hide: arduinoFirmwareVM.selectedFileName() === '' || arduinoFirmwareVM.isValidFirmwareFile() }">
                 <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>Oh snap!</strong> Only <i>.zip</i> and <i>.ino</i> files are supported!
+                <strong>Oh snap!</strong> Only <i>.zip</i>, <i>.tar.gz</i> and <i>.ino</i> files are supported!
               </div>
               <div class="alert alert-error" id="file-upload-notsupported" data-bind="css: { hide: ! arduinoFirmwareVM.browserDoesSupportFileApi() }">
                 <button type="button" class="close" data-dismiss="alert">x</button>
