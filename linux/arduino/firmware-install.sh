@@ -11,4 +11,4 @@ echo compilled in $TMPDIR
 
 echo uploading firmware from $TMPDIR
 UPLOAD=`$DIR/firmware-upload.sh $TMPDIR` 
-echo uploded firmware
+echo uploaded firmware

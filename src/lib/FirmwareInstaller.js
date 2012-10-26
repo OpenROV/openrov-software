@@ -96,7 +96,7 @@ var FirmwareInstaller = function () {
     var process = spawn(cmd, args);
 
     process.stderr.on('data', function(data) {
-      console.log(data);
+      console.log(data.toString());
     });
 
     process.stdout.on('data', function(data) {
