@@ -90,28 +90,28 @@ var FirmwareInstaller = function () {
   }
 
   installer.install = function(filename) {
-    var cmd = pat.join(baseDirectory, 'firmware-install.sh');
+    var cmd = path.join(baseDirectory, 'firmware-install.sh');
     var args = [ filename ];
 
     var process = spawn(cmd, args);
 
     process.stdout.on('data', function(data) {
-      if (data.indexOf('unpacking') == 0) {
+      if (data.toString().indexOf('unpacking') == 0) {
         installer.emit("firmwareinstaller-unpacking");
       }
-      if (data.indexOf('unpacked') == 0) {
+      if (data.toString().indexOf('unpacked') == 0) {
         installer.emit("firmwareinstaller-unpacked", "");
       }
-      if (data.indexOf('compilling') == 0) {
+      if (data.toString().indexOf('compilling') == 0) {
 
       }
-      if (data.indexOf('compilled') == 0) {
+      if (data.toString().indexOf('compilled') == 0) {
         installer.emit("firmwareinstaller-compilled", "");
       }
-      if (data.indexOf('uploading') == 0) {
+      if (data.toString().indexOf('uploading') == 0) {
 
       }
-      if (data.indexOf('uploaded') == 0) {
+      if (data.toString().indexOf('uploaded') == 0) {
         installer.emit("firmwareinstaller-uploaded", "");
       }
     });
