@@ -86,7 +86,39 @@ var FirmwareInstaller = function () {
     process.on('exit', function (code) {
       console.log('firmware-compile finished with code' + code);
       installer.emit("firmwareinstaller-uploaded", directory);
-    });      
+    });          
+  }
+
+  installer.install = function(filename) {
+    var cmd = path.join(baseDirectory, 'firmware-install.sh');
+    var args = [ filename ];
+
+    var process = spawn(cmd, args);
+
+    process.stderr.on('data', function(data) {
+      console.log(data.toString());
+    });
+
+    process.stdout.on('data', function(data) {
+      if (data.toString().indexOf('unpacking') == 0) {
+        installer.emit("firmwareinstaller-unpacking");
+      }
+      if (data.toString().indexOf('unpacked') == 0) {
+        installer.emit("firmwareinstaller-unpacked", "");
+      }
+      if (data.toString().indexOf('compilling') == 0) {
+
+      }
+      if (data.toString().indexOf('compilled') == 0) {
+        installer.emit("firmwareinstaller-compilled", "");
+      }
+      if (data.toString().indexOf('uploading') == 0) {
+
+      }
+      if (data.toString().indexOf('uploaded') == 0) {
+        installer.emit("firmwareinstaller-uploaded", "");
+      }
+    });
   }
 
   return installer;

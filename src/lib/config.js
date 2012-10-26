@@ -19,7 +19,7 @@ var getLibPath = function(lib) {
 
 module.exports = {
   debug:            process.env.NODE_DEBUG      !== 'false',
-  debug_commands:   process.env.NODE_DEBUG_COMMANDS     === 'true',
+  debug_commands:   false, //process.env.NODE_DEBUG_COMMANDS     === 'true',
   production:       process.env.NODE_ENV         || true,
   sample_freq:     (process.env.SAMPLE_FREQ      && parseInt(process.env.SAMPLE_FREQ))     || 20, //Hz
   dead_zone:        process.env.DEAD_ZONE        && parseInt(process.env.DEAD_ZONE)        || 10,
