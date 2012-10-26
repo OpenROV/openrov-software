@@ -18,6 +18,7 @@ reset() {
   echo "1" > /sys/class/gpio/gpio38/value
   back_to_normal &
 }
+echo Initiating arduino reset 1>&2
 reset &
 sleep 1
 

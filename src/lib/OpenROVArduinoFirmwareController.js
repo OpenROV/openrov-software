@@ -42,7 +42,7 @@ var OpenROVArduinoFirmwareController = function() {
              Data   : "",
              Downloaded : 0
           }
-          console.log("file: " + controller.files[Name])
+          console.log("file: " + controller.files[Name].name)
           var Place = 0;
           try{
              var Stat = fs.statSync(tempDirectory +  Name);
@@ -97,12 +97,17 @@ var OpenROVArduinoFirmwareController = function() {
 
   }
 
+  controller.installer.on('firmwareinstaller-unpacking',
+    function()  {
+      controller.socket.emit("arduinoFirmware-status", { key : "unpacking", value : "true" });
+    });
+
   controller.installer.on('firmwareinstaller-unpacked',
     function(directory) {
       logger.log('Unpacked firmware file into ' + directory);
       controller.socket.emit("arduinoFirmware-status", { key : "unpacked", value : "true" });
       controller.socket.emit("arduinoFirmware-status", { key : "compiling", value : "true" });
-      controller.installer.compile(directory);
+      //controller.installer.compile(directory);
     });
 
   controller.installer.on('firmwareinstaller-compilled',
@@ -110,7 +115,7 @@ var OpenROVArduinoFirmwareController = function() {
       logger.log('Compiled firmware in directory ' + directory);
       controller.socket.emit("arduinoFirmware-status", { key : "compiled", value : "true" });
       controller.socket.emit("arduinoFirmware-status", { key : "arduinoUploading", value : "true" });
-      controller.installer.upload(directory);
+      //controller.installer.upload(directory);
     });
 
   controller.installer.on('firmwareinstaller-uploaded', 
@@ -122,8 +127,7 @@ var OpenROVArduinoFirmwareController = function() {
 
   controller.handleUploadedFile = function(socket, filename) {
     logger.log("going to install the uploaded file: " + filename);
-    controller.socket.emit("arduinoFirmware-status", { key : "unpacking", value : "true" });
-    controller.installer.unpack(path.resolve(tempDirectory + filename));
+    controller.installer.install(path.resolve(tempDirectory + filename));
   }
 
   return controller;
