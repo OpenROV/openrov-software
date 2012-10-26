@@ -95,6 +95,10 @@ var FirmwareInstaller = function () {
 
     var process = spawn(cmd, args);
 
+    process.stderr.on('data', function(data) {
+      console.log(data);
+    });
+
     process.stdout.on('data', function(data) {
       if (data.toString().indexOf('unpacking') == 0) {
         installer.emit("firmwareinstaller-unpacking");
