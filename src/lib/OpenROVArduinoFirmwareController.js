@@ -127,8 +127,7 @@ var OpenROVArduinoFirmwareController = function() {
 
   controller.handleUploadedFile = function(socket, filename) {
     logger.log("going to install the uploaded file: " + filename);
-    // controller.installer.unpack(filename);
-    controller.installer.install(file);
+    controller.installer.install(path.resolve(tempDirectory + filename));
   }
 
   return controller;
