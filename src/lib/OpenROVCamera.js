@@ -34,9 +34,9 @@ var OpenROVCamera = function (options) {
   var options = orutils.mixin(options, default_opts);
   var _capturing = false;
   var args= [ '-i' ,
-              'input_uvc.so -r ' + options.resolution + ' -f ' + options.framerate,
+              '/usr/local/lib/input_uvc.so -r ' + options.resolution + ' -f ' + options.framerate,
               '-o',
-              'output_http.so -p ' + options.port
+              '/usr/local/lib/output_http.so -p ' + options.port
             ];
             
   // End camera process gracefully
