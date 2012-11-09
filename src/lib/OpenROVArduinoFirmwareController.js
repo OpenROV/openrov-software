@@ -20,12 +20,12 @@ var CONFIG = require('./config')
 
 
 
-var OpenROVArduinoFirmwareController = function() {
+var OpenROVArduinoFirmwareController = function(eventLoop) {
   
   var tempDirectory = "temp/";
   var controller = { socket: null };
   controller.files = {};
-  controller.installer = new FirmwareInstaller();
+  controller.installer = new FirmwareInstaller(eventLoop);
 
   controller.initializeSocket = function(socket) {
 
