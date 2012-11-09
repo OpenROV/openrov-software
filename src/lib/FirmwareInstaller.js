@@ -16,7 +16,9 @@ var EventEmitter = require('events').EventEmitter
   , spawn = require('child_process').spawn
   ;
 
-var FirmwareInstaller = function () {
+var FirmwareInstaller = function (eventLoop) {
+
+  var globalEventLoop = eventLoop; 
   var installer = new EventEmitter();
   var baseDirectory = path.join(__dirname, '..', '..', 'linux', 'arduino');
 
@@ -111,12 +113,14 @@ var FirmwareInstaller = function () {
       }
       if (data.toString().indexOf('compilled') == 0) {
         installer.emit("firmwareinstaller-compilled", "");
+	globalEventLoop.emit("serial-stop");
       }
       if (data.toString().indexOf('uploading') == 0) {
 
       }
       if (data.toString().indexOf('uploaded') == 0) {
         installer.emit("firmwareinstaller-uploaded", "");
+	globalEventLoop.emit("serial-start");
       }
     });
   }
