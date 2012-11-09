@@ -14,13 +14,13 @@ back_to_normal() {
   sleep 2
   #set GPIO6 to LOW
   echo "0" > /sys/class/gpio/gpio38/value
-  echo "low" > /sys/class/gpio/gpio32/direction
+  echo "high" > /sys/class/gpio/gpio32/direction
 }
 
 reset() {
   #set GPIO6 to HIGH
   echo "1" > /sys/class/gpio/gpio38/value
-  echo "high" > /sys/class/gpio/gpio32/direction
+  echo "low" > /sys/class/gpio/gpio32/direction
   back_to_normal &
 }
 echo Initiating arduino reset 1>&2
