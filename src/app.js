@@ -12,6 +12,7 @@ var CONFIG = require('./lib/config')
   , app = express()
   , server = app.listen(CONFIG.port)
   , io = require('socket.io').listen(server)
+  , EventEmitter = require('events').EventEmitter
   , OpenROVCamera = require(CONFIG.OpenROVCamera)
   , OpenROVController = require(CONFIG.OpenROVController)
   , OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController')  
@@ -23,11 +24,12 @@ app.use(express.static(__dirname + '/static/'));
 
 process.env.NODE_ENV = true;
 
+var globalEventLoop = new EventEmitter();
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({delay : DELAY});
-var controller = new OpenROVController();
+var controller = new OpenROVController(globalEventLoop);
 var statusReader = new StatusReader();
-var arduinoUploadController = new OpenROVArduinoFirmwareController();
+var arduinoUploadController = new OpenROVArduinoFirmwareController(globalEventLoop);
 
 app.get('/config.js', function(req, res) {
   res.send('var CONFIG = ' + JSON.stringify(CONFIG));

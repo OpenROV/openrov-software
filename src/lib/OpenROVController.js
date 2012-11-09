@@ -17,15 +17,20 @@ var setup_serial = function(){
     var setuart_process = spawn('sudo', [ path.join(location,'setuart.sh') ]);
 };
 
+var getNewSerial = function(){
+	return new SerialPort(CONFIG.serial, { baud: CONFIG.serial_baud });
+};
+
 var OFFSET = 128;
 
-var OpenROVController = function() {
+var OpenROVController = function(eventLoop) {
   var serial;
+  var globalEventLoop = eventLoop;
   
   setup_serial();
 
   // ATmega328p is connected to Beaglebone over UART1 (pins TX 24, RX 26)
-  if (CONFIG.production) serial = new SerialPort(CONFIG.serial, { baud: CONFIG.serial_baud });
+  if (CONFIG.production) serial = getNewSerial();
 
   var controller = {};
   controller.sendCommand = function(throttle, yaw, vertical) {
@@ -41,6 +46,16 @@ var OpenROVController = function() {
     if(CONFIG.debug_coomands) console.error("command", command);
     if(CONFIG.production) serial.write(command);
   };
+
+  globalEventLoop.on('serial-stop', function(){
+	logger.log("Closng serial conection for firmware upload");	
+	serial.close();
+	 });
+
+  globalEventLoop.on('serial-start', function(){
+	serial = getNewSerial();
+	logger.log("Opened new serial connection after firmware upload");
+	});
 
   return controller;
 }
