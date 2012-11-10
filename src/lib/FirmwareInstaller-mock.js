@@ -35,6 +35,12 @@ var FirmwareInstaller = function () {
   	setTimeout(function() { installer.emit("firmwareinstaller-uploaded", directory);}, 2000 );
   }
 
+  installer.install = function(filename) {
+    installer.unpack(filename);
+    setTimeout(installer.compile, 2000);
+    setTimeout(installer.upload, 4000);
+  }
+
   return installer;
 }
 
