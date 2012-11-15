@@ -68,10 +68,10 @@ void loop(){
   if (time.elapsed(1000)) {
     vout.send(vout.read());
   }
-  else if (time.elapsed(500)) {
-    digitalWrite(13, HIGH);
-    delay(200);
-    digitalWrite(13, LOW);
-  }
+  // else if (time.elapsed(500)) {
+  //   digitalWrite(13, HIGH);
+  //   delay(200);
+  //   digitalWrite(13, LOW);
+  // }
 
 }
