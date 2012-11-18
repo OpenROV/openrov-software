@@ -67,6 +67,8 @@ void loop(){
   // send voltage
   if (time.elapsed(1000)) {
     vout.send(vout.read());
+    Serial.print("time:");
+    Serial.println(millis());
   }
   // else if (time.elapsed(500)) {
   //   digitalWrite(13, HIGH);
