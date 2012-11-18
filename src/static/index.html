@@ -54,6 +54,7 @@
               <div class="control-element span2 hidden"><h6>Temperature:</h6><h2 data-bind="html: convertedTemperature"></h2></div>
               <div class="control-element span3 hidden"><div class="pull-right" id="depth-gauge"></div><h6>Depth:</h6><h2 data-bind="text: convertedDepth"></h2></div>
                 <div class="control-element span3"><h6>RunTime:</h6><h2 data-bind="text: formattedRunTime"></h2></div>
+                <div class="control-element span3"><h6>Voltage:</h6><h2 data-bind="text: currentVoltage().toFixed(2)+ ' Volts'"></h2></div>
             </div>
           </div>
         </div>    
