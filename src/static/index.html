@@ -52,6 +52,7 @@
             <div class="container-fluid" style="height: 100%">
               <div class="control-element span2 hidden"><h6>Temperature:</h6><h2 data-bind="html: convertedTemperature"></h2></div>
               <div class="control-element span3 hidden"><div class="pull-right" id="depth-gauge"></div><h6 class="">Depth:</h6><h2 data-bind="text: convertedDepth"></h2></div>
+
             </div>
           </div>
         </div>    
@@ -81,7 +82,7 @@
                 <input name="unit-of-temperature" type="radio" value="farenheit" data-bind="checked: unitTemperature">
                 <span>Farenheit</span>
               </label>
-            </div> -->           
+            </div>-->
           </div>
           <div class="settings-block">
             <h4>Upload firmware</h4>
@@ -147,6 +148,7 @@
         <script type='text/javascript' src="js/mousetrap.min.js"></script>
         <script type='text/javascript' src='js/knockout-2.1.0.js'></script>
         <script type='text/javascript' src='js/OpenRovViewModel.js'></script>
+        <script type='text/javascript' src='js/ArduinoFirmwareViewModel.js'></script>
         <script type='text/javascript' src="/js/gamepad.js"></script>
         <script type='text/javascript' src="/js/keypad.js"></script>
         <script type='text/javascript' src="/js/frame.js"></script>
