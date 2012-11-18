@@ -1,5 +1,3 @@
-
-
 function OpenRovViewModel(){
 	var self = this;
 
@@ -9,6 +7,7 @@ function OpenRovViewModel(){
 	self.currentTemperature = ko.observable(0);
 	self.currentDepth = ko.observable(0);
 	self.currentHeading = ko.observable(115);
+	self.currentRunTime = ko.observable(0);
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
@@ -34,10 +33,15 @@ function OpenRovViewModel(){
 		}
 	});
 
+    self.formattedRunTime = ko.computed(function(){
+            return msToTime(self.currentRunTime());
+        });
+
 	self.arduinoFirmwareVM = new ArduinoFirmwareViewModel();
 	
 	self.updateStatus = function(data) {
 		self.currentDepth(data.depth);
 		self.currentTemperature(data.temp);
+		self.currentRunTime(data.runtime);
 	}
 }
