@@ -36,38 +36,14 @@ var OpenROVController = function() {
     }
 
     controller.sendCommand = function(throttle, yaw, vertical) {
-        var port = 0,
-            starbord = 0;
-        port = starbord = throttle;
-        port += yaw;
-        starbord -= yaw;
-        port = map(port);
-        starbord = map(starbord);
-        vertical = Math.round(exp(vertical)) + 90;
-        var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
+        var motorCommands = physics.mapMotors(throttle, yaw, vertical);
+        var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
         console.log(command);
     };
 
   return controller;
 }
 
-function map(val) {
-    val = limit(val, -90, 90);
-    val = Math.round(exp(val));
-    val += OFFSET;
-    return val;
-}
-
-function exp(val) {
-    if(val === 0) return 0;
-    var sign = val / Math.abs(val);
-    var adj = Math.pow(90, Math.abs(val) / 90);
-    return sign * adj;
-}
-
-function limit(value, l, h) { // truncate anything that goes outside of -127, 127
-    return Math.max(l, Math.min(h, value));
-}
 
 
 module.exports = OpenROVController;
