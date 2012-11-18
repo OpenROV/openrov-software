@@ -1,9 +1,10 @@
-
+var ArduinoPhysics = require('./ArduinoPhysics')
 
 var StatusReader = function() {
 
 	var currTemp = 20;
 	var currDepth = 0;
+    var physics = new ArduinoPhysics();
 
     var reader = {};
 
@@ -15,6 +16,7 @@ var StatusReader = function() {
             var subParts = parts[i].split(":");
             status[subParts[0]]=subParts[1];
         }
+        status.vout=physics.mapVoltageReading(status.vout);
         return status;
     };
 	

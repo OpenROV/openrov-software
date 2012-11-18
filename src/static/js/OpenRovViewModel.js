@@ -10,6 +10,7 @@ function OpenRovViewModel(){
 	self.currentRunTime = ko.observable(0);
     self.lastPing = ko.observable();
     self.isArduinoConnected = ko.observable(0);
+    self.currentVoltage = ko.observable(0);
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
@@ -54,6 +55,7 @@ function OpenRovViewModel(){
 		self.currentDepth(data.depth);
 		self.currentTemperature(data.temp);
 		self.currentRunTime(data.time);
+		self.currentVoltage(data.vout);
         self.lastPing(new Date());
 	}
 

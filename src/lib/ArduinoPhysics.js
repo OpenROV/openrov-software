@@ -19,7 +19,16 @@ var ArduinoPhysics = function() {
         }
     };
 
+    physics.mapVoltageReading = function(voltage){
+        return mapA(voltage, 0, 1023,0,12);
+    };
+
     return physics;
+}
+
+function mapA(x, in_min, in_max, out_min, out_max)
+{
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 function map(val) {
@@ -36,7 +45,7 @@ function exp(val) {
     return sign * adj;
 }
 
-function limit(value, l, h) { // truncate anything that goes outside of -127, 127
+function limit(value, l, h) { // truncate anything that goes outside of max and min value
     return Math.max(l, Math.min(h, value));
 }
 

@@ -19,6 +19,7 @@
 var CONFIG = require('./config')
   , logger = require('./logger').create(CONFIG.debug)
   , StatusReader = require('./StatusReader')
+  , ArduinoPhysics = require('./ArduinoPhysics')
   , EventEmitter = require('events').EventEmitter;
 
 var OFFSET = 90;
@@ -26,11 +27,12 @@ var OFFSET = 90;
 var OpenROVController = function() {
     var controller = new EventEmitter();
     var reader = new StatusReader();
+    var physics = new ArduinoPhysics();
 
     setInterval(sendEvent,3000);
 
     function sendEvent() {
-        var data ="vout:245;time:11000";
+        var data ="vout:1023;time:11000";
         var status = reader.parseStatus(data);
         controller.emit('status',status);
     }
