@@ -1,77 +1,3 @@
-
-function ArduinoFirmwareViewModel(){
-	var self = this;
-	var numberOfSteps = 6;
-
-	self.stepsDone = ko.observable(0);
-
-	self.selectedFile = ko.observable();
-		
-	self.uploadPercentage = ko.observable(0);
-	
-	self.uploaded = ko.observable(false);
-	self.unpacking = ko.observable(false);
-	self.unpacked = ko.observable(false);
-	self.compiling = ko.observable(false);
-	self.compiled = ko.observable(false);
-	self.arduinoUploading = ko.observable(false);
-	self.arduinoUploaded = ko.observable(false);
-
-	self.reset = function() {
-		self.stepsDone(0);
-		self.selectedFile('');
-		self.uploadPercentage(0);
-		self.uploaded(false);
-		self.unpacked(false)
-		self.unpacking(false);
-		self.compiling(false);
-		self.compiled(false);
-		self.arduinoUploading(false);
-		self.arduinoUploaded(false);
-
-	};
-
-    self.selectedFileName = ko.computed(function() {
-    	if (self.selectedFile()){
-    		return self.selectedFile().name;
-    	}
-    	return "";
-    });
-
-	self.isValidFirmwareFile = ko.computed(function() {
-		var fileName = self.selectedFileName();
-	    var ext = fileName.split('.').pop().toLowerCase();
-	     return ($.inArray(ext, ['zip', 'ino' , 'gz']) != -1);
-    });
-
-    self.browserDoesSupportFileApi = ko.computed(function() {
-    	return !(window.File && window.FileReader);
-    });
-
-	self.overallPercentage = ko.computed(function() {
-		var percentage =  (100/numberOfSteps) * self.stepsDone();
-		console.log("percentage: " + numberOfSteps + " done: " + self.stepsDone());
-		return percentage;
-	});
-
-    self.inProgress = ko.computed(function() {
-    	return self.stepsDone() != 0;
-    });
-
-    self.updateStatus = function(data){
-    	if (data.errorMessage){ 
-    		//handle error
-    		return;
-    	}
-    	if (self[self.lastStatus]) { 
-    		self[self.lastStatus](false);
-    	}
-    	self[data.key](true);
-    	self.stepsDone(self.stepsDone() + 1);
-    };
-
-}
-
 function OpenRovViewModel(){
 	var self = this;
 
@@ -81,6 +7,7 @@ function OpenRovViewModel(){
 	self.currentTemperature = ko.observable(0);
 	self.currentDepth = ko.observable(0);
 	self.currentHeading = ko.observable(115);
+	self.currentRunTime = ko.observable(0);
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
@@ -106,10 +33,15 @@ function OpenRovViewModel(){
 		}
 	});
 
+    self.formattedRunTime = ko.computed(function(){
+            return msToTime(self.currentRunTime());
+        });
+
 	self.arduinoFirmwareVM = new ArduinoFirmwareViewModel();
 	
 	self.updateStatus = function(data) {
 		self.currentDepth(data.depth);
 		self.currentTemperature(data.temp);
+		self.currentRunTime(data.time);
 	}
 }

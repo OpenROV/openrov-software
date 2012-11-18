@@ -4,12 +4,13 @@
  * This file holds the controller logic.  It manages the connection to the Atmega328.
  *
  */
-
-var SerialPort = require('serialport').SerialPort
+var serialPort = require('serialport')
   , path = require('path')
   , spawn = require('child_process').spawn
   , CONFIG = require('./config')
-  , logger = require('./logger').create(CONFIG.debug);
+  , StatusReader = require('./StatusReader')
+  , logger = require('./logger').create(CONFIG.debug)
+  , EventEmitter = require('events').EventEmitter;
 
 var setup_serial = function(){
     var location = path.join(__dirname, '..', './linux')
@@ -18,21 +19,32 @@ var setup_serial = function(){
 };
 
 var getNewSerial = function(){
-	return new SerialPort(CONFIG.serial, { baud: CONFIG.serial_baud });
+	return new serialPort.SerialPort(CONFIG.serial, {
+        baudrate: CONFIG.serial_baud,
+        parser: serialPort.parsers.readline("\r\n")
+    });
 };
 
-var OFFSET = 128;
+var OFFSET = 90;
 
 var OpenROVController = function(eventLoop) {
   var serial;
   var globalEventLoop = eventLoop;
-  
+  var reader = new StatusReader();
+
   setup_serial();
 
   // ATmega328p is connected to Beaglebone over UART1 (pins TX 24, RX 26)
   if (CONFIG.production) serial = getNewSerial();
 
-  var controller = {};
+
+  var controller = new EventEmitter();
+
+  serial.on( "data", function( data ) {
+      var status = reader.parseStatus(data);
+      controller.emit('status',status);
+  });
+
   controller.sendCommand = function(throttle, yaw, vertical) {
     var port = 0,
         starbord = 0;
@@ -43,12 +55,12 @@ var OpenROVController = function(eventLoop) {
     starbord = map(starbord);
     vertical = Math.round(exp(vertical)) + 90;
     var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
-    if(CONFIG.debug_coomands) console.error("command", command);
+    if(CONFIG.debug_commands) console.error("command", command);
     if(CONFIG.production) serial.write(command);
   };
 
   globalEventLoop.on('serial-stop', function(){
-	logger.log("Closng serial conection for firmware upload");	
+	logger.log("Closing serial connection for firmware upload");
 	serial.close();
 	 });
 

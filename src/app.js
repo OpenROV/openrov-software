@@ -15,8 +15,7 @@ var CONFIG = require('./lib/config')
   , EventEmitter = require('events').EventEmitter
   , OpenROVCamera = require(CONFIG.OpenROVCamera)
   , OpenROVController = require(CONFIG.OpenROVController)
-  , OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController')  
-  , StatusReader = require('./lib/StatusReader')
+  , OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController')
   , logger = require('./lib/logger').create(CONFIG.debug)
   ;
 
@@ -28,7 +27,6 @@ var globalEventLoop = new EventEmitter();
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({delay : DELAY});
 var controller = new OpenROVController(globalEventLoop);
-var statusReader = new StatusReader();
 var arduinoUploadController = new OpenROVArduinoFirmwareController(globalEventLoop);
 
 app.get('/config.js', function(req, res) {
@@ -46,15 +44,15 @@ io.sockets.on('connection', function (socket) {
 
   socket.send('initialize');  // opens socket with client
 
-	socket.on('control_update', function(controls) {
-		controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
-	});
+    socket.on('control_update', function(controls) {
+        controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
+    });
 
-	statusReader.getStatus(function() {
-		statusReader.on('status', function(data) {
-			socket.volatile.emit('status', data);
-		});
-	});
+    controller.on('status',function(status){
+        socket.emit('status',status);
+    })
+
+  arduinoUploadController.initializeSocket(socket);
 
   camera.on('started', function(){
     socket.emit('videoStarted');
@@ -68,7 +66,7 @@ io.sockets.on('connection', function (socket) {
       return console.error('couldn\'t initialize camera. got:', err);
       }
   });
-  arduinoUploadController.initializeSocket(socket);
+
 });
 
 
