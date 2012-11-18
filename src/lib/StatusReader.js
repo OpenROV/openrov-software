@@ -4,6 +4,9 @@ var StatusReader = function(options) {
 	var reader = new EventEmitter();
 	var currTemp = 20;
 	var currDepth = 0;
+	var currRunTime = 0;
+    var boot = Date.now();
+
 	
 	reader.getStatus = function(callback){
 		callback();
@@ -11,9 +14,14 @@ var StatusReader = function(options) {
 	}
 	
 	function sendEvent() {
-		var status = { depth: updateDepth(), temp: updateTemp() };
+		var status = { depth: updateDepth(), temp: updateTemp(), runtime: updateRunTime() };
 		reader.emit('status', status);
 	}
+
+    function updateRunTime(){
+        var now = Date.now();
+        return now - boot;
+    }
 	
 	function updateTemp(){
 		var temp;
