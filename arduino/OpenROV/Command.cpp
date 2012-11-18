@@ -9,7 +9,7 @@ boolean Command::cmp(String a){
 
 // get string from buffer
 String Command::get(){
-  //delay(30); // number of characters to be read?  buffer delay (TODO:  affects timing of sensors... fix this?)
+  //delay(30); // number of characters to be read?  buffer delay (TODO:  affects timing of devices... fix this?)
   String command = "";
   char in;
   while(Serial.available() > 0) { // read full string

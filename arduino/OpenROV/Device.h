@@ -1,11 +1,11 @@
 
-#ifndef __Sensor_H_
-#define __Sensor_H_
+#ifndef __Device_H_
+#define __Device_H_
 #include <Arduino.h>
 
 #define MAX_LEN 50
 
-class Sensor {
+class Device {
     
   private:
     static const char SEPARATER = ':';
@@ -22,8 +22,8 @@ class Sensor {
     static const boolean out = false;
     static const boolean in = true;
     
-    Sensor(String sensor_name, int pin_number, boolean digital_truth, boolean in_out);
-    Sensor(String sensor_name, int pin_number, boolean digital_truth);
+    Device(String device_name, int pin_number, boolean digital_truth, boolean in_out);
+    Device(String device_name, int pin_number, boolean digital_truth);
     void send(int val);
     int read();
     void write(int val);

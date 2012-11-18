@@ -2,12 +2,15 @@
 #include <Arduino.h>
 #include "Motors.h"
 #include "Command.h"
-#include "Sensor.h"
+#include "Device.h"
+#include "Timer.h"
 
 
 Motors motors(9, 10, 11);
 Command cmd;
-Sensor led("led", 4, led.analog, led.out);
+Device led("led", 4, led.analog, led.out);
+Device vout("vout", 0, vout.analog, vout.in);
+Timer time;
 
 Servo tilt, light;
 // IMPORTANT!
@@ -18,18 +21,22 @@ int array[MAX_ARGS];
 void setup(){
 
   Serial.begin(115200);
+
+  pinMode(13, OUTPUT);
  
   tilt.attach(12);
   light.attach(6);
   
   motors.reset();
   led.reset();
+
+  time.reset();
 }
 
 void loop(){
   
   if (Serial.available()) {
-    // blocks output data... TODO: need a way of calculating frequency for sensor data
+    // blocks output data... TODO: need a way of calculating frequency for device data
     delay(30);
     // Get command from serial buffer
     cmd.get();
@@ -46,7 +53,6 @@ void loop(){
       int v = array[2];
       int s = array[3];
       motors.go(p, v, s); 
-      // Serial.println(cmd.cmd);
     }
     else if (cmd.cmp("light")) {
       cmd.parse(array);
@@ -57,4 +63,17 @@ void loop(){
       motors.stop(); 
     }
   }
+
+  // send voltage
+  if (time.elapsed(1000)) {
+    vout.send(vout.read());
+    Serial.print("time:");
+    Serial.println(millis());
+  }
+  // else if (time.elapsed(500)) {
+  //   digitalWrite(13, HIGH);
+  //   delay(200);
+  //   digitalWrite(13, LOW);
+  // }
+
 }
