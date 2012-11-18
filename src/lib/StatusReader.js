@@ -1,27 +1,22 @@
-var EventEmitter = require('events').EventEmitter;
 
-var StatusReader = function(options) {
-	var reader = new EventEmitter();
+
+var StatusReader = function() {
+
 	var currTemp = 20;
 	var currDepth = 0;
-	var currRunTime = 0;
-    var boot = Date.now();
 
-	
-	reader.getStatus = function(callback){
-		callback();
-		setInterval(sendEvent,3000);
-	}
-	
-	function sendEvent() {
-		var status = { depth: updateDepth(), temp: updateTemp(), runtime: updateRunTime() };
-		reader.emit('status', status);
-	}
+    var reader = {};
 
-    function updateRunTime(){
-        var now = Date.now();
-        return now - boot;
-    }
+    reader.parseStatus= function(rawStatus){
+        var parts = rawStatus.split(';');
+        var status = { depth: updateDepth(), temp: updateTemp()};
+
+        for(var i=0;i<parts.length;i++){
+            var subParts = parts[i].split(":");
+            status[subParts[0]]=subParts[1];
+        }
+        return status;
+    };
 	
 	function updateTemp(){
 		var temp;

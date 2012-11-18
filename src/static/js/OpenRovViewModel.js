@@ -42,6 +42,6 @@ function OpenRovViewModel(){
 	self.updateStatus = function(data) {
 		self.currentDepth(data.depth);
 		self.currentTemperature(data.temp);
-		self.currentRunTime(data.runtime);
+		self.currentRunTime(data.time);
 	}
 }
