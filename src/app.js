@@ -48,6 +48,10 @@ io.sockets.on('connection', function (socket) {
         controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
     });
 
+    socket.on('tilt_update', function(value) {
+        controller.sendTilt(value);
+    });
+
     controller.on('status',function(status){
         socket.emit('status',status);
     })

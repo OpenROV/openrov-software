@@ -11,6 +11,7 @@ function OpenRovViewModel(){
     self.lastPing = ko.observable();
     self.isArduinoConnected = ko.observable(0);
     self.currentVoltage = ko.observable(0);
+    self.currentTiltPosition = ko.observable(0);
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
@@ -36,6 +37,11 @@ function OpenRovViewModel(){
 		}
 	});
 
+    self.servoTiltStyle = ko.computed(function(){
+        var angle = self.currentTiltPosition()*-45;
+        return "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)";
+    });
+
     self.updateConnectionStatus = function(){
         var now = new Date();
         var delay = now - self.lastPing();
@@ -58,6 +64,10 @@ function OpenRovViewModel(){
 		self.currentVoltage(data.vout);
         self.lastPing(new Date());
 	}
+
+    self.updateTilt = function(value){
+        self.currentTiltPosition(value);
+    }
 
     setInterval(self.updateConnectionStatus, 1000);
 }

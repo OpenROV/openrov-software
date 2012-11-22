@@ -11,7 +11,7 @@ var ArduinoPhysics = function() {
         starbord -= yaw;
         port = map(port);
         starbord = map(starbord);
-        vertical = Math.round(exp(vertical)) + 90;
+        vertical = Math.round(exp(vertical)) + OFFSET;
         return {
             port: port,
             starbord: starbord,
@@ -22,6 +22,11 @@ var ArduinoPhysics = function() {
     physics.mapVoltageReading = function(voltage){
         return mapA(voltage, 0, 1023,0,12);
     };
+
+    physics.mapTiltServo = function (value) {
+        return value + OFFSET;
+    };
+
 
     return physics;
 }

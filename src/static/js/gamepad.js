@@ -5,7 +5,13 @@ var GamePad = function() {
     return navigator && navigator.webkitGamepads && navigator.webkitGamepads[0] && navigator.webkitGamepads[0].axes;
   }
 
-  gp.getPositions = function() {
+    var servoTiltHandler = function(value){};
+
+    kp.bindServoTilt = function(callback){
+        servoTiltHandler=callback;
+    };
+
+    gp.getPositions = function() {
     var axes = getAxes();
     var positions = {
       throttle: 0,
