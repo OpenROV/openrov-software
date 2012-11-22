@@ -43,6 +43,12 @@ var OpenROVController = function() {
         console.log(command);
     };
 
+    controller.sendTilt = function(value) {
+        var servoTilt = physics.mapTiltServo(value);
+        var command = 'tilt(' + servoTilt +');';
+        console.log("command", command);
+    };
+
   return controller;
 }
 

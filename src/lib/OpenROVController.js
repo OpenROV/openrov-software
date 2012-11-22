@@ -52,6 +52,13 @@ var OpenROVController = function(eventLoop) {
     if(CONFIG.production) serial.write(command);
   };
 
+    controller.sendTilt = function(value) {
+        var servoTilt = physics.mapTiltServo(value);
+        var command = 'tilt(' + servoTilt +');';
+        if(CONFIG.debug_commands) console.error("command", command);
+        if(CONFIG.production) serial.write(command);
+    };
+
   globalEventLoop.on('serial-stop', function(){
 	logger.log("Closing serial connection for firmware upload");
 	serial.close();
