@@ -43,7 +43,11 @@
                 </div>
                 <div id="keyboard" class="controller well well-small" >
                     <img src="themes/OpenROV/img/keyboard.png" class="center">
-                    Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
+                    <p>Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.</p>
+                </div>
+                <div id="servoTilt" class="controller well well-small" >
+                    <p>Servo Tilt: <img src="themes/OpenROV/img/servo_tilt.png" data-bind="attr: {style: servoTiltStyle}" class="center"></p>
+                    <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
                 </div>
             </div>
           </div>
@@ -225,6 +229,11 @@
                 $("#gamepad").hide();
                 controller = kp;
             }
+
+            controller.bindServoTilt(function (value){
+                viewmodel.updateTilt(value);
+                socket.emit('tilt_update',value * 90);
+            });
 
             var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms
             setInterval(function() {
