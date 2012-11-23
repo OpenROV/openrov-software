@@ -27,6 +27,9 @@ var ArduinoPhysics = function() {
         return value + OFFSET;
     };
 
+    physics.mapLight = function (value) {
+        return mapA(value, 0,5,0,1023);
+    };
 
     return physics;
 }

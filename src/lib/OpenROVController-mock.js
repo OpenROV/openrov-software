@@ -49,6 +49,12 @@ var OpenROVController = function() {
         console.log("command", command);
     };
 
+    controller.sendLight = function(value) {
+        var light = physics.mapLight(value);
+        var command = 'light(' + light +');';
+        console.log("command", command);
+    };
+
   return controller;
 }
 
