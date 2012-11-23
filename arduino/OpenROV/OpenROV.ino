@@ -24,7 +24,7 @@ void setup(){
 
   pinMode(13, OUTPUT);
  
-  tilt.attach(12);
+  tilt.attach(3);
   light.attach(6);
   
   motors.reset();
