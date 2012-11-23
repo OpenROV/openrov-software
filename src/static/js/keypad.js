@@ -31,28 +31,38 @@ var KEYS = {
   },
   81: { //Q (tilt up)
     command: 'tilt',
-    position: 'tilt',
     value: 1
   },
   65: { //A (tilt fwd)
     command: 'tilt',
-    position: 'tilt',
     value: 0
   },
   90: { //Z (tilt down)
     command: 'tilt',
-    position: 'tilt',
     value: -1
+  },
+  187: { //+ (brightness up)
+     command: 'light',
+     value: 1
+  },
+  189: { //- (brightness down)
+     command: 'light',
+     value: -1
   }
 }
 
 var KeyPad = function() {
   var kp = {};
   var servoTiltHandler = function(value){};
+  var brightnessHandler = function(value){};
 
   kp.bindServoTilt = function(callback){
       servoTiltHandler=callback;
   };
+
+    kp.bindBrightness = function(callback){
+        brightnessHandler=callback;
+    };
 
   var positions = {
     throttle: 0,
@@ -68,6 +78,8 @@ var KeyPad = function() {
         positions[info.position] = info.value;
     else if(info.command=='tilt')
         servoTiltHandler(info.value);
+    else if(info.command=='light')
+        brightnessHandler(info.value);
   });
 
   $(window).keyup(function(evt) {
