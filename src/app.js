@@ -52,6 +52,10 @@ io.sockets.on('connection', function (socket) {
         controller.sendTilt(value);
     });
 
+    socket.on('brightness_update', function(value) {
+        controller.sendLight(value);
+    });
+
     controller.on('status',function(status){
         socket.emit('status',status);
     })

@@ -6,9 +6,13 @@ var GamePad = function() {
   }
 
     var servoTiltHandler = function(value){};
+    var brightnessHandler = function(value){};
 
-    kp.bindServoTilt = function(callback){
+    gp.bindServoTilt = function(callback){
         servoTiltHandler=callback;
+    };
+    gp.bindBrightness = function(callback){
+        brightnessHandler=callback;
     };
 
     gp.getPositions = function() {

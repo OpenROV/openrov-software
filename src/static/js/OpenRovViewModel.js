@@ -12,6 +12,7 @@ function OpenRovViewModel(){
     self.isArduinoConnected = ko.observable(0);
     self.currentVoltage = ko.observable(0);
     self.currentTiltPosition = ko.observable(0);
+    self.currentBrightness = ko.observable(0);
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
@@ -42,6 +43,12 @@ function OpenRovViewModel(){
         return "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)";
     });
 
+    self.brightnessClass = ko.computed(function(){
+        var brightness = self.currentBrightness();
+        return "center level"+brightness;
+    });
+
+
     self.updateConnectionStatus = function(){
         var now = new Date();
         var delay = now - self.lastPing();
@@ -65,8 +72,11 @@ function OpenRovViewModel(){
         self.lastPing(new Date());
 	}
 
-    self.updateTilt = function(value){
-        self.currentTiltPosition(value);
+    self.updateBrightness = function(value) {
+        var newVal = self.currentBrightness();
+        newVal += value;
+        if(newVal<0 || newVal >5) return;
+        self.currentBrightness(newVal);
     }
 
     setInterval(self.updateConnectionStatus, 1000);

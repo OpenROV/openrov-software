@@ -49,6 +49,10 @@
                     <p>Servo Tilt: <img src="themes/OpenROV/img/servo_tilt.png" data-bind="attr: {style: servoTiltStyle}" class="center"></p>
                     <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
                 </div>
+                <div id="lights" class="controller well well-small" >
+                    <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"><div class="center" style="width: 20px;" data-bind="text: currentBrightness"></div></div></p>
+                    <p>Use <i>+</i>, <i>-</i> to increase brightness of lights.</p>
+                </div>
             </div>
           </div>
         </div>
@@ -231,8 +235,15 @@
             }
 
             controller.bindServoTilt(function (value){
-                viewmodel.updateTilt(value);
+                viewmodel.currentTiltPosition(value);
                 socket.emit('tilt_update',value * 90);
+            });
+
+            controller.bindBrightness(function (value){
+                viewmodel.updateBrightness(value);
+                socket.emit('brightness_update',viewmodel.currentBrightness());
+                socket.emit('brightness_update',viewmodel.currentBrightness());
+                socket.emit('brightness_update',viewmodel.currentBrightness());
             });
 
             var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms

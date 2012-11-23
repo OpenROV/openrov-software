@@ -160,3 +160,36 @@ img.center {
   display: table-cell;
   vertical-align: middle; 
 }
+
+#brightnessIndicator {
+    border-color: #000000;
+    border-radius: 30px;
+    padding: 12px 20px 12px 30px;
+    width: 120px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.level0 {
+    background: #ffffff;
+}
+
+.level1 {
+    background: #FFFFCC;
+}
+
+.level2 {
+    background: #ffff99;
+}
+
+.level3 {
+    background: #ffff66;
+}
+
+.level4 {
+    background: #ffff33;
+}
+
+.level5 {
+    background: #FFFF00;
+}
