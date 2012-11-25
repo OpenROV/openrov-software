@@ -24,7 +24,6 @@
                   <li><a href="#about"  class="hidden">Debug</a></li>
                 </ul>
               </div><!--/.nav-collapse -->
-                <img data-bind="attr: { src: 'themes/OpenROV/img/connection-' + isArduinoConnected() + '.png' }" class="nav pull-right">
             </div>
           </div>
         </div>
@@ -50,7 +49,8 @@
                     <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
                 </div>
                 <div id="lights" class="controller well well-small" >
-                    <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"><div class="center" style="width: 20px;" data-bind="text: currentBrightness"></div></div></p>
+                    <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"></div></p>
+                    <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
                     <p>Use <i>+</i>, <i>-</i> to increase brightness of lights.</p>
                 </div>
             </div>
@@ -59,10 +59,11 @@
         <div class="navbar navbar-inverse navbar-fixed-bottom">
           <div class="navbar-inner">
             <div class="container-fluid" style="height: 100%">
-              <div class="control-element span2 hidden"><h6>Temperature:</h6><h2 data-bind="html: convertedTemperature"></h2></div>
-              <div class="control-element span3 hidden"><div class="pull-right" id="depth-gauge"></div><h6>Depth:</h6><h2 data-bind="text: convertedDepth"></h2></div>
-                <div class="control-element span3"><h6>RunTime:</h6><h2 data-bind="text: formattedRunTime"></h2></div>
-                <div class="control-element span3"><h6>Voltage:</h6><h2 data-bind="text: currentVoltage().toFixed(2)+ ' Volts'"></h2></div>
+              <div class="span1 pull-left"><h6>Connection</h6><div id="connectionHealth" data-bind="attr: { class: isArduinoConnected }">&nbsp;</div></div>
+              <div class="span2 hidden pull-right"><h6>Temperature</h6><h2 data-bind="html: convertedTemperature"></h2></div>
+              <div class="span2 hidden pull-right"><div class="pull-right" id="depth-gauge"></div><h6>Depth:</h6><h2 data-bind="text: convertedDepth"></h2></div>
+                <div class="span2 pull-right"><h2 data-bind="text: formattedRunTime"></h2><h4 data-bind="text: currentTime().toLocaleTimeString()"></h4></div>
+                <div class="span1 pull-right"><h2 data-bind="text: currentVoltage().toFixed(1)+ 'v'"></h2><div id="batteryIndicator" data-bind="attr: {class: batteryLevel}">&nbsp;</div></div>
             </div>
           </div>
         </div>    
