@@ -9,10 +9,11 @@ function OpenRovViewModel(){
 	self.currentHeading = ko.observable(115);
 	self.currentRunTime = ko.observable(0);
     self.lastPing = ko.observable();
-    self.isArduinoConnected = ko.observable(0);
+    self.isArduinoConnected = ko.observable("false");
     self.currentVoltage = ko.observable(0);
     self.currentTiltPosition = ko.observable(0);
     self.currentBrightness = ko.observable(0);
+    self.currentTime = ko.observable(new Date());
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
@@ -48,6 +49,19 @@ function OpenRovViewModel(){
         return "center level"+brightness;
     });
 
+    self.batteryLevel = ko.computed(function(){
+        var voltage = self.currentVoltage();
+        if(voltage < 9)
+            return "level1";
+        if(voltage < 10)
+            return "level2";
+        if(voltage < 10.5)
+            return "level3";
+        if(voltage < 11.5)
+            return "level4";
+        return "level5";
+    });
+
 
     self.updateConnectionStatus = function(){
         var now = new Date();
@@ -80,4 +94,5 @@ function OpenRovViewModel(){
     }
 
     setInterval(self.updateConnectionStatus, 1000);
+    setInterval(function () {self.currentTime(new Date())}, 1000);
 }
