@@ -49,7 +49,8 @@
                     <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
                 </div>
                 <div id="lights" class="controller well well-small" >
-                    <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"><div class="center" style="width: 20px;" data-bind="text: currentBrightness"></div></div></p>
+                    <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"></div></p>
+                    <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
                     <p>Use <i>+</i>, <i>-</i> to increase brightness of lights.</p>
                 </div>
             </div>

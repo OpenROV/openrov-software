@@ -89,7 +89,7 @@ function OpenRovViewModel(){
     self.updateBrightness = function(value) {
         var newVal = self.currentBrightness();
         newVal += value;
-        if(newVal<0 || newVal >5) return;
+        if(newVal<0 || newVal >10) return;
         self.currentBrightness(newVal);
     }
 

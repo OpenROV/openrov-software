@@ -162,36 +162,55 @@ img.center {
 }
 
 #brightnessIndicator {
-    border-color: #000000;
-    border-radius: 30px;
-    padding: 12px 20px 12px 30px;
-    width: 120px;
-    border-style: solid;
-    border-width: 1px;
+    width:250px;
+    height: 51px;
+    border:1px solid black;
+    background-image: url('../img/brightness.png');
+    background-repeat:no-repeat;
 }
 
 #brightnessIndicator.level0 {
-    background: #ffffff;
+    background-image: none;
 }
 
 #brightnessIndicator.level1 {
-    background: #FFFFCC;
+    background-position: 0px -471px;
 }
 
 #brightnessIndicator.level2 {
-    background: #ffff99;
+    background-position: 0px -418px;
 }
 
 #brightnessIndicator.level3 {
-    background: #ffff66;
+    background-position: 0px -366px;
 }
 
 #brightnessIndicator.level4 {
-    background: #ffff33;
+    background-position: 0px -313px;
 }
 
 #brightnessIndicator.level5 {
-    background: #FFFF00;
+    background-position: 0px -261px;
+}
+
+#brightnessIndicator.level6 {
+    background-position: 0px -209px;
+}
+
+#brightnessIndicator.level7 {
+    background-position: 0px -157px;
+}
+
+#brightnessIndicator.level8 {
+    background-position: 0px -104px;
+}
+
+#brightnessIndicator.level9 {
+    background-position: 0px -52px;
+}
+
+#brightnessIndicator.level10 {
+    background-position: 0px 0px;
 }
 
 .battery0 {
