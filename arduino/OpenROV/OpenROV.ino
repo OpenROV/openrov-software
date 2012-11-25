@@ -25,7 +25,7 @@ void setup(){
   pinMode(13, OUTPUT);
  
   tilt.attach(3);
-  light.attach(6);
+  light.attach(5);
   
   motors.reset();
   led.reset();
@@ -56,8 +56,8 @@ void loop(){
     }
     else if (cmd.cmp("light")) {
       cmd.parse(array);
-      int light = array[1];
-      led.write(light);
+      int value = array[1];
+      light.write(value);
     }
     else {
       motors.stop(); 
