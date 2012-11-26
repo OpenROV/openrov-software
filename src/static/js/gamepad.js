@@ -113,7 +113,8 @@ var GamePad = function() {
   gp.isAvailable = function() {
       if(isSupported())
         window.requestAnimationFrame(updateStatus);
-        if(getPads()[0]!=undefined){
+        var pads = getPads();
+        if(pads!=undefined && pads[0]!=undefined){
             return true;
         }
       return false;
