@@ -1,6 +1,16 @@
 var GamePad = function() {
   var gp = {};
 
+    var padStatus = {
+        position: {
+            throttle: 0,
+            yaw: 0,
+            lift: 0
+        },
+        tilt: 0,
+        light: 0
+    }
+
     if ( !window.requestAnimationFrame ) {
         window.requestAnimationFrame = ( function() {
             return window.webkitRequestAnimationFrame ||
@@ -44,29 +54,65 @@ var GamePad = function() {
         brightnessHandler=callback;
     };
 
+
+    var updateLightStatus = function(buttons){
+        var lightValue=0;
+        if(buttons[12]==1)
+            lightValue=1;
+        if(buttons[13]==1)
+            lightValue=-1;
+        if(padStatus.light!=lightValue){
+            padStatus.light=lightValue;
+            brightnessHandler(padStatus.light);
+        }
+    };
+
+    var updateTiltStatus = function(buttons){
+        var servoValue=0;
+        if(buttons[3]==1)
+            servoTiltHandler(1);
+        if(buttons[1]==1)
+            servoTiltHandler(0);
+        if(buttons[0]==1)
+            servoTiltHandler(-1);
+    };
+
     gp.getPositions = function() {
-    window.requestAnimationFrame(gp.getPositions);
+        window.requestAnimationFrame(updateStatus);
+        return padStatus.position;
+    }
+
+    var updateStatus = function() {
+    window.requestAnimationFrame(updateStatus);
 
     var pad = getPads()[0];
         if(pad){
             var axes = pad.axes;
+            var buttons = pad.buttons;
             var positions = {
                 throttle: 0,
                 yaw: 0,
                 lift: 0
             };
-            if(!axes) return positions;
-            return {
-                throttle: -1*axes[1],
-                yaw: axes[0],
-                lift: -1*axes[3]
-            };
+            if(buttons)
+            {
+                updateLightStatus(buttons);
+                updateTiltStatus(buttons);
+            }
+            if(axes) {
+                positions = {
+                    throttle: -1*axes[1],
+                    yaw: axes[0],
+                    lift: -1*axes[3]
+                };
+            }
+            padStatus.position = positions;
         }
   }
 
   gp.isAvailable = function() {
       if(isSupported())
-        window.requestAnimationFrame(gp.getPositions);
+        window.requestAnimationFrame(updateStatus);
         if(getPads()[0]!=undefined){
             return true;
         }
