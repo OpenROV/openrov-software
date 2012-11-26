@@ -5,14 +5,13 @@
 #include "Device.h"
 #include "Timer.h"
 
-
 Motors motors(9, 10, 11);
 Command cmd;
-Device led("led", 4, led.analog, led.out);
 Device vout("vout", 0, vout.analog, vout.in);
+Device light("light", 5, light.analog, light.out);
 Timer time;
 
-Servo tilt, light;
+Servo tilt;
 // IMPORTANT!
 // array[0] will be the number of arguments in the command
 int array[MAX_ARGS];
@@ -25,11 +24,9 @@ void setup(){
   pinMode(13, OUTPUT);
  
   tilt.attach(3);
-  light.attach(6);
   
   motors.reset();
-  led.reset();
-
+  
   time.reset();
 }
 
@@ -56,8 +53,8 @@ void loop(){
     }
     else if (cmd.cmp("light")) {
       cmd.parse(array);
-      int light = array[1];
-      led.write(light);
+      int value = array[1];
+      light.write(value);
     }
     else {
       motors.stop(); 
