@@ -229,7 +229,9 @@
               viewmodel.arduinoFirmwareVM.toggleDetails();
             });
 
-            $('#arduiniFirmware-details').scrollTop($('#arduiniFirmware-details')[0].scrollHeight);
+            viewmodel.arduinoFirmwareVM.details.subscribe(function(data) { 
+              $('#arduiniFirmware-details').scrollTop($('#arduiniFirmware-details')[0].scrollHeight);
+            });
 
             /* ------------------------------------------
                gamepad/keyboard 

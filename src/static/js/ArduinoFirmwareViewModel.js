@@ -16,7 +16,7 @@ function ArduinoFirmwareViewModel(){
     self.arduinoUploading = ko.observable(false);
     self.arduinoUploaded = ko.observable(false);
     self.detailsVisible = ko.observable(false);
-    self.details = ko.observable('foo');
+    self.details = ko.observable();
 
 
     self.reset = function() {

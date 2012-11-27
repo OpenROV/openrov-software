@@ -30,6 +30,7 @@ var FirmwareInstaller = function (eventLoop) {
 
     process.stderr.on('data', function(data) {
       console.log(data.toString());
+      installer.emit("firmwareinstaller-output", data.toString());
     });
 
     process.stdout.on('data', function(data) {
@@ -53,7 +54,6 @@ var FirmwareInstaller = function (eventLoop) {
         installer.emit("firmwareinstaller-uploaded", "");
 	globalEventLoop.emit("serial-start");
       }
-      installer.emit("firmwareinstaller-output", data);
     });
   }
 
