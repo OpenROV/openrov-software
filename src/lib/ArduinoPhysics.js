@@ -20,7 +20,7 @@ var ArduinoPhysics = function() {
     };
 
     physics.mapVoltageReading = function(voltage){
-        return mapA(voltage, 0, 1023,0,12);
+        return mapA(voltage, 0, 1023,0,50);
     };
 
     physics.mapTiltServo = function (value) {
