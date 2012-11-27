@@ -261,3 +261,9 @@ img.center {
 #connectionHealth.true {
     background-position: -29px 0px;
 }
+
+#arduiniFirmware-details {
+  width: 95%;
+  height: 90px;
+  margin-top: 10px;
+}
