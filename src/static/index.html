@@ -143,6 +143,12 @@
                 <li data-bind="css: { muted: ! arduinoFirmwareVM.arduinoUploading() }">Upload to Arduino <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.arduinoUploaded"></i></li>
               </ul>
             </div>
+            <div class="progress-step">
+              <a href="#" class="btn" id="arduinoFirmware-showdetails" data-bind="css: { disabled: ! arduinoFirmwareVM.inProgress() }">Show details</a>
+              <div class="collapse" data-bind="css: { collapse: !arduinoFirmwareVM.detailsVisible() }">
+                <textarea id="arduiniFirmware-details" readonly="readonly" data-bind="text: arduinoFirmwareVM.details"></textarea>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <a href="#" class="btn" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="css: { disabled: arduinoFirmwareVM.inProgress() }, visible: ! arduinoFirmwareVM.arduinoUploaded()">Cancel</a>
@@ -219,6 +225,11 @@
               viewmodel.arduinoFirmwareVM.reset();
               //$('#firmware-upload-dialog').modal('hide');
             });
+            $('#arduinoFirmware-showdetails').click(function() {
+              viewmodel.arduinoFirmwareVM.toggleDetails();
+            });
+
+            $('#arduiniFirmware-details').scrollTop($('#arduiniFirmware-details')[0].scrollHeight);
 
             /* ------------------------------------------
                gamepad/keyboard 
@@ -299,7 +310,11 @@
 
             socket.on('arduinoFirmware-status', function(data){
               viewmodel.arduinoFirmwareVM.updateStatus(data);
-            })
+            });
+
+            socket.on('arduinoFirmware-output', function(data){
+              viewmodel.arduinoFirmwareVM.logOutput(data);
+            });
 
             setupFrameHandling(socket);
           });

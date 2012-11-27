@@ -15,6 +15,9 @@ function ArduinoFirmwareViewModel(){
     self.compiled = ko.observable(false);
     self.arduinoUploading = ko.observable(false);
     self.arduinoUploaded = ko.observable(false);
+    self.detailsVisible = ko.observable(false);
+    self.details = ko.observable('foo');
+
 
     self.reset = function() {
         self.stepsDone(0);
@@ -27,7 +30,8 @@ function ArduinoFirmwareViewModel(){
         self.compiled(false);
         self.arduinoUploading(false);
         self.arduinoUploaded(false);
-
+        self.detailsVisible(false);
+        self.details('');
     };
 
     self.selectedFileName = ko.computed(function() {
@@ -68,5 +72,18 @@ function ArduinoFirmwareViewModel(){
         self[data.key](true);
         self.stepsDone(self.stepsDone() + 1);
     };
+
+    self.toggleDetails = function(){
+        if (self.detailsVisible()) {
+            self.detailsVisible(false);
+        }
+        else {
+            self.detailsVisible(true);
+        }
+    };
+
+    self.logOutput = function(data) {
+        self.details(self.details() + data);
+    }
 
 }
