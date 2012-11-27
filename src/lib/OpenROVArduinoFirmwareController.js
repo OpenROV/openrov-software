@@ -125,6 +125,11 @@ var OpenROVArduinoFirmwareController = function(eventLoop) {
       controller.socket.emit("arduinoFirmware-status", { key : "arduinoUploaded", value : "true" });
     });
 
+  controller.installer.on('firmwareinstaller-output',
+    function(data) {
+      controller.socket.emit('arduinoFirmware-output', data);
+    });
+
   controller.handleUploadedFile = function(socket, filename) {
     logger.log("going to install the uploaded file: " + filename);
     controller.installer.install(path.resolve(tempDirectory + filename));

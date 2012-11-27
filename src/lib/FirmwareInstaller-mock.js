@@ -28,6 +28,8 @@ var FirmwareInstaller = function () {
   }
 
   installer.compile = function(directory) {
+    setTimeout(function() { installer.emit("firmwareinstaller-output", "Stated compiling\n"); }, 500);
+    setTimeout(function() { installer.emit("firmwareinstaller-output", "Do compiling\n"); }, 1000);
   	setTimeout(function() { installer.emit("firmwareinstaller-compilled", directory);}, 2000 );
   }
 
