@@ -5,7 +5,7 @@
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/bootstrap-responsive.css" rel="stylesheet">        
         <link rel="stylesheet" href="themes/OpenROV/css/style.css">
-        <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+        <link href="css/ui-lightness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -20,8 +20,8 @@
               <p><a class="brand" href="#"><img src="themes/OpenROV/img/logo.png" class="logo"/>&nbsp;Cockpit</a></p>
               <div class="nav-collapse collapse">
                 <ul class="nav pull-right">
-                  <li><a href="#" id="show-settings" class="">Settings</a></li>
-                  <li><a href="#about"  class="hidden">Debug</a></li>
+                  <li><a href="#" id="show-settings">Settings</a></li>
+                  <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
                 </ul>
               </div><!--/.nav-collapse -->
             </div>
@@ -73,28 +73,28 @@
         <div class="drop-in-right" id="settings">
           <div class="back-button"></div><h3>Settings</h3>
           <div class="settings-block">
-            <h4>General Settings</h4>            
-            <!--Unit of measurement:
-            <div class="control-group">
-              <label class="radio inline">
-                <input name="unit-of-measurement" type="radio" value="metric" data-bind="checked: unitMeasurement">
-                <span>Metric</span>
-              </label>
-              <label class="radio inline">
-                <input name="unit-of-measurement" type="radio" value="imperial" data-bind="checked: unitMeasurement">
-                <span>Imperial</span>
-              </label>
-            </div>
-            <div class="control-group">
-              <label class="radio inline">
-                <input name="unit-of-temperature" type="radio" value="celsius" data-bind="checked: unitTemperature">
-                <span>Celsius</span>
-              </label>
-              <label class="radio inline">
-                <input name="unit-of-temperature" type="radio" value="farenheit" data-bind="checked: unitTemperature">
-                <span>Farenheit</span>
-              </label>
-            </div>-->
+              <!--<h4>General Settings</h4>
+              Unit of measurement:
+              <div class="control-group">
+                <label class="radio inline">
+                  <input name="unit-of-measurement" type="radio" value="metric" data-bind="checked: unitMeasurement">
+                  <span>Metric</span>
+                </label>
+                <label class="radio inline">
+                  <input name="unit-of-measurement" type="radio" value="imperial" data-bind="checked: unitMeasurement">
+                  <span>Imperial</span>
+                </label>
+              </div>
+              <div class="control-group">
+                <label class="radio inline">
+                  <input name="unit-of-temperature" type="radio" value="celsius" data-bind="checked: unitTemperature">
+                  <span>Celsius</span>
+                </label>
+                <label class="radio inline">
+                  <input name="unit-of-temperature" type="radio" value="farenheit" data-bind="checked: unitTemperature">
+                  <span>Farenheit</span>
+                </label>
+              </div>-->
           </div>
           <div class="settings-block">
             <h4>Upload firmware</h4>
@@ -115,6 +115,37 @@
               <button href="#firmware-upload-dialog" class="btn btn-small" type="button" id="arduinoFirmware-upload" data-bind="css: { disabled: arduinoFirmwareVM.isValidFirmwareFile() == false,  'btn-success': arduinoFirmwareVM.isValidFirmwareFile() }" data-toggle="modal"><i class="icon-upload icon-white"></i> Upload</button>
             </div>
           </div>
+        </div>
+
+        <div class="drop-in-right" id="diagnostic">
+            <div class="back-button"></div><h3>Diagnostics</h3>
+            <div class="settings-block">
+                <h4>Pre-Flight Check</h4>
+            </div>
+            <div class="settings-block">
+                <h4>Manually test motors</h4>
+                <div class="control-group invisible-field">
+                    <label class="control-label" for="portMotorSpeed">Port Motor</label>
+                    <input type="text" id="portMotorSpeedVal"/>
+                    <div class="controls">
+                        <div id="portMotorSpeed"></div>
+                    </div>
+                </div>
+                <div class="control-group invisible-field">
+                    <label class="control-label" for="starbordMotorSpeed">Starboard Motor</label>
+                    <input type="text" id="starbordMotorSpeedVal"/>
+                    <div class="controls">
+                        <div id="starbordMotorSpeed"></div>
+                    </div>
+                </div>
+                <div class="control-group invisible-field">
+                    <label class="control-label" for="verticalMotorSpeedVal">Vertical Motor</label>
+                    <input type="text" id="verticalMotorSpeedVal"/>
+                    <div class="controls">
+                        <div id="verticalMotorSpeed"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Firmware upload -->
@@ -204,6 +235,60 @@
               Mousetrap.unbind('esc');
             }
 
+              /* ------------------------------------------
+               diagnostic
+               */
+              var options = {};
+              $("#show-diagnostic").click(function() {
+                  $("#diagnostic").show('fold');
+                  viewmodel.sendUpdateEnabled(false);
+                  Mousetrap.bind('esc', hideDiagnostic);
+              });
+
+              $("#diagnostic .back-button").click(function() {
+                  hideDiagnostic();
+              });
+
+              function hideDiagnostic() {
+                  $("#diagnostic").hide('fold');
+                  viewmodel.sendUpdateEnabled(true);
+                  Mousetrap.unbind('esc');
+              }
+
+              $("#starbordMotorSpeed").slider({
+                  min:0,
+                  max:180,
+                  value:90,
+                  slide: function( event, ui ) {
+                      $( "#starbordMotorSpeedVal" ).val( ui.value );
+                      sendTestMotorMessage(socket);
+                  }
+              });
+              $( "#starbordMotorSpeedVal" ).val( $( "#starbordMotorSpeed" ).slider( "value" ) );
+
+              $("#portMotorSpeed").slider({
+                  min:0,
+                  max:180,
+                  value:90,
+                  slide: function( event, ui ) {
+                      $( "#portMotorSpeedVal" ).val( ui.value );
+                      sendTestMotorMessage(socket);
+                  }
+              });
+              $( "#portMotorSpeedVal" ).val( $( "#portMotorSpeed" ).slider( "value" ) );
+
+              $("#verticalMotorSpeed").slider({
+                  min:0,
+                  max:180,
+                  value:90,
+                  slide: function( event, ui ) {
+                      $( "#verticalMotorSpeedVal" ).val( ui.value );
+                      sendTestMotorMessage(socket);
+                  }
+              });
+              $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
+
+
             /* ------------------------------------------
                firmware upload 
             */
@@ -272,7 +357,8 @@
                 console.error("DEBUG: yaw", controls.yaw);
                 console.error("DEBUG: lift", controls.lift);
               }*/
-              socket.emit('control_update', controls);
+              if(viewmodel.sendUpdateEnabled())
+                socket.emit('control_update', controls);
             }, SAMPLE_PERIOD);
 
             var DEAD_ZONE = CONFIG.dead_zone;
@@ -320,6 +406,19 @@
 
             setupFrameHandling(socket);
           });
+
+          function sendTestMotorMessage(socket){
+              var portVal = $( "#portMotorSpeedVal" ).val();
+              var starbordVal = $( "#starbordMotorSpeedVal" ).val();
+              var verticalVal = $( "#verticalMotorSpeedVal" ).val();
+              socket.emit('motor_test', {
+                  port: portVal,
+                  starbord: starbordVal,
+                  vertical: verticalVal
+              });
+          }
+
+
         </script>
 
     </body>
