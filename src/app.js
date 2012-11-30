@@ -30,6 +30,7 @@ var controller = new OpenROVController(globalEventLoop);
 var arduinoUploadController = new OpenROVArduinoFirmwareController(globalEventLoop);
 
 app.get('/config.js', function(req, res) {
+  res.type('application/javascript');
   res.send('var CONFIG = ' + JSON.stringify(CONFIG));
 });
 
