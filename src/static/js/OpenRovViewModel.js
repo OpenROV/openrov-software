@@ -14,6 +14,7 @@ function OpenRovViewModel(){
     self.currentTiltPosition = ko.observable(0);
     self.currentBrightness = ko.observable(0);
     self.currentTime = ko.observable(new Date());
+    self.sendUpdateEnabled = ko.observable(true);
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
