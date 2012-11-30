@@ -45,6 +45,12 @@ var OpenROVController = function(eventLoop) {
       controller.emit('status',status);
   });
 
+    controller.sendMotorTest = function(port, starbord, vertical) {
+        var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
+        if(CONFIG.debug_commands) console.error("command", command);
+        if(CONFIG.production) serial.write(command);
+    };
+
   controller.sendCommand = function(throttle, yaw, vertical) {
     var motorCommands = physics.mapMotors(throttle, yaw, vertical);
     var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
