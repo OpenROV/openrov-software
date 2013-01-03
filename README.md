@@ -1,7 +1,12 @@
-OpenROV ROVision
+OpenROV Cockpit
 ================
 
-"[OpenROV](http://openrov.com/) is a DIY telerobotics community centered around underwater exploration & adventure."  One goal of OpenROV is to have onboard video for live viewing as the user operates the ROV.  Enter: ROVision.
+"[OpenROV](http://openrov.com/) is a DIY telerobotics community centered around underwater exploration & adventure."  One goal of OpenROV is to have onboard video for live viewing as the user operates the ROV.  Enter: OpenROV Cockpit.
+
+Getting started
+---------------
+
+**If you just getting started and wan't to have working environment for the OpenROV Cokpit, we recommend that you start with using our ready made [OpenROV disk Image](https://github.com/OpenROV/openrov-image/blob/master/README.md)!**
 
 Introduction
 ------------
