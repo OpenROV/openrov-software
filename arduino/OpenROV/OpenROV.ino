@@ -8,6 +8,7 @@
 Motors motors(9, 10, 11);
 Command cmd;
 Device vout("vout", 0, vout.analog, vout.in);
+Device iout("iout", 3, iout.analog, iout.in);
 Device light("light", 5, light.analog, light.out);
 Timer time;
 
@@ -61,9 +62,10 @@ void loop(){
     }
   }
 
-  // send voltage
+  // send voltage and current
   if (time.elapsed(1000)) {
     vout.send(vout.read());
+    iout.send(iout.read());
     Serial.print("time:");
     Serial.println(millis());
   }
