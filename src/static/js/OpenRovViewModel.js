@@ -11,6 +11,8 @@ function OpenRovViewModel(){
     self.lastPing = ko.observable();
     self.isArduinoConnected = ko.observable("false");
     self.currentVoltage = ko.observable(0);
+    self.currentCurrent = ko.observable(0);
+    self.currentCpuUsage = ko.observable(0);
     self.currentTiltPosition = ko.observable(0);
     self.currentBrightness = ko.observable(0);
     self.currentTime = ko.observable(new Date());
@@ -84,6 +86,8 @@ function OpenRovViewModel(){
 		self.currentTemperature(data.temp);
 		self.currentRunTime(data.time);
 		self.currentVoltage(data.vout);
+		self.currentCurrent(data.iout);
+		self.currentCpuUsage(data.cpuUsage);
         self.lastPing(new Date());
 	}
 
