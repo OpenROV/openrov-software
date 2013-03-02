@@ -21,14 +21,24 @@ int array[MAX_ARGS];
 // the more the readings will be smoothed, but the slower the output will
 // respond to the input.  Using a constant rather than a normal variable lets
 // use this value to determine the size of the readings array.
-const int numReadings = 10;
+const int numReadings = 100;
 
 int readings[numReadings];      // the readings from the analog input
 int index = 0;                  // the index of the current reading
 int total = 0;                  // the running total
 int average = 0;                // the average
+int c_tilt = 90;
+int c_motorp = 90;
+int c_motors = 90;
+int c_motorv = 90;
+int tilt_val = 90;
+int p = 90;
+int v = 90;
+int s = 90;
 
 void setup(){
+
+  delay(5000); //wait 5 seconds before starting to give time for programming pin sets
 
   Serial.begin(115200);
 
@@ -56,15 +66,15 @@ void loop(){
     // do something with the command, what command is it?
     if (cmd.cmp("tilt")) {
       cmd.parse(array);
-      int tilt_val = array[1];
-      tilt.write(tilt_val);
+      tilt_val = array[1];
+      //tilt.write(tilt_val);
     }
     else if (cmd.cmp("go")) {
       cmd.parse(array);
-      int p = array[1];
-      int v = array[2];
-      int s = array[3];
-      motors.go(p, v, s); 
+      p = array[1];
+      v = array[2];
+      s = array[3];
+      //motors.go(p, v, s); 
     }
     else if (cmd.cmp("light")) {
       cmd.parse(array);
@@ -74,6 +84,20 @@ void loop(){
     else {
       motors.stop(); 
     }
+  }
+
+  //to reduce AMP spikes, smooth large power adjustments out
+  if (time.elapsed (100)) {
+    if (p<c_motorp) c_motorp--;
+    if (p>c_motorp) c_motorp++;
+    if (v<c_motorv) c_motorv--;
+    if (v>c_motorv) c_motorv++;
+    if (s<c_motors) c_motors--;
+    if (s>c_motors) c_motors++;
+    if (tilt_val<c_tilt) c_tilt--;
+    if (tilt_val>c_tilt) c_tilt++;
+    tilt.write(tilt_val);
+    motors.go(c_motorp, c_motorv, c_motors);
   }
 
   if (time.elapsed (100)) {
