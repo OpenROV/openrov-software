@@ -11,6 +11,8 @@ Device vout("vout", 0, vout.analog, vout.in);
 Device iout("iout", 3, iout.analog, iout.in);
 Device light("light", 5, light.analog, light.out);
 Timer time;
+Timer statustime;
+Timer controltime;
 
 Servo tilt;
 // IMPORTANT!
@@ -49,6 +51,8 @@ void setup(){
   motors.reset();
   
   time.reset();
+  statustime.reset();
+  controltime.reset();
 
 // initialize all the readings to 0: 
   for (int thisReading = 0; thisReading < numReadings; thisReading++)
@@ -87,7 +91,7 @@ void loop(){
   }
 
   //to reduce AMP spikes, smooth large power adjustments out
-  if (time.elapsed (100)) {
+  if (controltime.elapsed (100)) {
     if (p<c_motorp) c_motorp--;
     if (p>c_motorp) c_motorp++;
     if (v<c_motorv) c_motorv--;
@@ -121,7 +125,7 @@ void loop(){
   }        
 
   // send voltage and current
-  if (time.elapsed(1000)) {
+  if (statustime.elapsed(1000)) {
     vout.send(vout.read());
     iout.send(average);
     Serial.print("time:");
