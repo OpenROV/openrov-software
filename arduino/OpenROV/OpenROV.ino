@@ -40,7 +40,7 @@ int s = 90;
 
 void setup(){
 
-  delay(5000); //wait 5 seconds before starting to give time for programming pin sets
+  //delay(10000); //wait 5 seconds before starting to give time for programming pin sets
 
   Serial.begin(115200);
 
