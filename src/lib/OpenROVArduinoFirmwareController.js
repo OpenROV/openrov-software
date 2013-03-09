@@ -66,6 +66,10 @@ var OpenROVArduinoFirmwareController = function(eventLoop) {
           });
     });
 
+  socket.on('arduinofirmware-uploadfromsource', function (){
+    controller.handleUploadedFile(socket,'');
+  });
+
   socket.on('arduinofirmware-upload', function (data){
         var Name = data['filename'];
         controller.files[Name]['Downloaded'] += data['data'].length;
@@ -131,8 +135,13 @@ var OpenROVArduinoFirmwareController = function(eventLoop) {
     });
 
   controller.handleUploadedFile = function(socket, filename) {
-    logger.log("going to install the uploaded file: " + filename);
-    controller.installer.install(path.resolve(tempDirectory + filename));
+    if (filename.length == 0) {
+      logger.log("going to install from the source folder");
+      controller.installer.installfromsource();
+    } else {
+      logger.log("going to install the uploaded file: " + filename);
+      controller.installer.install(path.resolve(tempDirectory + filename));
+    }
   }
 
   return controller;

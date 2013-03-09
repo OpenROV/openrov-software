@@ -21,9 +21,15 @@ var FirmwareInstaller = function (eventLoop) {
   var globalEventLoop = eventLoop; 
   var installer = new EventEmitter();
   var baseDirectory = path.join(__dirname, '..', '..', 'linux', 'arduino');
+  var installscript = 'firmware-install.sh';
+
+  installer.installfromsource = function() {
+    installscript = 'firmware-installfromsource.sh';
+    installer.install('');
+  }
 
   installer.install = function(filename) {
-    var cmd = path.join(baseDirectory, 'firmware-install.sh');
+    var cmd = path.join(baseDirectory, installscript);
     var args = [ filename ];
 
     var process = spawn(cmd, args);

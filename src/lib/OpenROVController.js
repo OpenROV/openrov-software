@@ -40,6 +40,10 @@ var OpenROVController = function(eventLoop) {
 
   var controller = new EventEmitter();
 
+  serial.on( 'close', function (data) {
+    logger.log('!Serial port closed');
+  });
+
   serial.on( "data", function( data ) {
       var status = reader.parseStatus(data);
       controller.emit('status',status);

@@ -2,7 +2,7 @@
 DIR="`dirname \"$0\"`"
 
 echo unpacking $1
-TMPDIR=`$DIR/firmware-unpack.sh $1` 
+TMPDIR=`$DIR/firmware-stage.sh $1` 
 echo unpacked $1 into folder $TMPDIR
 
 echo compilling in $TMPDIR
@@ -10,5 +10,5 @@ BUILD=`$DIR/firmware-build.sh $TMPDIR`
 echo compilled in $TMPDIR
 
 echo uploading firmware from $TMPDIR
-UPLOAD=`sudo $DIR/firmware-upload.sh $TMPDIR` 
+UPLOAD=`$DIR/firmware-upload.sh $TMPDIR` 
 echo uploaded firmware
