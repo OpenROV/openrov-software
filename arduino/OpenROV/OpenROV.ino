@@ -29,14 +29,14 @@ int readings[numReadings];      // the readings from the analog input
 int index = 0;                  // the index of the current reading
 int total = 0;                  // the running total
 int average = 0;                // the average
-int c_tilt = 90;
-int c_motorp = 90;
-int c_motors = 90;
-int c_motorv = 90;
-int tilt_val = 90;
-int p = 90;
-int v = 90;
-int s = 90;
+int c_tilt = MIDPOINT;
+int c_motorp = MIDPOINT;
+int c_motors = MIDPOINT;
+int c_motorv = MIDPOINT;
+int tilt_val = MIDPOINT;
+int p = MIDPOINT;
+int v = MIDPOINT;
+int s = MIDPOINT;
 
 void setup(){
 
