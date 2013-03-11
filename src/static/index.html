@@ -171,10 +171,9 @@
                 <div class="bar" style="width: 0%;" data-bind="style: { width: arduinoFirmwareVM.uploadPercentage() + '%' }"></div>
               </div>
               <ul class="unstyled">
-                <li data-bind="css: { muted: ! arduinoFirmwareVM.unpacking() }">Unpacking <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.unpacking() && ! arduinoFirmwareVM.unpacked() "></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.unpacked"></i></li>
-                <li data-bind="css: { muted: ! arduinoFirmwareVM.compiling() }">Compiling <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.compiling() && ! arduinoFirmwareVM.compiled()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.compiled"></i></li>
-                <li data-bind="css: { muted: ! arduinoFirmwareVM.arduinoUploading() }">Upload to Arduino <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.arduinoUploaded"></i></li>
-              </ul>
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.unpacking() }">Unpacking <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.unpacking() && ! arduinoFirmwareVM.unpacked() "></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.unpacked"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.unpacking() && ! arduinoFirmwareVM.unpacked() && arduinoFirmwareVM.failed()"></i></li>
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.compiling() }">Compiling <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.compiling() && ! arduinoFirmwareVM.compiled()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.compiled"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.compiling() && ! arduinoFirmwareVM.compiled() && arduinoFirmwareVM.failed()"></i></li>
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.arduinoUploading() }">Upload to Arduino <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.arduinoUploaded"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded() && arduinoFirmwareVM.failed()"></i></li>              </ul>
             </div>
             <div class="progress-step">
               <a href="#" class="btn" id="arduinoFirmware-showdetails" data-bind="css: { disabled: ! arduinoFirmwareVM.inProgress() }">Show details</a>
@@ -186,7 +185,7 @@
           <div class="modal-footer">
             <a href="#" class="btn" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="css: { disabled: arduinoFirmwareVM.inProgress() }, visible: ! arduinoFirmwareVM.arduinoUploaded()">Cancel</a>
             <a href="#" class="btn btn-primary" id="arduinoFirmware-startupload" data-bind="visible: ! arduinoFirmwareVM.arduinoUploaded()">Apply new firmware</a>
-            <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="visible: arduinoFirmwareVM.arduinoUploaded()">Close</a>
+            <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="visible: arduinoFirmwareVM.arduinoUploaded() || arduinoFirmwareVM.failed()">Close</a>
           </div>
         </div>
         

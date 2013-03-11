@@ -34,6 +34,16 @@ var FirmwareInstaller = function (eventLoop) {
 
     var process = spawn(cmd, args);
 
+    process.on('exit', function(code) {
+      if (code !==0) {
+        console.log('---- Error detected in Arduino Firmware update process ----');
+        installer.emit("firmwareinstaller-failed", "");
+      }
+      globalEventLoop.emit("serial-start");
+      installer.emit("firmwareinstaller-completed", "");
+
+    });
+
     process.stderr.on('data', function(data) {
       console.log(data.toString());
       installer.emit("firmwareinstaller-output", data.toString());
@@ -58,7 +68,6 @@ var FirmwareInstaller = function (eventLoop) {
       }
       if (data.toString().indexOf('uploaded') == 0) {
         installer.emit("firmwareinstaller-uploaded", "");
-	globalEventLoop.emit("serial-start");
       }
     });
   }

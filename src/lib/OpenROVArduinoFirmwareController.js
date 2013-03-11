@@ -134,6 +134,14 @@ var OpenROVArduinoFirmwareController = function(eventLoop) {
       controller.socket.emit('arduinoFirmware-output', data);
     });
 
+  //This will flow to the ArduinoFirmwareViewModel.js self.updateStatus function
+  controller.installer.on('firmwareinstaller-failed',
+    function(data) {
+      data = new Object();
+      data.errorMessage = true;
+      controller.socket.emit('arduinoFirmware-status', data);
+    });
+
   controller.handleUploadedFile = function(socket, filename) {
     if (filename.length == 0) {
       logger.log("going to install from the source folder");
