@@ -1,6 +1,6 @@
 function OpenRovViewModel(){
 	var self = this;
-
+	self.telemetry = new Object();
 	self.unitMeasurement = ko.observable("metric");
 	self.unitTemperature = ko.observable("celsius");
 
@@ -17,6 +17,7 @@ function OpenRovViewModel(){
     self.currentBrightness = ko.observable(0);
     self.currentTime = ko.observable(new Date());
     self.sendUpdateEnabled = ko.observable(true);
+    self.rawTelemetry = ko.observableArray([]);
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
@@ -88,7 +89,17 @@ function OpenRovViewModel(){
 		self.currentVoltage(data.vout);
 		self.currentCurrent(data.iout);
 		self.currentCpuUsage(data.cpuUsage);
-        self.lastPing(new Date());
+        	self.lastPing(new Date());
+		for (i in data){
+		  self.telemetry[i] = data[i];
+		}
+		self.rawTelemetry([]);
+		for (var item in self.telemetry){
+		  if (self.telemetry.hasOwnProperty(item)) {
+		    self.rawTelemetry().push({ key: item, value: self.telemetry[item] });
+		  }
+		};
+		self.rawTelemetry.valueHasMutated();
 	}
 
     self.updateBrightness = function(value) {

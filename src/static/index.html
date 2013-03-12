@@ -54,6 +54,14 @@
                     <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
                     <p>Use <i>+</i>, <i>-</i> to increase brightness of lights.</p>
                 </div>
+                <div id="telemetry" class="controller well well-small" >
+		    <ul data-bind="foreach: rawTelemetry">
+		       <li>
+		           <span data-bind="text: key"></span>
+		           <span data-bind="text: value"></span>
+		       </li>
+		    </ul>
+		</div>
             </div>
           </div>
         </div>
@@ -197,6 +205,7 @@
         <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
         <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
         <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
+	<script type='text/javascript' src="https://raw.github.com/jamesfoster/knockout.observableDictionary/master/ko.observableDictionary.js"></script>
         <script type='text/javascript' src='js/utilities.js'></script>
         <script type='text/javascript' src='js/ArduinoFirmwareViewModel.js'></script>
         <script type='text/javascript' src='js/OpenRovViewModel.js'></script>
