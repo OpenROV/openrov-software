@@ -4,6 +4,7 @@
 #include "Command.h"
 #include "Device.h"
 #include "Timer.h"
+#include "FreeMem.h"
 
 Motors motors(9, 10, 11);
 Command cmd;
@@ -128,13 +129,11 @@ void loop(){
   if (statustime.elapsed(1000)) {
     vout.send(vout.read());
     iout.send(average);
+    Serial.print("fmem:");
+    Serial.print(freeMemory());
+    Serial.print(";");
     Serial.print("time:");
     Serial.println(millis());
   }
-  // else if (time.elapsed(500)) {
-  //   digitalWrite(13, HIGH);
-  //   delay(200);
-  //   digitalWrite(13, LOW);
-  // }
 
 }
