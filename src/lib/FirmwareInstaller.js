@@ -21,12 +21,28 @@ var FirmwareInstaller = function (eventLoop) {
   var globalEventLoop = eventLoop; 
   var installer = new EventEmitter();
   var baseDirectory = path.join(__dirname, '..', '..', 'linux', 'arduino');
+  var installscript = 'firmware-install.sh';
+
+  installer.installfromsource = function() {
+    installscript = 'firmware-installfromsource.sh';
+    installer.install('');
+  }
 
   installer.install = function(filename) {
-    var cmd = path.join(baseDirectory, 'firmware-install.sh');
+    var cmd = path.join(baseDirectory, installscript);
     var args = [ filename ];
 
     var process = spawn(cmd, args);
+
+    process.on('exit', function(code) {
+      if (code !==0) {
+        console.log('---- Error detected in Arduino Firmware update process ----');
+        installer.emit("firmwareinstaller-failed", "");
+      }
+      globalEventLoop.emit("serial-start");
+      installer.emit("firmwareinstaller-completed", "");
+
+    });
 
     process.stderr.on('data', function(data) {
       console.log(data.toString());
@@ -52,7 +68,6 @@ var FirmwareInstaller = function (eventLoop) {
       }
       if (data.toString().indexOf('uploaded') == 0) {
         installer.emit("firmwareinstaller-uploaded", "");
-	globalEventLoop.emit("serial-start");
       }
     });
   }

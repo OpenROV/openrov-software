@@ -19,7 +19,7 @@ var setup_serial = function(){
     var setuart_process = spawn('sudo', [ path.join(location,'setuart.sh') ]);
 };
 
-var getNewSerial = function(){
+var getNewSerialold = function(){
 	return new serialPort.SerialPort(CONFIG.serial, {
         baudrate: CONFIG.serial_baud,
         parser: serialPort.parsers.readline("\r\n")
@@ -32,6 +32,23 @@ var OpenROVController = function(eventLoop) {
   var reader = new StatusReader();
   var physics = new ArduinoPhysics();
 
+  var getNewSerial = function(){
+        var s = new serialPort.SerialPort(CONFIG.serial, {
+        baudrate: CONFIG.serial_baud,
+        parser: serialPort.parsers.readline("\r\n")
+    });
+        s.on( 'close', function (data) {
+         logger.log('!Serial port closed');
+        });
+
+        s.on( "data", function( data ) {
+         var status = reader.parseStatus(data);
+         controller.emit('status',status);
+        });
+        return s;
+  };
+
+
   setup_serial();
 
   // ATmega328p is connected to Beaglebone over UART1 (pins TX 24, RX 26)
@@ -39,11 +56,6 @@ var OpenROVController = function(eventLoop) {
 
 
   var controller = new EventEmitter();
-
-  serial.on( "data", function( data ) {
-      var status = reader.parseStatus(data);
-      controller.emit('status',status);
-  });
 
     controller.sendMotorTest = function(port, starbord, vertical) {
         var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
@@ -79,7 +91,7 @@ var OpenROVController = function(eventLoop) {
 
   globalEventLoop.on('serial-start', function(){
 	serial = getNewSerial();
-	logger.log("Opened new serial connection after firmware upload");
+	logger.log("Opened serial connection after firmware upload");
 	});
 
   return controller;

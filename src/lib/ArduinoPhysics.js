@@ -23,6 +23,11 @@ var ArduinoPhysics = function() {
         return mapA(voltage, 0, 1023,0,50);
     };
 
+    //INA169 calculation, VOUT = (IS) (RS) (1000µA/V) (RL)
+    physics.mapCurrentReading = function(voltage){
+        return mapA(voltage, 0, 1023, 0, 5) + .4; //add offset
+    };
+
     physics.mapTiltServo = function (value) {
         return value + OFFSET;
     };

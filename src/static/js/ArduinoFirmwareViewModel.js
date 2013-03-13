@@ -17,6 +17,7 @@ function ArduinoFirmwareViewModel(){
     self.arduinoUploaded = ko.observable(false);
     self.detailsVisible = ko.observable(false);
     self.details = ko.observable();
+    self.failed = ko.observable(false);
 
 
     self.reset = function() {
@@ -32,6 +33,7 @@ function ArduinoFirmwareViewModel(){
         self.arduinoUploaded(false);
         self.detailsVisible(false);
         self.details('');
+	self.failed(false);
     };
 
     self.selectedFileName = ko.computed(function() {
@@ -63,7 +65,7 @@ function ArduinoFirmwareViewModel(){
 
     self.updateStatus = function(data){
         if (data.errorMessage){
-            //handle error
+            self.failed(true);
             return;
         }
         if (self[self.lastStatus]) {

@@ -54,6 +54,14 @@
                     <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
                     <p>Use <i>+</i>, <i>-</i> to increase brightness of lights.</p>
                 </div>
+                <div id="telemetry" class="controller well well-small" >
+		    <ul data-bind="foreach: rawTelemetry">
+		       <li>
+		           <span data-bind="text: key"></span>
+		           <span data-bind="text: value"></span>
+		       </li>
+		    </ul>
+		</div>
             </div>
           </div>
         </div>
@@ -64,7 +72,9 @@
               <div class="span2 hidden pull-right"><h6>Temperature</h6><h2 data-bind="html: convertedTemperature"></h2></div>
               <div class="span2 hidden pull-right"><div class="pull-right" id="depth-gauge"></div><h6>Depth:</h6><h2 data-bind="text: convertedDepth"></h2></div>
                 <div class="span2 pull-right"><h2 data-bind="text: formattedRunTime"></h2><h4 data-bind="text: currentTime().toLocaleTimeString()"></h4></div>
-                <div class="span1 pull-right"><h2 data-bind="text: currentVoltage().toFixed(1)+ 'v'"></h2><div id="batteryIndicator" data-bind="attr: {class: batteryLevel}">&nbsp;</div></div>
+		<div class="span2 pull-right"><h2 data-bind="text: currentCpuUsage() + '%'"></h2></div>
+                <div class="span2 pull-right"><h2 data-bind="text: currentVoltage().toFixed(1)+ 'v'"></h2><div id="batteryIndicator" data-bind="attr: {class: batteryLevel}">&nbsp;</div></div>
+		<div class="span2 pull-right"><h2 data-bind="text: currentCurrent().toFixed(3)+ 'A'"></h2><div>&nbsp;</div></div>
             </div>
           </div>
         </div>    
@@ -169,10 +179,9 @@
                 <div class="bar" style="width: 0%;" data-bind="style: { width: arduinoFirmwareVM.uploadPercentage() + '%' }"></div>
               </div>
               <ul class="unstyled">
-                <li data-bind="css: { muted: ! arduinoFirmwareVM.unpacking() }">Unpacking <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.unpacking() && ! arduinoFirmwareVM.unpacked() "></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.unpacked"></i></li>
-                <li data-bind="css: { muted: ! arduinoFirmwareVM.compiling() }">Compiling <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.compiling() && ! arduinoFirmwareVM.compiled()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.compiled"></i></li>
-                <li data-bind="css: { muted: ! arduinoFirmwareVM.arduinoUploading() }">Upload to Arduino <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.arduinoUploaded"></i></li>
-              </ul>
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.unpacking() }">Unpacking <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.unpacking() && ! arduinoFirmwareVM.unpacked() "></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.unpacked"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.unpacking() && ! arduinoFirmwareVM.unpacked() && arduinoFirmwareVM.failed()"></i></li>
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.compiling() }">Compiling <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.compiling() && ! arduinoFirmwareVM.compiled()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.compiled"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.compiling() && ! arduinoFirmwareVM.compiled() && arduinoFirmwareVM.failed()"></i></li>
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.arduinoUploading() }">Upload to Arduino <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.arduinoUploaded"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded() && arduinoFirmwareVM.failed()"></i></li>              </ul>
             </div>
             <div class="progress-step">
               <a href="#" class="btn" id="arduinoFirmware-showdetails" data-bind="css: { disabled: ! arduinoFirmwareVM.inProgress() }">Show details</a>
@@ -183,8 +192,8 @@
           </div>
           <div class="modal-footer">
             <a href="#" class="btn" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="css: { disabled: arduinoFirmwareVM.inProgress() }, visible: ! arduinoFirmwareVM.arduinoUploaded()">Cancel</a>
-            <a href="#" class="btn btn-primary" id="arduinoFirmware-startupload" data-bind="css: { disabled: arduinoFirmwareVM.inProgress() }, visible: ! arduinoFirmwareVM.arduinoUploaded()">Apply new firmware</a>
-            <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="visible: arduinoFirmwareVM.arduinoUploaded()">Close</a>
+            <a href="#" class="btn btn-primary" id="arduinoFirmware-startupload" data-bind="visible: ! arduinoFirmwareVM.arduinoUploaded()">Apply new firmware</a>
+            <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="visible: arduinoFirmwareVM.arduinoUploaded() || arduinoFirmwareVM.failed()">Close</a>
           </div>
         </div>
         
@@ -299,9 +308,14 @@
               viewmodel.arduinoFirmwareVM.selectedFile(selectedFile);
             });
             $("#arduinoFirmware-startupload").click(function() {
-              fileReader.onload = function(evnt){
+              fileReader.onload = function(evnt) {
                 console.log("Upload event: " + selectedFile.name)
-                socket.emit('arduinofirmware-upload', { 'filename' : selectedFile.name, data : evnt.target.result });
+                socket.emit('arduinofirmware-upload', { 'filename' : selectedFile.name, data : evnt.target.result });                
+              }
+              if (!selectedFile) {
+                selectedFile = new Object(); 
+                selectedFile.name = 'fromSource';
+                socket.emit('arduinofirmware-uploadfromsource');
               }
               console.log("Starting upload: " + selectedFile.name)
               socket.emit('arduinofirmware-startupload', { 'filename' : selectedFile.name, 'size' : selectedFile.size });
