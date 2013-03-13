@@ -57,15 +57,6 @@ var OpenROVController = function(eventLoop) {
 
   var controller = new EventEmitter();
 
- // serialPort.on( 'close', function (data) {
- //   logger.log('!Serial port closed');
- // });
-
- // serialPort.on( "data", function( data ) {
- //     var status = reader.parseStatus(data);
- //     controller.emit('status',status);
- // });
-
     controller.sendMotorTest = function(port, starbord, vertical) {
         var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
         if(CONFIG.debug_commands) console.error("command", command);

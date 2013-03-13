@@ -1,23 +1,25 @@
 function OpenRovViewModel(){
-	var self = this;
-	self.telemetry = new Object();
-	self.unitMeasurement = ko.observable("metric");
-	self.unitTemperature = ko.observable("celsius");
+    var self = this;
+    self.telemetry = new Object();
+    self.unitMeasurement = ko.observable("metric");
+    self.unitTemperature = ko.observable("celsius");
 
-	self.currentTemperature = ko.observable(0);
-	self.currentDepth = ko.observable(0);
-	self.currentHeading = ko.observable(115);
-	self.currentRunTime = ko.observable(0);
+    self.currentTemperature = ko.observable(0);
+    self.currentDepth = ko.observable(0);
+    self.currentHeading = ko.observable(115);
+    self.currentRunTime = ko.observable(0);
     self.lastPing = ko.observable();
     self.isArduinoConnected = ko.observable("false");
     self.currentVoltage = ko.observable(0);
     self.currentCurrent = ko.observable(0);
-    self.currentCpuUsage = ko.observable(0);
+    self.currentRawCpuUsage = ko.observable(0);
     self.currentTiltPosition = ko.observable(0);
     self.currentBrightness = ko.observable(0);
     self.currentTime = ko.observable(new Date());
     self.sendUpdateEnabled = ko.observable(true);
     self.rawTelemetry = ko.observableArray([]);
+
+    self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
 
 	self.convertedDepth = ko.computed(function(){
 		switch(self.unitMeasurement()){
@@ -88,7 +90,7 @@ function OpenRovViewModel(){
 		self.currentRunTime(data.time);
 		self.currentVoltage(data.vout);
 		self.currentCurrent(data.iout);
-		self.currentCpuUsage(data.cpuUsage);
+		self.currentRawCpuUsage(data.cpuUsage);
         	self.lastPing(new Date());
 		for (i in data){
 		  self.telemetry[i] = data[i];

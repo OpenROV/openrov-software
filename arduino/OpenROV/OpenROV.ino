@@ -24,7 +24,7 @@ int array[MAX_ARGS];
 // the more the readings will be smoothed, but the slower the output will
 // respond to the input.  Using a constant rather than a normal variable lets
 // use this value to determine the size of the readings array.
-const int numReadings = 100;
+const int numReadings = 30;
 
 int readings[numReadings];      // the readings from the analog input
 int index = 0;                  // the index of the current reading
@@ -40,8 +40,6 @@ int v = MIDPOINT;
 int s = MIDPOINT;
 
 void setup(){
-
-  //delay(10000); //wait 5 seconds before starting to give time for programming pin sets
 
   Serial.begin(115200);
 
@@ -72,14 +70,12 @@ void loop(){
     if (cmd.cmp("tilt")) {
       cmd.parse(array);
       tilt_val = array[1];
-      //tilt.write(tilt_val);
     }
     else if (cmd.cmp("go")) {
       cmd.parse(array);
       p = array[1];
       v = array[2];
       s = array[3];
-      //motors.go(p, v, s); 
     }
     else if (cmd.cmp("light")) {
       cmd.parse(array);
@@ -92,7 +88,7 @@ void loop(){
   }
 
   //to reduce AMP spikes, smooth large power adjustments out
-  if (controltime.elapsed (100)) {
+  if (controltime.elapsed (50)) {
     if (p<c_motorp) c_motorp--;
     if (p>c_motorp) c_motorp++;
     if (v<c_motorv) c_motorv--;

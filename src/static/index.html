@@ -72,7 +72,7 @@
               <div class="span2 hidden pull-right"><h6>Temperature</h6><h2 data-bind="html: convertedTemperature"></h2></div>
               <div class="span2 hidden pull-right"><div class="pull-right" id="depth-gauge"></div><h6>Depth:</h6><h2 data-bind="text: convertedDepth"></h2></div>
                 <div class="span2 pull-right"><h2 data-bind="text: formattedRunTime"></h2><h4 data-bind="text: currentTime().toLocaleTimeString()"></h4></div>
-		<div class="span2 pull-right"><h2 data-bind="text: (currentCpuUsage()*100).toFixed(0)+ '%'"></h2></div>
+		<div class="span2 pull-right"><h2 data-bind="text: currentCpuUsage() + '%'"></h2></div>
                 <div class="span2 pull-right"><h2 data-bind="text: currentVoltage().toFixed(1)+ 'v'"></h2><div id="batteryIndicator" data-bind="attr: {class: batteryLevel}">&nbsp;</div></div>
 		<div class="span2 pull-right"><h2 data-bind="text: currentCurrent().toFixed(3)+ 'A'"></h2><div>&nbsp;</div></div>
             </div>
@@ -205,7 +205,6 @@
         <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
         <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
         <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
-	<script type='text/javascript' src="https://raw.github.com/jamesfoster/knockout.observableDictionary/master/ko.observableDictionary.js"></script>
         <script type='text/javascript' src='js/utilities.js'></script>
         <script type='text/javascript' src='js/ArduinoFirmwareViewModel.js'></script>
         <script type='text/javascript' src='js/OpenRovViewModel.js'></script>
