@@ -38,7 +38,7 @@ int tilt_val = MIDPOINT;
 int p = MIDPOINT;
 int v = MIDPOINT;
 int s = MIDPOINT;
-
+int aggro = 5; //How aggressive the throttle changes
 void setup(){
 
   Serial.begin(115200);
@@ -89,15 +89,15 @@ void loop(){
 
   //to reduce AMP spikes, smooth large power adjustments out
   if (controltime.elapsed (50)) {
-    if (p<c_motorp) c_motorp--;
-    if (p>c_motorp) c_motorp++;
-    if (v<c_motorv) c_motorv--;
-    if (v>c_motorv) c_motorv++;
-    if (s<c_motors) c_motors--;
-    if (s>c_motors) c_motors++;
-    if (tilt_val<c_tilt) c_tilt--;
-    if (tilt_val>c_tilt) c_tilt++;
-    tilt.write(tilt_val);
+    if (p<c_motorp) c_motorp -= min(aggro,c_motorp-p);  
+    if (p>c_motorp) c_motorp += min(aggro,p-c_motorp);
+    if (v<c_motorv) c_motorv -= min(aggro,c_motorv-v);
+    if (v>c_motorv) c_motorv += min(aggro,v-c_motorv);
+    if (s<c_motors) c_motors -= min(aggro,c_motors-s);
+    if (s>c_motors) c_motors += min(aggro,s-c_motors);
+    if (tilt_val<c_tilt) c_tilt -= min(aggro,c_tilt-tilt_val);
+    if (tilt_val>c_tilt) c_tilt += min(aggro,tilt_val-c_tilt);
+    tilt.writeMicroseconds(tilt_val);
     motors.go(c_motorp, c_motorv, c_motors);
   }
 
@@ -127,6 +127,20 @@ void loop(){
     iout.send(average);
     Serial.print("fmem:");
     Serial.print(freeMemory());
+    Serial.print(";");
+    Serial.print("motors:");
+    Serial.print(c_motorp);
+    Serial.print(",");
+    Serial.print(c_motorv);
+    Serial.print(",");
+    Serial.print(c_motors);
+    Serial.print(";");
+    Serial.print("mtarg:");
+    Serial.print(p);
+    Serial.print(",");
+    Serial.print(v);
+    Serial.print(",");
+    Serial.print(s);
     Serial.print(";");
     Serial.print("time:");
     Serial.println(millis());

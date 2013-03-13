@@ -265,9 +265,9 @@
               }
 
               $("#starbordMotorSpeed").slider({
-                  min:0,
-                  max:180,
-                  value:90,
+                  min:1000,
+                  max:2000,
+                  value:1500,
                   slide: function( event, ui ) {
                       $( "#starbordMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
@@ -276,9 +276,9 @@
               $( "#starbordMotorSpeedVal" ).val( $( "#starbordMotorSpeed" ).slider( "value" ) );
 
               $("#portMotorSpeed").slider({
-                  min:0,
-                  max:180,
-                  value:90,
+                  min:1000,
+                  max:2000,
+                  value:1500,
                   slide: function( event, ui ) {
                       $( "#portMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
@@ -287,9 +287,9 @@
               $( "#portMotorSpeedVal" ).val( $( "#portMotorSpeed" ).slider( "value" ) );
 
               $("#verticalMotorSpeed").slider({
-                  min:0,
-                  max:180,
-                  value:90,
+                  min:1000,
+                  max:2000,
+                  value:1500,
                   slide: function( event, ui ) {
                       $( "#verticalMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
@@ -350,7 +350,7 @@
 
             controller.bindServoTilt(function (value){
                 viewmodel.currentTiltPosition(value);
-                socket.emit('tilt_update',value * 90);
+                socket.emit('tilt_update',value*300+1500);
             });
 
             controller.bindBrightness(function (value){
@@ -365,7 +365,7 @@
               var positions = controller.getPositions();
 
               var controls = {};
-              for(var i in positions) controls[i] = deaden(positions[i] * 90);
+              for(var i in positions) controls[i] = deaden(positions[i]*500+1500);
               /*if(CONFIG.debug) {
                 console.error("DEBUG: throttle", controls.throttle);
                 console.error("DEBUG: yaw", controls.yaw);
@@ -376,14 +376,12 @@
             }, SAMPLE_PERIOD);
 
             var DEAD_ZONE = CONFIG.dead_zone;
-            var MAX = 90;
-            function deaden(val) {
-              var sign = val / Math.abs(val);
-              val = Math.abs(val);
-              if (val < DEAD_ZONE) return 0;
-              var m = (MAX + DEAD_ZONE) / (MAX - DEAD_ZONE);
-              val = m * (val - DEAD_ZONE) - DEAD_ZONE;
-              return sign * val;
+            var NEUTRAL = 1500;
+            function deaden(value) {
+              val = value-1500;
+	      if (((NEUTRAL - DEAD_ZONE) < val) && (val < (NEUTRAL + DEADZONE)))
+	        { return NEUTRAL;}
+              else {return value;} 
             }
 
 

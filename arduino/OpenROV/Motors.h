@@ -3,7 +3,7 @@
 
 #include <Servo.h>
 
-#define MIDPOINT 90
+#define MIDPOINT 1500
 
 class Motors {
   private:

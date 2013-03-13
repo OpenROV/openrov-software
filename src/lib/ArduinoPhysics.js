@@ -1,17 +1,27 @@
-var OFFSET = 90;
+var OFFSET = 1500;
 var ArduinoPhysics = function() {
 
     var physics = {};
+
+    //For mapping to the motor Microseconds range from 1000 to 2000. This
+    //is mostly a pass through for now as we want to keep the numbers consistent
+    //from the UI to the controller for ease of troubleshooting for now.
+    //Perhaps we will shift the range to -500..0..500 in the future.
+    physics.mapMotor = function (val) {
+      val = limit(val,1000,2000);
+      val = Math.round(val);
+      return val;
+    };
 
     physics.mapMotors = function(throttle, yaw, vertical){
         var port = 0,
             starbord = 0;
         port = starbord = throttle;
-        port += yaw;
-        starbord -= yaw;
-        port = map(port);
-        starbord = map(starbord);
-        vertical = Math.round(exp(vertical)) + OFFSET;
+        port += OFFSET-yaw;
+        starbord -= OFFSET-yaw;
+        port = physics.mapMotor(port);
+        starbord = physics.mapMotor(starbord);
+        //vertical = Math.round(exp(vertical)) + OFFSET;
         return {
             port: port,
             starbord: starbord,
@@ -42,20 +52,6 @@ var ArduinoPhysics = function() {
 function mapA(x, in_min, in_max, out_min, out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-function map(val) {
-    val = limit(val, -90, 90);
-    val = Math.round(exp(val));
-    val += OFFSET;
-    return val;
-}
-
-function exp(val) {
-    if(val === 0) return 0;
-    var sign = val / Math.abs(val);
-    var adj = Math.pow(90, Math.abs(val) / 90);
-    return sign * adj;
 }
 
 function limit(value, l, h) { // truncate anything that goes outside of max and min value

@@ -58,7 +58,7 @@ var OpenROVController = function(eventLoop) {
   var controller = new EventEmitter();
 
     controller.sendMotorTest = function(port, starbord, vertical) {
-        var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
+        var command = 'go(' + physics.mapMotor(port) + ',' + physics.mapMotor(vertical) + ',' + physics.mapMotor(starbord) + ');';
         if(CONFIG.debug_commands) console.error("command", command);
         if(CONFIG.production) serial.write(command);
     };
