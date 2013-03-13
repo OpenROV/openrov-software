@@ -1,12 +1,20 @@
+
 var ArduinoPhysics = require('./ArduinoPhysics')
+var os = require('./os-utils')
+
+var CPUUsage =10;
 
 var StatusReader = function() {
 
-	var currTemp = 20;
-	var currDepth = 0;
+        var currTemp = 20;
+        var currDepth = 0;
     var physics = new ArduinoPhysics();
 
     var reader = {};
+
+	var currCpuUsage = 0;
+	setInterval(function(){os.cpuUsage(function(v){currCpuUsage = v;});},1000);
+    
 
     reader.parseStatus= function(rawStatus){
         var parts = rawStatus.split(';');
@@ -17,8 +25,12 @@ var StatusReader = function() {
             status[subParts[0]]=subParts[1];
         }
         status.vout=physics.mapVoltageReading(status.vout);
+	status.iout=physics.mapCurrentReading(status.iout);
+        
+        status.cpuUsage = currCpuUsage;
+       
         return status;
-    };
+    }
 	
 	function updateTemp(){
 		var temp;
