@@ -17,8 +17,8 @@ var ArduinoPhysics = function() {
         var port = 0,
             starbord = 0;
         port = starbord = throttle;
-        port += OFFSET-yaw;
-        starbord -= OFFSET-yaw;
+        port -= OFFSET-yaw;
+        starbord += OFFSET-yaw;
         port = physics.mapMotor(port);
         starbord = physics.mapMotor(starbord);
         //vertical = Math.round(exp(vertical)) + OFFSET;
