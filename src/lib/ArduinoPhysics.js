@@ -39,7 +39,7 @@ var ArduinoPhysics = function() {
     };
 
     physics.mapTiltServo = function (value) {
-        return value + OFFSET;
+        return limit(value,1000,2000);
     };
 
     physics.mapLight = function (value) {

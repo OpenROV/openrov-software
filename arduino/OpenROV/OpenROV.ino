@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include "FreeMem.h"
 
+
 Motors motors(9, 10, 11);
 Command cmd;
 Device vout("vout", 0, vout.analog, vout.in);
@@ -97,7 +98,7 @@ void loop(){
     if (s>c_motors) c_motors += min(aggro,s-c_motors);
     if (tilt_val<c_tilt) c_tilt -= min(aggro,c_tilt-tilt_val);
     if (tilt_val>c_tilt) c_tilt += min(aggro,tilt_val-c_tilt);
-    tilt.writeMicroseconds(tilt_val);
+    tilt.writeMicroseconds(c_tilt);
     motors.go(c_motorp, c_motorv, c_motors);
   }
 
@@ -141,6 +142,17 @@ void loop(){
     Serial.print(v);
     Serial.print(",");
     Serial.print(s);
+    Serial.print(";");
+    Serial.print("servo:");
+    Serial.print(c_tilt);
+    Serial.print(";");
+    Serial.print("starg:");
+    Serial.print(tilt_val);
+    Serial.print(";");
+    Serial.print("ver:");
+    //Version Number of last change from UTC date: .YYYYMMDDHHMMSS. If you make a change between this and the cockpit that requires the firmware to be in sync or it breaks the system your should update this version number
+    // and update the cockpit software lib/OpenROVControler.js to check and ensure the firmware is at this version.
+    Serial.print(".20130314034900");
     Serial.print(";");
     Serial.print("time:");
     Serial.println(millis());
