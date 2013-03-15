@@ -33,7 +33,7 @@ int total = 0;                  // the running total
 int average = 0;                // the average
 int new_tilt = MIDPOINT;
 int new_p = MIDPOINT;
-int new_c = MIDPOINT;
+int new_s = MIDPOINT;
 int new_v = MIDPOINT;
 int tilt_val = MIDPOINT;
 int p = MIDPOINT;
@@ -96,12 +96,12 @@ void loop(){
     if (p>new_p) new_p += min(smoothingIncriment,p-new_p);
     if (v<new_v) new_v -= min(smoothingIncriment,new_v-v);
     if (v>new_v) new_v += min(smoothingIncriment,v-new_v);
-    if (s<new_c) new_c -= min(smoothingIncriment,new_c-s);
-    if (s>new_c) new_c += min(smoothingIncriment,s-new_c);
+    if (s<new_s) new_s -= min(smoothingIncriment,new_s-s);
+    if (s>new_s) new_s += min(smoothingIncriment,s-new_s);
     if (tilt_val<new_tilt) new_tilt -= min(smoothingIncriment,new_tilt-tilt_val);
     if (tilt_val>new_tilt) new_tilt += min(smoothingIncriment,tilt_val-new_tilt);
     tilt.writeMicroseconds(new_tilt);
-    motors.go(new_p, new_v, new_c);
+    motors.go(new_p, new_v, new_s);
   }
 
   if (time.elapsed (100)) {
@@ -136,7 +136,7 @@ void loop(){
     Serial.print(",");
     Serial.print(new_v);
     Serial.print(",");
-    Serial.print(new_c);
+    Serial.print(new_s);
     Serial.print(";");
     Serial.print("mtarg:");
     Serial.print(p);
