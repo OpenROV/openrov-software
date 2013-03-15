@@ -52,11 +52,11 @@ var KEYS = {
     command: 'power',
     value: 1
   },
-  219: { //[ (vtrim -)
+  57: { //9 (vtrim -)
     command: 'vtrim',
     value: -1
   },
-  221: { //] (vtrim +) 
+  48: { //0 (vtrim +) 
     command: 'vtrim',
     value: 1
   }, 

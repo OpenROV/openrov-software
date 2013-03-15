@@ -20,6 +20,6 @@ void Motors::go(int p, int v, int s){
 
 void Motors::stop(){
   port.write(MIDPOINT);
-  vertical.write(MIDPOINT);
-  starbord.write(MIDPOINT);
+  vertical.writeMicroseconds(MIDPOINT);
+  starbord.writeMicroseconds(MIDPOINT);
 }
