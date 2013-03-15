@@ -31,15 +31,15 @@ int readings[numReadings];      // the readings from the analog input
 int index = 0;                  // the index of the current reading
 int total = 0;                  // the running total
 int average = 0;                // the average
-int c_tilt = MIDPOINT;
-int c_motorp = MIDPOINT;
-int c_motors = MIDPOINT;
-int c_motorv = MIDPOINT;
+int new_tilt = MIDPOINT;
+int new_p = MIDPOINT;
+int new_c = MIDPOINT;
+int new_v = MIDPOINT;
 int tilt_val = MIDPOINT;
 int p = MIDPOINT;
 int v = MIDPOINT;
 int s = MIDPOINT;
-int aggro = 5; //How aggressive the throttle changes
+int smoothingIncriment = 5; //How aggressive the throttle changes
 void setup(){
 
   Serial.begin(115200);
@@ -88,18 +88,20 @@ void loop(){
     }
   }
 
-  //to reduce AMP spikes, smooth large power adjustments out
+  //to reduce AMP spikes, smooth large power adjustments out. This incirmentally adjusts the motors and servo
+  //to their new positions in increments.  The incriment should eventually be adjustable from the cockpit so that
+  //the pilot could have more aggressive response profiles for the ROV.
   if (controltime.elapsed (50)) {
-    if (p<c_motorp) c_motorp -= min(aggro,c_motorp-p);  
-    if (p>c_motorp) c_motorp += min(aggro,p-c_motorp);
-    if (v<c_motorv) c_motorv -= min(aggro,c_motorv-v);
-    if (v>c_motorv) c_motorv += min(aggro,v-c_motorv);
-    if (s<c_motors) c_motors -= min(aggro,c_motors-s);
-    if (s>c_motors) c_motors += min(aggro,s-c_motors);
-    if (tilt_val<c_tilt) c_tilt -= min(aggro,c_tilt-tilt_val);
-    if (tilt_val>c_tilt) c_tilt += min(aggro,tilt_val-c_tilt);
-    tilt.writeMicroseconds(c_tilt);
-    motors.go(c_motorp, c_motorv, c_motors);
+    if (p<new_p) new_p -= min(smoothingIncriment,new_p-p);  
+    if (p>new_p) new_p += min(smoothingIncriment,p-new_p);
+    if (v<new_v) new_v -= min(smoothingIncriment,new_v-v);
+    if (v>new_v) new_v += min(smoothingIncriment,v-new_v);
+    if (s<new_c) new_c -= min(smoothingIncriment,new_c-s);
+    if (s>new_c) new_c += min(smoothingIncriment,s-new_c);
+    if (tilt_val<new_tilt) new_tilt -= min(smoothingIncriment,new_tilt-tilt_val);
+    if (tilt_val>new_tilt) new_tilt += min(smoothingIncriment,tilt_val-new_tilt);
+    tilt.writeMicroseconds(new_tilt);
+    motors.go(new_p, new_v, new_c);
   }
 
   if (time.elapsed (100)) {
@@ -130,11 +132,11 @@ void loop(){
     Serial.print(freeMemory());
     Serial.print(";");
     Serial.print("motors:");
-    Serial.print(c_motorp);
+    Serial.print(new_p);
     Serial.print(",");
-    Serial.print(c_motorv);
+    Serial.print(new_v);
     Serial.print(",");
-    Serial.print(c_motors);
+    Serial.print(new_c);
     Serial.print(";");
     Serial.print("mtarg:");
     Serial.print(p);
@@ -144,7 +146,7 @@ void loop(){
     Serial.print(s);
     Serial.print(";");
     Serial.print("servo:");
-    Serial.print(c_tilt);
+    Serial.print(new_tilt);
     Serial.print(";");
     Serial.print("starg:");
     Serial.print(tilt_val);
