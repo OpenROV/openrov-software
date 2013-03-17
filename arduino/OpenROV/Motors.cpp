@@ -22,4 +22,7 @@ void Motors::stop(){
   port.write(MIDPOINT);
   vertical.writeMicroseconds(MIDPOINT);
   starbord.writeMicroseconds(MIDPOINT);
+  port.detach();
+  vertical.detach();
+  starbord.detach();
 }

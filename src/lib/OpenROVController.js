@@ -97,6 +97,20 @@ var OpenROVController = function(eventLoop) {
         if(CONFIG.debug_commands) console.error("command", command);
         if(CONFIG.production) serial.write(command);
     };
+    
+    controller.stop = function(value) {
+        if (this.NotSafeToControl()) return;
+        var command = 'stop();';
+        if(CONFIG.debug_commands) console.error("command", command);
+        if(CONFIG.production) serial.write(command);
+    };
+    
+    controller.start = function(value) {
+        if (this.NotSafeToControl()) return;
+        var command = 'start();';
+        if(CONFIG.debug_commands) console.error("command", command);
+        if(CONFIG.production) serial.write(command);
+    };    
 
   globalEventLoop.on('register-ArdunoFirmwareVersion', function(val){
         controller.ArduinoFirmwareVersion = val;

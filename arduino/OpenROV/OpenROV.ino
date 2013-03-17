@@ -83,6 +83,12 @@ void loop(){
       int value = array[1];
       light.write(value);
     }
+    else if (cmd.cmp("start")) {
+      motors.reset();
+    }    
+    else if (cmd.cmp("stop")) {
+      motors.stop();
+    }
     else {
       motors.stop(); 
     }

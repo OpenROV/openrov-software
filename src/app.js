@@ -42,7 +42,8 @@ var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
   connections += 1;
-
+  if (connections == 1) controller.start();
+  
   socket.send('initialize');  // opens socket with client
 
     socket.on('motor_test', function(controls) {
@@ -58,6 +59,12 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('brightness_update', function(value) {
         controller.sendLight(value);
+    });
+    
+    socket.on('disconnect', function(){
+      connections -= 1;
+      console.log('disconnect detected');
+      if(connections === 0) controller.stop();
     });
 
     controller.on('status',function(status){
@@ -79,13 +86,6 @@ io.sockets.on('connection', function (socket) {
       }
   });
 
-});
-
-
-// SOCKET disconnection ==============================
-io.sockets.on('disconnect', function(socket){
-  connections -= 1;
-  if(connections === 0) rov.close();
 });
 
 camera.on('error.device', function(err) {
