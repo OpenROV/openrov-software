@@ -59,6 +59,23 @@ void setup(){
     readings[thisReading] = 0;     
 }
 
+int smoothAdjustedServoPosition(int target, int current){
+  // if the MIDPOINT is betwen the change requested in velocity we want to go to MIDPOINT first, and right away.
+  if (((current < MIDPOINT) && (MIDPOINT < target)) || ((target < MIDPOINT) && (MIDPOINT < current))){
+    return MIDPOINT;
+  }
+  // if the change is moving us closer to MIDPOINT it is a reduction of power and we can move all the way to the target
+  // in one command
+  if (abs(MIDPOINT-target) < abs(MIDPOINT-current)){
+    return target;
+  }
+  // else, we need to smooth out amp spikes by making a series of incrimental changes in the motors, so only move part of
+  // the way to the target this time.
+  double x = target - current;
+  int sign = (x>0) - (x<0);
+  return(current + sign * (min(abs(target - current), smoothingIncriment)));
+}
+
 void loop(){
   
   if (Serial.available()) {
@@ -98,14 +115,10 @@ void loop(){
   //to their new positions in increments.  The incriment should eventually be adjustable from the cockpit so that
   //the pilot could have more aggressive response profiles for the ROV.
   if (controltime.elapsed (50)) {
-    if (p<new_p) new_p -= min(smoothingIncriment,new_p-p);  
-    if (p>new_p) new_p += min(smoothingIncriment,p-new_p);
-    if (v<new_v) new_v -= min(smoothingIncriment,new_v-v);
-    if (v>new_v) new_v += min(smoothingIncriment,v-new_v);
-    if (s<new_s) new_s -= min(smoothingIncriment,new_s-s);
-    if (s>new_s) new_s += min(smoothingIncriment,s-new_s);
-    if (tilt_val<new_tilt) new_tilt -= min(smoothingIncriment,new_tilt-tilt_val);
-    if (tilt_val>new_tilt) new_tilt += min(smoothingIncriment,tilt_val-new_tilt);
+    new_p = smoothAdjustedServoPosition(p,new_p);
+    new_v = smoothAdjustedServoPosition(v,new_v);
+    new_s = smoothAdjustedServoPosition(s,new_s);
+    new_tilt = smoothAdjustedServoPosition(tilt_val,new_tilt);
     tilt.writeMicroseconds(new_tilt);
     motors.go(new_p, new_v, new_s);
   }
