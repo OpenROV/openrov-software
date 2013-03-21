@@ -8,6 +8,7 @@
  */
 
 var CONFIG = require('./lib/config')
+  , nconf = require('nconf')
   , express = require('express')
   , app = express()
   , server = app.listen(CONFIG.port)
@@ -43,8 +44,15 @@ var connections = 0;
 io.sockets.on('connection', function (socket) {
   connections += 1;
   if (connections == 1) controller.start();
-  
+    
   socket.send('initialize');  // opens socket with client
+
+  controller.requestSettings();
+  nconf.use('file', {file: './rovconfig.json'});
+  nconf.load();
+  nconf.defaults({'deadzone_pos':1550,'deadzone_neg':1450});  
+  socket.emit('settings',nconf.get());
+  socket.emit('videoStarted');
 
     socket.on('motor_test', function(controls) {
         controller.sendMotorTest(controls.port, controls.starbord, controls.vertical);
@@ -70,11 +78,24 @@ io.sockets.on('connection', function (socket) {
     controller.on('status',function(status){
         socket.emit('status',status);
     })
+    
+    controller.on('Arduino-settings-reported',function(settings){
+        socket.emit('settings',settings);
+        console.log('sending arduino settings to web client');
+    })
+    
+    controller.on('settings-updated',function(settings){
+        socket.emit('settings',settings);
+        console.log('sending settings to web client');
+    })
 
   arduinoUploadController.initializeSocket(socket);
 
+
+
+});
+
   camera.on('started', function(){
-    socket.emit('videoStarted');
     console.log("emitted 'videoStated'");
   });
 
@@ -85,8 +106,6 @@ io.sockets.on('connection', function (socket) {
       return console.error('couldn\'t initialize camera. got:', err);
       }
   });
-
-});
 
 camera.on('error.device', function(err) {
   console.error('camera emitted an error:', err);

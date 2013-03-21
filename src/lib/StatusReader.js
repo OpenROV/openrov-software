@@ -16,18 +16,31 @@ var StatusReader = function() {
 	setInterval(function(){os.cpuUsage(function(v){currCpuUsage = v;});},1000);
     
 
-    reader.parseStatus= function(rawStatus){
+    reader.parseStatus= function(rawStatus,controller){
         var parts = rawStatus.split(';');
         var status = { depth: updateDepth(), temp: updateTemp()};
 
         for(var i=0;i<parts.length;i++){
             var subParts = parts[i].split(":");
-            status[subParts[0]]=subParts[1];
+	    switch (subParts[0]) {
+	    case '*settings':
+		var setparts = subParts[1].split("|");
+		var settingsCollection = {};
+		for (var s=0;s<setparts.length;s++) {
+		    settingsCollection[setparts[0]] = setparts[1];
+		    console.log(subParts[1]);
+		}
+		controller.emit('Arduino-settings-reported',settingsCollection)
+		break;
+	    default:
+		status[subParts[0]]=subParts[1];
+	    }            
         }
-        status.vout=physics.mapVoltageReading(status.vout);
-	status.iout=physics.mapCurrentReading(status.iout);
+	
+	if ('vout' in status) status.vout=physics.mapVoltageReading(status.vout);
+	if ('iout' in status) status.iout=physics.mapCurrentReading(status.iout);
         
-        status.cpuUsage = currCpuUsage;
+        if ('vout' in status) status.cpuUsage = currCpuUsage;
        
         return status;
     }

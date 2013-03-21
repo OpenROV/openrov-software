@@ -19,13 +19,6 @@ var setup_serial = function(){
     var setuart_process = spawn('sudo', [ path.join(location,'setuart.sh') ]);
 };
 
-var getNewSerialold = function(){
-	return new serialPort.SerialPort(CONFIG.serial, {
-        baudrate: CONFIG.serial_baud,
-        parser: serialPort.parsers.readline("\r\n")
-    });
-};
-
 var OpenROVController = function(eventLoop) {
   var serial;
   var globalEventLoop = eventLoop;
@@ -41,13 +34,15 @@ var OpenROVController = function(eventLoop) {
         });
 
         s.on( "data", function( data ) {
-         var status = reader.parseStatus(data);
-         controller.emit('status',status);
+         var status = reader.parseStatus(data,controller);
+         if ('vout' in status)  controller.emit('status',status);
          if ('ver' in status) 
            controller.ArduinoFirmwareVersion = status.ver;
         });
         return s;
   };
+  
+
   
   setup_serial();
 
@@ -58,6 +53,13 @@ var OpenROVController = function(eventLoop) {
   var controller = new EventEmitter();
 
   controller.ArduinoFirmwareVersion = 0;
+  
+  controller.requestSettings = function(){
+    var command = 'reportSetting();';
+    console.log('asking for reportdata');
+    if(CONFIG.debug_commands) console.error("command", command);
+    if(CONFIG.production) serial.write(command);    
+  };
 
   controller.NotSafeToControl = function(){ //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= .20130314034859) return false;
@@ -81,7 +83,7 @@ var OpenROVController = function(eventLoop) {
     if(CONFIG.debug_commands) console.error("command", command);
     if(CONFIG.production) serial.write(command);
   };
-
+  
     controller.sendTilt = function(value) {
         if (this.NotSafeToControl()) return;
         var servoTilt = physics.mapTiltServo(value);

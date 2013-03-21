@@ -18,6 +18,10 @@ function OpenRovViewModel(){
     self.currentTime = ko.observable(new Date());
     self.sendUpdateEnabled = ko.observable(true);
     self.rawTelemetry = ko.observableArray([]);
+    self.setting = {};
+    self.smoothingIncriment = ko.observable(10);
+    self.deadzone_pos = ko.observable(1535);
+    self.deadzone_neg = ko.observable(1465);
 
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
 
@@ -84,6 +88,12 @@ function OpenRovViewModel(){
 
 	self.arduinoFirmwareVM = new ArduinoFirmwareViewModel();
 	
+	self.updateSettings = function(settings){
+	    if ('deadzone_pos' in settings) self.deadzone_pos(settings.deadzone_pos);
+	    if ('deadzone_neg' in settings) self.deadzone_neg(settings.deadzone_neg);
+	    if ('smoothingIncriment' in settings) self.smoothingIncriment(settings.smoothingIncriment);
+	}
+	
 	self.updateStatus = function(data) {
 		self.currentDepth(data.depth);
 		self.currentTemperature(data.temp);
@@ -110,6 +120,46 @@ function OpenRovViewModel(){
         if(newVal<0 || newVal >10) return;
         self.currentBrightness(newVal);
     }
+    
+    ko.bindingHandlers.slider = {
+	init: function (element, valueAccessor, allBindingsAccessor) {
+	    var options = allBindingsAccessor().sliderOptions || {};
+	    var sliderValues = ko.utils.unwrapObservable(valueAccessor());
+
+	    if(sliderValues.min !== undefined) {
+		options.range = true;
+		options.values = [0,0];
+	    }        
+	    
+	    options.slide = function(e, ui) {
+		if(sliderValues.min) {
+		    sliderValues.min(ui.values[0]);
+		    sliderValues.max(ui.values[1]);                                 
+		} else {
+		    valueAccessor()(ui.value);
+		}
+	    };
+	    
+	    ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+		$(element).slider("destroy");
+	    });
+	    
+	    $(element).slider(options);
+	},
+	update: function (element, valueAccessor) {
+	    var sliderValues = ko.toJS(valueAccessor());
+	    if(sliderValues.min !== undefined) {
+		$(element).slider("values", [sliderValues.min, sliderValues.max]);
+	    } else {
+		$(element).slider("value", sliderValues);
+	    }
+	    
+    
+	}
+    };    
+    
+
+    
 
     setInterval(self.updateConnectionStatus, 1000);
     setInterval(function () {self.currentTime(new Date())}, 1000);

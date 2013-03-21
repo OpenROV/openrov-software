@@ -54,7 +54,7 @@
                     <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
                     <p>Use <i>+</i>, <i>-</i> to increase brightness of lights.</p>
                 </div>
-                <div id="telemetry" class="controller well well-small" >
+                <div id="telemetry" class="well well-small" >
 		    <ul data-bind="foreach: rawTelemetry">
 		       <li>
 		           <span data-bind="text: key"></span>
@@ -124,6 +124,13 @@
 
               <button href="#firmware-upload-dialog" class="btn btn-small" type="button" id="arduinoFirmware-upload" data-bind="css: { disabled: arduinoFirmwareVM.isValidFirmwareFile() == false,  'btn-success': arduinoFirmwareVM.isValidFirmwareFile() }" data-toggle="modal"><i class="icon-upload icon-white"></i> Upload</button>
             </div>
+	    <h4>Runtime Settings:</h4>
+	          <div class="control-group invisible-field">
+		      <label class="control-label" for="smoothingIncriment">Motor Response Aggressivness:</label>
+		      <input type="text" data-bind="value: smoothingIncriment" />
+		      <div class="controls" data-bind="slider: smoothingIncriment, sliderOptions: { min: 1, max: 50, step: 1}"></div>
+		  </div>	    
+	    </div>
           </div>
         </div>
 
@@ -155,6 +162,12 @@
                         <div id="verticalMotorSpeed"></div>
                     </div>
                 </div>
+	        <h4>Runtime Settings:</h4>
+	          <div class="control-group invisible-field">
+		      <label class="control-label" for="deadzone">DeadZone</label><br>min:
+		      <input type="text" data-bind="value: deadzone_neg" /><br>max:<input type="text" data-bind="value: deadzone_pos" />
+		      <div class="controls" data-bind="slider: { min: deadzone_neg, max: deadzone_pos }, sliderOptions: { min: 1000, max: 2000, step: 1}"></div>
+		  </div>
             </div>
         </div>
 
@@ -225,6 +238,10 @@
             socket.on('status', function (data) {
              viewmodel.updateStatus(data);
             });
+	    socket.on('settings', function (data){
+	      console.log('got settings')
+	      viewmodel.updateSettings(data);
+	    })
 
             /* ------------------------------------------
                settings 
@@ -237,7 +254,7 @@
 
             $("#settings .back-button").click(function() {
               hideSettings();
-            });
+            });	    
 
             function hideSettings() {
               $("#settings").hide('fold');
@@ -355,8 +372,6 @@
 
             controller.bindBrightness(function (value){
                 viewmodel.updateBrightness(value);
-                socket.emit('brightness_update',viewmodel.currentBrightness());
-                socket.emit('brightness_update',viewmodel.currentBrightness());
                 socket.emit('brightness_update',viewmodel.currentBrightness());
             });
 

@@ -106,6 +106,11 @@ void loop(){
     else if (cmd.cmp("stop")) {
       motors.stop();
     }
+    else if (cmd.cmp("reportSetting")) {
+      Serial.print("*settings:");
+      Serial.print("smoothingIncriment|");
+      Serial.print(String(smoothingIncriment) + ";");
+    }
     else {
       motors.stop(); 
     }
