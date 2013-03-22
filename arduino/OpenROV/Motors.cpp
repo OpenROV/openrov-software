@@ -19,7 +19,7 @@ void Motors::go(int p, int v, int s){
 }
 
 void Motors::stop(){
-  port.write(MIDPOINT);
+  port.writeMicroseconds(MIDPOINT);
   vertical.writeMicroseconds(MIDPOINT);
   starbord.writeMicroseconds(MIDPOINT);
   port.detach();
