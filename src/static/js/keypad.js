@@ -52,12 +52,20 @@ var KEYS = {
     command: 'power',
     value: 1
   },
-  57: { //9 (vtrim -)
+  55: { //7 (vtrim)
+    command: 'vtrim',
+    value: 1
+  },
+  56: { //8 (vttrim)
     command: 'vtrim',
     value: -1
   },
-  48: { //0 (vtrim +) 
-    command: 'vtrim',
+  57: { //9 (ttrim -)
+    command: 'ttrim',
+    value: -1
+  },
+  48: { //0 (ttrim +) 
+    command: 'ttrim',
     value: 1
   }, 
   81: { //Q (tilt up)
@@ -72,11 +80,11 @@ var KEYS = {
     command: 'tilt',
     value: -1
   },
-  187: { //+ (brightness up) - Firefox and Opera not compatible
+  80: { //p (brightness up) 
      command: 'light',
      value: 1
   },
-  189: { //- (brightness down) - Firefox and Opera not compatible
+  79: { //o (brightness down) 
      command: 'light',
      value: -1
   }
@@ -85,6 +93,7 @@ var KEYS = {
 var KeyPad = function() {
   var power = .5; //default to mid power
   var vtrim = 0; //default to no trim
+  var ttrim = 0;
   var kp = {};
   var servoTiltHandler = function(value){};
   var brightnessHandler = function(value){};
@@ -99,11 +108,17 @@ var KeyPad = function() {
 
   var vtrimHandler = function(value){
     vtrim+=value;
-    positions.throttle = (1/1000)*vtrim;
+    positions.lift = (1/1000)*vtrim;
+  };
+
+  var ttrimHandler = function(value){
+    ttrim+=value;
+    positions.throttle = (1/1000)*ttrim;
   };
 
   var stopHandler = function(){
     vtrim = 0;
+    ttrim = 0;
     positions.throttle = 0;
     positions.yaw = 0;
     positions.lift = 0;
@@ -129,6 +144,8 @@ var KeyPad = function() {
         power=info.value;
     else if(info.command=='vtrim')
 	vtrimHandler(info.value);
+    else if (info.command=='ttrim')
+	ttrimHandler(info.value);
     else if(info.command=='stop')
 	stopHandler();
   });
@@ -140,7 +157,9 @@ var KeyPad = function() {
     if(info.command=='command'){
        positions[info.position] = 0;
        if (info.position == 'throttle') 
-         positions.throttle = (1/1000)*vtrim;
+         positions.throttle = (1/1000)*ttrim;
+       if (info.position == 'lift')
+         positions.lift = (1/1000)*vtrim;
     }
     else if(info.command=='tilt')
         servoTiltHandler(info.value);
