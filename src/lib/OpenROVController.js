@@ -41,7 +41,6 @@ var OpenROVController = function(eventLoop) {
         });
         return s;
   };
-  
 
   
   setup_serial();
@@ -76,18 +75,18 @@ var OpenROVController = function(eventLoop) {
 
     controller.sendMotorTest = function(port, starbord, vertical) {
         if (this.NotSafeToControl()) return;
-        var command = 'go(' + physics.mapMotor(port) + ',' + physics.mapMotor(vertical) + ',' + physics.mapMotor(starbord) + ');';
+        var command = 'go(' + physics.mapRawMotor(port) + ',' + physics.mapRawMotor(vertical) + ',' + physics.mapRawMotor(starbord) + ');';
         if(CONFIG.debug_commands) console.error("command", command);
         if(CONFIG.production) serial.write(command);
     };
 
-  controller.sendCommand = function(throttle, yaw, vertical) {
-    if (this.NotSafeToControl()) return;
-    var motorCommands = physics.mapMotors(throttle, yaw, vertical);
-    var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
-    if(CONFIG.debug_commands) console.error("command", command);
-    if(CONFIG.production) serial.write(command);
-  };
+    controller.sendCommand = function(throttle, yaw, vertical) {
+      if (this.NotSafeToControl()) return;
+      var motorCommands = physics.mapMotors(throttle, yaw, vertical);
+      var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
+      if(CONFIG.debug_commands) console.error("command", command);
+      if(CONFIG.production) serial.write(command);
+    };
   
     controller.sendTilt = function(value) {
         if (this.NotSafeToControl()) return;
