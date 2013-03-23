@@ -68,6 +68,21 @@ io.sockets.on('connection', function (socket) {
         controller.sendLight(value);
     });
     
+    socket.on('update_settings', function(value){
+      for(var property in value)
+        if(value.hasOwnProperty(property))
+          CONFIG.preferences.set(property,value[property]);
+      CONFIG.preferences.save(function (err) {
+        if (err) {
+          console.error(err.message);
+          return;
+        }
+        console.log('Configuration saved successfully.');
+      });
+      controller.updateSetting();
+      controller.requestSettings();
+    });
+    
     socket.on('disconnect', function(){
       connections -= 1;
       console.log('disconnect detected');

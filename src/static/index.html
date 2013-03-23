@@ -260,6 +260,11 @@
               $("#settings").hide('fold');
               Mousetrap.unbind('esc');
             }
+	    
+	      viewmodel.smoothingIncriment.subscribe(function (newValue) {
+		sendUpdateSettingMessage(socket,{smoothingIncriment:newValue});
+	      }, this);
+
 
               /* ------------------------------------------
                diagnostic
@@ -316,7 +321,14 @@
                   }
               });
               $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
+	      
+	      viewmodel.deadzone_pos.subscribe(function (newValue) {
+		sendUpdateSettingMessage(socket,{deadzone_pos:newValue});
+	      }, this);
 
+	      viewmodel.deadzone_neg.subscribe(function (newValue) {
+		sendUpdateSettingMessage(socket,{deadzone_neg:newValue});
+	      }, this);
 
             /* ------------------------------------------
                firmware upload 
@@ -438,6 +450,10 @@
                   vertical: verticalVal
               });
           }
+	  
+	  function sendUpdateSettingMessage(socket,setting) {
+	    socket.emit('update_settings',setting);
+	  }
 
 
         </script>
