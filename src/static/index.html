@@ -254,6 +254,7 @@
 
             $("#settings .back-button").click(function() {
               hideSettings();
+	      sendUpdateSettingMessage(socket,{smoothingIncriment:viewmodel.smoothingIncriment()});
             });	    
 
             function hideSettings() {
@@ -261,11 +262,6 @@
               Mousetrap.unbind('esc');
             }
 	    
-	      viewmodel.smoothingIncriment.subscribe(function (newValue) {
-		sendUpdateSettingMessage(socket,{smoothingIncriment:newValue});
-	      }, this);
-
-
               /* ------------------------------------------
                diagnostic
                */
@@ -278,6 +274,8 @@
 
               $("#diagnostic .back-button").click(function() {
                   hideDiagnostic();
+		  sendUpdateSettingMessage(socket,{deadzone_pos:viewmodel.deadzone_pos()});
+		  sendUpdateSettingMessage(socket,{deadzone_neg:viewmodel.deadzone_neg()});
               });
 
               function hideDiagnostic() {
@@ -322,14 +320,6 @@
               });
               $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
 	      
-	      viewmodel.deadzone_pos.subscribe(function (newValue) {
-		sendUpdateSettingMessage(socket,{deadzone_pos:newValue});
-	      }, this);
-
-	      viewmodel.deadzone_neg.subscribe(function (newValue) {
-		sendUpdateSettingMessage(socket,{deadzone_neg:newValue});
-	      }, this);
-
             /* ------------------------------------------
                firmware upload 
             */

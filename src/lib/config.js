@@ -17,7 +17,7 @@ var getLibPath = function(lib) {
 	return result;
 }
 
-nconf.use('file', {file: '~/rovconfig.json'});
+nconf.use('file', {file: '/usr/local/etc/rovconfig.json'});
 nconf.load();
 //just odd enough to recognize as defaults
 nconf.defaults({'deadzone_pos':.1,'deadzone_neg':-.1, 'smoothingIncriment':4});
