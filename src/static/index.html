@@ -166,7 +166,7 @@
 	          <div class="control-group invisible-field">
 		      <label class="control-label" for="deadzone">DeadZone</label><br>min:
 		      <input type="text" data-bind="value: deadzone_neg" /><br>max:<input type="text" data-bind="value: deadzone_pos" />
-		      <div class="controls" data-bind="slider: { min: deadzone_neg, max: deadzone_pos }, sliderOptions: { min: 1000, max: 2000, step: 1}"></div>
+		      <div class="controls" data-bind="slider: { min: deadzone_neg, max: deadzone_pos }, sliderOptions: { min: -1, max: 1, step: .001}"></div>
 		  </div>
             </div>
         </div>
@@ -282,9 +282,10 @@
               }
 
               $("#starbordMotorSpeed").slider({
-                  min:1000,
-                  max:2000,
-                  value:1500,
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
                   slide: function( event, ui ) {
                       $( "#starbordMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
@@ -293,9 +294,10 @@
               $( "#starbordMotorSpeedVal" ).val( $( "#starbordMotorSpeed" ).slider( "value" ) );
 
               $("#portMotorSpeed").slider({
-                  min:1000,
-                  max:2000,
-                  value:1500,
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
                   slide: function( event, ui ) {
                       $( "#portMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
@@ -304,9 +306,10 @@
               $( "#portMotorSpeedVal" ).val( $( "#portMotorSpeed" ).slider( "value" ) );
 
               $("#verticalMotorSpeed").slider({
-                  min:1000,
-                  max:2000,
-                  value:1500,
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
                   slide: function( event, ui ) {
                       $( "#verticalMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
@@ -367,7 +370,7 @@
 
             controller.bindServoTilt(function (value){
                 viewmodel.currentTiltPosition(value);
-                socket.emit('tilt_update',value*300+1500);
+                socket.emit('tilt_update',value);
             });
 
             controller.bindBrightness(function (value){
@@ -380,7 +383,7 @@
               var positions = controller.getPositions();
 
               var controls = {};
-              for(var i in positions) controls[i] = deaden(positions[i]*500+1500);
+              for(var i in positions) controls[i] = positions[i];
               /*if(CONFIG.debug) {
                 console.error("DEBUG: throttle", controls.throttle);
                 console.error("DEBUG: yaw", controls.yaw);
@@ -390,16 +393,7 @@
                 socket.emit('control_update', controls);
             }, SAMPLE_PERIOD);
 
-            var DEAD_ZONE = CONFIG.dead_zone;
-            var NEUTRAL = 1500;
-            function deaden(value) {
-              val = value-1500;
-	      if (((NEUTRAL - DEAD_ZONE) < val) && (val < (NEUTRAL + DEADZONE)))
-	        { return NEUTRAL;}
-              else {return value;} 
-            }
-
-
+ 
             socket.on('arduinofirmware-requestmoredata', function (data){
                viewmodel.arduinoFirmwareVM.uploadPercentage(data['Percent']);
                var Place = data['Place'] * 524288; //The Next Blocks Starting Position

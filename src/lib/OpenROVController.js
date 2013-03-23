@@ -56,10 +56,15 @@ var OpenROVController = function(eventLoop) {
   
   controller.requestSettings = function(){
     var command = 'reportSetting();';
-    console.log('asking for reportdata');
     if(CONFIG.debug_commands) console.error("command", command);
     if(CONFIG.production) serial.write(command);    
   };
+  
+  controller.updateSetting = function(){
+    var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + physics.mapMotor(CONFIG.preferences.get('deadzone_neg')) + ','+ physics.mapMotor(CONFIG.preferences.get('deadzone_pos')) + ','+ ');';
+    if(CONFIG.debug_commands) console.error("command", command);
+    if(CONFIG.production) serial.write(command);    
+  };  
 
   controller.NotSafeToControl = function(){ //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= .20130314034859) return false;
@@ -125,6 +130,7 @@ var OpenROVController = function(eventLoop) {
 
   globalEventLoop.on('serial-start', function(){
 	serial = getNewSerial();
+	controller.updateSetting();
 	logger.log("Opened serial connection after firmware upload");
 	});
 

@@ -40,6 +40,8 @@ int p = MIDPOINT;
 int v = MIDPOINT;
 int s = MIDPOINT;
 int smoothingIncriment = 5; //How aggressive the throttle changes
+int deadZone_min = MIDPOINT;
+int deadZone_max = MIDPOINT;
 void setup(){
 
   Serial.begin(115200);
@@ -73,7 +75,14 @@ int smoothAdjustedServoPosition(int target, int current){
   // the way to the target this time.
   double x = target - current;
   int sign = (x>0) - (x<0);
-  return(current + sign * (min(abs(target - current), smoothingIncriment)));
+  int adjustedVal = current + sign * (min(abs(target - current), smoothingIncriment));
+  // skip the deadzone
+  if (sign<0) {
+    return (min(adjustedVal,deadZone_min));
+  } else if(sign>0){ 
+    return (max(adjustedVal,deadZone_max));
+  } else
+    return (adjustedVal);
 }
 
 void loop(){
@@ -110,6 +119,14 @@ void loop(){
       Serial.print("*settings:");
       Serial.print("smoothingIncriment|");
       Serial.print(String(smoothingIncriment) + ";");
+      Serial.print("deadZone_min|" + String(deadZone_min) + ";");
+      Serial.print("deadZone_max|" + String(deadZone_max) + ";");
+    }
+    else if (cmd.cmp("updateSetting")) {
+      cmd.parse(array);
+      smoothingIncriment = array[1];
+      deadZone_min = array[2];
+      deadZone_max = array[3];
     }
     else {
       motors.stop(); 

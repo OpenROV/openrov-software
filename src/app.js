@@ -8,7 +8,7 @@
  */
 
 var CONFIG = require('./lib/config')
-  , nconf = require('nconf')
+//  , nconf = require('nconf')
   , express = require('express')
   , app = express()
   , server = app.listen(CONFIG.port)
@@ -47,11 +47,10 @@ io.sockets.on('connection', function (socket) {
     
   socket.send('initialize');  // opens socket with client
 
+  controller.updateSetting();
   controller.requestSettings();
-  nconf.use('file', {file: './rovconfig.json'});
-  nconf.load();
-  nconf.defaults({'deadzone_pos':1550,'deadzone_neg':1450});  
-  socket.emit('settings',nconf.get());
+ 
+  socket.emit('settings',CONFIG.preferences.get());
   socket.emit('videoStarted');
 
     socket.on('motor_test', function(controls) {

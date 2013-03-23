@@ -20,8 +20,8 @@ function OpenRovViewModel(){
     self.rawTelemetry = ko.observableArray([]);
     self.setting = {};
     self.smoothingIncriment = ko.observable(10);
-    self.deadzone_pos = ko.observable(1535);
-    self.deadzone_neg = ko.observable(1465);
+    self.deadzone_pos = ko.observable(0);
+    self.deadzone_neg = ko.observable(0);
 
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
 
