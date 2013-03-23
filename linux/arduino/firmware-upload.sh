@@ -31,12 +31,15 @@ OUTPUT=`ino upload -m atmega328 -p /dev/ttyO1 2>&1`
 while [ $COUNTER -lt 10 ]; do 
 #OUTPUT=`sudo avrdude -c arduino -D -vvvv -i $DELAY -P /dev/ttyO1 -p m328p -U flash:w:.build/atmega328/firmware.hex 2>&1`
 	#sleep 1
+        echo "high" > /sys/class/gpio/gpio32/direction
 	sudo /opt/openrov/linux/setuart.sh &
-	/opt/openrov/linux/reset.sh 1>&2
+	#/opt/openrov/linux/reset.sh 1>&2
 	# sleep $COUNTER
+        echo "low" > /sys/class/gpio/gpio32/direction
         echo $OUTPUT  |  grep "bytes of flash verified"
 	if [ $? -eq 0 ] 
-		then 
+		then
+                        echo "high" > /sys/class/gpio/gpio32/direction
 			echo upload successfull! 1>&2
 			echo $OUTPUT 1>&2
 			exit 0

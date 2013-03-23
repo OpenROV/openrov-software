@@ -43,7 +43,7 @@
                 </div>
                 <div id="keyboard" class="controller well well-small" >
                     <img src="themes/OpenROV/img/keyboard.png" class="center">
-                    <p>Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.</p>
+                    <p>Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver. Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.</p>
                 </div>
                 <div id="servoTilt" class="controller well well-small" >
                     <p>Servo Tilt: <img src="themes/OpenROV/img/servo_tilt.png" data-bind="attr: {style: servoTiltStyle}" class="center"></p>
@@ -52,9 +52,9 @@
                 <div id="lights" class="controller well well-small" >
                     <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"></div></p>
                     <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
-                    <p>Use <i>+</i>, <i>-</i> to increase brightness of lights.</p>
+                    <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
                 </div>
-                <div id="telemetry" class="controller well well-small" >
+                <div id="telemetry" class="well well-small" >
 		    <ul data-bind="foreach: rawTelemetry">
 		       <li>
 		           <span data-bind="text: key"></span>
@@ -124,6 +124,13 @@
 
               <button href="#firmware-upload-dialog" class="btn btn-small" type="button" id="arduinoFirmware-upload" data-bind="css: { disabled: arduinoFirmwareVM.isValidFirmwareFile() == false,  'btn-success': arduinoFirmwareVM.isValidFirmwareFile() }" data-toggle="modal"><i class="icon-upload icon-white"></i> Upload</button>
             </div>
+	    <h4>Runtime Settings:</h4>
+	          <div class="control-group invisible-field">
+		      <label class="control-label" for="smoothingIncriment">Motor Response Aggressivness:</label>
+		      <input type="text" data-bind="value: smoothingIncriment" />
+		      <div class="controls" data-bind="slider: smoothingIncriment, sliderOptions: { min: 1, max: 50, step: 1}"></div>
+		  </div>	    
+	    </div>
           </div>
         </div>
 
@@ -155,6 +162,12 @@
                         <div id="verticalMotorSpeed"></div>
                     </div>
                 </div>
+	        <h4>Runtime Settings:</h4>
+	          <div class="control-group invisible-field">
+		      <label class="control-label" for="deadzone">DeadZone</label><br>min:
+		      <input type="text" data-bind="value: deadzone_neg" /><br>max:<input type="text" data-bind="value: deadzone_pos" />
+		      <div class="controls" data-bind="slider: { min: deadzone_neg, max: deadzone_pos }, sliderOptions: { min: -1, max: 1, step: .001}"></div>
+		  </div>
             </div>
         </div>
 
@@ -225,6 +238,10 @@
             socket.on('status', function (data) {
              viewmodel.updateStatus(data);
             });
+	    socket.on('settings', function (data){
+	      console.log('got settings')
+	      viewmodel.updateSettings(data);
+	    })
 
             /* ------------------------------------------
                settings 
@@ -237,13 +254,14 @@
 
             $("#settings .back-button").click(function() {
               hideSettings();
-            });
+	      sendUpdateSettingMessage(socket,{smoothingIncriment:viewmodel.smoothingIncriment()});
+            });	    
 
             function hideSettings() {
               $("#settings").hide('fold');
               Mousetrap.unbind('esc');
             }
-
+	    
               /* ------------------------------------------
                diagnostic
                */
@@ -256,6 +274,8 @@
 
               $("#diagnostic .back-button").click(function() {
                   hideDiagnostic();
+		  sendUpdateSettingMessage(socket,{deadzone_pos:viewmodel.deadzone_pos()});
+		  sendUpdateSettingMessage(socket,{deadzone_neg:viewmodel.deadzone_neg()});
               });
 
               function hideDiagnostic() {
@@ -265,9 +285,10 @@
               }
 
               $("#starbordMotorSpeed").slider({
-                  min:0,
-                  max:180,
-                  value:90,
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
                   slide: function( event, ui ) {
                       $( "#starbordMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
@@ -276,9 +297,10 @@
               $( "#starbordMotorSpeedVal" ).val( $( "#starbordMotorSpeed" ).slider( "value" ) );
 
               $("#portMotorSpeed").slider({
-                  min:0,
-                  max:180,
-                  value:90,
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
                   slide: function( event, ui ) {
                       $( "#portMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
@@ -287,17 +309,17 @@
               $( "#portMotorSpeedVal" ).val( $( "#portMotorSpeed" ).slider( "value" ) );
 
               $("#verticalMotorSpeed").slider({
-                  min:0,
-                  max:180,
-                  value:90,
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
                   slide: function( event, ui ) {
                       $( "#verticalMotorSpeedVal" ).val( ui.value );
                       sendTestMotorMessage(socket);
                   }
               });
               $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
-
-
+	      
             /* ------------------------------------------
                firmware upload 
             */
@@ -350,13 +372,11 @@
 
             controller.bindServoTilt(function (value){
                 viewmodel.currentTiltPosition(value);
-                socket.emit('tilt_update',value * 90);
+                socket.emit('tilt_update',value);
             });
 
             controller.bindBrightness(function (value){
                 viewmodel.updateBrightness(value);
-                socket.emit('brightness_update',viewmodel.currentBrightness());
-                socket.emit('brightness_update',viewmodel.currentBrightness());
                 socket.emit('brightness_update',viewmodel.currentBrightness());
             });
 
@@ -365,7 +385,7 @@
               var positions = controller.getPositions();
 
               var controls = {};
-              for(var i in positions) controls[i] = deaden(positions[i] * 90);
+              for(var i in positions) controls[i] = positions[i];
               /*if(CONFIG.debug) {
                 console.error("DEBUG: throttle", controls.throttle);
                 console.error("DEBUG: yaw", controls.yaw);
@@ -375,18 +395,7 @@
                 socket.emit('control_update', controls);
             }, SAMPLE_PERIOD);
 
-            var DEAD_ZONE = CONFIG.dead_zone;
-            var MAX = 90;
-            function deaden(val) {
-              var sign = val / Math.abs(val);
-              val = Math.abs(val);
-              if (val < DEAD_ZONE) return 0;
-              var m = (MAX + DEAD_ZONE) / (MAX - DEAD_ZONE);
-              val = m * (val - DEAD_ZONE) - DEAD_ZONE;
-              return sign * val;
-            }
-
-
+ 
             socket.on('arduinofirmware-requestmoredata', function (data){
                viewmodel.arduinoFirmwareVM.uploadPercentage(data['Percent']);
                var Place = data['Place'] * 524288; //The Next Blocks Starting Position
@@ -431,6 +440,10 @@
                   vertical: verticalVal
               });
           }
+	  
+	  function sendUpdateSettingMessage(socket,setting) {
+	    socket.emit('update_settings',setting);
+	  }
 
 
         </script>

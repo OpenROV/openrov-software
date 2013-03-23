@@ -13,13 +13,16 @@ void Motors::reset(){
 }
 
 void Motors::go(int p, int v, int s){
-  port.write(p);
-  vertical.write(v);
-  starbord.write(s);
+  port.writeMicroseconds(p);
+  vertical.writeMicroseconds(v);
+  starbord.writeMicroseconds(s);
 }
 
 void Motors::stop(){
-  port.write(MIDPOINT);
-  vertical.write(MIDPOINT);
-  starbord.write(MIDPOINT);
+  port.writeMicroseconds(MIDPOINT);
+  vertical.writeMicroseconds(MIDPOINT);
+  starbord.writeMicroseconds(MIDPOINT);
+  port.detach();
+  vertical.detach();
+  starbord.detach();
 }

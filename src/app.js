@@ -8,6 +8,7 @@
  */
 
 var CONFIG = require('./lib/config')
+//  , nconf = require('nconf')
   , express = require('express')
   , app = express()
   , server = app.listen(CONFIG.port)
@@ -42,8 +43,15 @@ var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
   connections += 1;
-
+  if (connections == 1) controller.start();
+    
   socket.send('initialize');  // opens socket with client
+
+  controller.updateSetting();
+  controller.requestSettings();
+ 
+  socket.emit('settings',CONFIG.preferences.get());
+  socket.emit('videoStarted');
 
     socket.on('motor_test', function(controls) {
         controller.sendMotorTest(controls.port, controls.starbord, controls.vertical);
@@ -59,15 +67,49 @@ io.sockets.on('connection', function (socket) {
     socket.on('brightness_update', function(value) {
         controller.sendLight(value);
     });
+    
+    socket.on('update_settings', function(value){
+      for(var property in value)
+        if(value.hasOwnProperty(property))
+          CONFIG.preferences.set(property,value[property]);
+      CONFIG.preferences.save(function (err) {
+        if (err) {
+          console.error(err.message);
+          return;
+        }
+        console.log('Configuration saved successfully.');
+      });
+      controller.updateSetting();
+      controller.requestSettings();
+    });
+    
+    socket.on('disconnect', function(){
+      connections -= 1;
+      console.log('disconnect detected');
+      if(connections === 0) controller.stop();
+    });
 
     controller.on('status',function(status){
         socket.emit('status',status);
     })
+    
+    controller.on('Arduino-settings-reported',function(settings){
+        socket.emit('settings',settings);
+        console.log('sending arduino settings to web client');
+    })
+    
+    controller.on('settings-updated',function(settings){
+        socket.emit('settings',settings);
+        console.log('sending settings to web client');
+    })
 
   arduinoUploadController.initializeSocket(socket);
 
+
+
+});
+
   camera.on('started', function(){
-    socket.emit('videoStarted');
     console.log("emitted 'videoStated'");
   });
 
@@ -78,15 +120,6 @@ io.sockets.on('connection', function (socket) {
       return console.error('couldn\'t initialize camera. got:', err);
       }
   });
-
-});
-
-
-// SOCKET disconnection ==============================
-io.sockets.on('disconnect', function(socket){
-  connections -= 1;
-  if(connections === 0) rov.close();
-});
 
 camera.on('error.device', function(err) {
   console.error('camera emitted an error:', err);
