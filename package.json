@@ -10,12 +10,14 @@
   "dependencies": {
     "express": ">= 3.0.0rc5",
     "serialport": ">= 1.0.8",
-    "socket.io": ""
+    "socket.io": "",
+    "nconf" : ""
   },
  "bundleDependencies": [
     "express",
     "socket.io",
-     "serialport"
+     "serialport",
+     "nconf"
   ],
   "engines": {
     "node": ">= 0.8.11"

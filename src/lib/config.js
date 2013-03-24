@@ -4,7 +4,7 @@
  * Configuration file.  Manage frame rate, port, etc.
  *
  */
-
+var nconf = require('nconf');
 var OpenROVCameraPath = "./lib/OpenROVCamera";
 var OpenROVControllerPath = "./lib/OpenROVController";
 var FirmwareInstallerPath = "./lib/FirmwareInstaller";
@@ -16,6 +16,12 @@ var getLibPath = function(lib) {
 	}
 	return result;
 }
+
+nconf.use('file', {file: '/usr/local/etc/rovconfig.json'});
+nconf.load();
+//just odd enough to recognize as defaults
+nconf.defaults({'deadzone_pos':.1,'deadzone_neg':-.1, 'smoothingIncriment':4});
+
 
 module.exports = {
   debug:            process.env.NODE_DEBUG      !== 'false',
@@ -30,6 +36,7 @@ module.exports = {
   port:             process.env.PORT             || 8080,
   serial:           process.env.SERIAL           || '/dev/ttyO1',
   serial_baud:      process.env.SERIAL_BAUD      || 115200,
+  preferences:	    nconf,
   OpenROVCamera:    getLibPath(OpenROVCameraPath),  
   OpenROVController:getLibPath(OpenROVControllerPath),  
   FirmwareInstaller:getLibPath(FirmwareInstallerPath),  
