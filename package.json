@@ -11,13 +11,19 @@
     "express": ">= 3.0.0rc5",
     "serialport": ">= 1.0.8",
     "socket.io": "",
-    "nconf" : ""
+    "nconf" : "",
+    "request" : "",
+    "moment" : "",
+    "mkdirp" : "",
   },
  "bundleDependencies": [
     "express",
     "socket.io",
      "serialport",
-     "nconf"
+     "nconf",
+     "request",
+     "moment",
+     "mkdirp"
   ],
   "engines": {
     "node": ">= 0.8.11"
