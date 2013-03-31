@@ -14,7 +14,7 @@
     "nconf" : "",
     "request" : "",
     "moment" : "",
-    "mkdirp" : "",
+    "mkdirp" : ""
   },
  "bundleDependencies": [
     "express",
