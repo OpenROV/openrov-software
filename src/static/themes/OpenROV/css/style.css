@@ -16,6 +16,7 @@ body {
 .sidebar-nav {
 }
 #telemetry {
+  height: 100%;
   overflow: scroll;
 }
 .container-fluid {
@@ -154,16 +155,21 @@ img.center {
     display: block;
 }
 
-#video {
-  width: 640px;
-  min-height: 480px;  
+#video { 
   border: 2px solid black;
-  border-radius: 10px;
-  padding: 10px;
   background-color: black;
 }
 
 #main-row {
+  padding-bottom:150px; /* this needs to be bigger than footer height*/
+}
+
+#footer{
+  position: relative;
+  margin-top: -150px; /* negative value of footer height */
+  height: 150px;
+  clear:both;
+  padding-top:20px;  
 }
 
 .full-height{
@@ -175,8 +181,13 @@ img.center {
 }
 
 #video-container {
-  display: table-cell;
-  vertical-align: middle; 
+  min-width: 640px;
+  min-height: 480px;
+  border-radius: 10px;
+  padding: 10px;
+  display: block;
+  vertical-align: middle;
+  margin: 0 auto;
 }
 
 #brightnessIndicator {
