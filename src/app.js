@@ -8,7 +8,7 @@
  */
 
 var CONFIG = require('./lib/config')
-//  , nconf = require('nconf')
+  , fs=require('fs')
   , express = require('express')
   , app = express()
   , server = app.listen(CONFIG.port)
@@ -18,9 +18,16 @@ var CONFIG = require('./lib/config')
   , OpenROVController = require(CONFIG.OpenROVController)
   , OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController')
   , logger = require('./lib/logger').create(CONFIG.debug)
+  , mkdirp = require('mkdirp')
+  , path = require('path')
   ;
 
 app.use(express.static(__dirname + '/static/'));
+app.use('/photos',express.directory(CONFIG.preferences.get('photoDirectory')));
+app.use('/photos',express.static(CONFIG.preferences.get('photoDirectory')));
+
+// setup required directories
+mkdirp(CONFIG.preferences.get('photoDirectory'));
 
 process.env.NODE_ENV = true;
 
@@ -53,6 +60,7 @@ io.sockets.on('connection', function (socket) {
   socket.emit('settings',CONFIG.preferences.get());
   socket.emit('videoStarted');
 
+
     socket.on('motor_test', function(controls) {
         controller.sendMotorTest(controls.port, controls.starbord, controls.vertical);
     });
@@ -66,6 +74,27 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('brightness_update', function(value) {
         controller.sendLight(value);
+    });
+    
+    socket.emitPhotos = function(){
+          fs.readdir(CONFIG.preferences.get('photoDirectory'),function(err,files){
+            if(err) throw err;
+            var myfiles = [];
+            files.forEach(function(file){
+              myfiles.push('/photos/' + path.basename(file));
+            });
+            globalEventLoop.emit('photos-updated',myfiles); // trigger files_ready event
+          });    
+    };
+    
+    socket.emitPhotos();
+  
+    socket.on('snapshot', function() {
+        camera.snapshot( function(filename) {
+          console.log('Photo taken: '+ filename);
+          // read all files from current directory
+          socket.emitPhotos();        
+        });
     });
     
     socket.on('update_settings', function(value){
@@ -102,6 +131,11 @@ io.sockets.on('connection', function (socket) {
         socket.emit('settings',settings);
         console.log('sending settings to web client');
     })
+    
+    globalEventLoop.on('photos-updated',function(photos){
+        socket.emit('photos-updated',photos);
+        console.log('sending photos to web client');
+    })    
 
   arduinoUploadController.initializeSocket(socket);
 

@@ -22,6 +22,7 @@ function OpenRovViewModel(){
     self.smoothingIncriment = ko.observable(10);
     self.deadzone_pos = ko.observable(0);
     self.deadzone_neg = ko.observable(0);
+    self.snapshots = ko.observableArray([]);
 
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
 
@@ -112,6 +113,11 @@ function OpenRovViewModel(){
 		  }
 		};
 		self.rawTelemetry.valueHasMutated();
+		
+	}
+	
+	self.updatePhotos = function(data) {
+	    self.snapshots(data);
 	}
 
     self.updateBrightness = function(value) {
