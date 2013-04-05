@@ -1,5 +1,7 @@
 var GamePad = function() {
   var gp = {};
+  
+    var deadzone=.03;
 
     var padStatus = {
         position: {
@@ -105,6 +107,9 @@ var GamePad = function() {
                     yaw: axes[0],
                     lift: -1*axes[3]
                 };
+                if (positions.throttle > -deadzone && positions.throttle < deadzone) positions.throttle = 0;
+                if (positions.yaw > -deadzone && positions.yaw < deadzone) positions.yaw = 0;
+                if (positions.lift > -deadzone && positions.lift < deadzone) positions.lift = 0;
             }
             padStatus.position = positions;
         }
