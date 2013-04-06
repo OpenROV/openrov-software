@@ -26,3 +26,7 @@ void Motors::stop(){
   vertical.detach();
   starbord.detach();
 }
+
+bool Motors::attached(){
+  return port.attached() || vertical.attached() || starbord.attached();
+}
