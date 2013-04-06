@@ -75,7 +75,7 @@ var OpenROVController = function(eventLoop) {
 
     controller.sendMotorTest = function(port, starbord, vertical) {
         if (this.NotSafeToControl()) return;
-        var command = 'go(' + physics.mapRawMotor(port) + ',' + physics.mapRawMotor(vertical) + ',' + physics.mapRawMotor(starbord) + ');';
+        var command = 'go(' + physics.mapRawMotor(port) + ',' + physics.mapRawMotor(vertical) + ',' + physics.mapRawMotor(starbord) + ',1);'; //the 1 bypasses motor smoothing
         if(CONFIG.debug_commands) console.error("command", command);
         if(CONFIG.production) serial.write(command);
     };
