@@ -16,6 +16,7 @@ class Motors {
     void reset();
     void go(int p, int v, int s);
     void stop();
+    bool attached();
     
 };
 

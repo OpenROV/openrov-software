@@ -42,6 +42,8 @@ int s = MIDPOINT;
 int smoothingIncriment = 5; //How aggressive the throttle changes
 int deadZone_min = MIDPOINT;
 int deadZone_max = MIDPOINT;
+boolean bypasssmoothing = false;
+
 void setup(){
 
   Serial.begin(115200);
@@ -99,11 +101,15 @@ void loop(){
       tilt_val = array[1];
     }
     else if (cmd.cmp("go")) {
+      //ignore corrupt data
       cmd.parse(array);
-      p = array[1];
-      v = array[2];
-      s = array[3];
-    }
+      if (array[1]>999 && array[2] >999 && array[3] > 999 && array[1]<2001 && array[2]<2001 && array[3] < 2001) {       
+        p = array[1];
+        v = array[2];
+        s = array[3];
+        if (array[4] == 1) bypasssmoothing=true;
+      }
+    }    
     else if (cmd.cmp("light")) {
       cmd.parse(array);
       int value = array[1];
@@ -129,7 +135,7 @@ void loop(){
       deadZone_max = array[3];
     }
     else {
-      motors.stop(); 
+      //ignore the corrupt data 
     }
   }
 
@@ -137,12 +143,23 @@ void loop(){
   //to their new positions in increments.  The incriment should eventually be adjustable from the cockpit so that
   //the pilot could have more aggressive response profiles for the ROV.
   if (controltime.elapsed (50)) {
-    new_p = smoothAdjustedServoPosition(p,new_p);
-    new_v = smoothAdjustedServoPosition(v,new_v);
-    new_s = smoothAdjustedServoPosition(s,new_s);
-    new_tilt = smoothAdjustedServoPosition(tilt_val,new_tilt);
-    tilt.writeMicroseconds(new_tilt);
-    motors.go(new_p, new_v, new_s);
+    if (p!=new_p || v!=new_v || s!=new_s) {
+      new_p = smoothAdjustedServoPosition(p,new_p);
+      new_v = smoothAdjustedServoPosition(v,new_v);
+      new_s = smoothAdjustedServoPosition(s,new_s);
+      if (bypasssmoothing)
+      {
+        new_p=p;
+        new_v=v;
+        new_s=s;
+        bypasssmoothing = false;
+      }
+      motors.go(new_p, new_v, new_s);
+    }
+    if (tilt_val != new_tilt){
+      new_tilt = smoothAdjustedServoPosition(tilt_val,new_tilt);
+      tilt.writeMicroseconds(new_tilt);
+    }
   }
 
   if (time.elapsed (100)) {
@@ -171,6 +188,9 @@ void loop(){
     iout.send(average);
     Serial.print("fmem:");
     Serial.print(freeMemory());
+    Serial.print(";");
+    Serial.print("motorAttached:");
+    Serial.print(motors.attached());
     Serial.print(";");
     Serial.print("motors:");
     Serial.print(new_p);
