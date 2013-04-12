@@ -23,6 +23,7 @@ var GamePad = function() {
     var servoTiltHandler = function(value){};
     var brightnessHandler = function(value){};
     var detectionHandler = function(value){};
+    var ignoreInputUntil = 0;
 
     //These must be bound to by the code that instantiates the gamepad.
     gp.bindServoTilt = function(callback){
@@ -76,6 +77,8 @@ var GamePad = function() {
     });    
     
   gamepad.bind(Gamepad.Event.AXIS_CHANGED, function(e) {
+    if ((new Date().getTime()) < ignoreInputUntil) return; //avoids inacurrate readings when the gamepad has just been connected from affecting the ROV
+    
     switch (e.axis) {
       case 'LEFT_STICK_X':
         padStatus.position.yaw = e.value*powerLevel;
@@ -103,6 +106,7 @@ var GamePad = function() {
   }
 
   gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
+    ignoreInputUntil = new Date().getTime() + 1000;
     console.log('Controller connected', device);
     detectionHandler();
   });
