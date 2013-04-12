@@ -406,27 +406,48 @@
             */
             var gp = new GamePad();
             var kp = new KeyPad();
-            var controller;
+            var controller = kp;
+	    
+	    var detectcontroller = function(){
+	      if(gp.isAvailable()) {
+		  $("#keyboard").hide();
+		  $("#gamepad").show();
+		  controller = gp;
+	      }
+	      else { 
+		  $("#gamepad").hide();
+		  $("#keyboard").show();
+		  controller = kp;
+	      }	      
+	    };
 
-            if(gp.isAvailable()) {
-                $("#keyboard").hide();
-                controller = gp;
-            }
-            else { 
-                $("#gamepad").hide();
-                controller = kp;
-            }
+	    gp.bindDetectionEvent(function(){
+	      detectcontroller();
+	      console.log('binddetectionevent called');
+	    });
+	    
+	    detectcontroller();
 
-            controller.bindServoTilt(function (value){
+            kp.bindServoTilt(function (value){
                 viewmodel.currentTiltPosition(value);
                 socket.emit('tilt_update',value);
             });
-
-            controller.bindBrightness(function (value){
+            
+	    gp.bindServoTilt(function (value){
+                viewmodel.currentTiltPosition(value);
+                socket.emit('tilt_update',value);
+            });
+	    
+            kp.bindBrightness(function (value){
                 viewmodel.updateBrightness(value);
                 socket.emit('brightness_update',viewmodel.currentBrightness());
             });
-
+	    
+            gp.bindBrightness(function (value){
+                viewmodel.updateBrightness(value);
+                socket.emit('brightness_update',viewmodel.currentBrightness());
+            });
+	    
             var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms
             setInterval(function() {
               var positions = controller.getPositions();

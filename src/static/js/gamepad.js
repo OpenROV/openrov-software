@@ -22,6 +22,7 @@ var GamePad = function() {
 
     var servoTiltHandler = function(value){};
     var brightnessHandler = function(value){};
+    var detectionHandler = function(value){};
 
     //These must be bound to by the code that instantiates the gamepad.
     gp.bindServoTilt = function(callback){
@@ -29,6 +30,9 @@ var GamePad = function() {
     };
     gp.bindBrightness = function(callback){
         brightnessHandler=callback;
+    };
+    gp.bindDetectionEvent = function(callback){
+        detectionHandler=callback;
     };
 
     gp.getPositions = function() {
@@ -100,6 +104,12 @@ var GamePad = function() {
 
   gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
     console.log('Controller connected', device);
+    detectionHandler();
+  });
+
+  gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
+    console.log('Controller disconnected', device);
+    detectionHandler();
   });
 
   gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
@@ -107,9 +117,13 @@ var GamePad = function() {
   });  
 
   gp.isAvailable = function() {
-    if(gamepad.init()) return true;
-      return false;
+    if(gamepad.count() == 0) return false;
+      return true;
   }
+  
+  if (!gamepad.init()) {
+          console.log('Your browser does not support gamepads, get the latest Google Chrome or Firefox.');
+  }  
 
   return gp;
 }
