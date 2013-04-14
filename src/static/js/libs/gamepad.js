@@ -634,6 +634,7 @@ Gamepad.prototype._updateWebkit = function() {
 			
 			if (
 				typeof(gamepad) !== 'undefined'
+                                && (gamepad !== null)
 				&& typeof(this.gamepads[gamepad.index]) === 'undefined'
 			) {
 				this._connect(gamepad);
