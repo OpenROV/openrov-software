@@ -10,12 +10,14 @@
 
 var spawn = require('child_process').spawn
   , util = require('util')
+  , request = require('request')
   , EventEmitter = require('events').EventEmitter
   , fs = require('fs')
   , path = require('path')
   , CONFIG = require('./config')
   , logger = require('./logger').create(CONFIG.debug)
   , orutils = require('./orutils')
+  , moment = require('moment')
   ;
 
 var OpenROVCamera = function (options) {
@@ -48,6 +50,13 @@ var OpenROVCamera = function (options) {
     process.kill(capture_process.pid, 'SIGHUP');
   }
 
+  camera.snapshot = function(callback) {
+    if (!_capturing) return;
+    var filename = CONFIG.preferences.get('photoDirectory') + '/ROV'+ moment().format("YYYYMMDDHHmmss") +'.jpg';
+    request('http://localhost:' + options.port +'/?action=snapshot').pipe(fs.createWriteStream(filename));
+    callback(filename);
+  }
+  
   // Actual camera capture starting mjpg-stremer
    
   camera.capture = function (callback) {
