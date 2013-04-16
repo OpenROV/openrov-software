@@ -20,6 +20,7 @@
               <p><a class="brand" href="#"><img src="themes/OpenROV/img/logo.png" class="logo"/>&nbsp;Cockpit</a></p>
               <div class="nav-collapse collapse">
                 <ul class="nav pull-right">
+		  <li><a href="#" id="show-photos">Photos</a></li>
                   <li><a href="#" id="show-settings">Settings</a></li>
                   <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
                 </ul>
@@ -29,14 +30,17 @@
         </div>
         
         <!-- Main ROW -->
-        <div class="container-fluid full-height">
-          <div class="row-fluid full-height" id="main-row">
+        <div id="main-row" class="container-fluid full-height">
+          <div class="row-fluid full-height">
             <div class="span9 border full-height" id="outher-videocontainer">
-              <div id="video-container" class="full-height">
-                <img src="themes/OpenROV/img/no_camera.jpg" alt="OpenROV" id="video" class="center" />
+              <div id="video-container" class="center" border='1'>
+                <img src="themes/OpenROV/img/no_camera.jpg" alt="OpenROV" id="video"/>
+		<div class="btn-group">
+		  <button id="capture-photo" class="btn">Capture</button>
+		</div>
               </div>
             </div>
-            <div class="span3 pull-right">
+            <div class="span3 pull-right" style="overflow: auto; height: 100%">
                 <div id="gamepad" class="controller well well-small" >
                     <img src="themes/OpenROV/img/gamepad.png" class="center">
                     <p>Use the <i>2 sticks</i> to maneuver.</p>
@@ -54,18 +58,20 @@
                     <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
                     <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
                 </div>
-                <div id="telemetry" class="well well-small" >
+                <div id="telemetry" class="controller well well-small" >
+
 		    <ul data-bind="foreach: rawTelemetry">
 		       <li>
 		           <span data-bind="text: key"></span>
 		           <span data-bind="text: value"></span>
 		       </li>
 		    </ul>
+
 		</div>
             </div>
           </div>
         </div>
-        <div class="navbar navbar-inverse navbar-fixed-bottom">
+        <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
           <div class="navbar-inner">
             <div class="container-fluid" style="height: 100%">
               <div class="span1 pull-left"><h6>Connection</h6><div id="connectionHealth" data-bind="attr: { class: isArduinoConnected }">&nbsp;</div></div>
@@ -77,7 +83,22 @@
 		<div class="span2 pull-right"><h2 data-bind="text: currentCurrent().toFixed(3)+ 'A'"></h2><div>&nbsp;</div></div>
             </div>
           </div>
-        </div>    
+        </div>
+	
+	<!-- photos -->
+        <div class="drop-in-right" id="photos">
+            <div class="back-button"></div><h3>Photos</h3>
+	      <div class="settings-block" style="position: relative; overflow: auto; height: 100%"> 
+		<ul class="thumbnails" data-bind="foreach: snapshots">
+		  <li class="">
+		    <a target="_blank" data-bind="attr: { href: $data}" class="thumbnail">
+		      <img data-bind="attr: { src: $data}"  width="260" height="180" alt="">
+		    </a>
+		  </li>
+		</ul>
+	       </div>
+            </div>
+        </div>	
 
         <!-- SETTINGS -->
         <div class="drop-in-right" id="settings">
@@ -218,6 +239,7 @@
         <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
         <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
         <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
+	<script type='text/javascript' src='js/libs/gamepad.js'></script>
         <script type='text/javascript' src='js/utilities.js'></script>
         <script type='text/javascript' src='js/ArduinoFirmwareViewModel.js'></script>
         <script type='text/javascript' src='js/OpenRovViewModel.js'></script>
@@ -242,7 +264,16 @@
 	      console.log('got settings')
 	      viewmodel.updateSettings(data);
 	    })
+	    socket.on('photos-updated', function(data) {
+	      console.log('got new photos');
+	      viewmodel.updatePhotos(data);
+	    })
 
+	    $("#capture-photo").click(function(){
+	      socket.emit('snapshot');
+	    });
+	    
+	    
             /* ------------------------------------------
                settings 
             */
@@ -266,6 +297,22 @@
                diagnostic
                */
               var options = {};
+	      $("#show-photos").click(function() {
+		$("#photos").show('fold');
+		viewmodel.sendUpdateEnabled(false);
+		Mousetrap.bind('esc', hidePhotos);
+	      });
+	      
+              function hidePhotos() {
+                  $("#photos").hide('fold');
+                  viewmodel.sendUpdateEnabled(true);
+                  Mousetrap.unbind('esc');
+              }
+	      
+              $("#photos .back-button").click(function() {
+                  hidePhotos();
+              });  	      
+	      
               $("#show-diagnostic").click(function() {
                   $("#diagnostic").show('fold');
                   viewmodel.sendUpdateEnabled(false);
@@ -276,8 +323,8 @@
                   hideDiagnostic();
 		  sendUpdateSettingMessage(socket,{deadzone_pos:viewmodel.deadzone_pos()});
 		  sendUpdateSettingMessage(socket,{deadzone_neg:viewmodel.deadzone_neg()});
-              });
-
+              });    
+	      
               function hideDiagnostic() {
                   $("#diagnostic").hide('fold');
                   viewmodel.sendUpdateEnabled(true);
@@ -359,27 +406,48 @@
             */
             var gp = new GamePad();
             var kp = new KeyPad();
-            var controller;
+            var controller = kp;
+	    
+	    var detectcontroller = function(){
+	      if(gp.isAvailable()) {
+		  $("#keyboard").hide();
+		  $("#gamepad").show();
+		  controller = gp;
+	      }
+	      else { 
+		  $("#gamepad").hide();
+		  $("#keyboard").show();
+		  controller = kp;
+	      }	      
+	    };
 
-            if(gp.isAvailable()) {
-                $("#keyboard").hide();
-                controller = gp;
-            }
-            else { 
-                $("#gamepad").hide();
-                controller = kp;
-            }
+	    gp.bindDetectionEvent(function(){
+	      detectcontroller();
+	      console.log('binddetectionevent called');
+	    });
+	    
+	    detectcontroller();
 
-            controller.bindServoTilt(function (value){
+            kp.bindServoTilt(function (value){
                 viewmodel.currentTiltPosition(value);
                 socket.emit('tilt_update',value);
             });
-
-            controller.bindBrightness(function (value){
+            
+	    gp.bindServoTilt(function (value){
+                viewmodel.currentTiltPosition(value);
+                socket.emit('tilt_update',value);
+            });
+	    
+            kp.bindBrightness(function (value){
                 viewmodel.updateBrightness(value);
                 socket.emit('brightness_update',viewmodel.currentBrightness());
             });
-
+	    
+            gp.bindBrightness(function (value){
+                viewmodel.updateBrightness(value);
+                socket.emit('brightness_update',viewmodel.currentBrightness());
+            });
+	    
             var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms
             setInterval(function() {
               var positions = controller.getPositions();

@@ -28,7 +28,7 @@ echo Serial port settings 1>&2
 COUNTER=0
 DELAY=0
 OUTPUT=`ino upload -m atmega328 -p /dev/ttyO1 2>&1`
-while [ $COUNTER -lt 10 ]; do 
+while [ $COUNTER -lt 5 ]; do 
 #OUTPUT=`sudo avrdude -c arduino -D -vvvv -i $DELAY -P /dev/ttyO1 -p m328p -U flash:w:.build/atmega328/firmware.hex 2>&1`
 	#sleep 1
         echo "high" > /sys/class/gpio/gpio32/direction
@@ -50,5 +50,6 @@ while [ $COUNTER -lt 10 ]; do
 	echo $OUTPUT 1>&2
 	sudo /opt/openrov/linux/reset.sh 1>&2
 	sleep 5
+        OUTPUT=`ino upload -m atmega328 -p /dev/ttyO1 2>&1 `
 done
 error_exit "Failed to upload after numerous tries. Aborting."
