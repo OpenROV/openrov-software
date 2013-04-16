@@ -68,8 +68,13 @@ var GamePad = function() {
           servoTiltHandler(-1);
           break;
         case 'RB':
-          ttrim = padStatus.position.throttle;
-          ltrim = padStatus.position.lift; 
+          if (ttrim != 0 || ltrim != 0) {
+            ttrim = 0;
+            ltrim = 0;
+          } else {
+            ttrim = padStatus.position.throttle;
+            ltrim = padStatus.position.lift;
+          }
           break;
         case 'START':
           advancePowerLevels();
@@ -85,14 +90,14 @@ var GamePad = function() {
         break;
       case 'LEFT_STICK_Y':
         if (e.value == 0) {
-          positions.throttle = (1/1000)*ttrim
+          padStatus.position.throttle = ttrim
         } else {
           padStatus.position.throttle = -1*e.value*powerLevel;
         }
         break;
       case 'RIGHT_STICK_Y':
         if (e.value == 0) {
-          positions.lift = (1/1000)*ltrim
+          padStatus.position.lift = ltrim
         } else {
           padStatus.position.lift = -1*e.value*powerLevel;
         }
