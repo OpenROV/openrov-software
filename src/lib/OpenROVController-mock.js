@@ -58,6 +58,22 @@ var OpenROVController = function() {
         console.log("command", command);
     };
 
+    controller.start = function(value) {
+        console.log("start");
+    };
+
+    controller.stop = function(value) {
+        console.log("stop");
+    };
+
+    controller.updateSetting = function(value) {
+
+    };
+
+    controller.requestSettings = function(){
+    };
+
+
   return controller;
 }
 
