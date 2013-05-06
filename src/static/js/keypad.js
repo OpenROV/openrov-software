@@ -25,32 +25,32 @@ var KEYS = {
   16: { // shift (lift up)
     command: 'command',
     position: 'lift',
-    value: 1
+    value: -1 //default 1
   },
   17: { //ctrl (lift down)
     command: 'command',
     position: 'lift',
-    value: -1
+    value: 1 //default -1
   },
   49: { //1 (power-1)
     command: 'power',
-    value: .1
+    value: .05 //def .1
   },
   50: { //2 (power-2)
     command: 'power',
-    value: .25 
+    value: .1 //def .25
   },
   51: { //3 (power-3)
     command: 'power',
-    value: .5
+    value: .2 //def .5
   },
   52: { //4 (power-4)
     command: 'power',
-    value: .75
+    value: .5 //def .75
   },
   53: { //5 (power-5)
     command: 'power',
-    value: 1
+    value: 1 //def 1
   },
   55: { //7 (vtrim)
     command: 'vtrim',
