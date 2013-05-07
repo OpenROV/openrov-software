@@ -449,18 +449,29 @@
             });
 	    
             var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms
+	    var priorControls = {};
             setInterval(function() {
               var positions = controller.getPositions();
-
+	      var updateRequired = false;  //Only send if there is a change
               var controls = {};
-              for(var i in positions) controls[i] = positions[i];
+              for(var i in positions) {
+		controls[i] = positions[i];
+		if (controls[i] != priorControls[i])
+		{
+		  updateRequired = true;
+		}
+	      }
+	      
               /*if(CONFIG.debug) {
                 console.error("DEBUG: throttle", controls.throttle);
                 console.error("DEBUG: yaw", controls.yaw);
                 console.error("DEBUG: lift", controls.lift);
               }*/
-              if(viewmodel.sendUpdateEnabled())
+              if(viewmodel.sendUpdateEnabled() && updateRequired){
                 socket.emit('control_update', controls);
+		priorControls = controls;
+		console.log('update...');
+	      }
             }, SAMPLE_PERIOD);
 
  
