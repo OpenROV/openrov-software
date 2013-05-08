@@ -43,7 +43,7 @@ var OpenROVController = function(eventLoop) {
   };
 
   
-  setup_serial();
+  if (CONFIG.setuart) setup_serial();
 
   // ATmega328p is connected to Beaglebone over UART1 (pins TX 24, RX 26)
   if (CONFIG.production) serial = getNewSerial();
