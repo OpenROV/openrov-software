@@ -23,6 +23,9 @@ function OpenRovViewModel(){
     self.deadzone_pos = ko.observable(0);
     self.deadzone_neg = ko.observable(0);
     self.snapshots = ko.observableArray([]);
+    self.googleTalkROVid = ko.observable("");
+    self.googleTalkROVpassword = ko.observable("");
+    self.googleTalkPilotId = ko.observable("");
 
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
 
@@ -93,6 +96,9 @@ function OpenRovViewModel(){
 	    if ('deadzone_pos' in settings) self.deadzone_pos(settings.deadzone_pos);
 	    if ('deadzone_neg' in settings) self.deadzone_neg(settings.deadzone_neg);
 	    if ('smoothingIncriment' in settings) self.smoothingIncriment(settings.smoothingIncriment);
+	    if ('googletalk_rovid' in settings) self.googleTalkROVid(settings.googletalk_rovid);
+	    if ('googletalk_rovpassword' in settings) self.googleTalkROVpassword(settings.googletalk_rovpassword);
+	    if ('googletalk_rov_pilotid' in settings) self.googleTalkPilotId(settings.googletalk_rov_pilotid);
 	}
 	
 	self.updateStatus = function(data) {
