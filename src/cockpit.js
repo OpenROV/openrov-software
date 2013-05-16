@@ -103,7 +103,7 @@ var jid = CONFIG.preferences.get('googletalk_rovid');
 var password = CONFIG.preferences.get('googletalk_rovpassword');
 var pilot = CONFIG.preferences.get('googletalk_rov_pilotid');
 
-if ((jid != null) && (password != null)){
+if ((jid) && (password)){
 // Establish a connection
 var conn = new xmpp.Client({
     jid         : jid,
@@ -112,7 +112,7 @@ var conn = new xmpp.Client({
     port        : 5222
 });
 conn.on('online', function(){
-    if (pilot != null){
+    if (pilot){
  
     console.log("ONLINE");
     
