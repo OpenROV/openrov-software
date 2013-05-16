@@ -150,7 +150,15 @@
 		      <label class="control-label" for="smoothingIncriment">Motor Response Aggressivness:</label>
 		      <input type="text" data-bind="value: smoothingIncriment" />
 		      <div class="controls" data-bind="slider: smoothingIncriment, sliderOptions: { min: 1, max: 50, step: 1}"></div>
-		  </div>	    
+		  </div>
+		  <div class="control-group">
+		      <label class="control-label" for="google-talk-id">Google Talk ROV ID:</label>
+		      <input type="text" data-bind="value: googleTalkROVid" />
+		      <label class="control-label" for="google-talk-password">Google Talk ROV Password:</label>
+		      <input type="text" data-bind="value: googleTalkROVpassword" />
+		      <label class="control-label" for="google-talk-pilot-id">Google Talk Pilot ID:</label>
+		      <input type="text" data-bind="value: googleTalkPilotId" />
+		  </div>
 	    </div>
           </div>
         </div>
@@ -169,6 +177,8 @@
                         <div id="portMotorSpeed"></div>
                     </div>
                 </div>
+		<label class="control-label" for="reverse-port-thruster">Reverse Port Thruster</label>
+		<input type="checkbox" data-bind="checked: reversePortThruster" />
                 <div class="control-group invisible-field">
                     <label class="control-label" for="starbordMotorSpeed">Starboard Motor</label>
                     <input type="text" id="starbordMotorSpeedVal"/>
@@ -176,6 +186,8 @@
                         <div id="starbordMotorSpeed"></div>
                     </div>
                 </div>
+		<label class="control-label" for="reverse-starbord-thruster">Reverse Starbord Thruster</label>
+		<input type="checkbox" data-bind="checked: reverseStarbordThruster" />		
                 <div class="control-group invisible-field">
                     <label class="control-label" for="verticalMotorSpeedVal">Vertical Motor</label>
                     <input type="text" id="verticalMotorSpeedVal"/>
@@ -183,6 +195,8 @@
                         <div id="verticalMotorSpeed"></div>
                     </div>
                 </div>
+		<label class="control-label" for="reverse-lift-thruster">Reverse Verticle Thruster</label>
+		<input type="checkbox" data-bind="checked: reverseLiftThruster" />		
 	        <h4>Runtime Settings:</h4>
 	          <div class="control-group invisible-field">
 		      <label class="control-label" for="deadzone">DeadZone</label><br>min:
@@ -278,19 +292,27 @@
                settings 
             */
             var options = {};
+	    var keyboard = null;
             $("#show-settings").click(function() { 
               $("#settings").show('fold');
+	      viewmodel.sendUpdateEnabled(false);
               Mousetrap.bind('esc', hideSettings);
+	      keyboard.unbindKeys();
             });
 
             $("#settings .back-button").click(function() {
               hideSettings();
 	      sendUpdateSettingMessage(socket,{smoothingIncriment:viewmodel.smoothingIncriment()});
+	      sendUpdateSettingMessage(socket,{googletalk_rovid:viewmodel.googleTalkROVid()});
+	      sendUpdateSettingMessage(socket,{googletalk_rovpassword:viewmodel.googleTalkROVpassword()});
+	      sendUpdateSettingMessage(socket,{googletalk_rov_pilotid:viewmodel.googleTalkPilotId()});
             });	    
 
             function hideSettings() {
               $("#settings").hide('fold');
+	      viewmodel.sendUpdateEnabled(true);
               Mousetrap.unbind('esc');
+	      keyboard.bindKeys()
             }
 	    
               /* ------------------------------------------
@@ -323,6 +345,9 @@
                   hideDiagnostic();
 		  sendUpdateSettingMessage(socket,{deadzone_pos:viewmodel.deadzone_pos()});
 		  sendUpdateSettingMessage(socket,{deadzone_neg:viewmodel.deadzone_neg()});
+		  sendUpdateSettingMessage(socket,{reverse_port_thruster:viewmodel.reversePortThruster()});
+		  sendUpdateSettingMessage(socket,{reverse_starbord_thruster:viewmodel.reverseStarbordThruster()});
+		  sendUpdateSettingMessage(socket,{reverse_lift_thruster:viewmodel.reverseLiftThruster()});
               });    
 	      
               function hideDiagnostic() {
@@ -406,6 +431,7 @@
             */
             var gp = new GamePad();
             var kp = new KeyPad();
+	    keyboard = kp;
             var controller = kp;
 	    
 	    var detectcontroller = function(){
@@ -449,18 +475,29 @@
             });
 	    
             var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms
+	    var priorControls = {};
             setInterval(function() {
               var positions = controller.getPositions();
-
+	      var updateRequired = false;  //Only send if there is a change
               var controls = {};
-              for(var i in positions) controls[i] = positions[i];
+              for(var i in positions) {
+		controls[i] = positions[i];
+		if (controls[i] != priorControls[i])
+		{
+		  updateRequired = true;
+		}
+	      }
+	      
               /*if(CONFIG.debug) {
                 console.error("DEBUG: throttle", controls.throttle);
                 console.error("DEBUG: yaw", controls.yaw);
                 console.error("DEBUG: lift", controls.lift);
               }*/
-              if(viewmodel.sendUpdateEnabled())
+              if(viewmodel.sendUpdateEnabled() && updateRequired){
                 socket.emit('control_update', controls);
+		priorControls = controls;
+		console.log('update...');
+	      }
             }, SAMPLE_PERIOD);
 
  

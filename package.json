@@ -14,16 +14,14 @@
     "nconf" : "",
     "request" : "",
     "moment" : "",
-    "mkdirp" : ""
+    "mkdirp" : "",
+    "forever-monitor" : "",
+    "node-xmpp" : ""
   },
  "bundleDependencies": [
     "express",
     "socket.io",
-     "serialport",
-     "nconf",
-     "request",
-     "moment",
-     "mkdirp"
+    "serialport"
   ],
   "engines": {
     "node": ">= 0.8.11"

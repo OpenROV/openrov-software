@@ -71,6 +71,8 @@ var GamePad = function() {
           if (ttrim != 0 || ltrim != 0) {
             ttrim = 0;
             ltrim = 0;
+            padStatus.position.throttle = 0;
+            padStatus.position.lift = 0;
           } else {
             ttrim = padStatus.position.throttle;
             ltrim = padStatus.position.lift;
