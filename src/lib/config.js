@@ -17,8 +17,17 @@ var getLibPath = function(lib) {
 	return result;
 }
 
-nconf.use('file', {file: '/usr/local/etc/rovconfig.json'});
-nconf.load();
+
+// Will essentially rewrite the file when a change to the defaults are made if there is a parsing error.
+try {
+  nconf.use('file', {file: '/usr/local/etc/rovconfig.json'});
+}
+catch (err) {
+  console.log('Unable to load the configuration file, resetting to defaults');
+  console.log(err);
+}
+
+
 //just odd enough to recognize as defaults
 nconf.defaults({'deadzone_pos':.1,'deadzone_neg':-.1, 'smoothingIncriment':4, 'photoDirectory':'/var/www/openrov/photos'});
 
