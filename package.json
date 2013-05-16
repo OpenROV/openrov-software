@@ -15,7 +15,8 @@
     "request" : "",
     "moment" : "",
     "mkdirp" : "",
-    "forever-monitor" : ""
+    "forever-monitor" : "",
+    "node-xmpp" : ""
   },
  "bundleDependencies": [
     "express",
