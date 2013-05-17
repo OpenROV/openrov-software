@@ -54,6 +54,7 @@ Gamepad.Type = {
 	PLAYSTATION: 'playstation',
 	LOGITECH: 'logitech',
 	XBOX: 'xbox',
+	ROCKCANDY: 'rockcandy',
 	UNSUPPORTED: 'unsupported'
 };
 
@@ -228,6 +229,55 @@ Gamepad.Mapping = {
 			RIGHT_STICK_X: 2,
 			RIGHT_STICK_Y: 3
 		}
+	},
+       ROCKCANDY: {
+		buttons: {
+			A: 0,
+			B: 1,
+			X: 2,
+			Y: 3,
+			LB: 4,
+			RB: 5,
+			LEFT_TRIGGER: 6,
+			RIGHT_TRIGGER: 7,
+			LEFT_STICK: 6,
+			RIGHT_STICK: 7,
+			START: 8,
+			BACK: 9,
+			HOME:10,
+			DPAD_UP: 11,
+			DPAD_DOWN: 12,
+			DPAD_LEFT: 13,
+			DPAD_RIGHT: 14
+		},
+		axes: {
+			LEFT_STICK_X: function(gamepad, manager) {
+					return manager._applyDeadzoneMaximize(gamepad.axes[0],.09);
+			},
+			LEFT_STICK_Y: function(gamepad, manager) {
+					return manager._applyDeadzoneMaximize(gamepad.axes[1],.09);
+			},
+			RIGHT_STICK_X: function(gamepad, manager) {
+					return manager._applyDeadzoneMaximize(gamepad.axes[3],.09);
+			},
+			RIGHT_STICK_Y: function(gamepad, manager) {
+					return manager._applyDeadzoneMaximize(gamepad.axes[4],.09);
+			},
+			LEFT_TRIGGER: function(gamepad, manager) {
+				if (gamepad.axes[2] > 0) {
+					return manager._applyDeadzoneMaximize(gamepad.axes[2]);
+				} else {
+					return 0;
+				}
+			},
+			RIGHT_TRIGGER: function(gamepad, manager) {
+				if (gamepad.axes[5] < 0) {
+					return manager._applyDeadzoneMaximize(gamepad.axes[5] * -1);
+				} else {
+					return 0;
+				}
+			}
+		}
 	}
 };
 
@@ -372,10 +422,16 @@ Gamepad.prototype._getMapping = function(type) {
 			} else {
 				return null;
 			}
-		break;            
+		break;
+	
+		case Gamepad.Type.ROCKCANDY:
+			return Gamepad.Mapping.ROCKCANDY;
+		break;
 
 		case Gamepad.Type.XBOX:
 			return Gamepad.Mapping.XBOX;
+		
+		
 	}
 	
 	return null;
@@ -460,8 +516,9 @@ Gamepad.prototype._disconnect = function(gamepad) {
  */
 Gamepad.prototype._resolveControllerType = function(id) {
 	id = id.toLowerCase();
-	
-	if (id.indexOf('xbox') !== -1 || id.indexOf('360') !== -1 || id.indexOf('standard gamepad') != -1) {
+	if (id.indexOf('rock candy') !==- 1) {
+		return Gamepad.Type.ROCKCANDY;
+	} else if (id.indexOf('xbox') !== -1 || id.indexOf('360') !== -1 || id.indexOf('standard gamepad') != -1) {
 		return Gamepad.Type.XBOX;
 	} else if (
 		id.indexOf('logitech') !== -1

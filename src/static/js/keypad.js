@@ -97,6 +97,7 @@ var KeyPad = function() {
   var kp = {};
   var servoTiltHandler = function(value){};
   var brightnessHandler = function(value){};
+  var processKeys = true;
 
   kp.bindServoTilt = function(callback){
       servoTiltHandler=callback;
@@ -106,6 +107,14 @@ var KeyPad = function() {
         brightnessHandler=callback;
     };
 
+  kp.bindKeys = function(){
+    processKeys = true;
+  };
+  
+  kp.unbindKeys = function(){
+    processKeys = false;
+  }
+  
   var vtrimHandler = function(value){
     vtrim+=value;
     positions.lift = (1/1000)*vtrim;
@@ -132,7 +141,7 @@ var KeyPad = function() {
 
   $(window).keydown(function(evt) {
     var info = KEYS[evt.keyCode];
-    if (!info) return;
+    if ((!info) || (!processKeys)) return;
     evt.preventDefault();
     if(info.command=='command')
         positions[info.position] = info.value*power;
@@ -152,7 +161,7 @@ var KeyPad = function() {
 
   $(window).keyup(function(evt) {
     var info = KEYS[evt.keyCode];
-    if (!info) return;
+    if ((!info) || (!processKeys)) return;
     evt.preventDefault();
     if(info.command=='command'){
        positions[info.position] = 0;

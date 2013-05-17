@@ -36,6 +36,9 @@ var ArduinoPhysics = function() {
         port = starbord = throttle;
         port += yaw;
         starbord -= yaw;
+        if (CONFIG.preferences.get('reverse_port_thruster')) port = port * -1;
+        if (CONFIG.preferences.get('reverse_starbord_thruster')) starbord = starbord * -1;
+        if (CONFIG.preferences.get('reverse_lift_thruster')) vertical = vertical * -1;
         return {
             port: physics.mapMotor(port),
             starbord: physics.mapMotor(starbord),
