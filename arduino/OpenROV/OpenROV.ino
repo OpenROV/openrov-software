@@ -5,6 +5,7 @@
 #include "Device.h"
 #include "Timer.h"
 #include "FreeMem.h"
+#include "MinIMU9/MinIMU9AHRS.h"
 
 
 Motors motors(9, 10, 11);
@@ -44,6 +45,7 @@ int deadZone_min = MIDPOINT;
 int deadZone_max = MIDPOINT;
 boolean bypasssmoothing = false;
 
+
 void setup(){
 
   Serial.begin(115200);
@@ -60,7 +62,10 @@ void setup(){
 
 // initialize all the readings to 0: 
   for (int thisReading = 0; thisReading < numReadings; thisReading++)
-    readings[thisReading] = 0;     
+    readings[thisReading] = 0;
+   Serial.print("init MiniMU9"); 
+  init_MiniMU9();
+  Serial.print("init Complete");
 }
 
 int smoothAdjustedServoPosition(int target, int current){
@@ -138,6 +143,10 @@ void loop(){
       //ignore the corrupt data 
     }
   }
+
+  Serial.print("Sample_MiniMU9");
+  sample_MiniMU9();
+  Serial.print("Sample_MiniMU9 Complete");
 
   //to reduce AMP spikes, smooth large power adjustments out. This incirmentally adjusts the motors and servo
   //to their new positions in increments.  The incriment should eventually be adjustable from the cockpit so that
