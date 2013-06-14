@@ -31,6 +31,8 @@ with MinIMU-9-Arduino-AHRS. If not, see <http://www.gnu.org/licenses/>.
 #include "Compass.h"
 #include "MinIMU9AHRS.h"
 #include "math.h"
+#include <Arduino.h>
+
 void Compass_Heading()
 {
   float MAG_X;
@@ -46,6 +48,10 @@ void Compass_Heading()
   sin_pitch = sin(pitch);
   
   // adjust for LSM303 compass axis offsets/sensitivity differences by scaling to +/-0.5 range
+  Serial.println("**");
+  Serial.println(SENSOR_SIGN[6]);
+  Serial.println(M_X_MIN);
+  Serial.println(M_X_MAX);
   c_magnetom_x = (float)(magnetom_x - SENSOR_SIGN[6]*M_X_MIN) / (M_X_MAX - M_X_MIN) - SENSOR_SIGN[6]*0.5;
   c_magnetom_y = (float)(magnetom_y - SENSOR_SIGN[7]*M_Y_MIN) / (M_Y_MAX - M_Y_MIN) - SENSOR_SIGN[7]*0.5;
   c_magnetom_z = (float)(magnetom_z - SENSOR_SIGN[8]*M_Z_MIN) / (M_Z_MAX - M_Z_MIN) - SENSOR_SIGN[8]*0.5;

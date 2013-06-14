@@ -89,7 +89,7 @@ void LSM303::enableDefault(void)
   writeAccReg(LSM303_CTRL_REG1_A, 0x27);
 
   if (_device == LSM303DLHC_DEVICE)
-    writeAccReg(LSM303_CTRL_REG4_A, 0x08); // DLHC: enable high resolution mode
+    writeAccReg(LSM303_CTRL_REG4_A, 0x20);//0x08); // DLHC: enable high resolution mode //+/-8g 4mg/LSB
 
   // Enable Magnetometer
   // 0x00 = 0b00000000
@@ -134,7 +134,7 @@ void LSM303::writeMagReg(byte reg, byte value)
 byte LSM303::readMagReg(int reg)
 {
   byte value;
-
+  Serial.print("readMagReg");
   // if dummy register address (magnetometer Y/Z), use device type to determine actual address
   if (reg < 0)
   {
@@ -158,6 +158,8 @@ byte LSM303::readMagReg(int reg)
   Wire.beginTransmission(MAG_ADDRESS);
   Wire.write(reg);
   last_status = Wire.endTransmission();
+  Serial.print("last_status:");
+  Serial.print(last_status);
   Wire.requestFrom(MAG_ADDRESS, 1);
   value = Wire.read();
   Wire.endTransmission();
@@ -213,6 +215,8 @@ void LSM303::readMag(void)
   Wire.beginTransmission(MAG_ADDRESS);
   Wire.write(LSM303_OUT_X_H_M);
   last_status = Wire.endTransmission();
+  Serial.print(".last_status:");
+  Serial.print(last_status);
   Wire.requestFrom(MAG_ADDRESS, 6);
 
   unsigned int millis_start = millis();
@@ -251,6 +255,8 @@ void LSM303::readMag(void)
   m.x = (int16_t)(xhm << 8 | xlm);
   m.y = (int16_t)(yhm << 8 | ylm);
   m.z = (int16_t)(zhm << 8 | zlm);
+  Serial.print("*");
+  Serial.print(m.x);
 }
 
 // Reads all 6 channels of the LSM303 and stores them in the object variables

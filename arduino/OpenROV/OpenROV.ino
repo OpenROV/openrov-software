@@ -1,3 +1,5 @@
+//OpenROV
+
 #include <Servo.h>
 #include <Arduino.h>
 #include "Motors.h"
@@ -5,7 +7,9 @@
 #include "Device.h"
 #include "Timer.h"
 #include "FreeMem.h"
+//#include "Pololu_Open_IMU.h"
 #include "MinIMU9/MinIMU9AHRS.h"
+#include "MinIMU9/I2C.h"
 
 
 Motors motors(9, 10, 11);
@@ -65,7 +69,8 @@ void setup(){
     readings[thisReading] = 0;
    Serial.print("init MiniMU9"); 
   init_MiniMU9();
-  Serial.print("init Complete");
+  //setupIMU();
+  //Serial.print("init Complete");
 }
 
 int smoothAdjustedServoPosition(int target, int current){
@@ -93,7 +98,7 @@ int smoothAdjustedServoPosition(int target, int current){
 }
 
 void loop(){
-  
+  scan();
   if (Serial.available()) {
     // blocks output data... TODO: need a way of calculating frequency for device data
     delay(30);
@@ -144,9 +149,8 @@ void loop(){
     }
   }
 
-  Serial.print("Sample_MiniMU9");
+  //sampleIMU();
   sample_MiniMU9();
-  Serial.print("Sample_MiniMU9 Complete");
 
   //to reduce AMP spikes, smooth large power adjustments out. This incirmentally adjusts the motors and servo
   //to their new positions in increments.  The incriment should eventually be adjustable from the cockpit so that
