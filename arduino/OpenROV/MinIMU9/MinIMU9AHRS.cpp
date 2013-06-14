@@ -122,32 +122,25 @@ float Temporary_Matrix[3][3]={
 };
 void init_MiniMU9()
 { 
-  Serial.print("In init...I2C_Init");
   I2C_Init();
 
   delay(1500);
 
-  Serial.print("In init...Accel_Init"); 
   Accel_Init();
-  Serial.print("In init...Compass_Init");
   Compass_Init();
-  Serial.print("In init...Gyro_Init");
   Gyro_Init();
   
   delay(20);
   
   for(int i=0;i<32;i++)    // We take some readings...
     {
-    Serial.print("In init...Read_Gyro");  
     Read_Gyro();
-    Serial.print("In init...Read_Accel");  
     Read_Accel();
     for(int y=0; y<6; y++)   // Cumulate values
       AN_OFFSET[y] += AN[y];
     delay(20);
     }
       
-  Serial.print("In init...AN_OFFSET loop");  
   
   for(int y=0; y<6; y++)
     AN_OFFSET[y] = AN_OFFSET[y]/32;
@@ -156,7 +149,6 @@ void init_MiniMU9()
   
   
   delay(2000);
-  Serial.print("In init...set timer");  
   
   timer=millis();
   delay(20);

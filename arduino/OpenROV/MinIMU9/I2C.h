@@ -32,7 +32,7 @@ with MinIMU-9-Arduino-AHRS. If not, see <http://www.gnu.org/licenses/>.
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+void scan();
 void I2C_Init();
 void Gyro_Init();
 void Read_Gyro();

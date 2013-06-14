@@ -88,20 +88,15 @@ byte L3G::readReg(byte reg)
 // Reads the 3 gyro channels and stores them in vector g
 void L3G::read()
 {
-  Serial.print("LEG->BeginingTranmission");
   Wire.beginTransmission(address);
   // assert the MSB of the address to get the gyro
   // to do slave-transmit subaddress updating.
-  Serial.print("LEG->Write OUT X L");
   Wire.write(L3G_OUT_X_L | (1 << 7));
-  Serial.print("LEG->EndTranmission");
   uint8_t result_code = Wire.endTransmission();
-  Serial.print(result_code);
-  Serial.print("LEG->request");
+//  Serial.print(result_code);
   Wire.requestFrom(address, (byte)6);
 
   while (Wire.available() < 6);
-  Serial.print("LEG->Reading");
   uint8_t xlg = Wire.read();
   uint8_t xhg = Wire.read();
   uint8_t ylg = Wire.read();
@@ -110,7 +105,6 @@ void L3G::read()
   uint8_t zhg = Wire.read();
 
   // combine high and low bytes
-  Serial.print("LEG->Combining Bits");
   g.x = (int16_t)(xhg << 8 | xlg);
   g.y = (int16_t)(yhg << 8 | ylg);
   g.z = (int16_t)(zhg << 8 | zlg);
