@@ -536,6 +536,7 @@
             });
 
             setupFrameHandling(socket);
+	   var cockpit = new Cockpit(socket);
           });
 
           function sendTestMotorMessage(socket){
@@ -553,7 +554,7 @@
 	    socket.emit('update_settings',setting);
 	  }
 
-	  var cockpit = new Cockpit();
+
         </script>
 
     </body>

@@ -16,15 +16,15 @@
 
         // Listen to navdata updates
         var compass = this;
- /*       this.cockpit.socket.on('navdata', function(data) {
+        this.cockpit.socket.on('navdata', function(data) {
             if (!jQuery.isEmptyObject(data)) {
                 requestAnimationFrame(function() {
-                    compass.moveTo(data.magneto.heading.fusionUnwrapped);
+                    compass.moveTo(data.yaw);
                 });
             }
  
         });
-*/
+
         // Setup compass canvas
         var divRect = div.getBoundingClientRect(),
             ctx, x, i, needle;

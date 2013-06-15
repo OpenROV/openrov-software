@@ -73,14 +73,14 @@
 
         // Bind to navdata events on websockets
         var ah = this;
-    /*    this.cockpit.socket.on('navdata', function(data) {
+        this.cockpit.socket.on('navdata', function(data) {
             if (!jQuery.isEmptyObject(data)) {
                 requestAnimationFrame(function() {
                     ah.render(data);
                 });
            }
         });
-*/
+
         // Bind on window events to resize
         $(window).resize(function(event) {
             ah.draw();
@@ -91,10 +91,10 @@
 
     AH.prototype.render = function(data) {
         this.setValues({
-            roll : data.demo.rotation.roll * Math.PI / 180,
-            pitch : data.demo.rotation.pitch * Math.PI / 180,
-            altitude : data.demo.altitudeMeters,
-            speed : data.demo.velocity.z
+            roll : data.roll * Math.PI / 180,
+            pitch : data.pitch * Math.PI / 180,
+            altitude : 0,
+            speed : 0
             // no idea...
         });
 

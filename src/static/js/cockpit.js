@@ -3,7 +3,8 @@
         
     var hostname = document.location.hostname ? document.location.hostname : "localhost";
     console.log("here");
-    var Cockpit = function Cockpit() {
+    var Cockpit = function Cockpit(csocket) {
+        this.socket = csocket;
         this.loadPlugins();
         console.log("loaded plugins");
     };

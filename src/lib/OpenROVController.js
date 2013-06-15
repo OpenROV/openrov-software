@@ -19,6 +19,22 @@ var setup_serial = function(){
     var setuart_process = spawn('sudo', [ path.join(location,'setuart.sh') ]);
 };
 
+var navdata = {
+    roll: 0,
+    pitch: 0,
+    yaw: 0
+}
+
+var stripANGHeader = function(data){
+    var sections = data.split('|');
+    var parts = sections[1].split(',');
+    var n = navdata;
+    n.roll = parts[0];
+    n.pitch = parts[1];
+    n.yaw = parts[2];
+    return n;
+};
+
 var OpenROVController = function(eventLoop) {
   var serial;
   var globalEventLoop = eventLoop;
@@ -38,6 +54,9 @@ var OpenROVController = function(eventLoop) {
          if ('vout' in status)  controller.emit('status',status);
          if ('ver' in status) 
            controller.ArduinoFirmwareVersion = status.ver;
+	 if ('IMUMatrix' in status) {controller.emit('navdata',stripANGHeader(status.IMUMatrix));
+	    console.log("sent IMU data to client");
+	 }
         });
         return s;
   };
