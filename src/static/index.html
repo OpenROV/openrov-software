@@ -260,6 +260,9 @@
         <script type='text/javascript' src="js/gamepad.js"></script>
         <script type='text/javascript' src="js/keypad.js"></script>
         <script type='text/javascript' src="js/frame.js"></script>
+	<script type='text/javascript' src="js/cockpit.js"></script>						
+	<script type='text/javascript' src="js/compass.js"></script>
+	<script type='text/javascript' src="js/horizon.js"></script>
         <script src="/config.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 
@@ -550,7 +553,7 @@
 	    socket.emit('update_settings',setting);
 	  }
 
-
+	  var cockpit = new Cockpit();
         </script>
 
     </body>

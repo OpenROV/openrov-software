@@ -296,3 +296,19 @@ img.center {
   height: 90px;
   margin-top: 10px;
 }
+
+#horizon {
+    opacity: 0.5;
+    position: absolute;
+    z-index: 3;
+    top: 0px;
+    left: 0px;
+}
+
+#compass {
+	position: absolute;
+	width: 100%;
+	height: 30px;
+	bottom: 0;
+	z-index: 5;
+}
