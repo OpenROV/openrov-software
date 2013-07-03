@@ -27,21 +27,23 @@ You should have received a copy of the GNU Lesser General Public License along
 with MinIMU-9-Arduino-AHRS. If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include "Output.h"
+#include "MinIMU_Output.h"
 #include "MinIMU9AHRS.h"
 #include <Arduino.h>
 
 void printdata(void)
 {    
-      Serial.print("IMUMatrix:");
+      Serial.print(F("IMUMatrix:"));
 
       #if PRINT_EULER == 1
-      Serial.print("ANG|");
+      Serial.print(F("ANG|"));
       Serial.print(ToDeg(roll));
       Serial.print(",");
       Serial.print(ToDeg(pitch));
       Serial.print(",");
       Serial.print(ToDeg(yaw));
+      Serial.print(F(",HD|"));
+      Serial.print(ToDeg(MAG_Heading));
       #endif      
       #if PRINT_ANALOGS==1
       Serial.print(",AN|");
@@ -64,7 +66,7 @@ void printdata(void)
       Serial.print(c_magnetom_z);
       #endif
       #if PRINT_DCM == 1
-      Serial.print (",DCM|");
+      Serial.print (F(",DCM|"));
       Serial.print(convert_to_dec(DCM_Matrix[0][0]));
       Serial.print (",");
       Serial.print(convert_to_dec(DCM_Matrix[0][1]));
@@ -83,7 +85,7 @@ void printdata(void)
       Serial.print (",");
       Serial.print(convert_to_dec(DCM_Matrix[2][2]));
       #endif
-      Serial.println();    
+      Serial.println(';');    
       
 }
 

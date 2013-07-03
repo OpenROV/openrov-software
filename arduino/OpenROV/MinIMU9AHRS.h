@@ -88,8 +88,8 @@ extern int SENSOR_SIGN[9];  //Correct directions x,y,z - gyro, accelerometer, ma
 //OUTPUTMODE=0 will print uncorrected data of the gyros (with drift)
 #define OUTPUTMODE 1
 
-#define PRINT_DCM 1     //Will print the whole direction cosine matrix
-#define PRINT_ANALOGS 1 //Will print the analog raw data
+//#define PRINT_DCM 1     //Will print the whole direction cosine matrix
+//#define PRINT_ANALOGS 1 //Will print the analog raw data
 #define PRINT_EULER 1   //Will print the Euler angles Roll, Pitch and Yaw
 
 #define STATUS_LED 13 
@@ -137,6 +137,8 @@ extern float Temporary_Matrix[3][3];
 void init_MiniMU9();
 
 void sample_MiniMU9();
+
+void Compass_Calibrate();
 #ifdef __cplusplus
 }
 #endif

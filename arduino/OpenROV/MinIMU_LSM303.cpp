@@ -1,4 +1,4 @@
-#include "LSM303.h"
+#include "MinIMU_LSM303.h"
 #include <Wire.h>
 #include <math.h>
 
@@ -158,8 +158,6 @@ byte LSM303::readMagReg(int reg)
   Wire.beginTransmission(MAG_ADDRESS);
   Wire.write(reg);
   last_status = Wire.endTransmission();
-  Serial.print("last_status:");
-  Serial.print(last_status);
   Wire.requestFrom(MAG_ADDRESS, 1);
   value = Wire.read();
   Wire.endTransmission();
@@ -215,8 +213,8 @@ void LSM303::readMag(void)
   Wire.beginTransmission(MAG_ADDRESS);
   Wire.write(LSM303_OUT_X_H_M);
   last_status = Wire.endTransmission();
-  Serial.print(".last_status:");
-  Serial.print(last_status);
+//  Serial.print(".last_status:");
+//  Serial.print(last_status);
   Wire.requestFrom(MAG_ADDRESS, 6);
 
   unsigned int millis_start = millis();
@@ -255,8 +253,6 @@ void LSM303::readMag(void)
   m.x = (int16_t)(xhm << 8 | xlm);
   m.y = (int16_t)(yhm << 8 | ylm);
   m.z = (int16_t)(zhm << 8 | zlm);
-  Serial.print("*");
-  Serial.print(m.x);
 }
 
 // Reads all 6 channels of the LSM303 and stores them in the object variables

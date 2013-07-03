@@ -9,6 +9,7 @@ boolean Command::cmp(String a){
 
 // get string from buffer
 String Command::get(){
+  _parsed = false;
   //delay(30); // number of characters to be read?  buffer delay (TODO:  affects timing of devices... fix this?)
   String command = "";
   char in;
@@ -21,6 +22,13 @@ String Command::get(){
   return cmd;
 }
 
+int* Command::args(){
+  if (_parsed == false){
+    parse(_array);
+  }
+  return _array;
+}
+
 // get 'arguments' from command
 void Command::parse(int array[MAX_ARGS]){
   String temp = cmd;
@@ -31,7 +39,7 @@ void Command::parse(int array[MAX_ARGS]){
   String val = "";
   int len = 1;
   
-  for (int i = 0; i < temp.length(); i++){
+  for (unsigned i = 0; i < temp.length(); i++){
     char t = temp[i];
     if (t != ','){  // if not argument delimiter
       val += t;
@@ -45,4 +53,5 @@ void Command::parse(int array[MAX_ARGS]){
   
   array[len] = atoi(&val[0]);
   array[0] = len;
+  _parsed = true;
 }

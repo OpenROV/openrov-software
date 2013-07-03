@@ -27,46 +27,35 @@ You should have received a copy of the GNU Lesser General Public License along
 with MinIMU-9-Arduino-AHRS. If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include "Vector.h"
+
+#include "MinIMU_Compass.h"
 #include "MinIMU9AHRS.h"
 #include "math.h"
-//Computes the dot product of two vectors
-float Vector_Dot_Product(float vector1[3],float vector2[3])
+#include <Arduino.h>
+
+void Compass_Heading()
 {
-  float op=0;
+  float MAG_X;
+  float MAG_Y;
+  float cos_roll;
+  float sin_roll;
+  float cos_pitch;
+  float sin_pitch;
   
-  for(int c=0; c<3; c++)
-  {
-  op+=vector1[c]*vector2[c];
-  }
+  cos_roll = cos(roll);
+  sin_roll = sin(roll);
+  cos_pitch = cos(pitch);
+  sin_pitch = sin(pitch);
   
-  return op; 
+  // adjust for LSM303 compass axis offsets/sensitivity differences by scaling to +/-0.5 range
+  c_magnetom_x = (float)(magnetom_x - SENSOR_SIGN[6]*M_X_MIN) / (M_X_MAX - M_X_MIN) - SENSOR_SIGN[6]*0.5;
+  c_magnetom_y = (float)(magnetom_y - SENSOR_SIGN[7]*M_Y_MIN) / (M_Y_MAX - M_Y_MIN) - SENSOR_SIGN[7]*0.5;
+  c_magnetom_z = (float)(magnetom_z - SENSOR_SIGN[8]*M_Z_MIN) / (M_Z_MAX - M_Z_MIN) - SENSOR_SIGN[8]*0.5;
+  
+  // Tilt compensated Magnetic filed X:
+  MAG_X = c_magnetom_x*cos_pitch+c_magnetom_y*sin_roll*sin_pitch+c_magnetom_z*cos_roll*sin_pitch;
+  // Tilt compensated Magnetic filed Y:
+  MAG_Y = c_magnetom_y*cos_roll-c_magnetom_z*sin_roll;
+  // Magnetic Heading
+  MAG_Heading = atan2(-MAG_Y,MAG_X);
 }
-
-//Computes the cross product of two vectors
-void Vector_Cross_Product(float vectorOut[3], float v1[3],float v2[3])
-{
-  vectorOut[0]= (v1[1]*v2[2]) - (v1[2]*v2[1]);
-  vectorOut[1]= (v1[2]*v2[0]) - (v1[0]*v2[2]);
-  vectorOut[2]= (v1[0]*v2[1]) - (v1[1]*v2[0]);
-}
-
-//Multiply the vector by a scalar. 
-void Vector_Scale(float vectorOut[3],float vectorIn[3], float scale2)
-{
-  for(int c=0; c<3; c++)
-  {
-   vectorOut[c]=vectorIn[c]*scale2; 
-  }
-}
-
-void Vector_Add(float vectorOut[3],float vectorIn1[3], float vectorIn2[3])
-{
-  for(int c=0; c<3; c++)
-  {
-     vectorOut[c]=vectorIn1[c]+vectorIn2[c];
-  }
-}
-
-
-
