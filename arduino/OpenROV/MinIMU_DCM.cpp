@@ -27,11 +27,11 @@ You should have received a copy of the GNU Lesser General Public License along
 with MinIMU-9-Arduino-AHRS. If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include "DCM.h"
+#include "MinIMU_DCM.h"
 #include "MinIMU9AHRS.h"
 #include <math.h>
-#include "Vector.h"
-#include "matrix.h"
+#include "MinIMU_Vector.h"
+#include "MinIMU_matrix.h"
 #include <stdlib.h>
 #include <Arduino.h>
 /**************************************************/

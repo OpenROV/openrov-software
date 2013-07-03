@@ -7,13 +7,16 @@
 
 class Command {
   private:
-		
+    int _array[MAX_ARGS];
+    bool _parsed;
+    		
   public:
     String cmd;
     String value;
     Command(){value = "";};
     String get();
     boolean cmp(String a);
+    int* args();
     void parse(int array[MAX_ARGS]);
 };
 

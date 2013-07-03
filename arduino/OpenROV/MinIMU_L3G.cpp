@@ -1,4 +1,4 @@
-#include "L3G.h"
+#include "MinIMU_L3G.h"
 #include <Wire.h>
 #include <math.h>
 

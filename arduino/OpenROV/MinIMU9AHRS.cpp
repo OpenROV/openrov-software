@@ -29,12 +29,12 @@ with MinIMU-9-Arduino-AHRS. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "MinIMU9AHRS.h"
 #include <Wire.h>
-#include "I2C.h"
-#include "Compass.h"
-#include "matrix.h"
-#include "Vector.h"
-#include "Output.h"
-#include "DCM.h"
+#include "MinIMU_I2C.h"
+#include "MinIMU_Compass.h"
+#include "MinIMU_matrix.h"
+#include "MinIMU_Vector.h"
+#include "MinIMU_Output.h"
+#include "MinIMU_DCM.h"
 #include <Arduino.h>
 
 
@@ -157,7 +157,7 @@ void init_MiniMU9()
 
 void sample_MiniMU9() //Main Loop
 {
-  if((millis()-timer)>=20)  // Main loop runs at 50Hz
+  if((millis()-timer)>=100) //20 // Main loop runs at 50Hz
   {
     counter++;
     timer_old = timer;

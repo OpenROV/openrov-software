@@ -27,10 +27,10 @@ You should have received a copy of the GNU Lesser General Public License along
 with MinIMU-9-Arduino-AHRS. If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include "I2C.h"
-#include "LSM303.h"
-#include "L3G.h"
 #include <Wire.h>
+#include "MinIMU_I2C.h"
+#include "MinIMU_LSM303.h"
+#include "MinIMU_L3G.h"
 #include "MinIMU9AHRS.h"
 
 L3G gyro;
@@ -137,12 +137,36 @@ void Compass_Init()
 
 void Read_Compass()
 {
-  Serial.print("Reading compass");
   compass.readMag();
-  Serial.print("Reading compass complete");
   magnetom_x = SENSOR_SIGN[6] * compass.m.x;
-  Serial.print(magnetom_x);
   magnetom_y = SENSOR_SIGN[7] * compass.m.y;
   magnetom_z = SENSOR_SIGN[8] * compass.m.z;
+}
+
+void Compass_Calibrate() {
+  long timer=millis();
+  LSM303::vector running_min = {2047, 2047, 2047}, running_max = {-2048, -2048, -2048};   
+  while((millis()-timer)<=60000){ //calibrate for 1 minutes
+ 
+    compass.read();
+    
+    running_min.x = min(running_min.x, compass.m.x);
+    running_min.y = min(running_min.y, compass.m.y);
+    running_min.z = min(running_min.z, compass.m.z);
+  
+    running_max.x = max(running_max.x, compass.m.x);
+    running_max.y = max(running_max.y, compass.m.y);
+    running_max.z = max(running_max.z, compass.m.z);
+    
+    delay(100);
+  }
+  compass.m_max.x = running_max.x;
+  compass.m_max.y = running_max.y;
+  compass.m_max.z = running_max.z;
+  compass.m_min.x = running_min.x;
+  compass.m_min.y = running_min.y;
+  compass.m_min.z = running_min.z;
+  
+
 }
 
