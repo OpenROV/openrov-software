@@ -22,7 +22,7 @@ LSM303::LSM303(void)
   _device = LSM303_DEVICE_AUTO;
   acc_address = ACC_ADDRESS_SA0_A_LOW;
 
-  io_timeout = 0;  // 0 = no timeout
+  io_timeout = 60;  // 0 = no timeout
   did_timeout = false;
 }
 

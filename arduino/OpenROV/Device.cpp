@@ -63,7 +63,30 @@ void OutputSharedData(){
     
     Serial.print(F("hdgd:"));
     Serial.print(navdata::HDGD);
-    Serial.println(';');         
+    Serial.println(';');
+    Serial.print(F("deap:"));
+    Serial.print(navdata::DEAP);
+    Serial.println(';');
+    Serial.print(F("pitc:"));
+    Serial.print(navdata::PITC);
+    Serial.println(';');
+    Serial.print(F("roll:"));
+    Serial.print(navdata::ROLL);
+    Serial.println(';');
+    Serial.print(F("yaw:"));
+    Serial.print(navdata::YAW);
+    Serial.println(';');    
+    Serial.print(F("fthr:"));
+    Serial.print(navdata::FTHR);
+    Serial.println(';');
+    
+    Serial.print(F("pres:"));
+    Serial.print(envdata::PRES);
+    Serial.println(';');
+    Serial.print(F("temp:"));
+    Serial.print(envdata::TEMP);
+    Serial.println(';');    
+    
 }
 
 int DeviceManager::device_count = 0;
@@ -71,6 +94,14 @@ Device *DeviceManager::devices[MAX_DEVICES];
 
 // Initialize all of the shared data types
 double navdata::HDGD = 0;
+float navdata::DEAP = 0;
+float navdata::PITC = 0;
+float navdata::ROLL = 0;
+float navdata::FTHR = 0;
+float navdata::YAW = 0;
+
+float envdata::PRES = 0;
+float envdata::TEMP = 0;
 
 double capedata::FMEM = 0;
 double capedata::VOUT = 0;

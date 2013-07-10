@@ -7,6 +7,7 @@ static Pin light("light", LIGHTS_PIN, light.analog, light.out);
 
 void Lights::device_setup(){
   Settings::capability_bitarray |= (1 << LIGHTS_CAPABLE);
+  light.write(0);
 }
 
 void Lights::device_loop(Command command){
