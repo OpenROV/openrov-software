@@ -36,6 +36,11 @@ Settings settings;
   Pilot pilot;
 #endif
 
+#if(HAS_STD_CAMERAMOUNT)
+  #include "CameraMount.h"
+  CameraMount cameramount;
+#endif
+
 #if(HAS_POLOLU_MINIMUV)
   #define COMPASS_ENABLED 1
   #define GYRO_ENABLED 1

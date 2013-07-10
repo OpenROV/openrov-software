@@ -7,31 +7,59 @@ This code is configured be default to enable the components that ship on the Ope
 
 <table border=1>
     <tr>
-        <th>Component</th><th>Default</th><th>Description</th>        
+        <th>Component</th><th>Default</th><th>Description</th><th>Size</th><th>Memory Used</th>       
     </tr>
     <tr>
-        <td>Pilot</td><td>On</td><td>Place holder for fly by wire type behavior</td>        
+        <td>Pilot</td>
+        <td>On</td>
+        <td>Place holder for fly by wire type behavior</td>
+        <td>58b</td>
+        <td>tbd</td>        
     </tr>
     <tr>
-        <td>CalibrationLasers</td><td>Off</td><td>If you add a couple lasers that fire in parallel this module will control them.</td>        
+        <td>CalibrationLasers</td>
+        <td>Off</td>
+        <td>If you add a couple lasers that fire in parallel this module will control them.</td>
+        <td>460b</td>
+        <td>tbd</td>            
     </tr>
     <tr>
-        <td>CameraMount</td><td>On</td><td>Basic vertical tilt for moving the camera</td>        
+        <td>CameraMount</td>
+        <td>On</td>
+        <td>Basic vertical tilt for moving the camera</td>
+        <td>1,034b</td>
+        <td>tbd</td>       
     </tr>
     <tr>
-        <td>Cape</td><td>On</td><td>Emits all of the sensor data regarding the ATMEGA328 and the OpenROV cape.</td>        
+        <td>Cape</td>
+        <td>On</td>
+        <td>Emits all of the sensor data regarding the ATMEGA328 and the OpenROV cape.</td>
+        <td>970b</td>
+        <td>tbd</td>            
     </tr>
     <tr>
-        <td>Lights</td><td>On</td><td>Controls the lights on the ROV</td>        
+        <td>Lights</td>
+        <td>On</td>
+        <td>Controls the lights on the ROV</td>
+        <td>460b</td>
+        <td>tbd</td>            
     </tr>
     <tr>
-        <td>Thrusters2X1</td><td>On</td><td>For controlling the motors in a Port/Vertical/Starboard configuration.</td>        
+        <td>Thrusters2X1</td>
+        <td>On</td>
+        <td>For controlling the motors in a Port/Vertical/Starboard configuration.</td>
+        <td>2,314b</td>
+        <td>tbd</td>            
     </tr>    
     <tr>
-        <td>MiniIMU</td><td>Off</td><td>The Pololu IMU (http://www.pololu.com/catalog/product/1268) for compass and orientation.</td>        
+        <td>MiniIMU</td>
+        <td>Off</td>
+        <td>The Pololu IMU (http://www.pololu.com/catalog/product/1268) for compass and orientation.</td>
+        <td>10,122b</td>
+        <td>tbd</td>            
     </tr>
 </table>
-
+OpenROV Arduino cade base sketch size with zero components enabled: 13,524b
 
 
 Adding Sensors and Devices
