@@ -7,6 +7,7 @@ Pin light("claser", CALIBRATIONLASERS_PIN, light.analog, light.out);
 
 void CalibrationLaser::device_setup(){
     Settings::capability_bitarray |= (1 << CALIBRATION_LASERS_CAPABLE);
+    light.write(0);
 }
 
 void CalibrationLaser::device_loop(Command command){

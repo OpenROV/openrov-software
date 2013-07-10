@@ -93,8 +93,8 @@
         this.setValues({
             roll : data.roll * Math.PI / 180,
             pitch : data.pitch * Math.PI / 180,
-            altitude : 0,
-            speed : 0
+            altitude : 0,//data.deapth,
+            speed : 0//data.thrust
             // no idea...
         });
 

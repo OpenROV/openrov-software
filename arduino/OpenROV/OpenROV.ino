@@ -9,6 +9,8 @@
 
 
 //Include the defined headers in the settings.h file for the different devices that may be wired in.
+Settings settings;
+
 #if(HAS_STD_LIGHTS)
   #include "Lights.h"
   Lights lights;
@@ -64,7 +66,7 @@ void setup(){
 
 
 void loop(){
-  
+  cmd.cmd = "";
   if (Serial.available()) {
     //Todo: Add code to tap a watchdog timer here. If we loose connection with the beagle bone the system will reset causing motors to go back to idle
   

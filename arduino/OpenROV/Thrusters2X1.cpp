@@ -89,6 +89,8 @@ void Thrusters::device_loop(Command command){
 
   }
   
+  navdata::FTHR = map((new_p + new_s) / 2, 1000,2000,-100,100);
+  
   //The output from the motors is unique to the thruster configuration
   if (thrusterOutput.elapsed(1000)){
     Serial.print(F("motors:"));
@@ -105,7 +107,8 @@ void Thrusters::device_loop(Command command){
     Serial.print(v);
     Serial.print(',');
     Serial.print(s);
-    Serial.println(';'); 
+    Serial.println(';');
+    
   } 
 }
 

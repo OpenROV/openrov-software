@@ -148,6 +148,7 @@ io.sockets.on('connection', function (socket) {
 
   controller.updateSetting();
   controller.requestSettings();
+  controller.requestCapabilities();
  
   socket.emit('settings',CONFIG.preferences.get());
   socket.emit('videoStarted');
@@ -216,6 +217,10 @@ io.sockets.on('connection', function (socket) {
 
     controller.on('navdata',function(navdata){
         socket.emit('navdata',navdata);
+    })
+    
+    controller.on('rovsys', function(data){
+        socket.emit('rovsys',data);
     })
     
     controller.on('Arduino-settings-reported',function(settings){

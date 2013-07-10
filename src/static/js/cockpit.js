@@ -14,8 +14,15 @@
         Cockpit.plugins.forEach(function(plugin) {
             new plugin(cockpit);
         });
+        Cockpit.plugins = []; //flush them out for now. May move to a loaded array if we use in the future
     };
 
+    Cockpit.prototype.addPlugin = function addPlugin(plugin) {
+        var cockpit = this;
+        Cockpit.plugins.push(plugin);
+        new plugin(cockpit);
+    };
+    
     // Static array containing all plugins to load
     Cockpit.plugins = [];
 

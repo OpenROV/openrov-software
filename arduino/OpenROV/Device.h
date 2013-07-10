@@ -26,6 +26,17 @@
 class navdata{
   public:
     static double HDGD; //Compass heading in degrees
+    static float DEAP; //Depth in meters
+    static float ROLL; //Roll in degrees
+    static float PITC; //Pitch in degrees
+    static float YAW; //Yaw in degrees
+    static float FTHR; //% of power in forward thrust
+};
+
+class envdata{
+  public:
+    static float PRES; //Pressure in millibars
+    static float TEMP; //Temperature in C
 };
 
 class capedata{

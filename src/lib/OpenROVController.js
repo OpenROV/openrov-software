@@ -22,7 +22,13 @@ var setup_serial = function(){
 var navdata = {
     roll: 0,
     pitch: 0,
-    yaw: 0
+    yaw: 0,
+    thrust: 0,
+    deapth : 0
+}
+
+var rovsys = {
+    capabilities: 0
 }
 
 var stripANGHeader = function(data){
@@ -51,11 +57,17 @@ var OpenROVController = function(eventLoop) {
 
         s.on( "data", function( data ) {
          var status = reader.parseStatus(data,controller);
+	 
          if ('vout' in status)  controller.emit('status',status);
          if ('ver' in status) 
            controller.ArduinoFirmwareVersion = status.ver;
 	 if ('IMUMatrix' in status) {controller.emit('navdata',stripANGHeader(status.IMUMatrix));
-	    console.log("sent IMU data to client");
+	 }
+	 if ('CAPA' in status) {
+	    var s = rovsys;
+	    console.log("RovSys: " + status.CAPA)
+	    s.capabilities = parseInt(status.CAPA);
+	    controller.emit('rovsys',s);
 	 }
         });
         return s;
@@ -71,6 +83,13 @@ var OpenROVController = function(eventLoop) {
   var controller = new EventEmitter();
 
   controller.ArduinoFirmwareVersion = 0;
+
+  controller.requestCapabilities = function(){
+    console.log("Sending rcap to arduino");
+    var command = 'rcap();';
+    if(CONFIG.debug_commands) console.error("command", command);
+    if(CONFIG.production) serial.write(command);    
+  };
   
   controller.requestSettings = function(){
     var command = 'reportSetting();';

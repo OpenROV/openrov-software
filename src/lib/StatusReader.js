@@ -28,13 +28,11 @@ var StatusReader = function() {
 		var settingsCollection = {};
 		for (var s=0;s<setparts.length;s++) {
 		    settingsCollection[setparts[0]] = setparts[1];
-		    console.log(subParts[1]);
 		}
 		controller.emit('Arduino-settings-reported',settingsCollection)
 		break;
 	    default:
 		status[subParts[0]]=subParts[1];
-		console.log(subParts[0]);
 
 	    }            
         }

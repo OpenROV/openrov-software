@@ -1,3 +1,12 @@
+
+// These constants map to the arduino device.h file's constants for capabilities of the ROV
+const  LIGHTS_CAPABLE = 1;
+const  CALIBRATION_LASERS_CAPABLE = 2;
+const  CAMERA_MOUNT_1_AXIS_CAPABLE = 3;
+const  COMPASS_CAPABLE = 4;
+const  ORIENTATION_CAPABLE = 5;
+const  DEAPTH_CAPABLE = 6;
+
 function OpenRovViewModel(){
     var self = this;
     self.telemetry = new Object();
@@ -29,6 +38,7 @@ function OpenRovViewModel(){
     self.reversePortThruster = ko.observable();
     self.reverseStarbordThruster = ko.observable();
     self.reverseLiftThruster = ko.observable();
+    self.capabilities = ko.observable(0);
     
     
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
@@ -106,6 +116,13 @@ function OpenRovViewModel(){
 	    if ('googletalk_rovid' in settings) self.googleTalkROVid(settings.googletalk_rovid);
 	    if ('googletalk_rovpassword' in settings) self.googleTalkROVpassword(settings.googletalk_rovpassword);
 	    if ('googletalk_rov_pilotid' in settings) self.googleTalkPilotId(settings.googletalk_rov_pilotid);
+	}
+	
+	self.updateRovsys = function(data){
+	    console.log('got RovSys update from Arduino');
+	    if ('capabilities' in data) {
+		self.capabilities(data.capabilities);
+	    }
 	}
 	
 	self.updateStatus = function(data) {
