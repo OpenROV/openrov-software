@@ -11,6 +11,7 @@
 #define HAS_STD_CAPE (1)
 #define HAS_STD_2X1_THRUSTERS (1)
 #define HAS_STD_PILOT (1)
+#define HAS_STD_CAMERAMOUNT (1)
 #define CAMERAMOUNT_PIN 3
 #define CAPE_VOLTAGE_PIN 0 
 #define CAPE_CURRENT_PIN 3
