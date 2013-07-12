@@ -86,11 +86,8 @@ void Cape::device_loop(Command command){
     capedata::VOUT = vout.read();
     capedata::IOUT = average;
     capedata::FMEM = freeMemory();
-    //Version Number of last change from UTC date: .YYYYMMDDHHMMSS. If you make a change between this and the cockpit that requires the firmware to be in sync or it breaks the system your should update this version number
-    // and update the cockpit software lib/OpenROVControler.js to check and ensure the firmware is at this version.
-    capedata::VER = ".20130629034900";
     capedata::ATMP = GetTemp();
-    capedata::UTIM = millis();
+    capedata::UTIM = millis(); 
   }  
 }
 

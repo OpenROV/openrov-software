@@ -23,10 +23,10 @@ echo Setting up uploader 1>&2
 echo Serial port settings 1>&2
 /opt/openrov/linux/setuart.sh 1>&2 || error_exit "$LINENO:"
 /opt/openrov/linux/reset.sh 1>&2
-ino upload -m atmega328 -p /dev/ttyO1 1>&2 
+#ino upload -m atmega328 -p /dev/ttyO1 1>&2 
 
 COUNTER=0
-OUTPUT=`ino upload -m atmega328 -p /dev/ttyO1 2>&1`
+OUTPUT=`ino upload -p /dev/ttyO1 2>&1`
 while [ $COUNTER -lt 5 ]; do 
 	/opt/openrov/linux/reset.sh 1>&2
 	sleep 0.4
