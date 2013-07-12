@@ -1,5 +1,6 @@
 #include "Device.h"
 #include "Settings.h"
+
 Device::Device(){
   DeviceManager::registerDevice(this);
 }
@@ -53,9 +54,16 @@ void OutputSharedData(){
     Serial.print(';');
     Serial.print(F("atmp:"));
     Serial.print(capedata::ATMP);
-    Serial.print(';');    
+    Serial.print(';');
     Serial.print(F("ver:"));
-    Serial.print(capedata::VER);
+    Serial.print(F("CUSTOM_BUILD"));
+    Serial.print(';');
+    Serial.print(F("cmpd:"));
+    Serial.print( F(__DATE__));
+    Serial.print( F(", "));
+    Serial.print( F(__TIME__));
+    Serial.print( F(", "));
+    Serial.println( F(__VERSION__));  
     Serial.print(';');
     Serial.print(F("time:"));
     Serial.print(capedata::UTIM);
