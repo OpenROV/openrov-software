@@ -57,8 +57,7 @@ var OpenROVController = function(eventLoop) {
 
         s.on( "data", function( data ) {
          var status = reader.parseStatus(data,controller);
-	 
-         if ('vout' in status)  controller.emit('status',status);
+	 controller.emit('status',status);
          if ('ver' in status) 
            controller.ArduinoFirmwareVersion = status.ver;
 	 if ('IMUMatrix' in status) {controller.emit('navdata',stripANGHeader(status.IMUMatrix));
@@ -67,6 +66,7 @@ var OpenROVController = function(eventLoop) {
 	    var s = rovsys;
 	    console.log("RovSys: " + status.CAPA)
 	    s.capabilities = parseInt(status.CAPA);
+	    controller.Capabilities= s.capabilities;
 	    controller.emit('rovsys',s);
 	 }
         });
@@ -83,6 +83,7 @@ var OpenROVController = function(eventLoop) {
   var controller = new EventEmitter();
 
   controller.ArduinoFirmwareVersion = 0;
+  controller.Capabilities = 0;
 
   controller.requestCapabilities = function(){
     console.log("Sending rcap to arduino");
@@ -105,8 +106,10 @@ var OpenROVController = function(eventLoop) {
 
   controller.NotSafeToControl = function(){ //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= .20130314034859) return false;
+    if (this.Capabilities != 0) return false; //This feature added after the swap to ms on the Arduino
     console.log('Audrino is at an incompatible version of firmware. Upgrade required before controls will respond');
     console.log(this.ArduinoFirmwareVersion);
+    console.log(this.Capabilities);
     return true;
   };
 
@@ -158,7 +161,12 @@ var OpenROVController = function(eventLoop) {
 
   globalEventLoop.on('register-ArdunoFirmwareVersion', function(val){
         controller.ArduinoFirmwareVersion = val;
-        });
+  });
+
+  globalEventLoop.on('register-ArduinoCapabilities', function(val){
+        controller.Capabilities = val;
+  });
+
 
   globalEventLoop.on('serial-stop', function(){
 	logger.log("Closing serial connection for firmware upload");

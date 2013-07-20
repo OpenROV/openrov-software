@@ -126,12 +126,12 @@ function OpenRovViewModel(){
 	}
 	
 	self.updateStatus = function(data) {
-		self.currentDepth(data.depth);
-		self.currentTemperature(data.temp);
-		self.currentRunTime(data.time);
-		self.currentVoltage(data.vout);
-		self.currentCurrent(data.iout);
-		self.currentRawCpuUsage(data.cpuUsage);
+		if ('depth' in data) self.currentDepth(data.depth);
+		if ('temp' in data) self.currentTemperature(data.temp);
+		if ('time' in data) self.currentRunTime(data.time);
+		if ('vout' in data) self.currentVoltage(data.vout);
+		if ('iout' in data) self.currentCurrent(data.iout);
+		if ('cpuUsage' in data) self.currentRawCpuUsage(data.cpuUsage);
         	self.lastPing(new Date());
 		for (i in data){
 		  self.telemetry[i] = data[i];
