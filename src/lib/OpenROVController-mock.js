@@ -32,30 +32,50 @@ var OpenROVController = function() {
     setInterval(sendEvent,3000);
 
     function sendEvent() {
-        var data ="vout:1023;time:11000";
-        var status = reader.parseStatus(data);
-        controller.emit('status',status);
+      var data ="vout:1023;time:11000";
+      var status = reader.parseStatus(data);
+      controller.emit('status',status);
     }
     controller.sendMotorTest = function(port, starbord, vertical) {
-        var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
-        console.log(command);
+      var command = 'go(' + port + ',' + vertical + ',' + starbord + ');';
+      console.log(command);
     };
     controller.sendCommand = function(throttle, yaw, vertical) {
-        var motorCommands = physics.mapMotors(throttle, yaw, vertical);
-        var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
-        console.log(command);
+      var motorCommands = physics.mapMotors(throttle, yaw, vertical);
+      var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
+      console.log(command);
     };
 
     controller.sendTilt = function(value) {
-        var servoTilt = physics.mapTiltServo(value);
-        var command = 'tilt(' + servoTilt +');';
-        console.log("command", command);
+      var servoTilt = physics.mapTiltServo(value);
+      var command = 'tilt(' + servoTilt +');';
+      console.log("command", command);
     };
 
     controller.sendLight = function(value) {
-        var light = physics.mapLight(value);
-        var command = 'light(' + light +');';
-        console.log("command", command);
+      var light = physics.mapLight(value);
+      var command = 'light(' + light +');';
+      console.log("command", command);
+    };
+
+    controller.start = function(value) {
+      if (this.NotSafeToControl()) return;
+      var command = 'start();';
+      console.log(command);
+    };    
+
+    controller.NotSafeToControl = function(){
+      return false;
+    };
+
+    controller.updateSetting = function(){
+      var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + physics.mapMotor(CONFIG.preferences.get('deadzone_neg')) + ','+ physics.mapMotor(CONFIG.preferences.get('deadzone_pos')) + ','+ ');';
+      console.log(command);
+    };  
+
+    controller.requestSettings = function(){
+      var command = 'reportSetting();';
+      console.log(command);
     };
 
   return controller;
