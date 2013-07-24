@@ -2,7 +2,7 @@ var forever = require('forever-monitor');
 
   var child = new (forever.Monitor)('/opt/openrov/src/cockpit.js', {
     max: 3,
-    silent: ! process.env.NODE_DEBUG,
+    silent: process.env.NODE_DEBUG === 'false',
     options: [],
     //
     // Log files and associated logging options for this instance
