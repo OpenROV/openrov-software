@@ -22,7 +22,10 @@ void DeviceManager::doDeviceLoops(Command cmd){
   for(int i=0;i<device_count;i++) {
     int stime = millis();
     devices[i]->device_loop(cmd);
-    DeviceManager:device_loop_ms[i]+=millis()-stime;
+    int delta = millis()-stime;
+    if (delta > 0){
+      DeviceManager:device_loop_ms[i]+=delta;
+    }
   }
 }
 
@@ -97,7 +100,7 @@ void OutputSharedData(){
     Serial.print(envdata::TEMP);
     Serial.println(';'); 
  
-    Serial.print(F("log:"));
+    Serial.print(F("dlms:")); //device loop time in ms
     for(int i=0;i<DeviceManager::device_count;i++){
       Serial.print(i);
       Serial.print('|');
@@ -109,7 +112,7 @@ void OutputSharedData(){
 
 int DeviceManager::device_count = 0;
 Device *DeviceManager::devices[MAX_DEVICES];
-int DeviceManager::device_loop_ms[MAX_DEVICES];
+unsigned DeviceManager::device_loop_ms[MAX_DEVICES];
 
 // Initialize all of the shared data types
 double navdata::HDGD = 0;
