@@ -147,7 +147,9 @@ io.sockets.on('connection', function (socket) {
   socket.send('initialize');  // opens socket with client
 
   controller.updateSetting();
-  controller.requestSettings();
+  setTimeout((function() {
+    controller.requestSettings();
+  }), 1000);
   controller.requestCapabilities();
  
   socket.emit('settings',CONFIG.preferences.get());
@@ -202,7 +204,10 @@ io.sockets.on('connection', function (socket) {
         console.log('Configuration saved successfully.');
       });
       controller.updateSetting();
-      controller.requestSettings();
+      setTimeout((function() {
+        controller.requestSettings();
+      }), 1000);
+      
     });
     
     socket.on('disconnect', function(){

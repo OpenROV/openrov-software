@@ -20,7 +20,9 @@ void DeviceManager::registerDevice(Device *device){
 
 void DeviceManager::doDeviceLoops(Command cmd){
   for(int i=0;i<device_count;i++) {
+    int stime = millis();
     devices[i]->device_loop(cmd);
+    DeviceManager:device_loop_ms[i]+=millis()-stime;
   }
 }
 
@@ -93,12 +95,21 @@ void OutputSharedData(){
     Serial.println(';');
     Serial.print(F("temp:"));
     Serial.print(envdata::TEMP);
-    Serial.println(';');    
+    Serial.println(';'); 
+ 
+    Serial.print(F("log:"));
+    for(int i=0;i<DeviceManager::device_count;i++){
+      Serial.print(i);
+      Serial.print('|');
+      Serial.print(DeviceManager::device_loop_ms[i]);
+    }
+    Serial.print(';');   
     
 }
 
 int DeviceManager::device_count = 0;
 Device *DeviceManager::devices[MAX_DEVICES];
+int DeviceManager::device_loop_ms[MAX_DEVICES];
 
 // Initialize all of the shared data types
 double navdata::HDGD = 0;

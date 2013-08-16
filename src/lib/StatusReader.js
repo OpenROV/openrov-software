@@ -24,10 +24,12 @@ var StatusReader = function() {
             var subParts = parts[i].split(":");
 	    switch (subParts[0]) {
 	    case '*settings':
-		var setparts = subParts[1].split("|");
+		console.log(subParts[1]);
+		var setparts = subParts[1].split(",");
 		var settingsCollection = {};
 		for (var s=0;s<setparts.length;s++) {
-		    settingsCollection[setparts[0]] = setparts[1];
+		    var lastParts = setparts[s].split("|");
+		    settingsCollection[lastParts[0]] = lastParts[1];
 		}
 		controller.emit('Arduino-settings-reported',settingsCollection)
 		break;

@@ -12,8 +12,7 @@ void CalibrationLaser::device_setup(){
 
 void CalibrationLaser::device_loop(Command command){
     if( command.cmp("claser")){
-      int *array = command.args();
-      int value = array[1];
+      int value = command.args[1];
       light.write(value);
     }       
 
