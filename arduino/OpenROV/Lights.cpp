@@ -13,8 +13,9 @@ void Lights::device_setup(){
 void Lights::device_loop(Command command){
 
     if( command.cmp("light")){
-      int *array = command.args();
-      int value = array[1];
+      Serial.print("log:light1;");
+      int value = command.args[1];
+      Serial.print("log:light2;");
       light.write(value);
     }  
 }

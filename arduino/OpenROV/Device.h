@@ -82,8 +82,10 @@ class DeviceManager
 {
   private:  
     static Device *devices[MAX_DEVICES];
+
   
   public:
+    static int device_loop_ms[MAX_DEVICES];
     static int device_count;
     static void registerDevice(Device *device);
     static void doDeviceLoops(Command command);

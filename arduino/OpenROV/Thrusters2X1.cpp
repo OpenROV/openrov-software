@@ -54,12 +54,11 @@ void Thrusters::device_loop(Command command){
 
   if (command.cmp("go")) {
       //ignore corrupt data
-      int *array = command.args();
-      if (array[1]>999 && array[2] >999 && array[3] > 999 && array[1]<2001 && array[2]<2001 && array[3] < 2001) {       
-        p = array[1];
-        v = array[2];
-        s = array[3];
-        if (array[4] == 1) bypasssmoothing=true;
+      if (command.args[1]>999 && command.args[2] >999 && command.args[3] > 999 && command.args[1]<2001 && command.args[2]<2001 && command.args[3] < 2001) {       
+        p = command.args[1];
+        v = command.args[2];
+        s = command.args[3];
+        if (command.args[4] == 1) bypasssmoothing=true;
       }
     }    
     else if (command.cmp("start")) {
