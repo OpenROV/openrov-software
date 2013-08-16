@@ -79,21 +79,16 @@ String Command::get(){
 void Command::parse(){
 
   String temp = Command::cmd;
-  
-  Serial.print(F("log:temp|"));
-  Serial.print(temp);
-  Serial.println(';'); 
+  if (temp.length() == 0){
+    Serial.print(F("log:Parsers should not have blank command.;"));
+  }
   
   value = "";
   for (unsigned i = 0; i < temp.length(); i++){
     char t = temp[i];
     if ((t == '(') || (t == ';')) break;
     value += temp[i];
-  }
-
-  Serial.print(F("log:ParsedValue|"));
-  Serial.print(value);
-  Serial.println(';'); 
+  } 
   
   temp.replace(value, "");
   temp.replace("(", "");
@@ -103,10 +98,7 @@ void Command::parse(){
   int len = 1;
   
   for (unsigned i = 0; i < temp.length(); i++){
-    char t = temp[i];
-    Serial.print(F("log:Pt|"));
-    Serial.print(t);
-    Serial.println(';');    
+    char t = temp[i];   
     if (t != ','){  // if not argument delimiter
       val += t;
     }
@@ -119,12 +111,6 @@ void Command::parse(){
   
   args[len] = atoi(&val[0]);
   args[0] = len;
-  for (int i=0;i<=len;i++){
-      Serial.print(F("log:Parsed|"));
-      Serial.print(args[i]);
-      Serial.println(';');  
-  }
-  _parsed = true;
 }
 
 
