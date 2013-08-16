@@ -46,7 +46,7 @@ class capedata{
     static double IOUT; //Current measured in to the cape in milli-amps.
     static double ATMP; //Arduino internal temp in Cellcius (should not get above ~86)
     static String VER;  //version number of the OpenRov firmware
-    static int UTIM; //up-time since Arduino was started in milliseconds
+    static double UTIM; //up-time since Arduino was started in milliseconds
 };
 
 class thrusterdata{
@@ -82,8 +82,10 @@ class DeviceManager
 {
   private:  
     static Device *devices[MAX_DEVICES];
+
   
   public:
+    static unsigned device_loop_ms[MAX_DEVICES];
     static int device_count;
     static void registerDevice(Device *device);
     static void doDeviceLoops(Command command);

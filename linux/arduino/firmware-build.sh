@@ -20,9 +20,19 @@ error_exit ()
 	exit 1
 }
 
+cd $1/src || error_exit "$LINENO: Cannot change directory! Aborting"
+
+HASH=`find -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum `
+
 cd $1 || error_exit "$LINENO: Cannot change directory! Aborting"
 
-ino build -m atmega328  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
+mv $1/src/Device.cpp $1/src/Device.cpp.template
+
+sed 's/CUSTOM_BUILD/'"$HASH"'/g' $1/src/Device.cpp.template > $1/src/Device.cpp
+
+rm $1/src/Device.cpp.template
+
+ino build  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
 
 echo $1
 exit 0
