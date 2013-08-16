@@ -6,7 +6,10 @@
 #include "Timer.h"
 #include "Pin.h"
 #include "Settings.h"
+#include <avr/wdt.h> // watchdog timer
+#include <EEPROM.h>
 
+byte check = 0;
 
 //Include the defined headers in the settings.h file for the different devices that may be wired in.
 Settings settings;
@@ -53,37 +56,91 @@ Settings settings;
 
 Command cmd;
 
+volatile byte wdt_resets = 0; //watchdog resets
 
 // IMPORTANT!
 // array[0] will be the number of arguments in the command
-int array[MAX_ARGS];
+int array[MAX_ARGS]; 
 Timer Output1000ms;
+int loops_per_sec;
 
 void setup(){
-
+  disableWatchdog();
+  enableWatchdog();
   Serial.begin(115200);
+  //watchdogOn();
+
+  check = EEPROM.read(0);
+  
+  // if the watchdog triggered and the ISR completed, the first EEPROM byte will be a "1"
+  if(check == 1)
+  {
+    wdt_resets = EEPROM.read(1);
+    EEPROM.write(0,0); // reset byte so the EEPROM is not read on next startup
+    Serial.println("log:Watchdog was triggered and the following was read from EEPROM;");
+    Serial.print("log:");
+    Serial.println(wdt_resets);
+    Serial.print(';');
+  }
+  
   pinMode(13, OUTPUT);
   Output1000ms.reset();
-  //Todo: Add code to enable the watchdog timer for 5 seconds or so.
   
   DeviceManager::doDeviceSetups();
 }
 
 
 void loop(){
+  wdt_reset();
   cmd.cmd = "";
-  if (Serial.available()) {
-    //Todo: Add code to tap a watchdog timer here. If we loose connection with the beagle bone the system will reset causing motors to go back to idle
-  
-    // blocks output data... TODO: need a way of calculating frequency for device data
-    delay(30);
-    // Get command from serial buffer
-    cmd.get();
-  }
+  cmd.get();
   
   DeviceManager::doDeviceLoops(cmd);
+  loops_per_sec++;
   if (Output1000ms.elapsed(1000)) {
     OutputSharedData(); 
+    Serial.print(F("alps:"));
+    Serial.print(loops_per_sec);
+    Serial.println(';');
+    loops_per_sec = 0; 
   }
+  
 }
+
+
+
+
+/* sets the watchdog timer both interrupt and reset mode with an 8 second timeout */
+void enableWatchdog()
+{
+  cli();
+  MCUSR &= ~(1<<WDRF);
+  wdt_reset();
+  WDTCSR |= (1<<WDCE) | (1<<WDE);
+  WDTCSR = (~(1<<WDP1) & ~(1<<WDP2)) | ((1<<WDE) | (1<<WDIE) | (1<<WDP3) | (1<<WDP0));
+  sei();
+}
+
+/* disables the watchdog timer */
+void disableWatchdog()
+{
+  cli();
+  wdt_reset();
+  MCUSR &= ~(1<<WDRF);
+  WDTCSR |= (1<<WDCE) | (1<<WDE);
+  WDTCSR = 0x00;
+  sei();
+}
+
+/* this is called when the watchdog times out and before the reset */
+ISR(WDT_vect)
+{
+
+  EEPROM.write(1, wdt_resets+1);    // write the random number to the second byte
+  EEPROM.write(0,1);         // write a "1" to the first byte to indicate the data in second byte is valid and the ISR triggered properly
+  while(true);               // triggers the second watchdog timeout for a reset
+}
+
+
+
 

@@ -13,8 +13,7 @@ void Lights::device_setup(){
 void Lights::device_loop(Command command){
 
     if( command.cmp("light")){
-      int *array = command.args();
-      int value = array[1];
+      int value = command.args[1];
       light.write(value);
     }  
 }

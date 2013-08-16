@@ -25,6 +25,7 @@
 
 
 #define MIDPOINT 1500
+#define LOGGING (1)
 
 
 class Settings : public Device {

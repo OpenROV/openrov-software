@@ -1,5 +1,6 @@
 #include "Device.h"
 #include "Settings.h"
+
 Device::Device(){
   DeviceManager::registerDevice(this);
 }
@@ -19,7 +20,12 @@ void DeviceManager::registerDevice(Device *device){
 
 void DeviceManager::doDeviceLoops(Command cmd){
   for(int i=0;i<device_count;i++) {
+    int stime = millis();
     devices[i]->device_loop(cmd);
+    int delta = millis()-stime;
+    if (delta > 0){
+      DeviceManager:device_loop_ms[i]+=delta;
+    }
   }
 }
 
@@ -53,9 +59,16 @@ void OutputSharedData(){
     Serial.print(';');
     Serial.print(F("atmp:"));
     Serial.print(capedata::ATMP);
-    Serial.print(';');    
+    Serial.print(';');
     Serial.print(F("ver:"));
-    Serial.print(capedata::VER);
+    Serial.print(F("CUSTOM_BUILD"));
+    Serial.print(';');
+    Serial.print(F("cmpd:"));
+    Serial.print( F(__DATE__));
+    Serial.print( F(", "));
+    Serial.print( F(__TIME__));
+    Serial.print( F(", "));
+    Serial.println( F(__VERSION__));  
     Serial.print(';');
     Serial.print(F("time:"));
     Serial.print(capedata::UTIM);
@@ -85,12 +98,21 @@ void OutputSharedData(){
     Serial.println(';');
     Serial.print(F("temp:"));
     Serial.print(envdata::TEMP);
-    Serial.println(';');    
+    Serial.println(';'); 
+ 
+    Serial.print(F("dlms:")); //device loop time in ms
+    for(int i=0;i<DeviceManager::device_count;i++){
+      Serial.print(i);
+      Serial.print('|');
+      Serial.print(DeviceManager::device_loop_ms[i]);
+    }
+    Serial.print(';');   
     
 }
 
 int DeviceManager::device_count = 0;
 Device *DeviceManager::devices[MAX_DEVICES];
+unsigned DeviceManager::device_loop_ms[MAX_DEVICES];
 
 // Initialize all of the shared data types
 double navdata::HDGD = 0;
@@ -108,7 +130,7 @@ double capedata::VOUT = 0;
 double capedata::IOUT = 0;
 double capedata::ATMP = 0;
 String capedata::VER = "";
-int capedata::UTIM = 0;
+double capedata::UTIM = 0;
 
 boolean thrusterdata::MATC = true;
 
