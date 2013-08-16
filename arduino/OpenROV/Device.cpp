@@ -130,7 +130,7 @@ double capedata::VOUT = 0;
 double capedata::IOUT = 0;
 double capedata::ATMP = 0;
 String capedata::VER = "";
-int capedata::UTIM = 0;
+double capedata::UTIM = 0;
 
 boolean thrusterdata::MATC = true;
 
