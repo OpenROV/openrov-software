@@ -6,6 +6,8 @@
 #include "Pin.h"
 
 class Cape : public Device {
+  private:
+
   public:
     Cape():Device(){};
     void device_setup();
