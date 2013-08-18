@@ -92,7 +92,6 @@ void setup(){
 
 void loop(){
   wdt_reset();
-  cmd.cmd = "";
   cmd.get();
   
   DeviceManager::doDeviceLoops(cmd);
