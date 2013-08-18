@@ -47,70 +47,46 @@ boolean getSerialString(){
 }
 
     int Command::_array[MAX_ARGS];
-    bool Command::_parsed;
-    String Command::cmd;
-    String Command::value;
     int Command::args[MAX_ARGS];
 
 
 // match from command received
-boolean Command::cmp(String a){
-  boolean match = cmd.startsWith(a);
-//  if (match) value = a;
-  return match;
+boolean Command::cmp(char const* targetcommand){
+  char* pos = strstr(dataBuffer, targetcommand);
+  if(pos==dataBuffer) { //starts with
+    return true;
+  }
+  return false;
 }
 
 // get string from buffer
-String Command::get(){
-  Command::cmd = "";
+boolean Command::get(){
   if(getSerialString()){
     //String available for parsing.  Parse it here
-     Command::cmd = dataBuffer;
-     Serial.print(F("cmd:"));     
-     Serial.println(Command::cmd);
-
      parse();
+     return true;
   }
-
-  return Command::cmd;
+  return false;
 }
 
 // get 'arguments' from command
 void Command::parse(){
-
-  String temp = Command::cmd;
-  if (temp.length() == 0){
-    Serial.print(F("log:Parsers should not have blank command.;"));
-  }
-  
-  value = "";
-  for (unsigned i = 0; i < temp.length(); i++){
-    char t = temp[i];
-    if ((t == '(') || (t == ';')) break;
-    value += temp[i];
-  } 
-  
-  temp.replace(value, "");
-  temp.replace("(", "");
-  temp.replace(")", "");
-      
-  String val = "";
-  int len = 1;
-  
-  for (unsigned i = 0; i < temp.length(); i++){
-    char t = temp[i];   
-    if (t != ','){  // if not argument delimiter
-      val += t;
+  char * pch;
+  byte i = 0;
+  pch = strtok (dataBuffer," ,();");
+  while (pch != NULL){
+    if (i == 0) {
+      //this is the command text
+     Serial.print(F("cmd:"));     
+     Serial.println(pch);            
+    } else {
+      //this is a parameter
+      args[i] = atoi(pch);
     }
-    else {
-      args[len] = atoi(&val[0]);
-      len++;
-      val = "";
-    }
+    i++;
+    pch = strtok (NULL," ,();");
   }
-  
-  args[len] = atoi(&val[0]);
-  args[0] = len;
+  args[0] = i;
 }
 
 
