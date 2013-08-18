@@ -14,6 +14,7 @@ var EventEmitter = require('events').EventEmitter
   , CONFIG = require('./config')
   , logger = require('./logger').create(CONFIG.debug)
   , spawn = require('child_process').spawn
+  , avrdude = require('./avrdude')
   ;
 
 var FirmwareInstaller = function (eventLoop) {
@@ -62,6 +63,7 @@ var FirmwareInstaller = function (eventLoop) {
       if (data.toString().indexOf('compilled') == 0) {
         installer.emit("firmwareinstaller-compilled", "");
 	globalEventLoop.emit("serial-stop");
+	//avrdude.firmwareuploader();
       }
       if (data.toString().indexOf('uploading') == 0) {
 

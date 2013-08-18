@@ -4,17 +4,16 @@
 #include <Arduino.h>
 
 #define MAX_ARGS 10
-
+#define MAX_COMMANDSIZE 40
 class Command {
   private:
-		
+    static int _array[MAX_ARGS];
+    void parse();
+    		
   public:
-    String cmd;
-    String value;
-    Command(){value = "";};
-    String get();
-    boolean cmp(String a);
-    void parse(int array[MAX_ARGS]);
+    static int args[MAX_ARGS];
+    boolean get();
+    boolean cmp(char const* a);
 };
 
 

@@ -19,6 +19,34 @@ var setup_serial = function(){
     var setuart_process = spawn('sudo', [ path.join(location,'setuart.sh') ]);
 };
 
+var navdata = {
+    roll: 0,
+    pitch: 0,
+    yaw: 0,
+    thrust: 0,
+    deapth : 0
+}
+
+var settingsCollection = {
+    smoothingIncriment: 0,
+    deadZone_min: 0,
+    deadZone_max: 0
+}
+
+var rovsys = {
+    capabilities: 0
+}
+
+var stripANGHeader = function(data){
+    var sections = data.split('|');
+    var parts = sections[1].split(',');
+    var n = navdata;
+    n.roll = parts[0];
+    n.pitch = parts[1];
+    n.yaw = parts[2];
+    return n;
+};
+
 var OpenROVController = function(eventLoop) {
   var serial;
   var globalEventLoop = eventLoop;
@@ -35,9 +63,34 @@ var OpenROVController = function(eventLoop) {
 
         s.on( "data", function( data ) {
          var status = reader.parseStatus(data,controller);
-         if ('vout' in status)  controller.emit('status',status);
+	 controller.emit('status',status);
          if ('ver' in status) 
            controller.ArduinoFirmwareVersion = status.ver;
+	 if ('IMUMatrix' in status) {controller.emit('navdata',stripANGHeader(status.IMUMatrix));
+	 }
+	 if ('TSET' in status) {
+		console.log(status.settings);
+		var setparts = status.settings.split(",");
+		settingsCollection.smoothingIncriment = setparts[0];
+		settingsCollection.deadZone_min = setparts[1];
+		settingsCollection.deadZone_max = setparts[2];
+		controller.emit('Arduino-settings-reported',settingsCollection)
+	 }   	 
+	 if ('CAPA' in status) {
+	    var s = rovsys;
+	    console.log("RovSys: " + status.CAPA)
+	    s.capabilities = parseInt(status.CAPA);
+	    controller.Capabilities= s.capabilities;
+	    controller.emit('rovsys',s);
+	 }
+	 if ('cmd' in status) {
+	    var s = rovsys;
+	    console.log("cmd: " + status.cmd)
+	 }
+	 if ('log' in status) {
+	    var s = rovsys;
+	    console.log("log: " + status.log)
+	 }		 
         });
         return s;
   };
@@ -52,6 +105,14 @@ var OpenROVController = function(eventLoop) {
   var controller = new EventEmitter();
 
   controller.ArduinoFirmwareVersion = 0;
+  controller.Capabilities = 0;
+
+  controller.requestCapabilities = function(){
+    console.log("Sending rcap to arduino");
+    var command = 'rcap();';
+    if(CONFIG.debug_commands) console.error("command", command);
+    if(CONFIG.production) serial.write(command);    
+  };
   
   controller.requestSettings = function(){
     var command = 'reportSetting();';
@@ -60,15 +121,18 @@ var OpenROVController = function(eventLoop) {
   };
   
   controller.updateSetting = function(){
-    var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + physics.mapMotor(CONFIG.preferences.get('deadzone_neg')) + ','+ physics.mapMotor(CONFIG.preferences.get('deadzone_pos')) + ','+ ');';
+    var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + physics.mapMotor(CONFIG.preferences.get('deadzone_neg')) + ','+ physics.mapMotor(CONFIG.preferences.get('deadzone_pos')) + ');';
     if(CONFIG.debug_commands) console.error("command", command);
+    console.log(command);
     if(CONFIG.production) serial.write(command);    
   };  
 
   controller.NotSafeToControl = function(){ //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= .20130314034859) return false;
+    if (this.Capabilities != 0) return false; //This feature added after the swap to ms on the Arduino
     console.log('Audrino is at an incompatible version of firmware. Upgrade required before controls will respond');
     console.log(this.ArduinoFirmwareVersion);
+    console.log(this.Capabilities);
     return true;
   };
 
@@ -84,6 +148,7 @@ var OpenROVController = function(eventLoop) {
       if (this.NotSafeToControl()) return;
       var motorCommands = physics.mapMotors(throttle, yaw, vertical);
       var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
+      console.log(command);
       if(CONFIG.debug_commands) console.error("command", command);
       if(CONFIG.production) serial.write(command);
     };
@@ -120,7 +185,12 @@ var OpenROVController = function(eventLoop) {
 
   globalEventLoop.on('register-ArdunoFirmwareVersion', function(val){
         controller.ArduinoFirmwareVersion = val;
-        });
+  });
+
+  globalEventLoop.on('register-ArduinoCapabilities', function(val){
+        controller.Capabilities = val;
+  });
+
 
   globalEventLoop.on('serial-stop', function(){
 	logger.log("Closing serial connection for firmware upload");

@@ -1,3 +1,12 @@
+
+// These constants map to the arduino device.h file's constants for capabilities of the ROV
+const  LIGHTS_CAPABLE = 1;
+const  CALIBRATION_LASERS_CAPABLE = 2;
+const  CAMERA_MOUNT_1_AXIS_CAPABLE = 3;
+const  COMPASS_CAPABLE = 4;
+const  ORIENTATION_CAPABLE = 5;
+const  DEAPTH_CAPABLE = 6;
+
 function OpenRovViewModel(){
     var self = this;
     self.telemetry = new Object();
@@ -29,6 +38,7 @@ function OpenRovViewModel(){
     self.reversePortThruster = ko.observable();
     self.reverseStarbordThruster = ko.observable();
     self.reverseLiftThruster = ko.observable();
+    self.capabilities = ko.observable(0);
     
     
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
@@ -108,13 +118,20 @@ function OpenRovViewModel(){
 	    if ('googletalk_rov_pilotid' in settings) self.googleTalkPilotId(settings.googletalk_rov_pilotid);
 	}
 	
+	self.updateRovsys = function(data){
+	    console.log('got RovSys update from Arduino');
+	    if ('capabilities' in data) {
+		self.capabilities(data.capabilities);
+	    }
+	}
+	
 	self.updateStatus = function(data) {
-		self.currentDepth(data.depth);
-		self.currentTemperature(data.temp);
-		self.currentRunTime(data.time);
-		self.currentVoltage(data.vout);
-		self.currentCurrent(data.iout);
-		self.currentRawCpuUsage(data.cpuUsage);
+		if ('depth' in data) self.currentDepth(data.depth);
+		if ('temp' in data) self.currentTemperature(data.temp);
+		if ('time' in data) self.currentRunTime(data.time);
+		if ('vout' in data) self.currentVoltage(data.vout);
+		if ('iout' in data) self.currentCurrent(data.iout);
+		if ('cpuUsage' in data) self.currentRawCpuUsage(data.cpuUsage);
         	self.lastPing(new Date());
 		for (i in data){
 		  self.telemetry[i] = data[i];
