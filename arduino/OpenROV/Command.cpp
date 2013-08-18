@@ -4,7 +4,7 @@
  #define DATABUFFERSIZE      80
  static char dataBuffer[DATABUFFERSIZE+1]; //Add 1 for NULL terminator
  static byte dataBufferIndex = 0;
-
+ static boolean commandReady = false;
  const char endChar = ';'; // or '!', or whatever your end character is
  static boolean storeString = false; //This will be our flag to put the data in our buffer
  
@@ -52,6 +52,7 @@ boolean getSerialString(){
 
 // match from command received
 boolean Command::cmp(char const* targetcommand){
+  if (!commandReady) return false;
   char* pos = strstr(dataBuffer, targetcommand);
   if(pos==dataBuffer) { //starts with
     return true;
@@ -61,9 +62,11 @@ boolean Command::cmp(char const* targetcommand){
 
 // get string from buffer
 boolean Command::get(){
+  commandReady = false;
   if(getSerialString()){
     //String available for parsing.  Parse it here
      parse();
+     commandReady = true;
      return true;
   }
   return false;
@@ -78,14 +81,20 @@ void Command::parse(){
     if (i == 0) {
       //this is the command text
      Serial.print(F("cmd:"));     
-     Serial.println(pch);            
+     Serial.print(pch);
+     Serial.print('(');    
     } else {
       //this is a parameter
       args[i] = atoi(pch);
+      if(i>1){
+        Serial.print(','); 
+      }
+      Serial.print(pch); 
     }
     i++;
     pch = strtok (NULL," ,();");
   }
+  Serial.println(");"); 
   args[0] = i;
 }
 
