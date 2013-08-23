@@ -147,7 +147,10 @@ io.sockets.on('connection', function (socket) {
   socket.send('initialize');  // opens socket with client
 
   controller.updateSetting();
-  controller.requestSettings();
+  setTimeout((function() {
+    controller.requestSettings();
+  }), 1000);
+  controller.requestCapabilities();
  
   socket.emit('settings',CONFIG.preferences.get());
   socket.emit('videoStarted');
@@ -201,7 +204,10 @@ io.sockets.on('connection', function (socket) {
         console.log('Configuration saved successfully.');
       });
       controller.updateSetting();
-      controller.requestSettings();
+      setTimeout((function() {
+        controller.requestSettings();
+      }), 1000);
+      
     });
     
     socket.on('disconnect', function(){
@@ -211,7 +217,15 @@ io.sockets.on('connection', function (socket) {
     });
 
     controller.on('status',function(status){
-        socket.emit('status',status);
+        socket.volatile.emit('status',status);
+    })
+
+    controller.on('navdata',function(navdata){
+        socket.volatile.emit('navdata',navdata);
+    })
+    
+    controller.on('rovsys', function(data){
+        socket.emit('rovsys',data);
     })
     
     controller.on('Arduino-settings-reported',function(settings){
