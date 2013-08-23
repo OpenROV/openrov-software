@@ -80,6 +80,8 @@ If you want to add your own module you need to:
 - [ ] In the OpenRov.ino file, add a #ifdef section for your device along side the other devices.
 - [ ] Update the enumeration of #ifdef devices in the settings.h file
 
+If your module requires multiple sub-modules, use a naming convention that groups your files togther in the directory. Do not use subdirectories as that prevents the Aurdino IDE from being able to load the project.
+
 Be sure to use SI units everywhere to make it easy for modules to share data. The following table are the suggestions from the ada-fruit standard sensor project which looks like a good guide to follow:
 
 Standardised SI Units for Sensor DataA key part of the unified sensor driver system layer is the standardisation of values on SI units of a particular scale. This following SI units and scales are used for the appropriate sensor type:
