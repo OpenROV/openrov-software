@@ -2,13 +2,13 @@
 # GPIO1 equals equals /sys/class/gpio32 (32 + 0)
 
 back_to_normal() {
-  sleep 1
+  sleep 0.1
   #set GPIO1_0 to HIGH
   echo "high" > /sys/class/gpio/gpio32/direction
 }
 
 reset() {
-  sleep 1
+  #sleep 1
   #prepare gpio
   echo "32" > /sys/class/gpio/export
   echo "out" >/sys/class/gpio/gpio32/direction 
