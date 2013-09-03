@@ -1,63 +1,139 @@
 #include "Device.h"
+#include "Settings.h"
 
-Device::Device(String device_name, int pin_number, boolean digital_truth, boolean in_out){
-  name = device_name;
-  pin = pin_number;
-  is_digital = digital_truth;
-  is_input = in_out;
+Device::Device(){
+  DeviceManager::registerDevice(this);
 }
 
-Device::Device(String device_name, int pin_number, boolean digital_truth){
-  name = device_name;
-  pin = pin_number;
-  is_digital = digital_truth;
-  is_input = in;  // default to input
-}
-
-void Device::reset(){
-  if (is_digital) {
-    if (is_input) {
-      pinMode(pin, INPUT);
-    }
-    else {
-      pinMode(pin, OUTPUT);
-    }
-  }
-}
-
-void Device::send(int val){
-  char output[MAX_LEN];
-  String temp = name + SEPARATER + (String)val + DELIMITER;
-  temp.toCharArray(output, MAX_LEN-1);
+void Device::device_loop(Command cmd){
   
-  Serial.write(output);
 }
 
-int Device::read(){
-  if (is_input) {
-    if (is_digital) value = digitalRead(pin);
-    else value = analogRead(pin);
-    return value;
-  }
-  return -1;
+void Device::device_setup(){
+  
 }
 
-void Device::write(int val){
-  if (!is_input){
-    if (is_digital){
-      if (val == 0) digitalWrite(pin, LOW);
-      else digitalWrite(pin, HIGH);
-    }
-    else {
-      analogWrite(pin, val);
+void DeviceManager::registerDevice(Device *device){
+  devices[device_count] = device;
+  device_count++;
+}
+
+void DeviceManager::doDeviceLoops(Command cmd){
+  for(int i=0;i<device_count;i++) {
+    int stime = millis();
+    devices[i]->device_loop(cmd);
+    int delta = millis()-stime;
+    if (delta > 0){
+      DeviceManager:device_loop_ms[i]+=delta;
     }
   }
-  value = val;
 }
 
-String Device::string(){
-  String dig = (is_digital) ? "1" : "0";
-  String inp = (is_input) ? "1" : "0";
-  String temp = inp + "__" + dig + "__" + (String)value;
-  return temp;
+void DeviceManager::doDeviceSetups(){
+  for(int i=0;i<device_count;i++) {
+    devices[i]->device_setup();
+  }
 }
+
+void OutputSharedData(){
+
+    Serial.print(F("motorAttached:"));
+    Serial.print(thrusterdata::MATC);
+    Serial.println(';');
+    
+    Serial.print(F("servo:"));
+    Serial.print(cameraMountdata::CMNT);
+    Serial.print(';');
+    Serial.print(F("starg:"));
+    Serial.print(cameraMountdata::CMTG);
+    Serial.println(';');
+    
+    Serial.print(F("fmem:"));
+    Serial.print(capedata::FMEM);
+    Serial.print(';');
+    Serial.print(F("vout:"));
+    Serial.print(capedata::VOUT);
+    Serial.print(';');    
+    Serial.print(F("iout:"));
+    Serial.print(capedata::IOUT);
+    Serial.print(';');
+    Serial.print(F("atmp:"));
+    Serial.print(capedata::ATMP);
+    Serial.print(';');
+    Serial.print(F("ver:"));
+    Serial.print(F("CUSTOM_BUILD"));
+    Serial.print(';');
+    Serial.print(F("cmpd:"));
+    Serial.print( F(__DATE__));
+    Serial.print( F(", "));
+    Serial.print( F(__TIME__));
+    Serial.print( F(", "));
+    Serial.println( F(__VERSION__));  
+    Serial.print(';');
+    Serial.print(F("time:"));
+    Serial.print(capedata::UTIM);
+    Serial.println(';'); 
+    
+    Serial.print(F("hdgd:"));
+    Serial.print(navdata::HDGD);
+    Serial.println(';');
+    Serial.print(F("deap:"));
+    Serial.print(navdata::DEAP);
+    Serial.println(';');
+    Serial.print(F("pitc:"));
+    Serial.print(navdata::PITC);
+    Serial.println(';');
+    Serial.print(F("roll:"));
+    Serial.print(navdata::ROLL);
+    Serial.println(';');
+    Serial.print(F("yaw:"));
+    Serial.print(navdata::YAW);
+    Serial.println(';');    
+    Serial.print(F("fthr:"));
+    Serial.print(navdata::FTHR);
+    Serial.println(';');
+    
+    Serial.print(F("pres:"));
+    Serial.print(envdata::PRES);
+    Serial.println(';');
+    Serial.print(F("temp:"));
+    Serial.print(envdata::TEMP);
+    Serial.println(';'); 
+ 
+    Serial.print(F("dlms:")); //device loop time in ms
+    for(int i=0;i<DeviceManager::device_count;i++){
+      Serial.print(i);
+      Serial.print('|');
+      Serial.print(DeviceManager::device_loop_ms[i]);
+    }
+    Serial.print(';');   
+    
+}
+
+int DeviceManager::device_count = 0;
+Device *DeviceManager::devices[MAX_DEVICES];
+unsigned DeviceManager::device_loop_ms[MAX_DEVICES];
+
+// Initialize all of the shared data types
+double navdata::HDGD = 0;
+float navdata::DEAP = 0;
+float navdata::PITC = 0;
+float navdata::ROLL = 0;
+float navdata::FTHR = 0;
+float navdata::YAW = 0;
+
+float envdata::PRES = 0;
+float envdata::TEMP = 0;
+
+double capedata::FMEM = 0;
+double capedata::VOUT = 0;
+double capedata::IOUT = 0;
+double capedata::ATMP = 0;
+String capedata::VER = "";
+double capedata::UTIM = 0;
+
+boolean thrusterdata::MATC = true;
+
+int cameraMountdata::CMNT = MIDPOINT;
+int cameraMountdata::CMTG = MIDPOINT;
+
