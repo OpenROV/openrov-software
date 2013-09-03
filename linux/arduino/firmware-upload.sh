@@ -20,8 +20,6 @@ error_exit ()
 cd $1  || error_exit "$LINENO:"
 #the first time you call 'ino upload' it has to configure itself. That takes longer and interferes with the reset. therefore we start it before hand and let it fail.
 echo Setting up uploader 1>&2
-echo Serial port settings 1>&2
-/opt/openrov/linux/setuart.sh 1>&2 || error_exit "$LINENO:"
 #/opt/openrov/linux/reset.sh 1>&2
 #ino upload -m atmega328 -p /dev/ttyO1 1>&2 
 
