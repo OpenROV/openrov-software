@@ -451,12 +451,12 @@
         );
         this.ctx.clip();
 
-        yOffset = this.altitude / 100 * pixelsPer100Ft;
+        yOffset = this.altitude / 1 * pixelsPer100Ft;
 
         // The unclipped ticks to be rendered. We render 500ft either side of
         // the center to be safe
-        from = Math.floor(this.altitude / 100)  - 5;
-        to = Math.ceil(this.altitude / 100)  + 5;
+        from = Math.floor(this.altitude / 1)  - 5;
+        to = Math.ceil(this.altitude / 1)  + 5;
 
         for (i = from; i < to; ++i) {
             this.ctx.moveTo(0, -i * pixelsPer100Ft + yOffset);
@@ -478,7 +478,7 @@
 
             this.ctx.font = '12px Arial';
             this.ctx.fillStyle = 'white';
-            this.ctx.fillText(i * 100, 15, -i * pixelsPer100Ft + yOffset + 4);
+            this.ctx.fillText(i * 1, 15, -i * pixelsPer100Ft + yOffset + 4);
         }
 
         this.ctx.strokeStyle = 'white';
@@ -518,7 +518,7 @@
         this.ctx.strokeStyle = 'black';
         this.ctx.fillStyle = 'black';
         this.ctx.fillText(
-            Math.round(this.altitude * 200) / 100,
+            Math.round(this.altitude * 100) / 100,
             15, 4.5, altIndicatorHeight
         );
 
