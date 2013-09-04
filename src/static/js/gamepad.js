@@ -88,7 +88,7 @@ var GamePad = function() {
     
     switch (e.axis) {
       case 'LEFT_STICK_X':
-        padStatus.position.yaw = e.value*powerLevel;
+        padStatus.position.yaw = e.value*.05;
         break;
       case 'LEFT_STICK_Y':
         if (e.value == 0) {
@@ -101,7 +101,7 @@ var GamePad = function() {
         if (e.value == 0) {
           padStatus.position.lift = ltrim
         } else {
-          padStatus.position.lift = -1*e.value*powerLevel;
+          padStatus.position.lift = -1*e.value;
         }
         break;      
     }
