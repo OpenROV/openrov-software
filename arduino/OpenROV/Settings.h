@@ -7,21 +7,25 @@
 // This section is for devices and their configuration
 //Kit:
 #define HAS_STD_LIGHTS (1)
-#define LIGHTS_PIN 5
-#define HAS_STD_CAPE (1)
+//#define LIGHTS_PIN 5
+#define LIGHTS_PIN 44
+#define HAS_STD_CAPE (0)
 #define HAS_STD_2X1_THRUSTERS (1)
 #define HAS_STD_PILOT (1)
 #define HAS_STD_CAMERAMOUNT (1)
-#define CAMERAMOUNT_PIN 3
+//#define CAMERAMOUNT_PIN 3
+#define CAMERAMOUNT_PIN 9
 #define CAPE_VOLTAGE_PIN 0 
 #define CAPE_CURRENT_PIN 3
 
 //After Market:
 #define HAS_STD_CALIBRATIONLASERS (0)
-#define CALIBRATIONLASERS_PIN 6
+//#define CALIBRATIONLASERS_PIN 6
+#define CALIBRATIONLASERS_PIN 45
 #define HAS_POLOLU_MINIMUV (0)
 #define HAS_MS5803_14BA (0)
 #define MS5803_14BA_I2C_ADDRESS 0x76
+#define HAS_OROV_CONTROLLERBOARD_25 (1)
 
 
 #define MIDPOINT 1500

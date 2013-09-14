@@ -44,6 +44,11 @@ Settings settings;
   CameraMount cameramount;
 #endif
 
+#if(HAS_OROV_CONTROLLERBOARD_25)
+  #include "controllerboard25.h"
+  Controller25 controller;
+#endif#
+
 #if(HAS_POLOLU_MINIMUV)
   #define COMPASS_ENABLED 1
   #define GYRO_ENABLED 1

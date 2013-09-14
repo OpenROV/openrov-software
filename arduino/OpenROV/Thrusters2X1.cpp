@@ -5,8 +5,8 @@
 #include "Motors.h"
 #include "Timer.h"
 
-Motors motors(9, 10, 11);
-
+//Motors motors(9, 10, 11);
+Motors motors(6, 7, 8);
 
 
 int new_p = MIDPOINT;
