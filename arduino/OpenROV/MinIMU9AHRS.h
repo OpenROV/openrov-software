@@ -90,7 +90,7 @@ extern int SENSOR_SIGN[9];  //Correct directions x,y,z - gyro, accelerometer, ma
 
 //#define PRINT_DCM 1     //Will print the whole direction cosine matrix
 //#define PRINT_ANALOGS 1 //Will print the analog raw data
-#define PRINT_EULER 1   //Will print the Euler angles Roll, Pitch and Yaw
+//#define PRINT_EULER 1   //Will print the Euler angles Roll, Pitch and Yaw
 
 #define STATUS_LED 13 
 

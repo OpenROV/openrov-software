@@ -188,7 +188,7 @@ void sample_MiniMU9() //Main Loop
     Euler_angles();
     // ***
    
-    printdata();
+    //printdata();
   }
    
 }
