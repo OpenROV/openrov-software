@@ -92,6 +92,7 @@ volatile byte wdt_resets = 0; //watchdog resets
 // array[0] will be the number of arguments in the command
 int array[MAX_ARGS]; 
 Timer Output1000ms;
+Timer Output100ms;
 int loops_per_sec;
 
 void setup(){
@@ -115,6 +116,7 @@ void setup(){
   
   pinMode(13, OUTPUT);
   Output1000ms.reset();
+  Output100ms.reset();
   
   DeviceManager::doDeviceSetups();
 }
@@ -132,6 +134,9 @@ void loop(){
     Serial.print(loops_per_sec);
     Serial.println(';');
     loops_per_sec = 0; 
+  }
+  if (Output100ms.elapsed(100)) {
+    OutputNavData();
   }
   
 }
