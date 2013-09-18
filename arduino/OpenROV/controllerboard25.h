@@ -4,6 +4,10 @@
 #include "Device.h"
 #include "Pin.h"
 
+#define LIGHTS_PIN 44
+#define CAMERAMOUNT_PIN 9
+#define CALIBRATIONLASERS_PIN 45
+
 class Controller25 : public Device {
   private:
 

@@ -1,3 +1,4 @@
+#include "AConfig.h"
 #if(HAS_STD_CAPE)
 #include "Device.h"
 #include "Pin.h"
@@ -5,8 +6,6 @@
 #include "Timer.h"
 #include "FreeMem.h"
 #include "Settings.h"
-
-
 
 const int numReadings = 30;
 int readings[numReadings];      // the readings from the analog input

@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_STD_CAMERAMOUNT)
 #include <Servo.h>
 #include "Device.h"
 #include "Pin.h"
@@ -50,6 +52,7 @@ void CameraMount::device_loop(Command command){
 
 //void Cape::do_event(Event event){
 //}
+#endif
 
 
 

@@ -11,8 +11,22 @@
 
 byte check = 0;
 
-//Include the defined headers in the settings.h file for the different devices that may be wired in.
+//Include the defined headers in the settings.h file for the different devices that may be wired in.  For
+//devices that have pin numbers wired to a board they are added in the cape or controllerboard cpp file because
+//we need the pin numbers.
+
 Settings settings;
+
+
+#if(HAS_STD_CAPE)
+  #include "Cape.h"
+  Cape cape;
+#endif
+
+#if(HAS_OROV_CONTROLLERBOARD_25)
+  #include "controllerboard25.h"
+  Controller25 controller;
+#endif#
 
 #if(HAS_STD_LIGHTS)
   #include "Lights.h"
@@ -22,11 +36,6 @@ Settings settings;
 #if(HAS_STD_CALIBRATIONLASERS)
   #include "CalibrationLaser.h"
   CalibrationLaser calibrationLaser;
-#endif
-
-#if(HAS_STD_CAPE)
-  #include "Cape.h"
-  Cape cape;
 #endif
 
 #if(HAS_STD_2X1_THRUSTERS)
@@ -44,10 +53,7 @@ Settings settings;
   CameraMount cameramount;
 #endif
 
-#if(HAS_OROV_CONTROLLERBOARD_25)
-  #include "controllerboard25.h"
-  Controller25 controller;
-#endif#
+
 
 #if(HAS_POLOLU_MINIMUV)
   #define COMPASS_ENABLED 1
