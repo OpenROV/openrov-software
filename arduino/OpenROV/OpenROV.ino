@@ -1,3 +1,4 @@
+#include "AConfig.h"
 #include <Servo.h>
 #include <Arduino.h>
 #include "Motors.h"
@@ -26,7 +27,7 @@ Settings settings;
 #if(HAS_OROV_CONTROLLERBOARD_25)
   #include "controllerboard25.h"
   Controller25 controller;
-#endif#
+#endif
 
 #if(HAS_STD_LIGHTS)
   #include "Lights.h"
@@ -62,6 +63,24 @@ Settings settings;
   #include "MinIMU9.h"
   #include <Wire.h> //required to force the Arduino IDE to include the library in the path for the I2C code
   MinIMU9 IMU;
+#endif
+
+#if(HAS_MPU9150)
+  #define COMPASS_ENABLED 1
+  #define GYRO_ENABLED 1
+  #define ACCELEROMETER_ENABLED 1
+  #include "MPU9150.h"
+  #include <Wire.h> //required to force the Arduino IDE to include the library in the path for the I2C code
+
+  MPU9150 IMU;
+#endif
+
+#if(HAS_MS5803_14BA)
+  #define DEAPTH_ENABLED 1
+  #include "MS5803_14BA.h"
+  #include <Wire.h> //required to force the Arduino IDE to include the library in the path for the I2C code
+  #include <SPI.h> //required to force the Arduino IDE to include the library in the path for the SPI code
+  MS5803_14BA DeapthSensor;
 #endif
 
 
