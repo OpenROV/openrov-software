@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_OROV_CONTROLLERBOARD_25)
 #include "Device.h"
 #include "Pin.h"
 #include "controllerboard25.h"
@@ -22,8 +24,8 @@ float celsiusTempRead;
 // respond to the input.  Using a constant rather than a normal variable lets
 // use this value to determine the size of the readings array.
 
-Pin vout("vout", CAPE_VOLTAGE_PIN, vout.analog, vout.in);
-Pin iout("iout", CAPE_CURRENT_PIN, iout.analog, iout.in);
+//Pin vout("vout", CAPE_VOLTAGE_PIN, vout.analog, vout.in);
+//Pin iout("iout", CAPE_CURRENT_PIN, iout.analog, iout.in);
 Pin escpower("escpower", escpowerpin, escpower.digital, escpower.out);
 
 double GetTemp(void)
@@ -163,3 +165,4 @@ void Controller25::device_loop(Command command){
     capedata::UTIM = millis(); 
   }  
 }
+#endif

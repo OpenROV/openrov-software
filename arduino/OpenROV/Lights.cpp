@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_STD_LIGHTS)
 #include "Device.h"
 #include "Pin.h"
 #include "Lights.h"
@@ -17,7 +19,7 @@ void Lights::device_loop(Command command){
       light.write(value);
     }  
 }
-
+#endif
 
 
 

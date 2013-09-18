@@ -1,3 +1,4 @@
+#if(HAS_STD_CALIBRATIONLASERS)
 #include "Device.h"
 #include "Pin.h"
 #include "CalibrationLaser.h"
@@ -17,6 +18,7 @@ void CalibrationLaser::device_loop(Command command){
     }       
 
 }
+#endif
 
 
 

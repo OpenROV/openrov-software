@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_STD_2X1_THRUSTERS)
 #include "Device.h"
 #include "Pin.h"
 #include "Thrusters2X1.h"
@@ -110,7 +112,7 @@ void Thrusters::device_loop(Command command){
     
   } 
 }
-
+#endif
 
 
 
