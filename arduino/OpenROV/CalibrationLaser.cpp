@@ -1,3 +1,4 @@
+#include "AConfig.h"
 #if(HAS_STD_CALIBRATIONLASERS)
 #include "Device.h"
 #include "Pin.h"
