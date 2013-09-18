@@ -14,7 +14,7 @@
 
 #if(HAS_OROV_CONTROLLERBOARD_25)
   #include "controllerboard25.h"
-#endif#
+#endif
 
 class CalibrationLaser : public Device {
   public:

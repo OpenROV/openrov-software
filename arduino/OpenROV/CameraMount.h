@@ -15,7 +15,7 @@
 
 #if(HAS_OROV_CONTROLLERBOARD_25)
   #include "controllerboard25.h"
-#endif#
+#endif
 
 class CameraMount : public Device {
   public:

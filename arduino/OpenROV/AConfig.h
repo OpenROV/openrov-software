@@ -21,9 +21,10 @@
 #define HAS_STD_CAMERAMOUNT (1)
 
 //After Market:
-#define HAS_POLOLU_MINIMUV (1)
+#define HAS_POLOLU_MINIMUV (0)
 #define HAS_MS5803_14BA (1)
 #define MS5803_14BA_I2C_ADDRESS 0x76
+#define HAS_MPU9150 (1)
 
 
 #endif
