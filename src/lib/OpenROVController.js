@@ -170,6 +170,17 @@ var OpenROVController = function(eventLoop) {
         if(CONFIG.production) serial.write(command);
     };
     
+    var claserstate = 0;
+    controller.sendLaser = function(value) {
+        if (this.NotSafeToControl()) return;
+	if (claserstate === 0) {
+	    claserstate = 255;
+	} else {claserstate = 0;}
+        var command = 'claser(' + claserstate +');';
+        if(CONFIG.debug_commands) console.error("command", command);
+        if(CONFIG.production) serial.write(command);
+    };    
+    
     controller.stop = function(value) {
         if (this.NotSafeToControl()) return;
         var command = 'stop();';
