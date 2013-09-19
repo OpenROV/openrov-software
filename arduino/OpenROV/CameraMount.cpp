@@ -9,22 +9,19 @@
 Servo tilt;
 int tilt_val;
 int new_tilt;
+const int tiltrate = 10;
 
 int smoothAdjustedCameraPosition(int target, int current){
   // if the MIDPOINT is betwen the change requested in velocity we want to go to MIDPOINT first, and right away.
   if (((current < MIDPOINT) && (MIDPOINT < target)) || ((target < MIDPOINT) && (MIDPOINT < current))){
     return MIDPOINT;
   }
-  // if the change is moving us closer to MIDPOINT it is a reduction of power and we can move all the way to the target
-  // in one command
-  if (abs(MIDPOINT-target) < abs(MIDPOINT-current)){
-    return target;
-  }
+
   // else, we need to smooth out amp spikes by making a series of incrimental changes in the motors, so only move part of
   // the way to the target this time.
   double x = target - current;
   int sign = (x>0) - (x<0);
-  int adjustedVal = current + sign * (min(abs(target - current), Settings::smoothingIncriment));
+  int adjustedVal = current + sign * (min(abs(target - current), tiltrate));
   // skip the deadzone
   if (sign<0) {
     return (min(adjustedVal,Settings::deadZone_min));
