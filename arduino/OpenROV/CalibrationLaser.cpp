@@ -5,17 +5,17 @@
 #include "CalibrationLaser.h"
 #include "Settings.h"
 
-Pin light("claser", CALIBRATIONLASERS_PIN, light.analog, light.out);
+Pin claser("claser", CALIBRATIONLASERS_PIN, claser.analog, claser.out);
 
 void CalibrationLaser::device_setup(){
     Settings::capability_bitarray |= (1 << CALIBRATION_LASERS_CAPABLE);
-    light.write(0);
+    claser.write(0);
 }
 
 void CalibrationLaser::device_loop(Command command){
     if( command.cmp("claser")){
       int value = command.args[1];
-      light.write(value);
+      claser.write(value);
     }       
 
 }
