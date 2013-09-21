@@ -1,5 +1,4 @@
 #include "AConfig.h"
-#include <Servo.h>
 #include <Arduino.h>
 #include "Motors.h"
 #include "Command.h"

@@ -6,21 +6,19 @@
 #include "Settings.h"
 #include <Arduino.h>
 
-//Pin light("light", LIGHTS_PIN, light.analog, light.out);
+Pin light("light", LIGHTS_PIN, light.analog, light.out);
 
 void Lights::device_setup(){
   Settings::capability_bitarray |= (1 << LIGHTS_CAPABLE);
-  //light.reset();
-  //light.write(0);
-  pinMode(LIGHTS_PIN, OUTPUT); 
+  light.reset();
+  light.write(0);
 }
 
 void Lights::device_loop(Command command){
 
     if( command.cmp("light")){
       int value = command.args[1];
-      //light.write(value);
-      analogWrite(LIGHTS_PIN, value);
+      light.write(value);
     }  
 }
 #endif
