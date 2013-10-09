@@ -33,7 +33,7 @@ function Hardware() {
 
     setInterval(sendEvent,3000);
     function sendEvent() {
-      var data ="vout:1023";
+      var data ="vout:1023;iout:125;";
       var status = reader.parseStatus(data);
       hardware.emit('status',status);
     }
