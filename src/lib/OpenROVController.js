@@ -10,7 +10,7 @@ var serialPort = require('serialport')
   , CONFIG = require('./config')
   , StatusReader = require('./StatusReader')
   , ArduinoPhysics = require('./ArduinoPhysics')
-  , logger = require('./logger').create(CONFIG.debug)
+  , logger = require('./logger').create(CONFIG)
   , EventEmitter = require('events').EventEmitter;
 
 var setup_serial = function(){
@@ -110,19 +110,19 @@ var OpenROVController = function(eventLoop) {
   controller.requestCapabilities = function(){
     console.log("Sending rcap to arduino");
     var command = 'rcap();';
-    if(CONFIG.debug_commands) console.error("command", command);
+    logger.command(command);
     if(CONFIG.production) serial.write(command);    
   };
   
   controller.requestSettings = function(){
     var command = 'reportSetting();';
-    if(CONFIG.debug_commands) console.error("command", command);
+    logger.command(command);
     if(CONFIG.production) serial.write(command);    
   };
   
   controller.updateSetting = function(){
     var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + physics.mapMotor(CONFIG.preferences.get('deadzone_neg')) + ','+ physics.mapMotor(CONFIG.preferences.get('deadzone_pos')) + ');';
-    if(CONFIG.debug_commands) console.error("command", command);
+    logger.command(command);
     console.log(command);
     if(CONFIG.production) serial.write(command);    
   };  
@@ -140,7 +140,7 @@ var OpenROVController = function(eventLoop) {
     controller.sendMotorTest = function(port, starbord, vertical) {
         if (this.NotSafeToControl()) return;
         var command = 'go(' + physics.mapRawMotor(port) + ',' + physics.mapRawMotor(vertical) + ',' + physics.mapRawMotor(starbord) + ',1);'; //the 1 bypasses motor smoothing
-        if(CONFIG.debug_commands) console.error("command", command);
+        logger.command(command);
         if(CONFIG.production) serial.write(command);
     };
 
@@ -149,7 +149,7 @@ var OpenROVController = function(eventLoop) {
       var motorCommands = physics.mapMotors(throttle, yaw, vertical);
       var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
       console.log(command);
-      if(CONFIG.debug_commands) console.error("command", command);
+      logger.command(command);
       if(CONFIG.production) serial.write(command);
     };
   
@@ -157,7 +157,7 @@ var OpenROVController = function(eventLoop) {
         if (this.NotSafeToControl()) return;
         var servoTilt = physics.mapTiltServo(value);
         var command = 'tilt(' + servoTilt +');';
-        if(CONFIG.debug_commands) console.error("command", command);
+        logger.command(command);
         if(CONFIG.production) serial.write(command);
     };
 
@@ -165,21 +165,21 @@ var OpenROVController = function(eventLoop) {
         if (this.NotSafeToControl()) return;
         var light = physics.mapLight(value);
         var command = 'light(' + light +');';
-        if(CONFIG.debug_commands) console.error("command", command);
+        logger.command(command);
         if(CONFIG.production) serial.write(command);
     };
     
     controller.stop = function(value) {
         if (this.NotSafeToControl()) return;
         var command = 'stop();';
-        if(CONFIG.debug_commands) console.error("command", command);
+        logger.command(command);
         if(CONFIG.production) serial.write(command);
     };
     
     controller.start = function(value) {
         if (this.NotSafeToControl()) return;
         var command = 'start();';
-        if(CONFIG.debug_commands) console.error("command", command);
+        logger.command(command);
         if(CONFIG.production) serial.write(command);
     };    
 

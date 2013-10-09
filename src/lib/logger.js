@@ -1,17 +1,19 @@
-//var OpenROV = OpenROV || {};
-var CONFIG = require('./config');
-
-function Logger(enabled) {
-	this.enabled = enabled;
+function Logger(config) {
 	this.log = function(arguments) {
-		if (enabled) {
+		if (config.debug) {
 			console.log(arguments);
 		}		
 	}
+
+	this.command = function(arguments) {
+		if (config.debug_commands) {
+			console.error("command", command);
+		}
+	}
 };
 
-Logger.create = function(enabled) {
-		return new Logger(enabled);
+Logger.create = function(config) {
+		return new Logger(config);
 	};
 
 module.exports = Logger;
