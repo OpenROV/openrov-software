@@ -18,7 +18,7 @@ var fork = require('child_process').fork
   , fs = require('fs')
   , path = require('path')
   , CONFIG = require('./config')
-  , logger = require('./logger').create(CONFIG.debug)
+  , logger = require('./logger').create(CONFIG)
   ;
 
 var OpenROVCamera = function (options) {

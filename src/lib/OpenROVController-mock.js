@@ -17,7 +17,7 @@
  */
 
 var CONFIG = require('./config')
-  , logger = require('./logger').create(CONFIG.debug)
+  , logger = require('./logger').create(CONFIG)
   , StatusReader = require('./StatusReader')
   , ArduinoPhysics = require('./ArduinoPhysics')
   , EventEmitter = require('events').EventEmitter;

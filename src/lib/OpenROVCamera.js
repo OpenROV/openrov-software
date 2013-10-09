@@ -15,7 +15,7 @@ var spawn = require('child_process').spawn
   , fs = require('fs')
   , path = require('path')
   , CONFIG = require('./config')
-  , logger = require('./logger').create(CONFIG.debug)
+  , logger = require('./logger').create(CONFIG)
   , orutils = require('./orutils')
   , moment = require('moment')
   ;
