@@ -11,7 +11,7 @@ var path = require('path')
   , ArduinoPhysics = require('./ArduinoPhysics')
   , logger = require('./logger').create(CONFIG)
   , EventEmitter = require('events').EventEmitter
-  , Hardware = require('./Hardware');
+  , Hardware = require('../' + CONFIG.Hardware);
 
 var navdata = {
     roll: 0,
@@ -53,7 +53,9 @@ var OpenROVController = function(eventLoop) {
   var globalEventLoop = eventLoop;
   var physics = new ArduinoPhysics();
   var hardware = new Hardware();
-  hardware.on('status', function(data) {
+  var controller = new EventEmitter();
+
+  hardware.on('status', function(status) {
     controller.emit('status',status);
 
     if ('ver' in status) {
@@ -94,8 +96,6 @@ var OpenROVController = function(eventLoop) {
   setup_serial();
 
   hardware.connect();
-
-  var controller = new EventEmitter();
 
   controller.ArduinoFirmwareVersion = 0;
   controller.Capabilities = 0;
