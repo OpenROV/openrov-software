@@ -6,7 +6,11 @@ var serialPort = require('serialport')
 function Hardware() {
 	var hardware = new EventEmitter();
 	var reader = new StatusReader();
-	var hardware.serial = { };
+	hardware.serial = { };
+
+	reader.on('Arduino-settings-reported', function(settings) {
+		hardware.emit('Arduino-settings-reported', settings);
+	});
 
 	hardware.connect = function() {
 		hardware.serial = new serialPort.SerialPort(
@@ -20,15 +24,15 @@ function Hardware() {
          logger.log('!Serial port closed');
         });
 
-		hardware.serial.on( "data", function( data ) {
-			var status = reader.parseStatus(data,controller);
+		hardware.serial.on( 'data', function( data ) {
+			var status = reader.parseStatus(data);
 			hardware.emit('status', status);
 		});
 	};
 
 	hardware.write = function(command) {
 		logger.command(command);
-		
+
 		if(CONFIG.production) {
 			hardware.serial.write(command);
 		}

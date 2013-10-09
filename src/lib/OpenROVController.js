@@ -86,12 +86,14 @@ var OpenROVController = function(eventLoop) {
       console.log("log: " + status.log)
     }
   });
+
+  hardware.on('Arduino-settings-reported', function(settings) {
+    controller.emit('Arduino-settings-reported', settings);
+  });
   
   setup_serial();
 
-  // ATmega328p is connected to Beaglebone over UART1 (pins TX 24, RX 26)
   hardware.connect();
-
 
   var controller = new EventEmitter();
 
