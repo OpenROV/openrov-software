@@ -127,7 +127,7 @@ var OpenROVController = function(eventLoop) {
     if(CONFIG.production) serial.write(command);    
   };  
 
-  controller.NotSafeToControl = function(){ //Arduino is OK to accept commands
+  controller.notSafeToControl = function(){ //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= .20130314034859) return false;
     if (this.Capabilities != 0) return false; //This feature added after the swap to ms on the Arduino
     console.log('Audrino is at an incompatible version of firmware. Upgrade required before controls will respond');
@@ -138,14 +138,14 @@ var OpenROVController = function(eventLoop) {
 
 
     controller.sendMotorTest = function(port, starbord, vertical) {
-        if (this.NotSafeToControl()) return;
+        if (this.notSafeToControl()) return;
         var command = 'go(' + physics.mapRawMotor(port) + ',' + physics.mapRawMotor(vertical) + ',' + physics.mapRawMotor(starbord) + ',1);'; //the 1 bypasses motor smoothing
         logger.command(command);
         if(CONFIG.production) serial.write(command);
     };
 
     controller.sendCommand = function(throttle, yaw, vertical) {
-      if (this.NotSafeToControl()) return;
+      if (this.notSafeToControl()) return;
       var motorCommands = physics.mapMotors(throttle, yaw, vertical);
       var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
       console.log(command);
@@ -154,7 +154,7 @@ var OpenROVController = function(eventLoop) {
     };
   
     controller.sendTilt = function(value) {
-        if (this.NotSafeToControl()) return;
+        if (this.notSafeToControl()) return;
         var servoTilt = physics.mapTiltServo(value);
         var command = 'tilt(' + servoTilt +');';
         logger.command(command);
@@ -162,7 +162,7 @@ var OpenROVController = function(eventLoop) {
     };
 
     controller.sendLight = function(value) {
-        if (this.NotSafeToControl()) return;
+        if (this.notSafeToControl()) return;
         var light = physics.mapLight(value);
         var command = 'light(' + light +');';
         logger.command(command);
@@ -170,14 +170,14 @@ var OpenROVController = function(eventLoop) {
     };
     
     controller.stop = function(value) {
-        if (this.NotSafeToControl()) return;
+        if (this.notSafeToControl()) return;
         var command = 'stop();';
         logger.command(command);
         if(CONFIG.production) serial.write(command);
     };
     
     controller.start = function(value) {
-        if (this.NotSafeToControl()) return;
+        if (this.notSafeToControl()) return;
         var command = 'start();';
         logger.command(command);
         if(CONFIG.production) serial.write(command);

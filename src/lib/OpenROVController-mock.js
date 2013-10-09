@@ -59,12 +59,12 @@ var OpenROVController = function() {
     };
 
     controller.start = function(value) {
-      if (this.NotSafeToControl()) return;
+      if (this.notSafeToControl()) return;
       var command = 'start();';
       console.log(command);
     };    
 
-    controller.NotSafeToControl = function(){
+    controller.notSafeToControl = function(){
       return false;
     };
 
