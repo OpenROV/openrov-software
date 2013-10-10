@@ -39,6 +39,20 @@ function OpenRovViewModel(){
     self.reverseStarbordThruster = ko.observable();
     self.reverseLiftThruster = ko.observable();
     self.capabilities = ko.observable(0);
+    self.portMotorSpeed = ko.observable(0);
+    self.portMotorSlide = ko.observable(false);
+    self.starbordMotorSpeed = ko.observable(0);
+    self.starbordMotorSlide = ko.observable(false);
+    self.verticalMotorSpeed = ko.observable(0);
+    self.verticalMotorSlide = ko.observable(false);
+
+    self.diagnosticMotors = ko.observableArray([
+    	{ name: "Port Motor", propertyName: 'portMotorSpeed', reversePropertyName: 'reversePortThruster' },
+    	{ name: "Starboard Motor", propertyName: 'starbordMotorSpeed', reversePropertyName: 'reverseStarbordThruster'  },
+    	{ name: "Vertical Motor", propertyName: 'verticalMotorSpeed', reversePropertyName: 'reverseLiftThruster'  },
+    ]);
+    self.diagnosticMotorSpeedButtons = [ -1, 0, 1 ];
+
     self.savedBrightness = 0;
     
     
@@ -179,6 +193,10 @@ function OpenRovViewModel(){
         if(newVal<0 || newVal >10) return;
         self.currentBrightness(newVal);
     }
+
+    self.setMotorTestSpeed = function(propertyName, value) {
+    	self[propertyName](value);
+    };
     
     ko.bindingHandlers.slider = {
 	init: function (element, valueAccessor, allBindingsAccessor) {
