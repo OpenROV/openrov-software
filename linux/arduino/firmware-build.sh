@@ -32,7 +32,8 @@ sed 's/CUSTOM_BUILD/'"$HASH"'/g' $1/src/Device.cpp.template > $1/src/Device.cpp
 
 rm $1/src/Device.cpp.template
 
-ino build -m mega2560  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
+#ino build -m mega2560  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
+echo $BUILD_ATMEGA_CODE  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
 
 echo $1
 exit 0
