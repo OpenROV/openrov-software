@@ -16,6 +16,10 @@ reset() {
   echo "low" > /sys/class/gpio/gpio$LINUX_RESET_GPIO/value
   back_to_normal 
 }
+
+#setup required environment variables if not already set
+. /opt/openrov/linux/profile.d/orovconfig.sh
+
 echo Initiating arduino reset 1>&2
 reset &
 

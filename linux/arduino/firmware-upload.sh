@@ -26,6 +26,9 @@ echo Setting up uploader 1>&2
 COUNTER=0
 OUTPUT=`ino upload -p /dev/ttyO1 2>&1`
 #OUTPUT=`avrdude -P /dev/ttyO1 -c arduino-openrov -b 57600 -D -vvvv -p m328p -U flash:w: .build/uno/firmware.hex 2>&1`
+#setup required environment variables if not already set
+. /opt/openrov/linux/profile.d/orovconfig.sh
+
 while [ $COUNTER -lt 9 ]; do
         echo $COUNTER
         (sleep 0.0$COUNTER && /opt/openrov/linux/reset.sh) & 1>&2
