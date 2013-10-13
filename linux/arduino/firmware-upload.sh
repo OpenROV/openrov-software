@@ -27,7 +27,7 @@ COUNTER=0
 OUTPUT=`ino upload -p /dev/ttyO1 2>&1`
 #OUTPUT=`avrdude -P /dev/ttyO1 -c arduino-openrov -b 57600 -D -vvvv -p m328p -U flash:w: .build/uno/firmware.hex 2>&1`
 #setup required environment variables if not already set
-. /opt/openrov/linux/profile.d/orovconfig.sh
+. /opt/openrov/linux/orovconfig.sh
 
 while [ $COUNTER -lt 9 ]; do
         echo $COUNTER

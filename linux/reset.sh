@@ -18,7 +18,7 @@ reset() {
 }
 
 #setup required environment variables if not already set
-. /opt/openrov/linux/profile.d/orovconfig.sh
+. /opt/openrov/linux/orovconfig.sh
 
 echo Initiating arduino reset 1>&2
 reset &

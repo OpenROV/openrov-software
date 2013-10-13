@@ -35,7 +35,7 @@ rm $1/src/Device.cpp.template
 #ino build -m mega2560  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
 
 #setup required environment variables if not already set
-. /opt/openrov/linux/profile.d/orovconfig.sh
+. /opt/openrov/linux/orovconfig.sh
 
 echo $BUILD_ATMEGA_CODE  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
 
