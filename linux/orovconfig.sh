@@ -1,5 +1,8 @@
 #!/bin/sh
 
+if [ ! -f /var/run/rov_board ]; then
+    sudo /opt/openrov/linux/system-detect.sh
+fi
 
 export ROV_BOARD=`cat /var/run/rov_board`
 
