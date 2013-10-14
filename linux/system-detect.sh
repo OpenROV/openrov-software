@@ -2,30 +2,24 @@
 
 # This code will try to automatically detect known motor/power boards and configure the correctly tailored command for them*/
 
-testGPIOhigh() {
-
-  echo $1 > /sys/class/gpio/export || true
-  echo "in" >/sys/class/gpio/gpio$1/direction || true
-  local TESTVAL=`cat /sys/class/gpio/gpio$1/value` || true 
-  if test "$TESTVAL" = "1"
-  then
-	return 0 #true
-  else
-	return 1  #false
-  fi
-
+canTalkToATMEGAviaSPI(){
+    avrdude -P /dev/spidev1.0 -c linuxspi -vv -p m2560 > /dev/null 2>&1
+    if [ $? -ne 0 ] 
+    then
+        return 1
+    else
+        return 0
+    fi
+    
 }
 
 export ROV_BOARD=custom
 
-if testGPIOhigh 32
-then
-    export ROV_BOARD=cape
-fi
-
-if testGPIOhigh 30
+if canTalkToATMEGAviaSPI
 then
     export ROV_BOARD=board25
+else
+    export ROV_BOARD=cape
 fi
 
 echo "$ROV_BOARD" > /var/run/rov_board
