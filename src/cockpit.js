@@ -171,6 +171,10 @@ io.sockets.on('connection', function (socket) {
         controller.sendLight(value);
     });
     
+        socket.on('laser_update', function(value) {
+        controller.sendLaser(value);
+    });
+    
     socket.emitPhotos = function(){
           fs.readdir(CONFIG.preferences.get('photoDirectory'),function(err,files){
             if(err) throw err;
