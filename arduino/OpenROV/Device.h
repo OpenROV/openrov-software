@@ -94,6 +94,7 @@ class DeviceManager
 };
 
 void OutputSharedData();
+void OutputNavData();
 
 #ifdef LOGGING
 

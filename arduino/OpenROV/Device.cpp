@@ -35,6 +35,27 @@ void DeviceManager::doDeviceSetups(){
   }
 }
 
+void OutputNavData(){
+    Serial.print(F("hdgd:"));
+    Serial.print(navdata::HDGD);
+    Serial.print(';');
+    Serial.print(F("deap:"));
+    Serial.print(navdata::DEAP);
+    Serial.print(';');
+    Serial.print(F("pitc:"));
+    Serial.print(navdata::PITC);
+    Serial.print(';');
+    Serial.print(F("roll:"));
+    Serial.print(navdata::ROLL);
+    Serial.print(';');
+    Serial.print(F("yaw:"));
+    Serial.print(navdata::YAW);
+    Serial.print(';');    
+    Serial.print(F("fthr:"));
+    Serial.print(navdata::FTHR);
+    Serial.println(';');
+}
+
 void OutputSharedData(){
 
     Serial.print(F("motorAttached:"));
@@ -74,28 +95,9 @@ void OutputSharedData(){
     Serial.print(capedata::UTIM);
     Serial.println(';'); 
     
-    Serial.print(F("hdgd:"));
-    Serial.print(navdata::HDGD);
-    Serial.println(';');
-    Serial.print(F("deap:"));
-    Serial.print(navdata::DEAP);
-    Serial.println(';');
-    Serial.print(F("pitc:"));
-    Serial.print(navdata::PITC);
-    Serial.println(';');
-    Serial.print(F("roll:"));
-    Serial.print(navdata::ROLL);
-    Serial.println(';');
-    Serial.print(F("yaw:"));
-    Serial.print(navdata::YAW);
-    Serial.println(';');    
-    Serial.print(F("fthr:"));
-    Serial.print(navdata::FTHR);
-    Serial.println(';');
-    
     Serial.print(F("pres:"));
     Serial.print(envdata::PRES);
-    Serial.println(';');
+    Serial.print(';');
     Serial.print(F("temp:"));
     Serial.print(envdata::TEMP);
     Serial.println(';'); 
@@ -106,7 +108,7 @@ void OutputSharedData(){
       Serial.print('|');
       Serial.print(DeviceManager::device_loop_ms[i]);
     }
-    Serial.print(';');   
+    Serial.println(';');   
     
 }
 

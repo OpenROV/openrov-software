@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_POLOLU_MINIMUV)
 /*
 
 MinIMU-9-Arduino-AHRS
@@ -59,3 +61,4 @@ void Compass_Heading()
   // Magnetic Heading
   MAG_Heading = atan2(-MAG_Y,MAG_X);
 }
+#endif
