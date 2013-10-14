@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_STD_CAPE)
 #include "Device.h"
 #include "Pin.h"
 #include "Cape.h"
@@ -90,7 +92,7 @@ void Cape::device_loop(Command command){
     capedata::UTIM = millis(); 
   }  
 }
-
+#endif
 
 
 

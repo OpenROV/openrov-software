@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_POLOLU_MINIMUV)
 #include "MinIMU9.h"
 #include "MinIMU9AHRS.h"
 #include "MinIMU_I2C.h"
@@ -26,3 +28,4 @@ void MinIMU9::device_loop(Command command){
   navdata::ROLL = ToDeg(roll);
   navdata::YAW = ToDeg(yaw);
 }
+#endif

@@ -87,7 +87,11 @@ var KEYS = {
   79: { //o (brightness down) 
      command: 'light',
      value: -1
+  },
+  76: { //l (laser toggle) 
+     command: 'claser'
   }
+
 }
 
 var KeyPad = function() {
@@ -97,6 +101,7 @@ var KeyPad = function() {
   var kp = {};
   var servoTiltHandler = function(value){};
   var brightnessHandler = function(value){};
+  var claserHandler = function(){};
   var processKeys = true;
 
   kp.bindServoTilt = function(callback){
@@ -106,6 +111,10 @@ var KeyPad = function() {
     kp.bindBrightness = function(callback){
         brightnessHandler=callback;
     };
+    
+  kp.bindLasers = function(callback){
+    claserHandler=callback;
+  };
 
   kp.bindKeys = function(){
     processKeys = true;
@@ -149,6 +158,8 @@ var KeyPad = function() {
         servoTiltHandler(info.value);
     else if(info.command=='light')
         brightnessHandler(info.value);
+    else if(info.command=='claser')
+        claserHandler();	
     else if(info.command=='power')
         power=info.value;
     else if(info.command=='vtrim')

@@ -1,4 +1,4 @@
-
+#if(HAS_STD_2X1_THRUSTERS)
 #ifndef __THRUSTERS_H_
 #define __THRUSTERS_H_
 #include <Arduino.h>
@@ -14,4 +14,5 @@ class Thrusters : public Device {
     void device_setup();
     void device_loop(Command cmd);
 };
+#endif
 #endif

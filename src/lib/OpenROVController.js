@@ -24,7 +24,8 @@ var navdata = {
     pitch: 0,
     yaw: 0,
     thrust: 0,
-    deapth : 0
+    deapth : 0,
+    hdgd: 0
 }
 
 var settingsCollection = {
@@ -37,21 +38,16 @@ var rovsys = {
     capabilities: 0
 }
 
-var stripANGHeader = function(data){
-    var sections = data.split('|');
-    var parts = sections[1].split(',');
-    var n = navdata;
-    n.roll = parts[0];
-    n.pitch = parts[1];
-    n.yaw = parts[2];
-    return n;
-};
-
 var OpenROVController = function(eventLoop) {
   var serial;
   var globalEventLoop = eventLoop;
   var reader = new StatusReader();
   var physics = new ArduinoPhysics();
+  
+  setInterval((function() {
+    controller.emit('navdata',navdata);
+  }), 100);
+  
   var getNewSerial = function(){
         var s = new serialPort.SerialPort(CONFIG.serial, {
         baudrate: CONFIG.serial_baud,
@@ -66,8 +62,6 @@ var OpenROVController = function(eventLoop) {
 	 controller.emit('status',status);
          if ('ver' in status) 
            controller.ArduinoFirmwareVersion = status.ver;
-	 if ('IMUMatrix' in status) {controller.emit('navdata',stripANGHeader(status.IMUMatrix));
-	 }
 	 if ('TSET' in status) {
 		console.log(status.settings);
 		var setparts = status.settings.split(",");
@@ -90,7 +84,14 @@ var OpenROVController = function(eventLoop) {
 	 if ('log' in status) {
 	    var s = rovsys;
 	    console.log("log: " + status.log)
-	 }		 
+	 }
+	 if ('hdgd' in status) navdata.hdgd=status.hdgd;
+	 if ('deap' in status) navdata.deapth=status.deap;
+	 if ('pitc' in status) navdata.pitch=status.pitc;
+	 if ('roll' in status) navdata.roll=status.roll;
+	 if ('yaw' in status) navdata.yaw=status.yaw;
+	 if ('fthr' in status) navdata.thrust=status.fthr;
+
         });
         return s;
   };
@@ -168,6 +169,17 @@ var OpenROVController = function(eventLoop) {
         if(CONFIG.debug_commands) console.error("command", command);
         if(CONFIG.production) serial.write(command);
     };
+    
+    var claserstate = 0;
+    controller.sendLaser = function(value) {
+        if (this.NotSafeToControl()) return;
+	if (claserstate === 0) {
+	    claserstate = 255;
+	} else {claserstate = 0;}
+        var command = 'claser(' + claserstate +');';
+        if(CONFIG.debug_commands) console.error("command", command);
+        if(CONFIG.production) serial.write(command);
+    };    
     
     controller.stop = function(value) {
         if (this.NotSafeToControl()) return;
