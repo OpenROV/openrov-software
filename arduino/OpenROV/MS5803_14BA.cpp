@@ -176,7 +176,7 @@ void MS5803_14BA::device_loop(Command command){
   Serial.println(Temperature);
   Serial.print("Second-Order Temperature in Degrees C is ");
   Serial.println(Temperature - (T2 / 100));
-  envdata::TEMP = (Temperature-T2) / 100;  
+  envdata::TEMP = Temperature -(T2 / 100);  
   // Calculate the pressure parameters
   
   Offset = (float)CalConstant[2] * pow(2,16);
