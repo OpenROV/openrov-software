@@ -22,6 +22,7 @@ MPU9150Lib MPU;                                              // the MPU object
 void MPU9150::device_setup(){
   //Todo: Read calibration values from EPROM
   Wire.begin();
+  MPU.selectDevice(1);
   MPU.init(MPU_UPDATE_RATE);                             // start the MPU
   Settings::capability_bitarray |= (1 << COMPASS_CAPABLE);
   Settings::capability_bitarray |= (1 << ORIENTATION_CAPABLE);

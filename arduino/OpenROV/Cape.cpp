@@ -61,6 +61,11 @@ void Cape::device_setup(){
     readings[thisReading] = 0;     
 }
 
+float mapf(long x, long in_min, long in_max, long out_min, long out_max)
+{
+  return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
+}
+
 void Cape::device_loop(Command command){
 
   if (time.elapsed (100)) {
@@ -85,8 +90,8 @@ void Cape::device_loop(Command command){
 
   // send voltage and current
   if (statustime.elapsed(100)) {
-    capedata::VOUT = vout.read();
-    capedata::IOUT = average;
+    capedata::VOUT = fmap(vout.read(),0,1023,0,50);
+    capedata::IOUT = fmap(average,0,1023,0,5)+.4;
     capedata::FMEM = freeMemory();
     capedata::ATMP = GetTemp();
     capedata::UTIM = millis(); 
