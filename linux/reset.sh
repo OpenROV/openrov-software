@@ -4,7 +4,8 @@
 back_to_normal() {
   sleep 0.1
   #set GPIO1_0 to HIGH
-  echo "high" > /sys/class/gpio/gpio$LINUX_RESET_GPIO/value
+  echo 1 > /sys/class/gpio/gpio$LINUX_RESET_GPIO/value
+  echo Arduino reset set high, Arduino enabled.
 }
 
 reset() {
@@ -13,13 +14,13 @@ reset() {
   echo $LINUX_RESET_GPIO > /sys/class/gpio/export
   echo "out" >/sys/class/gpio/gpio$LINUX_RESET_GPIO/direction 
   #set GPIO1_0 to low
-  echo "low" > /sys/class/gpio/gpio$LINUX_RESET_GPIO/value
+  echo 0 > /sys/class/gpio/gpio$LINUX_RESET_GPIO/value
   back_to_normal 
 }
 
 #setup required environment variables if not already set
 . /opt/openrov/linux/orovconfig.sh
 
-echo Initiating arduino reset 1>&2
+echo Initiating arduino reset on pin $LINUX_RESET_GPIO 1>&2
 reset &
 
