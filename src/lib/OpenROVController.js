@@ -136,6 +136,13 @@ var OpenROVController = function(eventLoop) {
     console.log(this.Capabilities);
     return true;
   };
+  
+  
+    controller.send = function(cmd) {
+	var command = cmd + ';';
+        if(CONFIG.debug_commands) console.error("command", command);
+        if(CONFIG.production) serial.write(command);	
+    };
 
 
     controller.sendMotorTest = function(port, starbord, vertical) {

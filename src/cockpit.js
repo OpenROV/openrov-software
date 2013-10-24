@@ -174,6 +174,18 @@ io.sockets.on('connection', function (socket) {
         socket.on('laser_update', function(value) {
         controller.sendLaser(value);
     });
+        
+    socket.on('depth_zero', function(){
+        controller.send('dzer()');
+    });
+
+    socket.on('compass_callibrate', function(){
+        controller.send('ccal()');
+    });
+
+    socket.on('depth_togglewatertype', function(){
+        controller.send('dtwa()');
+    });
     
     socket.emitPhotos = function(){
           fs.readdir(CONFIG.preferences.get('photoDirectory'),function(err,files){

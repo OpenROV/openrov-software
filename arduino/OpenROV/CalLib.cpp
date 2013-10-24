@@ -60,14 +60,14 @@ boolean calLibRead(byte device, CALLIB_DATA *calData)
 
 void calLibErase(byte device)
 {
-    EEPROM.write(sizeof(CALLIB_DATA) * device, 0); // just destroy the valid byte
+    EEPROM.write(CALLIB_START, 0); // just destroy the valid byte
 }
 
 void calLibWrite(byte device, CALLIB_DATA *calData)
 {
   byte *ptr = (byte *)calData;
   byte length = sizeof(CALLIB_DATA);
-  int eeprom = sizeof(CALLIB_DATA) * device;
+  int eeprom = CALLIB_START;
 
   calData->valid = CALLIB_DATA_VALID;
   
@@ -79,7 +79,7 @@ boolean calLibRead(byte device, CALLIB_DATA *calData)
 {
   byte *ptr = (byte *)calData;
   byte length = sizeof(CALLIB_DATA);
-  int eeprom = sizeof(CALLIB_DATA) * device;
+  int eeprom = CALLIB_START;
 
   calData->magValid = false;
   calData->accelValid = false;

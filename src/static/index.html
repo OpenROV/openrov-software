@@ -169,6 +169,11 @@
             <div class="settings-block">
                 <h4>Pre-Flight Check</h4>
             </div>
+	    <div class="settings-block">
+	      <h4>Callibration</h4>
+	      <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
+	      <a href="#" class="btn" id="zero_depth">Zero Depth</a>	      
+	    </div>
             <div class="settings-block">
                 <h4>Manually test motors</h4>
                 <div class="control-group invisible-field">
@@ -408,6 +413,20 @@
               });
               $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
 	      
+	  $('#zero_depth').click(function() {
+            socket.emit('depth_zero');
+          });
+	  
+	  $('#callibrate_compass').click(function() {
+            socket.emit('compass_callibrate');
+          });
+	  
+	  $('#toggle_watertype').click(function() {
+            socket.emit('depth_togglewatertype');
+          });
+	  
+	  
+	      
             /* ------------------------------------------
                firmware upload 
             */
@@ -572,6 +591,7 @@
 	  function sendUpdateSettingMessage(socket,setting) {
 	    socket.emit('update_settings',setting);
 	  }
+	  
 
 
         </script>

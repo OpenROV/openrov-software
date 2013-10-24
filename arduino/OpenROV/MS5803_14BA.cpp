@@ -47,7 +47,8 @@ float Temperature, Pressure, TempDifference, Offset, Sensitivity;
 float T2, Off2, Sens2;  // Offsets for second-order temperature computation
 float AtmosPressure = 1015;
 float Depth;
-
+float DepthOffset = 0;
+float WaterDensity = 1.019716;
 Timer DepthSensorSamples;  
 byte ByteHigh, ByteMiddle, ByteLow;  // Variables for I2C reads
 
@@ -98,6 +99,17 @@ void MS5803_14BA::device_setup(){
 }
 
 void MS5803_14BA::device_loop(Command command){
+  if (command.cmp("dzer")){
+    DepthOffset=Depth;
+  }
+  else if (command.cmp("dtwa")){
+    if (WaterDensity == 1.019716) {
+      WaterDensity = 1.019716; //need the saltwater value
+    } else {
+      WaterDensity =  1.019716;
+    }
+  }  
+  
   if (DepthSensorSamples.elapsed(1000)){
   // Read the Device for the ADC Temperature and Pressure values
   
@@ -209,8 +221,8 @@ void MS5803_14BA::device_loop(Command command){
   //log("Pressure in psi is: ");
   //log(Pressure);
   
-  Depth = (Pressure - AtmosPressure) * 1.019716 / 100; 
-  navdata::DEAP = Depth; 
+  Depth = (Pressure - AtmosPressure) * WaterDensity / 100; 
+  navdata::DEAP = Depth-DepthOffset; 
 
   }
 }
