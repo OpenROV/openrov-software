@@ -37,7 +37,10 @@ rm $1/src/Device.cpp.template
 #setup required environment variables if not already set
 . /opt/openrov/linux/orovconfig.sh
 
-echo  `$BUILD_ATMEGA_CODE`  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
-
-echo $1
-exit 0
+EXITCODE=`$BUILD_ATMEGA_CODE 1>&2`
+if [ $? -eq 0 ]
+then
+  echo $1
+  exit 0
+fi
+error_exit "$LINENO: Compile of the Arduino image failed."
