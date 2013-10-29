@@ -22,13 +22,7 @@ int smoothAdjustedCameraPosition(int target, int current){
   double x = target - current;
   int sign = (x>0) - (x<0);
   int adjustedVal = current + sign * (min(abs(target - current), tiltrate));
-  // skip the deadzone
-  if (sign<0) {
-    return (min(adjustedVal,Settings::deadZone_min));
-  } else if(sign>0){ 
-    return (max(adjustedVal,Settings::deadZone_max));
-  } else
-    return (adjustedVal);
+  return (adjustedVal);
 }
 
 
@@ -40,11 +34,15 @@ void CameraMount::device_setup(){
 void CameraMount::device_loop(Command command){
     if (command.cmp("tilt")) {
       tilt_val = command.args[1];
+      cameraMountdata::CMTG = tilt_val;
     }
     if (tilt_val != new_tilt){
       new_tilt = smoothAdjustedCameraPosition(tilt_val,new_tilt);
       tilt.writeMicroseconds(new_tilt);
-    }    
+      cameraMountdata::CMNT = new_tilt;
+    }
+
+    
 }
 
 //void Cape::do_event(Event event){
