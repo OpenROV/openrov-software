@@ -45,6 +45,10 @@ unsigned int CalConstant[8];  // Matrix for holding calibration constants
 long AdcTemperature, AdcPressure;  // Holds raw ADC data for temperature and pressure
 float Temperature, Pressure, TempDifference, Offset, Sensitivity;
 float T2, Off2, Sens2;  // Offsets for second-order temperature computation
+float AtmosPressure = 1015;
+float Depth;
+float DepthOffset = 0;
+float WaterDensity = 1.019716;
 Timer DepthSensorSamples;  
 byte ByteHigh, ByteMiddle, ByteLow;  // Variables for I2C reads
 
@@ -59,16 +63,16 @@ void sendCommand(byte command){
 void MS5803_14BA::device_setup(){
   Settings::capability_bitarray |= (1 << DEAPTH_CAPABLE);
 
-    log("Depth Sensor setup.");
+  Serial.println("Depth Sensor setup.");
   Wire.begin();
-  log("Depth Sensor: initialized I2C");
+  Serial.println("Depth Sensor: initialized I2C");
   delay(10);
     
   // Reset the device and check for device presence
   
   sendCommand(Reset);
   delay(10);
-  log("Depth Sensor is reset");
+  Serial.println("Depth Sensor is reset");
    
   // Get the calibration constants and store in array
   
@@ -83,7 +87,7 @@ void MS5803_14BA::device_setup(){
     CalConstant[i] = (((unsigned int)ByteHigh << 8) + ByteLow);
   }
   
-  log("Depth: Calibration constants are:");
+  Serial.println("Depth: Calibration constants are:");
   
   for (byte i=0; i < 8; i++)
   {
@@ -95,6 +99,17 @@ void MS5803_14BA::device_setup(){
 }
 
 void MS5803_14BA::device_loop(Command command){
+  if (command.cmp("dzer")){
+    DepthOffset=Depth;
+  }
+  else if (command.cmp("dtwa")){
+    if (WaterDensity == 1.019716) {
+      WaterDensity = 1.019716; //need the saltwater value
+    } else {
+      WaterDensity =  1.019716;
+    }
+  }  
+  
   if (DepthSensorSamples.elapsed(1000)){
   // Read the Device for the ADC Temperature and Pressure values
   
@@ -176,7 +191,7 @@ void MS5803_14BA::device_loop(Command command){
   Serial.println(Temperature);
   Serial.print("Second-Order Temperature in Degrees C is ");
   Serial.println(Temperature - (T2 / 100));
-  envdata::TEMP = Temperature -(T2 / 100);  
+  envdata::TEMP = Temperature- (T2 / 100);  
   // Calculate the pressure parameters
   
   Offset = (float)CalConstant[2] * pow(2,16);
@@ -201,11 +216,14 @@ void MS5803_14BA::device_loop(Command command){
 
   // Convert to psig and display
   //
-  Pressure = Pressure - 1.015;  // Convert to gauge pressure (subtract atmospheric pressure)
-  Pressure = Pressure * 14.50377;  // Convert bars to psi
+  //Pressure = Pressure - 1.015;  // Convert to gauge pressure (subtract atmospheric pressure)
+  //Pressure = Pressure * 14.50377;  // Convert bars to psi
   //log("Pressure in psi is: ");
   //log(Pressure);
   
+  Depth = (Pressure - AtmosPressure) * WaterDensity / 100; 
+  navdata::DEAP = Depth-DepthOffset; 
+
   }
 }
 

@@ -19,6 +19,7 @@ class Settings : public Device {
     Settings():Device(){};
     void device_setup();
     void device_loop(Command cmd);
+    void scan_i2c();
 };
 
 #endif

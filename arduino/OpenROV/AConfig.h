@@ -18,13 +18,14 @@
 #define HAS_STD_LIGHTS (1)
 #define HAS_STD_CALIBRATIONLASERS (0)
 #define HAS_STD_2X1_THRUSTERS (1)
-#define HAS_STD_CAMERAMOUNT (1)
+#define HAS_STD_CAMERAMOUNT (0)
 
 //After Market:
-#define HAS_POLOLU_MINIMUV (0)
+#define HAS_POLOLU_MINIMUV (1)
 #define HAS_MS5803_14BA (0)
 #define MS5803_14BA_I2C_ADDRESS 0x76
 #define HAS_MPU9150 (0)
+#define MPU9150_EEPROM_START 2
 
 
 #endif

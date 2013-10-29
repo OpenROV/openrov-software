@@ -32,6 +32,8 @@
 
 #ifdef __SAM3X8E__
 #define CALLIB_START  ((uint32_t *)(IFLASH1_ADDR + IFLASH1_SIZE - IFLASH1_PAGE_SIZE))
+#else
+#define CALLIB_START MPU9150_EEPROM_START
 #endif
 
 typedef struct
