@@ -37,8 +37,8 @@ var StatusReader = function() {
 	    }            
         }
 	
-	if ('vout' in status) status.vout=physics.mapVoltageReading(status.vout);
-	if ('iout' in status) status.iout=physics.mapCurrentReading(status.iout);
+	if ('vout' in status) status.vout=parseFloat(status.vout);
+	if ('iout' in status) status.iout=parseFloat(status.iout);
         
         if ('vout' in status) status.cpuUsage = currCpuUsage;
        

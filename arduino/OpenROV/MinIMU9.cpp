@@ -15,11 +15,7 @@ void MinIMU9::device_setup(){
 
 void MinIMU9::device_loop(Command command){
   if (command.cmp("ccal")){
-    Compass_Calibrate();
     //Todo: Write calibrated values to EPROM
-  }
-  else if (command.cmp("i2cscan")){
-    scan();
   }
 
   sample_MiniMU9();
