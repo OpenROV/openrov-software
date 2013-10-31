@@ -7,18 +7,11 @@
 #include "Settings.h"
 
 Servo tilt;
-int tilt_val;
-int new_tilt;
-const int tiltrate = 10;
+int tilt_val = 1500;
+int new_tilt = 1500;
+const int tiltrate = 1;
 
 int smoothAdjustedCameraPosition(int target, int current){
-  // if the MIDPOINT is betwen the change requested in velocity we want to go to MIDPOINT first, and right away.
-  if (((current < MIDPOINT) && (MIDPOINT < target)) || ((target < MIDPOINT) && (MIDPOINT < current))){
-    return MIDPOINT;
-  }
-
-  // else, we need to smooth out amp spikes by making a series of incrimental changes in the motors, so only move part of
-  // the way to the target this time.
   double x = target - current;
   int sign = (x>0) - (x<0);
   int adjustedVal = current + sign * (min(abs(target - current), tiltrate));
