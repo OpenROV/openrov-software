@@ -6,7 +6,13 @@
 #include "CameraMount.h"
 #include "Settings.h"
 
-Servo tilt;
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <Arduino.h>
+//#include <Servo.h>
+
+//Servo tilt;
 int tilt_val = 1500;
 int new_tilt = 1500;
 const int tiltrate = 1;
@@ -18,9 +24,20 @@ int smoothAdjustedCameraPosition(int target, int current){
   return (adjustedVal);
 }
 
+void tiltServo(long milliseconds){
+	OCR1A = milliseconds*2; // set to 90° --> pulsewdith = 1.5ms
+}
 
 void CameraMount::device_setup(){
-    tilt.attach(CAMERAMOUNT_PIN);
+//    tilt.attach(CAMERAMOUNT_PIN);
+    pinMode(CAMERAMOUNT_PIN, OUTPUT);
+    TCCR1A = 0;
+    TCCR1B = 0;
+    TCCR1A |= (1<<COM1A1) | (1<<WGM11); // non-inverting mode for OC1A
+    TCCR1B |= (1<<WGM13) | (1<<WGM12) | (1<<CS11); // Mode 14, Prescaler 8
+
+    ICR1 = 40000; // 320000 / 8 = 40000   
+    tiltServo(1500);
     Settings::capability_bitarray |= (1 << CAMERA_MOUNT_1_AXIS_CAPABLE);
 }
 
@@ -31,7 +48,8 @@ void CameraMount::device_loop(Command command){
     }
     if (tilt_val != new_tilt){
       new_tilt = smoothAdjustedCameraPosition(tilt_val,new_tilt);
-      tilt.writeMicroseconds(new_tilt);
+      //tilt.writeMicroseconds(new_tilt);
+      tiltServo(new_tilt);
       cameraMountdata::CMNT = new_tilt;
     }
 
