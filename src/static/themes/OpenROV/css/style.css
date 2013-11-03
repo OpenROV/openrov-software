@@ -283,6 +283,24 @@ img.center {
     background-position:0px 0px;
 }
 
+#blackboxstatus{
+    margin:5px 10px;
+    width:30px;
+    height: 30px;
+    background-image: url('../img/bbconnection.png');
+    background-repeat:no-repeat;
+    background-position:0px 0px;
+}
+
+#blackboxstatus.false {
+    background-position:0px 0px;
+}
+
+#blackboxstatus.true {
+    background-position: -29px 0px;
+}
+
+
 #connectionHealth.false {
     background-position:0px 0px;
 }
