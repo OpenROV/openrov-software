@@ -98,6 +98,7 @@ var KeyPad = function() {
   var power = .5; //default to mid power
   var vtrim = 0; //default to no trim
   var ttrim = 0;
+  var tilt = 0;
   var kp = {};
   var servoTiltHandler = function(value){};
   var brightnessHandler = function(value){};
@@ -154,8 +155,10 @@ var KeyPad = function() {
     evt.preventDefault();
     if(info.command=='command')
         positions[info.position] = info.value*power;
-    else if(info.command=='tilt')
-        servoTiltHandler(info.value);
+    else if(info.command=='tilt'){
+        tilt+=info.value*(30/360); //30 degree incriments
+	if(info.value == 0) tilt = 0;
+        servoTiltHandler(tilt);}
     else if(info.command=='light')
         brightnessHandler(info.value);
     else if(info.command=='claser')
@@ -181,8 +184,8 @@ var KeyPad = function() {
        if (info.position == 'lift')
          positions.lift = (1/1000)*vtrim;
     }
-    else if(info.command=='tilt')
-        servoTiltHandler(info.value);
+    //else if(info.command=='tilt')
+    //    servoTiltHandler(info.value);
   });
 
   kp.getPositions = function() {
