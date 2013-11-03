@@ -123,6 +123,10 @@
         var that = this,
             closed = false;
 
+ 	this.db = function(){
+		return db;
+	}
+
         this.add = function( table ) {
             if ( closed ) {
                 throw 'Database has been closed';

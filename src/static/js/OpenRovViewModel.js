@@ -22,7 +22,7 @@ function OpenRovViewModel(){
     self.currentVoltage = ko.observable(0);
     self.currentCurrent = ko.observable(0);
     self.currentRawCpuUsage = ko.observable(0);
-    self.currentTiltPosition = ko.observable(0);
+    self.currentTiltPosition = ko.observable(1500);
     self.currentBrightness = ko.observable(0);
     self.currentTime = ko.observable(new Date());
     self.sendUpdateEnabled = ko.observable(true);
@@ -68,7 +68,7 @@ function OpenRovViewModel(){
 	});
 
     self.servoTiltStyle = ko.computed(function(){
-        var angle = self.currentTiltPosition()*-45;
+        var angle = (90/500)*self.currentTiltPosition()+90//*-45;
         return "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)";
     });
 
@@ -131,6 +131,7 @@ function OpenRovViewModel(){
 		if ('time' in data) self.currentRunTime(data.time);
 		if ('vout' in data) self.currentVoltage(data.vout);
 		if ('iout' in data) self.currentCurrent(data.iout);
+		if ('servo' in data) self.currentTiltPosition(data.servo);
 		if ('cpuUsage' in data) self.currentRawCpuUsage(data.cpuUsage);
         	self.lastPing(new Date());
 		for (i in data){

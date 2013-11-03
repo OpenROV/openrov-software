@@ -5,11 +5,106 @@
          * Constructuor
          */
 	var telemetry = [];
+	var server;
+        var idb;
+
+    var exportData = function(e) {
+        //block click before ready
+        if(!idb) return;
+        e.preventDefault();
+        var link = $("#exportLink");
+
+        //Ok, so we begin by creating the root object:
+        var data = {};
+        var promises = [];
+        for(var i=0;i <idb.objectStoreNames.length; i++) {
+            //thanks to http://msdn.microsoft.com/en-us/magazine/gg723713.aspx
+            promises.push(
+
+                $.Deferred(function(defer) {
+
+                    var objectstore = idb.objectStoreNames[i];
+                    console.log(objectstore);
+
+                    var transaction = idb.transaction([objectstore], "readonly");  
+                    var content=[];
+
+                    transaction.oncomplete = function(event) {
+                        console.log("trans oncomplete for "+objectstore + " with "+content.length+" items");
+                        defer.resolve({name:objectstore,data:content});
+                    };
+
+                    transaction.onerror = function(event) {
+                      // Don't forget to handle errors!
+                      console.dir(event);
+                    };
+
+                    var handleResult = function(event) {  
+                      var cursor = event.target.result;  
+                      if (cursor) {  
+                        content.push({key:cursor.key,value:cursor.value});
+                        cursor.continue();  
+                      }  
+                    };  
+
+                    var objectStore = transaction.objectStore(objectstore);
+                    objectStore.openCursor().onsuccess = handleResult;
+
+                }).promise()
+
+            );
+        }
+
+        $.when.apply(null, promises).then(function(result) {
+            //arguments is an array of structs where name=objectstorename and data=array of crap
+            //make a copy cuz I just don't like calling it argument
+            var dataToStore = arguments;
+            //serialize it
+            var serializedData = JSON.stringify(dataToStore);
+            //The Christian Cantrell solution
+            //document.location = 'data:Application/octet-stream,' + encodeURIComponent(serializedData);
+            var blob = new Blob([serializedData], {'type':'application\/octet-stream'});
+            link.attr("href", window.URL.createObjectURL(blob));
+	    //link.attr("href",'data:Application/octet-stream,'+encodeURIComponent(serializedData));
+            //link.trigger("click");
+	    alert(link[0]);
+            fakeClick(link[0]);
+        });
+
+    };
+
+
+
+
+function fakeClick(anchorObj) {
+  if (anchorObj.click) {
+    anchorObj.click()
+  } else if(document.createEvent) {
+    if(event.target !== anchorObj) {
+      var evt = document.createEvent("MouseEvents"); 
+      evt.initMouseEvent("click", true, true, window, 
+          0, 0, 0, 0, 0, false, false, false, false, 0, null); 
+      var allowDefault = anchorObj.dispatchEvent(evt);
+      // you can check allowDefault for false to see if
+      // any handler called evt.preventDefault().
+      // Firefox will *not* redirect to anchorObj.href
+      // for you. However every other browser will.
+    }
+  }
+}
+
+
         var Blackbox = function Blackbox(cockpit) {
                 console.log("Loading Blackbox plugin.");
                 this.cockpit = cockpit;
                 this.recording = false;
 		var blackbox = this;
+
+		// add required UI elements
+		$('#menu').append('<button id="exportButton" class="btn pull-right">Download Data</button><a id="exportLink" download="data.json"></a>');
+
+		$('#exportButton').click(exportData);
+
                 this.cockpit.socket.on('navdata', function(data) {
                     if (!jQuery.isEmptyObject(data)) {                      
                             blackbox.logNavData(data);
@@ -36,7 +131,7 @@
         };
 
 	var refreshintervalID;
-	var server;
+//	var server;
 //	var telemetry = [];
 
 	Blackbox.prototype.toggleRecording = function toggleRecording(){
@@ -123,6 +218,7 @@
             }
         } ).done( function ( s ) {
 	    server = s;
+	    idb=server.db();
             callback;
         } );
                 
