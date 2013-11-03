@@ -102,7 +102,7 @@ function fakeClick(anchorObj) {
 		var blackbox = this;
 
 		// add required UI elements
-                $('#menu').append('<div id="blackboxstatus" class="false"></div>');
+                $('#menu').append('<span id="blackboxstatus" class="false pull-right"></span>');
 		$('#menu').append('<button id="exportButton" class="btn pull-right">Download Data</button><a id="exportLink" download="data.json"></a>');
 
 		$('#exportButton').click(exportData);
@@ -140,12 +140,12 @@ function fakeClick(anchorObj) {
 		console.log("Recording = " + this.recording);
 		if (!this.recording){
 			console.log("Recording Telemetry");
-                        $('#blackboxstatus').attr('class', 'true');
+                        $('#blackboxstatus').toggleClass('false true');
 			var blackbox = this;
 			refreshintervalID = self.setInterval(blackbox.logTelemetryData,1000);	
 		} else {
 			console.log("Stopping Telemetry");
-                        $('#blackboxstatus').attr('class', 'false');
+                        $('#blackboxstatus').toggleClass('true false');
 			clearInterval(refreshintervalID);
 		}
 		this.recording = !this.recording;
