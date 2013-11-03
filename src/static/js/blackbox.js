@@ -68,7 +68,6 @@
             link.attr("href", window.URL.createObjectURL(blob));
 	    //link.attr("href",'data:Application/octet-stream,'+encodeURIComponent(serializedData));
             //link.trigger("click");
-	    alert(link[0]);
             fakeClick(link[0]);
         });
 
@@ -103,8 +102,8 @@ function fakeClick(anchorObj) {
 
 		// add required UI elements
                 $('#menu').append('<span id="blackboxstatus" class="false pull-right"></span>');
-		$('#menu').append('<button id="exportButton" class="btn pull-right">Download Data</button><a id="exportLink" download="data.json"></a>');
-
+		$('#menu').append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
+		$('#keyboard').append('<p><i>r</i> to toggle recording of telemetry</p>');
 		$('#exportButton').click(exportData);
 
                 this.cockpit.socket.on('navdata', function(data) {
@@ -141,11 +140,13 @@ function fakeClick(anchorObj) {
 		if (!this.recording){
 			console.log("Recording Telemetry");
                         $('#blackboxstatus').toggleClass('false true');
+			$('#exportButton').toggleClass('disabled enabled');
 			var blackbox = this;
 			refreshintervalID = self.setInterval(blackbox.logTelemetryData,1000);	
 		} else {
 			console.log("Stopping Telemetry");
                         $('#blackboxstatus').toggleClass('true false');
+			$('#exportButton').toggleClass('enabled disabled');
 			clearInterval(refreshintervalID);
 		}
 		this.recording = !this.recording;
@@ -174,6 +175,7 @@ function fakeClick(anchorObj) {
                  if (!this.recording) {
                         return;
                  }
+		navdata['timestamp'] = new Date().getTime();
                 server.navdata.add(navdata).done( function ( item ) {
                     console.log("saved");
                 } ); 
@@ -181,10 +183,11 @@ function fakeClick(anchorObj) {
         };
 
         Blackbox.prototype.logTelemetryData = function logTelemetryData(){
-		var clone = [];
+		var clone = new Object;
 		for (i in telemetry){
 			clone[i] = telemetry[i];
 		}
+		clone['timestamp'] = new Date().getTime();
                 server.telemetry.add(clone).done( function ( item ) {
                     console.log("saved telemetry");
                 } )
@@ -206,16 +209,16 @@ function fakeClick(anchorObj) {
         Blackbox.prototype.openDB = function openDB(callback){
         db.open( {
             server: 'openrov-blackbox',
-            version: 4,
+            version: 1,
             schema: {
                 navdata: {
-                    key: { keyPath: 'id' , autoIncrement: true },
+                    key: { keyPath: 'timestamp' , autoIncrement: false },
                     // Optionally add indexes
                     indexes: {
                     }
                 },
                 telemetry: {
-                    key: { keyPath: 'id' , autoIncrement: true }
+                    key: { keyPath: 'timestamp' , autoIncrement: false }
 
                     // Optionally add indexes
                 }
