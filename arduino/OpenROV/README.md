@@ -78,7 +78,7 @@ If you want to add your own module you need to:
 - [ ] replace the #define at the top of the .h file with a new name that represents your device
 - [ ] update the include of the light.h with your device name.h in the .cpp file
 - [ ] In the OpenRov.ino file, add a #ifdef section for your device along side the other devices.
-- [ ] Update the enumeration of #ifdef devices in the settings.h file
+- [ ] Update the enumeration of #ifdef devices in the AConfig.h file
 
 If your module requires multiple sub-modules, use a naming convention that groups your files togther in the directory. Do not use subdirectories as that prevents the Aurdino IDE from being able to load the project.
 
@@ -87,17 +87,17 @@ Be sure to use SI units everywhere to make it easy for modules to share data. Th
 Standardised SI Units for Sensor DataA key part of the unified sensor driver system layer is the standardisation of values on SI units of a particular scale. This following SI units and scales are used for the appropriate sensor type:
 --------------------------
 
-acceleration: values are in meter per second per second (m/s^2)
-magnetic: values are in micro-Tesla (uT)
-orientation: values are in degrees
-gyro: values are in rad/s
-temperature: values in degrees centigrade (Celsius)
-distance: values are in centimeters
-light: values are in SI lux units
-pressure: values are in hectopascal (hPa)
-relative_humidity: values are in percent
-current: values are in milliamps (mA)
-voltage: values are in volts (V)
-color: values are in 0..1.0 RGB channel luminosity and 32-bit RGBA format
+- acceleration: values are in meter per second per second (m/s^2)
+- magnetic: values are in micro-Tesla (uT)
+- orientation: values are in degrees
+- gyro: values are in rad/s
+- temperature: values in degrees centigrade (Celsius)
+- distance: values are in centimeters
+- light: values are in SI lux units
+- pressure: values are in hectopascal (hPa)
+- relative_humidity: values are in percent
+- current: values are in milliamps (mA)
+- voltage: values are in volts (V)
+- color: values are in 0..1.0 RGB channel luminosity and 32-bit RGBA format
  
 Please note that the ATMega328 has a max of 32K for loading code.  If you enable to many devices you can exceed that number and the code will fail to upload.  You can use the Arduino IDE and do a verify to check the size of the sketch.
