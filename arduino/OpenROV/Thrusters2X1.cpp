@@ -8,8 +8,8 @@
 #include "Timer.h"
 
 //Motors motors(9, 10, 11);
-Motors motors(6, 7, 8);
-
+//Motors motors(6, 7, 8);
+Motors motors(PORT_PIN,VERTICLE_PIN,STARBORD_PIN);
 
 int new_p = MIDPOINT;
 int new_s = MIDPOINT;

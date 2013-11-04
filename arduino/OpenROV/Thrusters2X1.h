@@ -8,6 +8,14 @@
 #define MOTOR_NEUTRAL = 1500
 #define MOTOR_COUNT = 3
 
+#if(HAS_STD_CAPE)
+  #include "Cape.h"
+#endif
+
+#if(HAS_OROV_CONTROLLERBOARD_25)
+  #include "controllerboard25.h"
+#endif
+
 class Thrusters : public Device {
   public:
     Thrusters():Device(){};
