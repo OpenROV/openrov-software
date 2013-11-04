@@ -145,6 +145,14 @@ io.sockets.on('connection', function (socket) {
   if (connections == 1) controller.start();
     
   socket.send('initialize');  // opens socket with client
+  if(camera.IsCapturing) {
+	socket.emit('videoStarted');
+	console.log("Send videoStarted to client 2");
+  } else {
+	console.log("Trying to restart mjpeg streamer");
+	camera.capture();
+	socket.emit('videoStarted');
+  }
 
   controller.updateSetting();
   setTimeout((function() {
@@ -153,7 +161,6 @@ io.sockets.on('connection', function (socket) {
   controller.requestCapabilities();
  
   socket.emit('settings',CONFIG.preferences.get());
-  socket.emit('videoStarted');
 
 
     socket.on('motor_test', function(controls) {
@@ -259,6 +266,15 @@ io.sockets.on('connection', function (socket) {
         console.log('sending photos to web client');
     })    
 
+   globalEventLoop.on('videoStarted', function(){
+	socket.emit('videoStarted');
+        console.log("sent videoStarted to client");
+   });
+
+   globalEventLoop.on('videoStopped', function(){
+	socket.emit('videoStopped');
+   });
+
   arduinoUploadController.initializeSocket(socket);
 
 
@@ -266,7 +282,9 @@ io.sockets.on('connection', function (socket) {
 });
 
   camera.on('started', function(){
-    console.log("emitted 'videoStated'");
+    console.log("emitted 'videoStarted'");
+    globalEventLoop.emit('videoStarted');
+
   });
 
   camera.capture(function(err) {
@@ -278,7 +296,8 @@ io.sockets.on('connection', function (socket) {
   });
 
 camera.on('error.device', function(err) {
-  console.error('camera emitted an error:', err);
+  console.log('camera emitted an error:', err);
+  globalEventLoop.emit('videoStopped');
 });
 
 if (process.platform === 'linux') {
