@@ -146,9 +146,12 @@ io.sockets.on('connection', function (socket) {
     
   socket.send('initialize');  // opens socket with client
   if(camera.IsCapturing) {
-	socket.send('videoStarted');}
-  else {
+	socket.emit('videoStarted');
+	console.log("Send videoStarted to client 2");
+  } else {
+	console.log("Trying to restart mjpeg streamer");
 	camera.capture();
+	socket.emit('videoStarted');
   }
 
   controller.updateSetting();
@@ -263,6 +266,15 @@ io.sockets.on('connection', function (socket) {
         console.log('sending photos to web client');
     })    
 
+   globalEventLoop.on('videoStarted', function(){
+	socket.emit('videoStarted');
+        console.log("sent videoStarted to client");
+   });
+
+   globalEventLoop.on('videoStopped', function(){
+	socket.emit('videoStopped');
+   });
+
   arduinoUploadController.initializeSocket(socket);
 
 
@@ -270,8 +282,8 @@ io.sockets.on('connection', function (socket) {
 });
 
   camera.on('started', function(){
-    console.log("emitted 'videoStated'");
-    socket.emit('videoStarted');
+    console.log("emitted 'videoStarted'");
+    globalEventLoop.emit('videoStarted');
 
   });
 
@@ -285,7 +297,7 @@ io.sockets.on('connection', function (socket) {
 
 camera.on('error.device', function(err) {
   console.log('camera emitted an error:', err);
-  socket.emit('videoStopped');
+  globalEventLoop.emit('videoStopped');
 });
 
 if (process.platform === 'linux') {

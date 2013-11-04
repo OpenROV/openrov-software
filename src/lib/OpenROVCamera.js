@@ -84,14 +84,14 @@ var OpenROVCamera = function (options) {
 
       capture_process.stderr.on('data', function (data) {
         logger.log('camera: ' + data);
-	_capturing = false;
-	camera.emit('error.device',data);
+//	camera.emit('error.device',data);
       });
       console.log('camera started');
       
       capture_process.on('exit', function (code) {
         console.log('child process exited with code ' + code);
 	_capturing = false;
+	camera.emit('error.device',code);
       });      
     });
   };
