@@ -31,7 +31,7 @@ COUNTER=0
 
 while [ $COUNTER -lt 9 ]; do
         echo $COUNTER
-        (sleep 0.0$COUNTER && /opt/openrov/linux/reset.sh 1>&2)
+#        (sleep 0.0$COUNTER && /opt/openrov/linux/reset.sh 1>&2)
 #        avrdude -P /dev/spidev1.0 -c linuxspi -vv -p m2560 -U flash:w:.build/mega2560/firmware.hex 2>&1
         EXITCODE=`$UPLOAD_TO_ATMEGA_COMMAND 1>&2`
 #	/opt/openrov/linux/reset.sh 1>&2#

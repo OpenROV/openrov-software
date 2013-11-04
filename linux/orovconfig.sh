@@ -16,7 +16,7 @@ fi
 
 if test "$ROV_BOARD" = "cape"
 then
-    export UPLOAD_TO_ATMEGA_COMMAND="avrdude -P /dev/ttyO1 -c arduino -D -vvv -p m328p -U flash:w:.build/uno/firmware.hex"
+    export UPLOAD_TO_ATMEGA_COMMAND="(sleep 0.0$COUNTER && /opt/openrov/linux/reset.sh 1>&2); avrdude -P /dev/ttyO1 -c arduino -D -vvv -p m328p -U flash:w:.build/uno/firmware.hex"
     export BUILD_ATMEGA_CODE="ino build"
     export LINUX_RESET_GPIO=32
 fi
