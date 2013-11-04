@@ -10,9 +10,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <Arduino.h>
-//#include <Servo.h>
 
-//Servo tilt;
+#if(CAMERAMOUNT_PIN != 11) //use timer 1
+Servo tilt;
+#endif
 int tilt_val = 1500;
 int new_tilt = 1500;
 const int tiltrate = 1;
@@ -29,7 +30,10 @@ void tiltServo(long milliseconds){
 }
 
 void CameraMount::device_setup(){
-//    tilt.attach(CAMERAMOUNT_PIN);
+#if(CAMERAMOUNT_PIN != 11) //use timer 1
+    tilt.attach(CAMERAMOUNT_PIN);
+    tilt.writeMicroseconds(new_tilt);
+#else
     pinMode(CAMERAMOUNT_PIN, OUTPUT);
     TCCR1A = 0;
     TCCR1B = 0;
@@ -38,6 +42,7 @@ void CameraMount::device_setup(){
 
     ICR1 = 40000; // 320000 / 8 = 40000   
     tiltServo(1500);
+#endif
     Settings::capability_bitarray |= (1 << CAMERA_MOUNT_1_AXIS_CAPABLE);
 }
 
@@ -48,8 +53,11 @@ void CameraMount::device_loop(Command command){
     }
     if (tilt_val != new_tilt){
       new_tilt = smoothAdjustedCameraPosition(tilt_val,new_tilt);
-      //tilt.writeMicroseconds(new_tilt);
+#if(CAMERAMOUNT_PIN != 11) //use timer 1     
+      tilt.writeMicroseconds(new_tilt);
+#else
       tiltServo(new_tilt);
+#endif
       cameraMountdata::CMNT = new_tilt;
     }
 
