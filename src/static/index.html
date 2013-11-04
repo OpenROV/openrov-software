@@ -133,7 +133,7 @@
             <div class="control-group">
               Arduino firmware:
               <label>
-                <input id="arduinoFirmware" type="file">
+                <!--input id="arduinoFirmware" type="file"-->
               </label>
               <div class="alert alert-error" id="arduinoFirmware-error" data-bind="css: { hide: arduinoFirmwareVM.selectedFileName() === '' || arduinoFirmwareVM.isValidFirmwareFile() }">
                 <button type="button" class="close" data-dismiss="alert">x</button>
@@ -144,7 +144,7 @@
                 <strong>Oh snap!</strong> Your browser doesn't support the file upload API!
               </div>
 
-              <button href="#firmware-upload-dialog" class="btn btn-small" type="button" id="arduinoFirmware-upload" data-bind="css: { disabled: arduinoFirmwareVM.isValidFirmwareFile() == false,  'btn-success': arduinoFirmwareVM.isValidFirmwareFile() }" data-toggle="modal"><i class="icon-upload icon-white"></i> Upload</button>
+              <button href="#firmware-upload-dialog" class="btn btn-small" type="button" id="arduinoFirmware-upload" data-bind="css: { 'btn-success': arduinoFirmwareVM.isValidFirmwareFile() == false,  'btn-success': arduinoFirmwareVM.isValidFirmwareFile() }" data-toggle="modal"><i class="icon-upload icon-white"></i> Upload firmware from SD card to Arduino</button>
             </div>
 	    <h4>Runtime Settings:</h4>
 	          <div class="control-group invisible-field">
