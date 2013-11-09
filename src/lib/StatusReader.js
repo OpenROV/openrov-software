@@ -41,6 +41,7 @@ var StatusReader = function() {
 	if ('iout' in status) status.iout=parseFloat(status.iout);
         
         if ('vout' in status) status.cpuUsage = currCpuUsage;
+	if ('vout' in status) status.beagleFreeMem = os.freemem();
        
         return status;
     }
