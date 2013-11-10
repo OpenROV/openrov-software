@@ -126,9 +126,10 @@ function fakeClick(anchorObj) {
          */
         Blackbox.prototype.listen = function listen() {
                 var self = this;
-                $(document).keydown(function(ev) {
-                        self.keyDown(ev);
-                });
+		KEYS[82] = {command: function(data) {  //r
+           		 self.keyDown();
+        		}
+		};
         };
 
 	var refreshintervalID;
@@ -159,10 +160,10 @@ function fakeClick(anchorObj) {
          * Process onkeydown. 
          */
         Blackbox.prototype.keyDown = function keyDown(ev) {
-                if ([ev.keyCode] != 82) { //r
-                        return;
-                } 
-                ev.preventDefault();
+          //      if ([ev.keyCode] != 82) { //r
+          //              return;
+          //      } 
+          //      ev.preventDefault();
 		
                 if (!this.recording) {
                         this.openDB(this.toggleRecording());

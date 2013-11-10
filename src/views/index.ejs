@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title><%= title %></title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.css" rel="stylesheet">        
+        <link rel="stylesheet" href="themes/OpenROV/css/style.css">
+        <link href="css/ui-lightness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+    <% for(var i=0; i<styles.length; i++) {%>
+    <link rel="stylesheet" href="<%= styles[i] %>"><% } %>
+  </head>
+  <script>
+
+  </script>
+        <script type='text/javascript' src="js/libs/jquery.min.js"></script>
+        <script type='text/javascript' src="js/libs/jquery-ui.min.js"></script>
+        <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
+        <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
+        <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
+	<script type='text/javascript' src='js/libs/gamepad.js'></script>
+        <script type='text/javascript' src='js/utilities.js'></script>
+        <script type='text/javascript' src='js/ArduinoFirmwareViewModel.js'></script>
+        <script type='text/javascript' src='js/OpenRovViewModel.js'></script>
+        <script type='text/javascript' src="js/gamepad.js"></script>
+        <script type='text/javascript' src="js/keypad.js"></script>
+        <script type='text/javascript' src="js/frame.js"></script>
+	<script type='text/javascript' src="js/cockpit.js"></script>
+	<!--script type='text/javascript' src="js/compass.js"></script-->
+	<script src='js/libs/db.js'></script>
+	<script type='text/javascript' src="js/blackbox.js"></script>
+	<script type='text/javascript' src="js/horizon.js"></script>
+        <script src="/config.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+
+  <% for(var i=0; i<scripts.length; i++) {%>
+  <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
+
+  <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="navbar-inner">
+            <div id="menu" class="container-fluid">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <p><a class="brand" href="#"><img src="themes/OpenROV/img/logo.png" class="logo"/>&nbsp;Cockpit</a></p>
+              <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+		  <li><a href="#" id="show-photos">Photos</a></li>
+                  <li><a href="#" id="show-settings">Settings</a></li>
+                  <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main ROW -->
+        <div id="main-row" class="container-fluid full-height">
+          <div class="row-fluid full-height">
+            <div class="span9 border full-height" id="outher-videocontainer">
+              <div id="video-container" class="center" border='1'>
+                <img src="themes/OpenROV/img/no_camera.jpg" alt="OpenROV" id="video"/>
+		<div class="btn-group">
+		  <button id="capture-photo" class="btn">Capture</button>
+		</div>
+              </div>
+            </div>
+            <div class="span3 pull-right" style="overflow: auto; height: 100%">
+                <div id="gamepad" class="controller well well-small" >
+                    <img src="themes/OpenROV/img/gamepad.png" class="center">
+                    <p>Use the <i>2 sticks</i> to maneuver.</p>
+                </div>
+                <div id="keyboard" class="controller well well-small" >
+                    <img src="themes/OpenROV/img/keyboard.png" class="center">
+                    <p>Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver. Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.</p>
+                </div>
+                <div id="servoTilt" class="controller well well-small" >
+                    <p>Servo Tilt: <img src="themes/OpenROV/img/servo_tilt.png" data-bind="attr: {style: servoTiltStyle}" class="center"></p>
+                    <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
+                </div>
+                <div id="lights" class="controller well well-small" >
+                    <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"></div></p>
+                    <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
+                    <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
+		    <p>Use <i>l</i> to toggle callibration lasers.</p>
+                </div>
+                <div id="telemetry" class="controller well well-small" >
+
+		    <ul data-bind="foreach: rawTelemetry">
+		       <li>
+		           <span data-bind="text: key"></span>
+		           <span data-bind="text: value"></span>
+		       </li>
+		    </ul>
+
+		</div>
+            </div>
+          </div>
+        </div>
+        <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
+          <div class="navbar-inner">
+            <div class="container-fluid" style="height: 100%">
+              <div class="span1 pull-left"><h6>Connection</h6><div id="connectionHealth" data-bind="attr: { class: isArduinoConnected }">&nbsp;</div></div>
+              <div class="span2 hidden pull-right"><h6>Temperature</h6><h2 data-bind="html: convertedTemperature"></h2></div>
+              <div class="span2 hidden pull-right"><div class="pull-right" id="depth-gauge"></div><h6>Depth:</h6><h2 data-bind="text: convertedDepth"></h2></div>
+                <div class="span2 pull-right"><h2 data-bind="text: formattedRunTime"></h2><h4 data-bind="text: currentTime().toLocaleTimeString()"></h4></div>
+		<div class="span2 pull-right"><h2 data-bind="text: currentCpuUsage() + '%'"></h2></div>
+                <div class="span2 pull-right"><h2 data-bind="text: currentVoltage().toFixed(1)+ 'v'"></h2><div id="batteryIndicator" data-bind="attr: {class: batteryLevel}">&nbsp;</div></div>
+		<div class="span2 pull-right"><h2 data-bind="text: currentCurrent().toFixed(3)+ 'A'"></h2><div>&nbsp;</div></div>
+            </div>
+          </div>
+        </div>
+	
+	<!-- photos -->
+        <div class="drop-in-right" id="photos">
+            <div class="back-button"></div><h3>Photos</h3>
+	      <div class="settings-block" style="position: relative; overflow: auto; height: 100%"> 
+		<ul class="thumbnails" data-bind="foreach: snapshots">
+		  <li class="">
+		    <a target="_blank" data-bind="attr: { href: $data}" class="thumbnail">
+		      <img data-bind="attr: { src: $data}"  width="260" height="180" alt="">
+		    </a>
+		  </li>
+		</ul>
+	       </div>
+            </div>
+        </div>	
+
+        <!-- SETTINGS -->
+        <div class="drop-in-right" id="settings">
+          <div class="back-button"></div><h3>Settings</h3>
+          <div class="settings-block">
+              <!--<h4>General Settings</h4>
+              Unit of measurement:
+              <div class="control-group">
+                <label class="radio inline">
+                  <input name="unit-of-measurement" type="radio" value="metric" data-bind="checked: unitMeasurement">
+                  <span>Metric</span>
+                </label>
+                <label class="radio inline">
+                  <input name="unit-of-measurement" type="radio" value="imperial" data-bind="checked: unitMeasurement">
+                  <span>Imperial</span>
+                </label>
+              </div>
+              <div class="control-group">
+                <label class="radio inline">
+                  <input name="unit-of-temperature" type="radio" value="celsius" data-bind="checked: unitTemperature">
+                  <span>Celsius</span>
+                </label>
+                <label class="radio inline">
+                  <input name="unit-of-temperature" type="radio" value="farenheit" data-bind="checked: unitTemperature">
+                  <span>Farenheit</span>
+                </label>
+              </div>-->
+          </div>
+          <div class="settings-block">
+            <h4>Upload firmware</h4>
+            <div class="control-group">
+              Arduino firmware:
+              <label>
+                <!--input id="arduinoFirmware" type="file"-->
+              </label>
+              <div class="alert alert-error" id="arduinoFirmware-error" data-bind="css: { hide: arduinoFirmwareVM.selectedFileName() === '' || arduinoFirmwareVM.isValidFirmwareFile() }">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>Oh snap!</strong> Only <i>.zip</i>, <i>.tar.gz</i> and <i>.ino</i> files are supported!
+              </div>
+              <div class="alert alert-error" id="file-upload-notsupported" data-bind="css: { hide: ! arduinoFirmwareVM.browserDoesSupportFileApi() }">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>Oh snap!</strong> Your browser doesn't support the file upload API!
+              </div>
+
+              <button href="#firmware-upload-dialog" class="btn btn-small" type="button" id="arduinoFirmware-upload" data-bind="css: { 'btn-success': arduinoFirmwareVM.isValidFirmwareFile() == false,  'btn-success': arduinoFirmwareVM.isValidFirmwareFile() }" data-toggle="modal"><i class="icon-upload icon-white"></i> Upload firmware from SD card to Arduino</button>
+            </div>
+	    <h4>Runtime Settings:</h4>
+	          <div class="control-group invisible-field">
+		      <label class="control-label" for="smoothingIncriment">Motor Response Aggressivness:</label>
+		      <input type="text" data-bind="value: smoothingIncriment" />
+		      <div class="controls" data-bind="slider: smoothingIncriment, sliderOptions: { min: 1, max: 50, step: 1}"></div>
+		  </div>
+
+	    </div>
+          </div>
+        </div>
+
+        <div class="drop-in-right" id="diagnostic">
+            <div class="back-button"></div><h3>Diagnostics</h3>
+            <div class="settings-block">
+                <h4>Pre-Flight Check</h4>
+            </div>
+	    <div class="settings-block">
+	      <h4>Callibration</h4>
+	      <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
+	      <a href="#" class="btn" id="zero_depth">Zero Depth</a>	      
+	    </div>
+            <div class="settings-block">
+                <h4>Manually test motors</h4>
+                <div class="control-group invisible-field">
+                    <label class="control-label" for="portMotorSpeed">Port Motor</label>
+                    <input type="text" id="portMotorSpeedVal"/>
+                    <div class="controls">
+                        <div id="portMotorSpeed"></div>
+                    </div>
+                </div>
+		<label class="control-label" for="reverse-port-thruster">Reverse Port Thruster</label>
+		<input type="checkbox" data-bind="checked: reversePortThruster" />
+                <div class="control-group invisible-field">
+                    <label class="control-label" for="starbordMotorSpeed">Starboard Motor</label>
+                    <input type="text" id="starbordMotorSpeedVal"/>
+                    <div class="controls">
+                        <div id="starbordMotorSpeed"></div>
+                    </div>
+                </div>
+		<label class="control-label" for="reverse-starbord-thruster">Reverse Starbord Thruster</label>
+		<input type="checkbox" data-bind="checked: reverseStarbordThruster" />		
+                <div class="control-group invisible-field">
+                    <label class="control-label" for="verticalMotorSpeedVal">Vertical Motor</label>
+                    <input type="text" id="verticalMotorSpeedVal"/>
+                    <div class="controls">
+                        <div id="verticalMotorSpeed"></div>
+                    </div>
+                </div>
+		<label class="control-label" for="reverse-lift-thruster">Reverse Verticle Thruster</label>
+		<input type="checkbox" data-bind="checked: reverseLiftThruster" />		
+	        <h4>Runtime Settings:</h4>
+	          <div class="control-group invisible-field">
+		      <label class="control-label" for="deadzone">DeadZone</label><br>min:
+		      <input type="text" data-bind="value: deadzone_neg" /><br>max:<input type="text" data-bind="value: deadzone_pos" />
+		      <div class="controls" data-bind="slider: { min: deadzone_neg, max: deadzone_pos }, sliderOptions: { min: -1, max: 1, step: .001}"></div>
+		  </div>
+            </div>
+        </div>
+
+        <!-- Firmware upload -->
+        <div class="modal fade" id="firmware-upload-dialog">
+          <div class="modal-header">
+            <h3>Upload Arduino Firmware</h3>
+          </div>
+          <div class="modal-body">
+            <strong>Filename: </strong><span data-bind="text: arduinoFirmwareVM.selectedFileName"></span>
+            <br>
+            <hr>
+            <div class="progress-step">
+              <p>Overall progress:</p>
+              <div class="progress progress-striped progress-success active">
+                <div class="bar" style="width: 0%;" data-bind="style: { width: arduinoFirmwareVM.overallPercentage() + '%' }"></div>
+              </div>
+            </div>
+            <div class="progress-step">
+              <p>File upload:</p>
+              <div class="progress progress-striped active">
+                <div class="bar" style="width: 0%;" data-bind="style: { width: arduinoFirmwareVM.uploadPercentage() + '%' }"></div>
+              </div>
+              <ul class="unstyled">
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.unpacking() }">Unpacking <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.unpacking() && ! arduinoFirmwareVM.unpacked() "></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.unpacked"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.unpacking() && ! arduinoFirmwareVM.unpacked() && arduinoFirmwareVM.failed()"></i></li>
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.compiling() }">Compiling <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.compiling() && ! arduinoFirmwareVM.compiled()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.compiled"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.compiling() && ! arduinoFirmwareVM.compiled() && arduinoFirmwareVM.failed()"></i></li>
+                <li data-bind="css: { muted: ! arduinoFirmwareVM.arduinoUploading() }">Upload to Arduino <i class="icon-fire" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded()"></i><i class="icon-ok" data-bind="visible: arduinoFirmwareVM.arduinoUploaded"></i><i class="icon-warning-sign" data-bind="visible: arduinoFirmwareVM.arduinoUploading() && ! arduinoFirmwareVM.arduinoUploaded() && arduinoFirmwareVM.failed()"></i></li>              </ul>
+            </div>
+            <div class="progress-step">
+              <a href="#" class="btn" id="arduinoFirmware-showdetails" data-bind="css: { disabled: ! arduinoFirmwareVM.inProgress() }">Show details</a>
+              <div class="collapse" data-bind="css: { collapse: !arduinoFirmwareVM.detailsVisible() }">
+                <textarea id="arduiniFirmware-details" readonly="readonly" data-bind="text: arduinoFirmwareVM.details"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="css: { disabled: arduinoFirmwareVM.inProgress() }, visible: ! arduinoFirmwareVM.arduinoUploaded()">Cancel</a>
+            <a href="#" class="btn btn-primary" id="arduinoFirmware-startupload" data-bind="visible: ! arduinoFirmwareVM.arduinoUploaded()">Apply new firmware</a>
+            <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal" data-target="#firmware-upload-dialog" data-bind="visible: arduinoFirmwareVM.arduinoUploaded() || arduinoFirmwareVM.failed()">Close</a>
+          </div>
+        </div>
+        
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+
+
+	<script> //Load conditional js files
+	  
+	</script>
+
+        <script>
+      		var viewmodel;
+          $(function() {
+			
+            viewmodel = new OpenRovViewModel();
+            ko.applyBindings(viewmodel);
+
+            var socket = io.connect();
+            socket.on('status', function (data) {
+             viewmodel.updateStatus(data);
+            });
+	    socket.on('settings', function (data){
+	      console.log('got settings')
+	      viewmodel.updateSettings(data);
+	    })
+	    socket.on('photos-updated', function(data) {
+	      console.log('got new photos');
+	      viewmodel.updatePhotos(data);
+	    })
+	    socket.on('rovsys', function(data) {
+	      console.log('got rovsys update');
+	      viewmodel.updateRovsys(data);
+	      if (viewmodel.capabilities()>>COMPASS_CAPABLE & 1) {
+		$.getScript("js/compass.js",function() {cockpit.loadPlugins();});		
+		console.log("Compass code loaded");
+	      }
+	    })
+
+	    $("#capture-photo").click(function(){
+	      socket.emit('snapshot');
+	    });
+	    
+	    
+            /* ------------------------------------------
+               settings 
+            */
+            var options = {};
+	    var keyboard = null;
+            $("#show-settings").click(function() { 
+              $("#settings").show('fold');
+	      viewmodel.sendUpdateEnabled(false);
+              Mousetrap.bind('esc', hideSettings);
+	      keyboard.unbindKeys();
+            });
+
+            $("#settings .back-button").click(function() {
+              hideSettings();
+	      sendUpdateSettingMessage(socket,{smoothingIncriment:viewmodel.smoothingIncriment()});
+            });	    
+
+            function hideSettings() {
+              $("#settings").hide('fold');
+	      viewmodel.sendUpdateEnabled(true);
+              Mousetrap.unbind('esc');
+	      keyboard.bindKeys()
+            }
+	    
+              /* ------------------------------------------
+               diagnostic
+               */
+              var options = {};
+	      $("#show-photos").click(function() {
+		$("#photos").show('fold');
+		viewmodel.sendUpdateEnabled(false);
+		Mousetrap.bind('esc', hidePhotos);
+	      });
+	      
+              function hidePhotos() {
+                  $("#photos").hide('fold');
+                  viewmodel.sendUpdateEnabled(true);
+                  Mousetrap.unbind('esc');
+              }
+	      
+              $("#photos .back-button").click(function() {
+                  hidePhotos();
+              });  	      
+	      
+              $("#show-diagnostic").click(function() {
+                  $("#diagnostic").show('fold');
+                  viewmodel.sendUpdateEnabled(false);
+                  Mousetrap.bind('esc', hideDiagnostic);
+              });
+
+              $("#diagnostic .back-button").click(function() {
+                  hideDiagnostic();
+		  sendUpdateSettingMessage(socket,{deadzone_pos:viewmodel.deadzone_pos()});
+		  sendUpdateSettingMessage(socket,{deadzone_neg:viewmodel.deadzone_neg()});
+		  sendUpdateSettingMessage(socket,{reverse_port_thruster:viewmodel.reversePortThruster()});
+		  sendUpdateSettingMessage(socket,{reverse_starbord_thruster:viewmodel.reverseStarbordThruster()});
+		  sendUpdateSettingMessage(socket,{reverse_lift_thruster:viewmodel.reverseLiftThruster()});
+              });    
+	      
+              function hideDiagnostic() {
+                  $("#diagnostic").hide('fold');
+                  viewmodel.sendUpdateEnabled(true);
+                  Mousetrap.unbind('esc');
+              }
+
+              $("#starbordMotorSpeed").slider({
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
+                  slide: function( event, ui ) {
+                      $( "#starbordMotorSpeedVal" ).val( ui.value );
+                      sendTestMotorMessage(socket);
+                  }
+              });
+              $( "#starbordMotorSpeedVal" ).val( $( "#starbordMotorSpeed" ).slider( "value" ) );
+
+              $("#portMotorSpeed").slider({
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
+                  slide: function( event, ui ) {
+                      $( "#portMotorSpeedVal" ).val( ui.value );
+                      sendTestMotorMessage(socket);
+                  }
+              });
+              $( "#portMotorSpeedVal" ).val( $( "#portMotorSpeed" ).slider( "value" ) );
+
+              $("#verticalMotorSpeed").slider({
+                  min:-1,
+                  max:1,
+                  value:0,
+		  step: .001,
+                  slide: function( event, ui ) {
+                      $( "#verticalMotorSpeedVal" ).val( ui.value );
+                      sendTestMotorMessage(socket);
+                  }
+              });
+              $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
+	      
+	  $('#zero_depth').click(function() {
+            socket.emit('depth_zero');
+          });
+	  
+	  $('#callibrate_compass').click(function() {
+            socket.emit('compass_callibrate');
+          });
+	  
+	  $('#toggle_watertype').click(function() {
+            socket.emit('depth_togglewatertype');
+          });
+	  
+	  
+	      
+            /* ------------------------------------------
+               firmware upload 
+            */
+            var selectedFile;
+            var fileReader = new FileReader();
+            $('#arduinoFirmware').live('change', function(evnt){ 
+              selectedFile = evnt.target.files[0];
+              viewmodel.arduinoFirmwareVM.selectedFile(selectedFile);
+            });
+            $("#arduinoFirmware-startupload").click(function() {
+              fileReader.onload = function(evnt) {
+                console.log("Upload event: " + selectedFile.name)
+                socket.emit('arduinofirmware-upload', { 'filename' : selectedFile.name, data : evnt.target.result });                
+              }
+              if (!selectedFile) {
+                selectedFile = new Object(); 
+                selectedFile.name = 'fromSource';
+                socket.emit('arduinofirmware-uploadfromsource');
+              }
+              console.log("Starting upload: " + selectedFile.name)
+              socket.emit('arduinofirmware-startupload', { 'filename' : selectedFile.name, 'size' : selectedFile.size });
+	      selectedFile = null;
+            });
+            $('#arduinoFirmware-closeupload').click(function() {
+              viewmodel.arduinoFirmwareVM.reset();
+              //$('#firmware-upload-dialog').modal('hide');
+            });
+            $('#arduinoFirmware-showdetails').click(function() {
+              viewmodel.arduinoFirmwareVM.toggleDetails();
+            });
+
+            viewmodel.arduinoFirmwareVM.details.subscribe(function(data) { 
+              $('#arduiniFirmware-details').scrollTop($('#arduiniFirmware-details')[0].scrollHeight);
+            });
+
+            /* ------------------------------------------
+               gamepad/keyboard 
+            */
+            var gp = new GamePad();
+            var kp = new KeyPad();
+	    keyboard = kp;
+            var controller = kp;
+	    
+	    var detectcontroller = function(){
+	      if(gp.isAvailable()) {
+		  $("#keyboard").hide();
+		  $("#gamepad").show();
+		  controller = gp;
+	      }
+	      else { 
+		  $("#gamepad").hide();
+		  $("#keyboard").show();
+		  controller = kp;
+	      }	      
+	    };
+
+	    gp.bindDetectionEvent(function(){
+	      detectcontroller();
+	      console.log('binddetectionevent called');
+	    });
+	    
+	    detectcontroller();
+
+            kp.bindServoTilt(function (value){
+               // viewmodel.currentTiltPosition(value);
+
+                socket.emit('tilt_update',value);
+            });
+            
+	    gp.bindServoTilt(function (value){
+                //viewmodel.currentTiltPosition(value);
+                socket.emit('tilt_update',value);
+            });
+	    
+            kp.bindBrightness(function (value){
+                viewmodel.updateBrightness(value);
+                socket.emit('brightness_update',viewmodel.currentBrightness());
+            });
+	    
+            kp.bindLasers(function (value){
+                socket.emit('laser_update');
+            });	    
+	    
+            gp.bindBrightness(function (value){
+                viewmodel.updateBrightness(value);
+                socket.emit('brightness_update',viewmodel.currentBrightness());
+            });
+	    
+            var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms
+	    var priorControls = {};
+            setInterval(function() {
+              var positions = controller.getPositions();
+	      var updateRequired = false;  //Only send if there is a change
+              var controls = {};
+              for(var i in positions) {
+		controls[i] = positions[i];
+		if (controls[i] != priorControls[i])
+		{
+		  updateRequired = true;
+		}
+	      }
+	      
+              /*if(CONFIG.debug) {
+                console.error("DEBUG: throttle", controls.throttle);
+                console.error("DEBUG: yaw", controls.yaw);
+                console.error("DEBUG: lift", controls.lift);
+              }*/
+              if(viewmodel.sendUpdateEnabled() && updateRequired){
+                socket.emit('control_update', controls);
+		priorControls = controls;
+		console.log('update...');
+	      }
+            }, SAMPLE_PERIOD);
+
+ 
+            socket.on('arduinofirmware-requestmoredata', function (data){
+               viewmodel.arduinoFirmwareVM.uploadPercentage(data['Percent']);
+               var Place = data['Place'] * 524288; //The Next Blocks Starting Position
+               var NewFile; //The Variable that will hold the new Block of Data
+	       if (selectedFile.slice != undefined)
+	       {
+                 NewFile = selectedFile.slice(Place, Place + Math.min(524288, (selectedFile.size-Place)));
+               }
+	       else if (selectedFile.webkitSlice != undefined)
+ 	       {
+                 NewFile = selectedFile.webkitSlice(Place, Place + Math.min(524288, (selectedFile.size-Place)));
+               }
+
+
+
+               fileReader.readAsBinaryString(NewFile);
+            });
+
+            socket.on('arduinofirmware-uploaddone', function(data){
+              viewmodel.arduinoFirmwareVM.uploaded(true);
+              viewmodel.arduinoFirmwareVM.uploadPercentage(100);
+            });
+
+            socket.on('arduinoFirmware-status', function(data){
+              viewmodel.arduinoFirmwareVM.updateStatus(data);
+            });
+
+            socket.on('arduinoFirmware-output', function(data){
+              viewmodel.arduinoFirmwareVM.logOutput(data);
+            });
+	    
+	    //plugin hooks
+            setupFrameHandling(socket);
+	   var cockpit = new Cockpit(socket);
+          });
+
+          function sendTestMotorMessage(socket){
+              var portVal = $( "#portMotorSpeedVal" ).val();
+              var starbordVal = $( "#starbordMotorSpeedVal" ).val();
+              var verticalVal = $( "#verticalMotorSpeedVal" ).val();
+              socket.emit('motor_test', {
+                  port: portVal,
+                  starbord: starbordVal,
+                  vertical: verticalVal
+              });
+          }
+	  
+	  function sendUpdateSettingMessage(socket,setting) {
+	    socket.emit('update_settings',setting);
+	  }
+	  
+
+
+        </script>
+
+    </body>
+
+
+</html>

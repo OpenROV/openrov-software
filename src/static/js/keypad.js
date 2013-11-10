@@ -148,6 +148,11 @@ var KeyPad = function() {
     yaw: 0,
     lift: 0
   };
+  
+  function isFunction(functionToCheck) {
+    var getType = {};
+    return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+  }
 
   $(window).keydown(function(evt) {
     var info = KEYS[evt.keyCode];
@@ -171,6 +176,9 @@ var KeyPad = function() {
 	ttrimHandler(info.value);
     else if(info.command=='stop')
 	stopHandler();
+    else if (isFunction(info.command)) {
+      info.command();
+    }
   });
 
   $(window).keyup(function(evt) {

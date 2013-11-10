@@ -11,7 +11,8 @@ var CONFIG = require('./lib/config')
   , fs=require('fs')
   , express = require('express')
   , app = express()
-  , server = app.listen(CONFIG.port)
+//  , server = app.listen(CONFIG.port)
+  ,server = require("http").createServer(app)
   , io = require('socket.io').listen(server)
   , EventEmitter = require('events').EventEmitter
   , OpenROVCamera = require(CONFIG.OpenROVCamera)
@@ -23,10 +24,24 @@ var CONFIG = require('./lib/config')
   , xmpp = require('node-xmpp');
   ;
 
+app.configure(function () {
 app.use(express.static(__dirname + '/static/'));
 app.use('/photos',express.directory(CONFIG.preferences.get('photoDirectory')));
 app.use('/photos',express.static(CONFIG.preferences.get('photoDirectory')));
+app.set('port', CONFIG.port);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs', { pretty: true });
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(app.router);
+app.use("/components", express.static(path.join(__dirname, 'bower_components')));
+});
 
+// Keep track of plugins js and css to load them in the view
+var scripts = []
+  , styles = []
+  ;
+    
 // setup required directories
 mkdirp(CONFIG.preferences.get('photoDirectory'));
 
@@ -43,101 +58,20 @@ app.get('/config.js', function(req, res) {
   res.send('var CONFIG = ' + JSON.stringify(CONFIG));
 });
 
+app.get('/', function (req, res) {
+    res.render('index', {
+        title: 'Express'
+        ,scripts: scripts
+        ,styles: styles
+    });
+});
+
 // no debug messages
 io.configure(function(){ io.set('log level', 1); });
 
 var connections = 0;
 
-// --move to utility file --
-var getNetworkIPs = (function () {
-    var ignoreRE = /^(127\.0\.0\.1|::1|fe80(:1)?::1(%.*)?)$/i;
 
-    var exec = require('child_process').exec;
-    var cached;
-    var command;
-    var filterRE;
-
-    switch (process.platform) {
-    case 'win32':
-    //case 'win64': // TODO: test
-        command = 'ipconfig';
-        filterRE = /\bIPv[46][^:\r\n]+:\s*([^\s]+)/g;
-        break;
-    case 'darwin':
-        command = 'ifconfig';
-        filterRE = /\binet\s+([^\s]+)/g;
-        // filterRE = /\binet6\s+([^\s]+)/g; // IPv6
-        break;
-    default:
-        command = 'ifconfig';
-        filterRE = /\binet\b[^:]+:\s*([^\s]+)/g;
-        // filterRE = /\binet6[^:]+:\s*([^\s]+)/g; // IPv6
-        break;
-    }
-
-    return function (callback, bypassCache) {
-        if (cached && !bypassCache) {
-            callback(null, cached);
-            return;
-        }
-        // system call
-        exec(command, function (error, stdout, sterr) {
-            cached = [];
-            var ip;
-            var matches = stdout.match(filterRE) || [];
-            //if (!error) {
-            for (var i = 0; i < matches.length; i++) {
-                ip = matches[i].replace(filterRE, '$1')
-                if (!ignoreRE.test(ip)) {
-                    cached.push(ip);
-                }
-            }
-            //}
-            callback(error, cached);
-        });
-    };
-})();
-//
-
-var jid = CONFIG.preferences.get('googletalk_rovid');
-var password = CONFIG.preferences.get('googletalk_rovpassword');
-var pilot = CONFIG.preferences.get('googletalk_rov_pilotid');
-
-if ((jid) && (password)){
-// Establish a connection
-var conn = new xmpp.Client({
-    jid         : jid,
-    password    : password,
-    host        : 'talk.google.com',
-    port        : 5222
-});
-conn.on('online', function(){
-    if (pilot){
- 
-    console.log("ONLINE");
-    
-    getNetworkIPs(function (error, ip) {
-    
-      conn.send(new xmpp.Element('message',
-                                                    { to: pilot,
-                                                      type: 'chat'}).
-                                   c('body').
-                                   t('ROV is online @ ' + ip));
-      conn.end();
-
-      if (error) {
-          console.log('error:', error);
-      }
-    }, false);
-
-
-    }
-    
-});
-conn.on('error', function(e) {
-     console.log(e);
-});
-}
 
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
@@ -314,4 +248,64 @@ if (process.platform === 'linux') {
   });
 }
 
-console.log('Started listening on port: ' + CONFIG.port);
+
+// Prepare dependency map for plugins
+var deps = {
+    server: server
+  , app: app
+  , io: io
+  , client: null
+  , config: CONFIG
+};
+
+
+// Load the plugins
+var dir = path.join(__dirname, 'plugins');
+function getFilter(ext) {
+    return function(filename) {
+        return filename.match(new RegExp('\\.' + ext + '$', 'i'));
+    };
+}
+
+fs.readdir(dir, function (err, files) {
+    if (err) {
+        throw err;
+    }
+
+    files.filter(function (file) {
+        
+        return fs.statSync(path.join(dir,file)).isDirectory();
+    }).forEach(function (plugin) {
+      console.log("Loading " + plugin + " plugin.");
+  
+      // Load the backend code
+      require(path.join(dir, plugin))(plugin, deps);
+  
+      // Add the public assets to a static route
+      if (fs.existsSync(assets = path.join(dir, plugin, 'public'))) {
+        app.use("/plugin/" + plugin, express.static(assets));
+      }
+  
+      // Add the js to the view
+      if (fs.existsSync(js = path.join(assets, 'js'))) {
+          fs.readdirSync(js).filter(getFilter('js')).forEach(function(script) {
+              scripts.push("/plugin/" + plugin + "/js/" + script);
+          });
+      }
+  
+      // Add the css to the view
+      if (fs.existsSync(css = path.join(assets, 'css'))) {
+          fs.readdirSync(css).filter(getFilter('css')).forEach(function(style) {
+              styles.push("/plugin/" + plugin + "/css/" + style);
+          });
+      }
+
+
+    });
+});
+
+// Start the web server
+server.listen(app.get('port'), function() {
+  console.log('Started listening on port: ' + app.get('port'));
+});
+
