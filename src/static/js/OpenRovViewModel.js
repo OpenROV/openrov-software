@@ -198,6 +198,4 @@ function OpenRovViewModel(){
 
     
 
-    setInterval(self.updateConnectionStatus, 1000);
-    setInterval(function () {self.currentTime(new Date())}, 1000);
 }
