@@ -14,7 +14,7 @@
 
 var CONFIG = require('./config')
   , FirmwareInstaller = require('../' + CONFIG.FirmwareInstaller)
-  , logger = require('./logger').create(CONFIG.debug)
+  , logger = require('./logger').create(CONFIG)
   , path = require('path')
   , fs = require('fs');
 

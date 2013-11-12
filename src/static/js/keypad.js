@@ -87,7 +87,11 @@ var KEYS = {
   79: { //o (brightness down) 
      command: 'light',
      value: -1
-  }
+  },
+  76: { //l (brightness toggle)
+    command: 'light',
+    value: 0
+  },
 }
 
 var KeyPad = function() {
@@ -103,9 +107,9 @@ var KeyPad = function() {
       servoTiltHandler=callback;
   };
 
-    kp.bindBrightness = function(callback){
-        brightnessHandler=callback;
-    };
+  kp.bindBrightness = function(callback){
+      brightnessHandler=callback;
+  };
 
   kp.bindKeys = function(){
     processKeys = true;
