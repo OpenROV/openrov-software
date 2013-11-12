@@ -76,25 +76,15 @@
                     <p>Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver. Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.</p>
                 </div>
                 <div id="servoTilt" class="controller well well-small" >
-                    <p>Servo Tilt: <img src="themes/OpenROV/img/servo_tilt.png" data-bind="attr: {style: servoTiltStyle}" class="center"></p>
+                    
                     <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
                 </div>
                 <div id="lights" class="controller well well-small" >
-                    <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"></div></p>
-                    <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
+
                     <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
 		    <p>Use <i>l</i> to toggle callibration lasers.</p>
                 </div>
-                <div id="telemetry" class="controller well well-small" >
 
-		    <ul data-bind="foreach: rawTelemetry">
-		       <li>
-		           <span data-bind="text: key"></span>
-		           <span data-bind="text: value"></span>
-		       </li>
-		    </ul>
-
-		</div>
             </div>
           </div>
         </div>
@@ -109,8 +99,8 @@
 	    <h4>Runtime Settings:</h4>
 	          <div class="control-group invisible-field">
 		      <label class="control-label" for="smoothingIncriment">Motor Response Aggressivness:</label>
-		      <input type="text" data-bind="value: smoothingIncriment" />
-		      <div class="controls" data-bind="slider: smoothingIncriment, sliderOptions: { min: 1, max: 50, step: 1}"></div>
+		      <!--input type="text" data-bind="value: smoothingIncriment" />
+		      <div class="controls" data-bind="slider: smoothingIncriment, sliderOptions: { min: 1, max: 50, step: 1}"></div-->
 		  </div>
 
 	    </div>
@@ -144,12 +134,12 @@
       		var viewmodel;
           $(function() {
 			
-            viewmodel = new OpenRovViewModel();
-            ko.applyBindings(viewmodel);
+            //viewmodel = new OpenRovViewModel();
+            //ko.applyBindings(viewmodel);
 
             var socket = io.connect();
 
-	    socket.on('rovsys', function(data) {
+	  /*  socket.on('rovsys', function(data) {
 	      console.log('got rovsys update');
 	      viewmodel.updateRovsys(data);
 	      if (viewmodel.capabilities()>>COMPASS_CAPABLE & 1) {
@@ -157,7 +147,7 @@
 		console.log("Compass code loaded");
 	      }
 	    })
-
+*/
 
 	    
 	    
@@ -168,7 +158,7 @@
 	    var keyboard = null;
             $("#show-settings").click(function() { 
               $("#settings").show('fold');
-	      viewmodel.sendUpdateEnabled(false);
+	//      viewmodel.sendUpdateEnabled(false);
               Mousetrap.bind('esc', hideSettings);
 	      keyboard.unbindKeys();
             });
@@ -180,7 +170,7 @@
 
             function hideSettings() {
               $("#settings").hide('fold');
-	      viewmodel.sendUpdateEnabled(true);
+	//      viewmodel.sendUpdateEnabled(true);
               Mousetrap.unbind('esc');
 	      keyboard.bindKeys()
             }
@@ -294,11 +284,12 @@
                 console.error("DEBUG: yaw", controls.yaw);
                 console.error("DEBUG: lift", controls.lift);
               }*/
-              if(viewmodel.sendUpdateEnabled() && updateRequired){
+       /*       if(viewmodel.sendUpdateEnabled() && updateRequired){
                 socket.emit('control_update', controls);
 		priorControls = controls;
 		console.log('update...');
 	      }
+	      */ 
             }, SAMPLE_PERIOD);
 
  

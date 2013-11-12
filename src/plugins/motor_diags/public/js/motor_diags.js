@@ -120,6 +120,7 @@
 	    if ('reverse_port_thruster' in settings ) $("#reversePortThruster").val(settings.reverse_port_thruster);
 	    if ('reverse_starbord_thruster' in settings ) $("#reverseStarbordThruster").val(settings.reverse_starbord_thruster);
 	    if ('reverse_lift_thruster' in settings ) $("#reverseLiftThruster").val(settings.reverse_lift_thruster);
+	 //   if ('smoothingIncriment' in settings) self.smoothingIncriment(settings.smoothingIncriment);
     };
     
     Motor_diags.prototype.SaveSettings = function SaveSettings(){

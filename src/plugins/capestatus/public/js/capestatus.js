@@ -23,6 +23,10 @@
 		<div class="span2 pull-right"><h2 id="currentCurrent">&nbsp;</h2><div>&nbsp;</div></div> \
             </div> \
           </div>');
+	
+	$("#servoTilt").append('<p>Servo Tilt: <img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png" class="center"></p>'); //attr style
+	
+	$("#lights").append('<p><div id="brightnessIndicator"></div></p>'); //attr class
 
         // Register the various event handlers
         this.listen();
@@ -65,8 +69,13 @@
 	    $("#batteryIndicator").attr('class',self.batteryLevel(data.vout));
 	};
 	if ('iout' in data) $("#currentCurrent").text(data.iout.toFixed(3) + 'A');
-	//if ('servo' in data) self.currentTiltPosition(data.servo);
+	if ('servo' in data) {
+	    var angle = (90/500)*data.servo+90//*-45;
+	    $("#servoTiltImage").attr("style", "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)");   
+	};
 	if ('cpuUsage' in data) $("#currentCpuUsage").text((data.cpuUsage*100).toFixed(0) + '%');
+	if ('ligp' in data) $("brightnessIndicator").attr('class',(data.ligp*100).toFixed(0));
+
 	this.lastPing = new Date();	
     };
     
