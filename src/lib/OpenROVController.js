@@ -43,73 +43,60 @@ var OpenROVController = function(eventLoop) {
   var globalEventLoop = eventLoop;
   var reader = new StatusReader();
   var physics = new ArduinoPhysics();
+  var hardware = new Hardware();
+  var controller = new EventEmitter();
   
   setInterval((function() {
     controller.emit('navdata',navdata);
   }), 100);
   
-  var getNewSerial = function() {
-        var s = new serialPort.SerialPort(CONFIG.serial, {
-          baudrate: CONFIG.serial_baud,
-          parser: serialPort.parsers.readline("\r\n")
-        });
-        s.on( 'close', function (data) {
-         logger.log('!Serial port closed');
-        });
+  hardware.on('status', function(status) {
+    controller.emit('status',status);
 
-        s.on( "data", function( data ) {
-          var status = reader.parseStatus(data,controller);
-          controller.emit('status',status);
-          if ('ver' in status) {
-            controller.ArduinoFirmwareVersion = status.ver;
-          }
-          if ('TSET' in status) {
-            console.log(status.settings);
-            var setparts = status.settings.split(",");
-            settingsCollection.smoothingIncriment = setparts[0];
-            settingsCollection.deadZone_min = setparts[1];
-            settingsCollection.deadZone_max = setparts[2];
-            controller.emit('Arduino-settings-reported',settingsCollection)
-          }   	 
-          if ('CAPA' in status) {
-            var s = rovsys;
-            console.log("RovSys: " + status.CAPA)
-            s.capabilities = parseInt(status.CAPA);
-            controller.Capabilities= s.capabilities;
-            controller.emit('rovsys',s);
-          }
-          if ('cmd' in status) {
-            var s = rovsys;
-            console.log("cmd: " + status.cmd)
-          }
-          if ('log' in status) {
-            var s = rovsys;
-            console.log("log: " + status.log)
-          }
-          if ('hdgd' in status) {
-            navdata.hdgd=status.hdgd;
-          }
-          if ('deap' in status) {
-            navdata.deapth=status.deap;
-          }
-          if ('pitc' in status) {
-            navdata.pitch=status.pitc;
-          }
-          if ('roll' in status) {
-            navdata.roll=status.roll;
-          }
-          if ('yaw' in status) {
-            navdata.yaw=status.yaw;
-          }
-          if ('fthr' in status) {
-            navdata.thrust=status.fthr;
-          }
-        });
-        return s;
-  };
-
-  hardware.on('Arduino-settings-reported', function(settings) {
-    controller.emit('Arduino-settings-reported', settings);
+    if ('ver' in status) {
+      controller.ArduinoFirmwareVersion = status.ver;
+    }
+    if ('TSET' in status) {
+      console.log(status.settings);
+      var setparts = status.settings.split(",");
+      settingsCollection.smoothingIncriment = setparts[0];
+      settingsCollection.deadZone_min = setparts[1];
+      settingsCollection.deadZone_max = setparts[2];
+      controller.emit('Arduino-settings-reported',settingsCollection)
+    }   	 
+    if ('CAPA' in status) {
+      var s = rovsys;
+      console.log("RovSys: " + status.CAPA)
+      s.capabilities = parseInt(status.CAPA);
+      controller.Capabilities= s.capabilities;
+      controller.emit('rovsys',s);
+    }
+    if ('cmd' in status) {
+      var s = rovsys;
+      console.log("cmd: " + status.cmd)
+    }
+    if ('log' in status) {
+      var s = rovsys;
+      console.log("log: " + status.log)
+    }
+    if ('hdgd' in status) {
+      navdata.hdgd=status.hdgd;
+    }
+    if ('deap' in status) {
+      navdata.deapth=status.deap;
+    }
+    if ('pitc' in status) {
+      navdata.pitch=status.pitc;
+    }
+    if ('roll' in status) {
+      navdata.roll=status.roll;
+    }
+    if ('yaw' in status) {
+      navdata.yaw=status.yaw;
+    }
+    if ('fthr' in status) {
+      navdata.thrust=status.fthr;
+    }
   });
   
   setup_serial();
@@ -180,7 +167,7 @@ var OpenROVController = function(eventLoop) {
     
   var claserstate = 0;
   controller.sendLaser = function(value) {
-    if (this.NotSafeToControl()) return;
+    if (this.notSafeToControl()) return;
     if (claserstate === 0) {
       claserstate = 255;
     } 
