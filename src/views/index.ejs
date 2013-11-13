@@ -252,8 +252,8 @@
             });
 	    
             kp.bindBrightness(function (value){
-                viewmodel.updateBrightness(value);
-                socket.emit('brightness_update',viewmodel.currentBrightness());
+        //        viewmodel.updateBrightness(value);
+                socket.emit('brightness_update',value);
             });
 	    
             kp.bindLasers(function (value){
