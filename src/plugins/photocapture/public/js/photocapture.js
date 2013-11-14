@@ -8,7 +8,7 @@
 
         // Instance variables
         this.cockpit = cockpit;
-
+	this.snapshots = ko.observableArray([]);
         // Add required UI elements
 	$("#diagnostic").after(
 	'<!-- photos --> \
@@ -28,49 +28,44 @@
 	
 	$("#menuitems").append('<li><a href="#" id="show-photos">Photos</a></li>');
 	
-	$("#servoTilt").before('<div class="btn-group"><button id="capture-photo" class="btn">Capture</button></div>');	 
-	
-		    socket.on('settings', function (data){
-	      console.log('got settings')
-	      viewmodel.updateSettings(data);
-	    })
-	    socket.on('photos-updated', function(data) {
-	      console.log('got new photos');
-	      viewmodel.updatePhotos(data);
-	    })
-	    
-	    	    $("#capture-photo").click(function(){
-	      socket.emit('snapshot');
-	    });
-		    
-		      $("#show-photos").click(function() {
-		$("#photos").show('fold');
-		viewmodel.sendUpdateEnabled(false);
-		Mousetrap.bind('esc', hidePhotos);
-	      });
-	      
-              function hidePhotos() {
-                  $("#photos").hide('fold');
-                  viewmodel.sendUpdateEnabled(true);
-                  Mousetrap.unbind('esc');
-              }
-	      
-              $("#photos .back-button").click(function() {
-                  hidePhotos();
-              });  	    
-		    
+	$("#servoTilt").before('<div class="btn-group"><button id="capture-photo" class="btn">Capture</button></div>');	 	    
 	
         // Register the various event handlers
         this.listen();
-        
+        ko.applyBindings(this,$("#photos")[0]);
     };
     
     //This pattern will hook events in the cockpit and pull them all back
     //so that the reference to this instance is available for further processing
     Photocapture.prototype.listen = function listen() {
         var photoc = this;
+	
+	photoc.cockpit.socket.on('photos-updated', function(data) {
+	      console.log('got new photos');
+	      photoc.snapshots(data);
+	    });
+
+	$("#capture-photo").click(function(){
+	      photoc.cockpit.socket.emit('snapshot');
+	});
+	
+	$("#show-photos").click(function() {
+	    $("#photos").show('fold');
+	    photoc.cockpit.sendUpdateEnabled =false;
+	    Mousetrap.bind('esc', photoc.hidePhotos);
+	});
+
+        $("#photos .back-button").click(function() {
+            photoc.hidePhotos();
+        }); 	
 
     };
+    
+    Photocapture.prototype.hidePhotos = function hidePhoto(){
+        $("#photos").hide('fold');
+        this.cockpit.sendUpdateEnabled =true;
+	Mousetrap.unbind('esc');	
+    }
     
 
 

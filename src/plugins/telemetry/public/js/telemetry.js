@@ -26,7 +26,7 @@
         setInterval(function(){self.displayTelemetry();}, 1000);	
         // Register the various event handlers
         this.listen();
-	ko.applyBindings(this);
+	ko.applyBindings(this,$("#rov_status_panel")[0]);
         
     };
     

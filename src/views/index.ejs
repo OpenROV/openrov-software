@@ -22,12 +22,11 @@
 	<script type='text/javascript' src='js/libs/gamepad.js'></script>
         <script type='text/javascript' src='js/utilities.js'></script>
         <script type='text/javascript' src='js/ArduinoFirmwareViewModel.js'></script>
-        <script type='text/javascript' src='js/OpenRovViewModel.js'></script>
         <script type='text/javascript' src="js/gamepad.js"></script>
         <script type='text/javascript' src="js/keypad.js"></script>
         <script type='text/javascript' src="js/frame.js"></script>
 	<script type='text/javascript' src="js/cockpit.js"></script>
-	<!--script type='text/javascript' src="js/compass.js"></script-->
+	<script type='text/javascript' src="js/compass.js"></script>
 	<script src='js/libs/db.js'></script>
 	<script type='text/javascript' src="js/blackbox.js"></script>
 	<script type='text/javascript' src="js/horizon.js"></script>
@@ -131,26 +130,10 @@
 	</script>
 
         <script>
-      		var viewmodel;
-          $(function() {
-			
-            //viewmodel = new OpenRovViewModel();
-            //ko.applyBindings(viewmodel);
 
+          $(function() {
             var socket = io.connect();
 
-	  /*  socket.on('rovsys', function(data) {
-	      console.log('got rovsys update');
-	      viewmodel.updateRovsys(data);
-	      if (viewmodel.capabilities()>>COMPASS_CAPABLE & 1) {
-		$.getScript("js/compass.js",function() {cockpit.loadPlugins();});		
-		console.log("Compass code loaded");
-	      }
-	    })
-*/
-
-	    
-	    
             /* ------------------------------------------
                settings 
             */
@@ -158,7 +141,7 @@
 	    var keyboard = null;
             $("#show-settings").click(function() { 
               $("#settings").show('fold');
-	//      viewmodel.sendUpdateEnabled(false);
+              cockpit.sendUpdateEnabled=false;
               Mousetrap.bind('esc', hideSettings);
 	      keyboard.unbindKeys();
             });
@@ -170,7 +153,7 @@
 
             function hideSettings() {
               $("#settings").hide('fold');
-	//      viewmodel.sendUpdateEnabled(true);
+              cockpit.sendUpdateEnabled = true;
               Mousetrap.unbind('esc');
 	      keyboard.bindKeys()
             }
@@ -183,7 +166,7 @@
 	      
               $("#show-diagnostic").click(function() {
                   $("#diagnostic").show('fold');
-                  viewmodel.sendUpdateEnabled(false);
+                  cockpit.sendUpdateEnabled=false;
                   Mousetrap.bind('esc', hideDiagnostic);
               });
 
@@ -193,7 +176,7 @@
 	      
               function hideDiagnostic() {
                   $("#diagnostic").hide('fold');
-                  viewmodel.sendUpdateEnabled(true);
+                  cockpit.sendUpdateEnabled=true;
                   Mousetrap.unbind('esc');
               }
 
