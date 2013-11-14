@@ -10,7 +10,7 @@
         this.cockpit = cockpit;
 
         // Add required UI elements
-        $("#menu").prepend('<div id="example">[example]</div>');
+        $("#menu").prepend('<div id="example" class="hidden">[example]</div>');
     };
 
     window.Cockpit.plugins.push(Example);

@@ -126,7 +126,7 @@ function fakeClick(anchorObj) {
          */
         Blackbox.prototype.listen = function listen() {
                 var self = this;
-		KEYS[82] = {command: function(data) {  //r
+		KEYS[82] = {keydown: function(data) {  //r
            		 self.keyDown();
         		}
 		};
@@ -185,7 +185,7 @@ function fakeClick(anchorObj) {
 
         Blackbox.prototype.logTelemetryData = function logTelemetryData(){
 		var clone = new Object;
-		for (i in telemetry){
+		for (var i in telemetry){
 			clone[i] = telemetry[i];
 		}
 		clone['timestamp'] = new Date().getTime();
@@ -200,7 +200,7 @@ function fakeClick(anchorObj) {
                  if (!this.recording) {
                         return;
                  }
-		for (i in data){
+		for (var i in data){
 		  telemetry[i] = data[i];
 		}
         };

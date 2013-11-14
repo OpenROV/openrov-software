@@ -74,7 +74,7 @@
 	    $("#servoTiltImage").attr("style", "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)");   
 	};
 	if ('cpuUsage' in data) $("#currentCpuUsage").text((data.cpuUsage*100).toFixed(0) + '%');
-	if ('ligp' in data) $("brightnessIndicator").attr('class',(data.ligp*100).toFixed(0));
+	if ('LIGP' in data) $("#brightnessIndicator").attr('class','level'+Math.ceil(data.LIGP*10));
 
 	this.lastPing = new Date();	
     };

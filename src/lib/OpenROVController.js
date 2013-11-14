@@ -28,6 +28,8 @@ var navdata = {
     hdgd: 0
 }
 
+var statusdata = new Object();
+
 var settingsCollection = {
     smoothingIncriment: 0,
     deadZone_min: 0,
@@ -48,6 +50,11 @@ var OpenROVController = function(eventLoop) {
     controller.emit('navdata',navdata);
   }), 100);
   
+  setInterval((function() {
+    controller.emit('status',statusdata);
+  }), 1000);  
+    
+  
   var getNewSerial = function(){
         var s = new serialPort.SerialPort(CONFIG.serial, {
         baudrate: CONFIG.serial_baud,
@@ -59,7 +66,10 @@ var OpenROVController = function(eventLoop) {
 
         s.on( "data", function( data ) {
          var status = reader.parseStatus(data,controller);
-	 controller.emit('status',status);
+	    for (i in status){
+		statusdata[i] = status[i];
+	    }	 
+	 //controller.emit('status',status);
          if ('ver' in status) 
            controller.ArduinoFirmwareVersion = status.ver;
 	 if ('TSET' in status) {
@@ -171,8 +181,7 @@ var OpenROVController = function(eventLoop) {
 
     controller.sendLight = function(value) {
         if (this.NotSafeToControl()) return;
-        var light = physics.mapLight(value);
-        var command = 'light(' + light +');';
+        var command = 'ligt(' + physics.mapLight(value) +');';
         if(CONFIG.debug_commands) console.error("command", command);
         if(CONFIG.production) serial.write(command);
     };
