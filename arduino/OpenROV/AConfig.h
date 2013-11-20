@@ -11,12 +11,15 @@
 *  have the address defined in this file.
 */
 //Kit:
-#define HAS_STD_CAPE (0)
 #define HAS_STD_PILOT (1)
-#define HAS_OROV_CONTROLLERBOARD_25 (0)
+/* The definitions are done in th
+	#define HAS_STD_CAPE (0)
+	#define HAS_OROV_CONTROLLERBOARD_25 (0)
+*/
+#include "BoardConfig.h"
 
 #define HAS_STD_LIGHTS (1)
-#define HAS_STD_CALIBRATIONLASERS (0)
+#define HAS_STD_CALIBRATIONLASERS (1)
 #define HAS_STD_2X1_THRUSTERS (1)
 #define HAS_STD_CAMERAMOUNT (1)
 
