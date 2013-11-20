@@ -46,7 +46,7 @@ then
     #define HAS_OROV_CONTROLLERBOARD_25 (1)
 	#endif
 
-	__EOF__
+__EOF__
 fi
 
 if test "$ROV_BOARD" = "cape"
@@ -58,7 +58,7 @@ then
     #define HAS_OROV_CONTROLLERBOARD_25 (0)
 	#endif
 
-	__EOF__
+__EOF__
 fi
 
 
