@@ -56,8 +56,9 @@
                 <div id="lights" class="controller well well-small" >
                     <p><div id="brightnessIndicator" data-bind="attr: {class: brightnessClass}"></div></p>
                     <p>Brightness: <span data-bind="text: currentBrightness()*10">0</span>%</p>
-                    <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
-		    <p>Use <i>l</i> to toggle callibration lasers.</p>
+                    <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.<br>
+                      Use <i>i</i> to toggle lights on/off.<br>
+                      Use <i>l</i> to toggle callibration lasers.</p>
                 </div>
                 <div id="telemetry" class="controller well well-small" >
 
@@ -176,33 +177,63 @@
 	    </div>
             <div class="settings-block">
                 <h4>Manually test motors</h4>
+
                 <div class="control-group invisible-field">
                     <label class="control-label" for="portMotorSpeed">Port Motor</label>
-                    <input type="text" id="portMotorSpeedVal"/>
+                    <input type="text" data-bind="value: portMotorSpeed" />
                     <div class="controls">
                         <div id="portMotorSpeed"></div>
                     </div>
+                    <div  class="text-center">
+                      <div  data-bind="foreach: diagnosticMotorSpeedButtons">
+                        <button class="btn" type="button" data-bind="text: $data, 
+                        click: function(data, event) { $parent.setMotorTestSpeed('portMotorSpeed', $data)}"></button>
+                      </div>
+
+                      <label class="" for="reverse-port-thruster">
+                        <input type="checkbox" data-bind="checked: reversePortThruster" id="reverse-port-thruster" />
+                        Reverse Port Thruster
+                        </label>
+
+                    </div>
                 </div>
-		<label class="control-label" for="reverse-port-thruster">Reverse Port Thruster</label>
-		<input type="checkbox" data-bind="checked: reversePortThruster" />
                 <div class="control-group invisible-field">
                     <label class="control-label" for="starbordMotorSpeed">Starboard Motor</label>
-                    <input type="text" id="starbordMotorSpeedVal"/>
+                    <input type="text"  data-bind="value: starbordMotorSpeed" />
                     <div class="controls">
                         <div id="starbordMotorSpeed"></div>
                     </div>
+                    <div  class="text-center">
+                      <div  data-bind="foreach: diagnosticMotorSpeedButtons">
+                        <button class="btn" type="button" data-bind="text: $data, 
+                        click: function(data, event) { $parent.setMotorTestSpeed('starbordMotorSpeed', $data)}"></button>
+                      </div>
+
+                      <label class="" for="reverse-starbord-thruster"><input type="checkbox" data-bind="checked: reverseStarbordThruster" />
+                            Reverse Starbord Thruster
+                          </label>
+                    </div>
                 </div>
-		<label class="control-label" for="reverse-starbord-thruster">Reverse Starbord Thruster</label>
-		<input type="checkbox" data-bind="checked: reverseStarbordThruster" />		
+            		
                 <div class="control-group invisible-field">
                     <label class="control-label" for="verticalMotorSpeedVal">Vertical Motor</label>
-                    <input type="text" id="verticalMotorSpeedVal"/>
+                    <input type="text"  data-bind="value: verticalMotorSpeed" />
                     <div class="controls">
                         <div id="verticalMotorSpeed"></div>
                     </div>
+                    <div  class="text-center">
+                      <div  data-bind="foreach: diagnosticMotorSpeedButtons">
+                        <button class="btn" type="button" data-bind="text: $data, 
+                        click: function(data, event) { $parent.setMotorTestSpeed('verticalMotorSpeed', $data)}"></button>
+                      </div>
+
+                      <label class="control-label" for="reverse-lift-thruster">
+                        <input type="checkbox" data-bind="checked: reverseLiftThruster" />    
+                        Reverse Verticle Thruster
+                      </label>
+                    </div>
                 </div>
-		<label class="control-label" for="reverse-lift-thruster">Reverse Verticle Thruster</label>
-		<input type="checkbox" data-bind="checked: reverseLiftThruster" />		
+
 	        <h4>Runtime Settings:</h4>
 	          <div class="control-group invisible-field">
 		      <label class="control-label" for="deadzone">DeadZone</label><br>min:
@@ -385,23 +416,23 @@
                   value:0,
 		  step: .001,
                   slide: function( event, ui ) {
-                      $( "#starbordMotorSpeedVal" ).val( ui.value );
-                      sendTestMotorMessage(socket);
+                      viewmodel.starbordMotorSlide(true);
+                      viewmodel.starbordMotorSpeed( ui.value );
+                      viewmodel.starbordMotorSlide(false);
                   }
               });
-              $( "#starbordMotorSpeedVal" ).val( $( "#starbordMotorSpeed" ).slider( "value" ) );
 
               $("#portMotorSpeed").slider({
                   min:-1,
                   max:1,
                   value:0,
-		  step: .001,
+            		  step: .001,
                   slide: function( event, ui ) {
-                      $( "#portMotorSpeedVal" ).val( ui.value );
-                      sendTestMotorMessage(socket);
+                      viewmodel.portMotorSlide(true);
+                      viewmodel.portMotorSpeed( ui.value );
+                      viewmodel.portMotorSlide(false);
                   }
               });
-              $( "#portMotorSpeedVal" ).val( $( "#portMotorSpeed" ).slider( "value" ) );
 
               $("#verticalMotorSpeed").slider({
                   min:-1,
@@ -409,11 +440,13 @@
                   value:0,
 		  step: .001,
                   slide: function( event, ui ) {
-                      $( "#verticalMotorSpeedVal" ).val( ui.value );
-                      sendTestMotorMessage(socket);
+                      viewmodel.verticalMotorSlide(true);
+                      viewmodel.verticalMotorSpeed( ui.value );
+                      viewmodel.verticalMotorSlide(false);
                   }
               });
-              $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
+
+    $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
 	      
 	  $('#zero_depth').click(function() {
             socket.emit('depth_zero');
@@ -428,7 +461,6 @@
           });
 	  
 	  
-	      
             /* ------------------------------------------
                firmware upload 
             */
@@ -462,6 +494,27 @@
 
             viewmodel.arduinoFirmwareVM.details.subscribe(function(data) { 
               $('#arduiniFirmware-details').scrollTop($('#arduiniFirmware-details')[0].scrollHeight);
+            });
+
+            viewmodel.portMotorSpeed.subscribe(function(newValue) {
+              if (! viewmodel.portMotorSlide()) {
+                $("#portMotorSpeed").slider("value", newValue);
+              }
+              sendTestMotorMessage(socket);
+            });
+
+            viewmodel.starbordMotorSpeed.subscribe(function(newValue) {
+              if (! viewmodel.starbordMotorSlide()) {
+                $("#starbordMotorSpeed").slider("value", newValue);
+              }
+              sendTestMotorMessage(socket);
+            });
+
+            viewmodel.verticalMotorSpeed.subscribe(function(newValue) {
+              if (! viewmodel.verticalMotorSlide()) {
+                $("#verticalMotorSpeed").slider("value", newValue);
+              }
+              sendTestMotorMessage(socket);
             });
 
             /* ------------------------------------------
@@ -581,22 +634,20 @@
           });
 
           function sendTestMotorMessage(socket){
-              var portVal = $( "#portMotorSpeedVal" ).val();
-              var starbordVal = $( "#starbordMotorSpeedVal" ).val();
-              var verticalVal = $( "#verticalMotorSpeedVal" ).val();
+              var portVal = viewmodel.portMotorSpeed();
+              var starbordVal = viewmodel.starbordMotorSpeed();
+              var verticalVal = viewmodel.verticalMotorSpeed();
               socket.emit('motor_test', {
                   port: portVal,
                   starbord: starbordVal,
                   vertical: verticalVal
               });
           }
+
 	  
 	  function sendUpdateSettingMessage(socket,setting) {
 	    socket.emit('update_settings',setting);
 	  }
-	  
-
-
         </script>
 
     </body>

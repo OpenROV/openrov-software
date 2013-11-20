@@ -12,7 +12,7 @@ var EventEmitter = require('events').EventEmitter
   , fs = require('fs')
   , path = require('path')
   , CONFIG = require('./config')
-  , logger = require('./logger').create(CONFIG.debug)
+  , logger = require('./logger').create(CONFIG)
   , spawn = require('child_process').spawn
   , avrdude = require('./avrdude')
   ;

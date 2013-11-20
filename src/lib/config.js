@@ -8,6 +8,7 @@ var nconf = require('nconf');
 var OpenROVCameraPath = "./lib/OpenROVCamera";
 var OpenROVControllerPath = "./lib/OpenROVController";
 var FirmwareInstallerPath = "./lib/FirmwareInstaller";
+var HardwarePath = "./lib/Hardware";
 
 var getLibPath = function(lib) {
 	var result = lib;
@@ -46,8 +47,9 @@ module.exports = {
   serial_baud:      process.env.SERIAL_BAUD      || 115200,
   preferences:	    nconf,
   OpenROVCamera:    getLibPath(OpenROVCameraPath),  
-  OpenROVController:getLibPath(OpenROVControllerPath),  
+  OpenROVController:OpenROVControllerPath,  //getLibPath(OpenROVControllerPath),  
   FirmwareInstaller:getLibPath(FirmwareInstallerPath),  
+  Hardware:         getLibPath(HardwarePath), 
 };
 
 console.log("config", module.exports);

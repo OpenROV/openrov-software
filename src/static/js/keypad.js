@@ -88,10 +88,13 @@ var KEYS = {
      command: 'light',
      value: -1
   },
+  73: { //i (brightness toggle)
+    command: 'light',
+    value: 0
+  },
   76: { //l (laser toggle) 
      command: 'claser'
   }
-
 }
 
 var KeyPad = function() {
@@ -109,9 +112,9 @@ var KeyPad = function() {
       servoTiltHandler=callback;
   };
 
-    kp.bindBrightness = function(callback){
-        brightnessHandler=callback;
-    };
+  kp.bindBrightness = function(callback){
+      brightnessHandler=callback;
+  };
     
   kp.bindLasers = function(callback){
     claserHandler=callback;
