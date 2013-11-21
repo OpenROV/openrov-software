@@ -76,9 +76,9 @@ void Thrusters::device_loop(Command command){
     }
   #ifdef ESCPOWER_PIN
     else if (command.cmp("escp")) {
-      escpower.write(args[1]); //Turn on the ESCs
+      escpower.write(command.args[1]); //Turn on the ESCs
       Serial.print(F("log:escpower="));
-      Serial.print(args[1]));
+      Serial.print(command.args[1]);
       Serial.println(';');
     }
   #endif  
