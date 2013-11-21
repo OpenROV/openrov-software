@@ -8,6 +8,8 @@
 
         // Instance variables
         this.cockpit = cockpit;
+	
+	//TODO: Add Dom's Button settings to UI
 
         // Add required UI elements
 	$("#diagnostic H3:contains('Diagnostics')").after(
