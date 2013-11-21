@@ -74,7 +74,9 @@ Updating
 The easiest way to upgrade your installation is to ssh on to
 
 1) ssh on to your rov
+
 2) cd /opt/openrov
+
 3) sudo ./update.sh
 
 This will go to the github repositroy and pull the latest code. You may need to reboot after the update.  There is a known issue where the serial.io project sometimes failes to compile.  You can ignore that, but you may have to try again if it aborts the update.
@@ -85,9 +87,13 @@ How to Contribute
 Contributions require that you sign a [CLA](http://wiki.openrov.com/index.php/Special:SignDocument?doc=9) before the project can accept your pull requests.
 
 1) Fork the project in github
+
 2) Add an issue to the issue list for the changes you want to make.  Browser the issues lists for many of the fixes and enhancement requests if your looking for ideas.
+
 3) Make your changes and or fixes.
+
 4) Test them locally on your ROV or using the mock framework for node if you don't have one.
+
 5) Send a pull request back to the Master repository.
 
 More details can be found on the [OpenROV Wiki](http://wiki.openrov.com/index.php/Contributing).
