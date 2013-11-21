@@ -30,5 +30,8 @@
 #define HAS_MPU9150 (0)
 #define MPU9150_EEPROM_START 2
 
+#if !(HAS_OROV_CONTROLLERBOARD_25) && !(HAS_STD_CAPE)
+#  error "You must select either standard cape or controllerboard25 in the AConfig.h file as they have predefined pin values required by other libraries."
+#endif
 
 #endif
