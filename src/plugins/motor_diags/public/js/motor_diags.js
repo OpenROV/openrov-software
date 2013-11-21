@@ -40,6 +40,7 @@
                 </div> \
 		<label class="control-label" for="reverse-lift-thruster">Reverse Verticle Thruster</label> \
 		<input type="checkbox" id="reverseLiftThruster" />		\
+		<br><a href="#" class="btn" id="callibrate_escs">Callibrate ESCs</a> \
 	        <h4>Runtime Settings:</h4> \
 	          <div class="control-group invisible-field"> \
 		      <label class="control-label" for="deadzone">DeadZone</label><br>min: \
@@ -84,6 +85,8 @@
                   }
             });
             $( "#verticalMotorSpeedVal" ).val( $( "#verticalMotorSpeed" ).slider( "value" ) );
+	    
+	   
         // Register the various event handlers
         this.listen();
         
@@ -99,6 +102,12 @@
         this.cockpit.socket.on('settings', function(data) {
             motordiag.LoadSettings(data);
         });
+	
+	 $("#callibrate_escs").click(function(){
+	    motordiag.cockpit.socket.emit('callibrate_escs');
+	    console.log("callibrate_escs sent")
+	});
+	
 
     };
     Motor_diags.prototype.sendTestMotorMessage = function sendTestMotorMessage(){

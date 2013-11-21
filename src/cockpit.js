@@ -23,6 +23,8 @@ var CONFIG = require('./lib/config')
   , path = require('path')
   , xmpp = require('node-xmpp');
   ;
+  
+
 
 app.configure(function () {
 app.use(express.static(__dirname + '/static/'));
@@ -52,6 +54,7 @@ var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({delay : DELAY});
 var controller = new OpenROVController(globalEventLoop);
 var arduinoUploadController = new OpenROVArduinoFirmwareController(globalEventLoop);
+controller.camera = camera;
 
 app.get('/config.js', function(req, res) {
   res.type('application/javascript');
@@ -128,27 +131,7 @@ io.sockets.on('connection', function (socket) {
         controller.send('dtwa()');
     });
     
-    socket.emitPhotos = function(){
-          fs.readdir(CONFIG.preferences.get('photoDirectory'),function(err,files){
-            if(err) throw err;
-            var myfiles = [];
-            files.forEach(function(file){
-              myfiles.push('/photos/' + path.basename(file));
-            });
-            globalEventLoop.emit('photos-updated',myfiles); // trigger files_ready event
-          });    
-    };
-    
-    socket.emitPhotos();
-  
-    socket.on('snapshot', function() {
-        camera.snapshot( function(filename) {
-          console.log('Photo taken: '+ filename);
-          // read all files from current directory
-          socket.emitPhotos();        
-        });
-    });
-    
+     
     socket.on('update_settings', function(value){
       for(var property in value)
         if(value.hasOwnProperty(property))
@@ -195,10 +178,7 @@ io.sockets.on('connection', function (socket) {
         console.log('sending settings to web client');
     })
     
-    globalEventLoop.on('photos-updated',function(photos){
-        socket.emit('photos-updated',photos);
-        console.log('sending photos to web client');
-    })    
+  
 
    globalEventLoop.on('videoStarted', function(){
 	socket.emit('videoStarted');
@@ -254,8 +234,9 @@ var deps = {
     server: server
   , app: app
   , io: io
-  , client: null
+  , rov: controller
   , config: CONFIG
+  , globalEventLoop: globalEventLoop
 };
 
 

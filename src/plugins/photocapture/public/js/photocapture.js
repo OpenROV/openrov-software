@@ -44,9 +44,16 @@
 	      console.log('got new photos');
 	      photoc.snapshots(data);
 	    });
+	
+	photoc.cockpit.socket.on('photo-added', function(filename) {
+	      console.log('got new photos');
+	      photoc.snapshots().push(filename);
+	      photoc.snapshots.valueHasMutated();
+	    });	
 
 	$("#capture-photo").click(function(){
 	      photoc.cockpit.socket.emit('snapshot');
+	      console.log('send snapshot request to server');
 	});
 	
 	$("#show-photos").click(function() {
