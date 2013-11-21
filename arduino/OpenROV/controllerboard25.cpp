@@ -16,7 +16,7 @@ Timer statustime2;
 int index = 0;                  // the index of the current reading
 int total = 0;                  // the running total
 int average = 0;                // the average
-int escpowerpin = 16;
+int escpowerpin = ESCPOWER_PIN;
 int temppin = A8;
 float celsiusTempRead;
 // Define the number of samples to keep track of.  The higher the number,
@@ -26,7 +26,7 @@ float celsiusTempRead;
 
 //Pin vout("vout", CAPE_VOLTAGE_PIN, vout.analog, vout.in);
 //Pin iout("iout", CAPE_CURRENT_PIN, iout.analog, iout.in);
-Pin escpower("escpower", escpowerpin, escpower.digital, escpower.out);
+
 
 double GetTemp(void)
 {
@@ -123,8 +123,7 @@ void Controller25::device_setup(){
   time.reset();
   statustime2.reset();
   onesecondtimer.reset();
-  escpower.reset();
-  escpower.write(1); //Turn on the ESCs
+
   // initialize all the readings to 0: 
   for (int thisReading = 0; thisReading < numReadings; thisReading++)
     readings[thisReading] = 0;     
