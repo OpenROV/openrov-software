@@ -20,10 +20,17 @@
         };
         this.sendUpdateEnabled = true;
         var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq; //ms
+	var trimHeld = false;
+	
 	this.priorControls = {};
 
         // Add required UI elements
         $("#menu").prepend('<div id="example" class="hidden">[example]</div>');
+	$("#footercontent").prepend(
+		    '<div class="span1 pull-left"> \
+			<h6>Thrust&nbsp;Factor</h6><div class="label badge" id="thrustfactor">&nbsp;</div> \
+		    </div>');
+	$("#lights").append('<p>press <i>i</i> to toggle lights</p>');
 
         var self = this;
         setInterval(function() {
@@ -31,6 +38,7 @@
         }, SAMPLE_PERIOD);
         
         this.listen();
+	$("#thrustfactor").text(4);	
         
     };
     
@@ -38,6 +46,18 @@
     //so that the reference to this instance is available for further processing
     ROVpilot.prototype.listen = function listen() {
         var rov = this;
+	
+	GAMEPAD.DPAD_UP 	= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.adjustLights',.1)} };
+	GAMEPAD.DPAD_DOWN	= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.adjustLights',-.1)} };
+	GAMEPAD.Y		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.adjustCameraTilt',.1)} };	
+	GAMEPAD.B		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.setCameraTilt',0)} };
+	GAMEPAD.A		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.adjustCameraTilt',-.1)} };
+	GAMEPAD.RB		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('toggleAllTrimHold')} };
+	GAMEPAD.START		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('incrimentPowerLevel')} };
+    
+	GAMEPAD.LEFT_STICK_X	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setYaw',v)} };
+	GAMEPAD.LEFT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setThrottle',-1*v)} };
+	GAMEPAD.RIGHT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setLift',-1*v)} };  	
         
         KEYS[32] = {keydown: function(){ rov.allStop()}};// space (all-stop)
         KEYS[38] = {keydown: function(){ rov.setThrottle(1)},
@@ -67,8 +87,23 @@
         KEYS[80] = {keydown: function(){ rov.adjustLights(.1)}}; //p (brightness up) 
         KEYS[79] = {keydown: function(){ rov.adjustLights(-.1)}}; //o (brightness down) 
         KEYS[76] = {keydown: function(){ rov.toggleLasers();}}; //l (laser toggle) 
+        //KEYS[73] = {keydown: function(){ rov.toggleLights();}}; //i (laser lights)
+	KEYS[73] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleLights');}}; //i (laser lights) 
 
-
+	cockpitEventEmitter.on('rovpilot.allStop',function(){ rov.allStop()});
+	cockpitEventEmitter.on('rovpilot.setThrottle',function(v){ rov.setThrottle(v)});
+	cockpitEventEmitter.on('rovpilot.setYaw',function(v){ rov.setYaw(v)});
+	cockpitEventEmitter.on('rovpilot.setLift',function(v){ rov.setLift(v)});
+	cockpitEventEmitter.on('rovpilot.powerLevel',function(v){ rov.powerLevel(v)});
+	cockpitEventEmitter.on('rovpilot.adjustVerticleTrim',function(v){ rov.adjustVerticleTrim(v)});
+	cockpitEventEmitter.on('rovpilot.adjustThrottleTrim',function(v){ rov.adjustThrottleTrim(v)});
+	cockpitEventEmitter.on('rovpilot.adjustCameraTilt',function(v){ rov.adjustCameraTilt(v)});
+	cockpitEventEmitter.on('rovpilot.setCameraTilt',function(v){ rov.setCameraTilt(v)});
+	cockpitEventEmitter.on('rovpilot.adjustLights',function(v){ rov.adjustLights(v)});
+	cockpitEventEmitter.on('rovpilot.toggleLasers',function(v){ rov.toggleLasers()});
+	cockpitEventEmitter.on('rovpilot.toggleLights',function(v){ rov.toggleLights()});
+	cockpitEventEmitter.on('rovpilot.incrimentPowerLevel', function(){ rov.incrimentPowerLevel()});
+	
     };
 
 
@@ -84,6 +119,13 @@
         this.setCameraTilt(this.tilt);
     };
     
+    ROVpilot.prototype.setLights = function setLights(value){
+	this.light = value;
+	if (this.light>1) this.light = 1;
+	if (this.light<0) this.light = 0;
+        this.cockpit.socket.emit('brightness_update',this.light);	
+    };
+    
     ROVpilot.prototype.adjustLights = function adjustLights(value){
         if (this.light==0 && value<0){ //this code rounds the horn so to speak by jumping from zero to max and vise versa
 	  this.light = 1;
@@ -92,14 +134,20 @@
 	} else {
 	  this.light += value;
 	}
-	if (this.light>1) this.light = 1;
-	if (this.light<0) this.light = 0;
-        this.cockpit.socket.emit('brightness_update',this.light);
+	this.setLights(this.light);
     };
     
     ROVpilot.prototype.toggleLasers = function toggleLasers(){
         this.cockpit.socket.emit('laser_update');
     };
+    
+    ROVpilot.prototype.toggleLights = function toggleLights(){
+        if (this.light>0) {
+	    this.setLights(0);
+	} else {
+	    this.setLights(1);
+	}
+    };    
     
     ROVpilot.prototype.adjustVerticleTrim = function adjustVerticleTrim(value){
         this.vtrim+=value;
@@ -110,6 +158,14 @@
         this.ttrim+=value;
         this.positions.throttle = (1/1000)*ttrim;
     };
+    
+    ROVpilot.prototype.toggleAllTrimHold = function toggleAllTrimHold(){
+	trimHeld = !bool;
+	if (trimHeld) {
+	    this.ttrim=positions.throttle;
+	    this.vtrim=positions.throttle;
+	}	
+    };    
     
     ROVpilot.prototype.setThrottle = function setThrottle(value){
         this.positions.throttle = value;
@@ -124,6 +180,13 @@
     ROVpilot.prototype.setYaw = function setYaw(value){
         this.positions.yaw = value;
     };
+    
+    ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel(){
+	var currentPowerLevel = $("#thrustfactor").text();
+	currentPowerLevel++;
+	if (currentPowerLevel>5) currentPowerLevel = 1;
+	this.powerLevel(currentPowerLevel);
+    }
     
     ROVpilot.prototype.powerLevel = function powerLevel(value){
         switch(value){
@@ -143,6 +206,7 @@
                 this.power = 1    
             break;
         }
+	$("#thrustfactor").text(value);		
     };      
     
     ROVpilot.prototype.allStop = function allStop(){
@@ -157,9 +221,12 @@
         var positions = this.positions;
 	var updateRequired = false;  //Only send if there is a change
         var controls = {};
-        
+ 
+ 	controls.throttle = positions.throttle * this.power;
+	controls.yaw = positions.yaw;
+	controls.lift = positions.lift * this.power;
         for(var i in positions) {
-	    controls[i] = positions[i];
+
 	    if (controls[i] != this.priorControls[i])
 	    {
                 updateRequired = true;

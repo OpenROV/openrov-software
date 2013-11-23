@@ -11,18 +11,15 @@
 	this.lastPing = null;
 
         // Add required UI elements
-        $("#footer").append(
-	  '<div class="navbar-inner"> \
-            <div class="container-fluid" style="height: 100%"> \
-              <div class="span1 pull-left"><h6>Connection</h6><div id="connectionHealth">&nbsp;</div></div> \
+        $("#footercontent").append(
+	  '   <div class="span1 pull-left"><h6>Connection</h6><div id="connectionHealth">&nbsp;</div></div> \
 	      <div class="span2 hidden pull-right"><h6>Temperature</h6><h2 data-bind="html: convertedTemperature"></h2></div> \
               <div class="span2 hidden pull-right"><div class="pull-right" id="depth-gauge"></div><h6>Depth:</h6><h2 data-bind="text: convertedDepth"></h2></div> \
                 <div class="span2 pull-right"><h2 id="formattedRunTime">time</h2><h4 id="localtime">&nbsp;</h4></div> \
 		<div class="span2 pull-right"><h2 id="currentCpuUsage">&nbsp;</h2></div> \
                 <div class="span2 pull-right"><h2 id="currentVoltage">&nbsp;</h2><div id="batteryIndicator">&nbsp;</div></div> \
 		<div class="span2 pull-right"><h2 id="currentCurrent">&nbsp;</h2><div>&nbsp;</div></div> \
-            </div> \
-          </div>');
+           ');
 	
 	$("#servoTilt").append('<p>Servo Tilt: <img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png" class="center"></p>'); //attr style
 	

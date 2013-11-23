@@ -22,8 +22,8 @@
 	<script type='text/javascript' src='js/libs/gamepad.js'></script>
         <script type='text/javascript' src='js/utilities.js'></script>
         <script type='text/javascript' src='js/ArduinoFirmwareViewModel.js'></script>
-        <script type='text/javascript' src="js/gamepad.js"></script>
         <script type='text/javascript' src="js/keypad.js"></script>
+        <script type='text/javascript' src="js/gamepad.js"></script>
         <script type='text/javascript' src="js/frame.js"></script>
 	<script type='text/javascript' src="js/cockpit.js"></script>
 	<script type='text/javascript' src="js/compass.js"></script>
@@ -32,6 +32,7 @@
 	<script type='text/javascript' src="js/horizon.js"></script>
         <script src="/config.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="js/libs/eventemitter2.js"></script>
 
   <% for(var i=0; i<scripts.length; i++) {%>
   <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
@@ -88,7 +89,10 @@
           </div>
         </div>
         <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
-
+	    <div class="navbar-inner">
+		<div id="footercontent" class="container-fluid" style="height: 100%">
+		</div>
+	    </div>
         </div>
 	
 
@@ -132,8 +136,31 @@
         <script>
 
           $(function() {
-            var socket = io.connect();
+	    if (window.io == undefined) {
+	      alert("detected no socket found");
+	      var mysocket = function(){
+		
+	      }
+	      mysocket.prototype.emit = function(x){console.log(x);};
+	      mysocket.prototype.emit = function(x,y){console.log(x);console.log(y);};
+	      simevents = new Object();
+	      mysocket.prototype.on = function(x,y){
+		console.log("registering " + x);
+		if (simevents.x == undefined) {
+		  simevents[x] = [];
+		}
+		simevents[x].push(y);
+	      };
 
+	      var io = new mysocket();
+	      var socket = new mysocket();
+	      CONFIG = new Object();
+	      CONFIG.sample_freq = 20;
+	      
+	    } else {
+            var socket = io.connect();
+	    }
+	    cockpitEventEmitter = new EventEmitter2();
             /* ------------------------------------------
                settings 
             */
@@ -192,41 +219,6 @@
 	  $('#toggle_watertype').click(function() {
             socket.emit('depth_togglewatertype');
           });
-	  
-	  
-
-            /* ------------------------------------------
-               gamepad/keyboard 
-            */
-            var gp = new GamePad();
-            var kp = new KeyPad();
-	    keyboard = kp;
-            var controller = kp;
-	    
-	    var detectcontroller = function(){
-	      if(gp.isAvailable()) {
-		  $("#keyboard").hide();
-		  $("#gamepad").show();
-		  controller = gp;
-	      }
-	      else { 
-		  $("#gamepad").hide();
-		  $("#keyboard").show();
-		  controller = kp;
-	      }	      
-	    };
-
-	    gp.bindDetectionEvent(function(){
-	      detectcontroller();
-	      console.log('binddetectionevent called');
-	    });
-	    
-	    detectcontroller();
-
-
-	    
-
-
  
  
 	    
