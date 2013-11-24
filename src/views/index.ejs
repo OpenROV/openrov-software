@@ -152,7 +152,7 @@
 	      CONFIG.sample_freq = 20;
 	      
 	    } else {
-            var socket = io.connect();
+            var socket = window.io.connect();
 	    }
 	    cockpitEventEmitter = new EventEmitter2();
             /* ------------------------------------------
