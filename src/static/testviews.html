@@ -47,9 +47,12 @@ function autoResize(id){
             scripts.push('../plugins/motor_diags/public/js/motor_diags.js');
             scripts.push('../plugins/touchcontroller/public/js/gamecontroller.min.js');
             scripts.push('../plugins/touchcontroller/public/js/touchcontroller.js');
+            
+            var styles = [];
+            styles.push('../plugins/touchcontroller/public/css/style.css');
 
             
-            frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:{}, scripts:scripts}));
+            frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:styles, scripts:scripts}));
             frameDoc.close();        
             //autoResize(iframe);
 

@@ -9,6 +9,14 @@ body {
   right: 0;
 }
 
+.testoverlay {
+    opacity: 0.5;
+    z-index: 3;
+    top: 0px;
+    left: 0px;
+    position: absolute;  
+}
+
 * {
   position: relative;
   z-index: 1;
@@ -181,8 +189,8 @@ img.center {
 }
 
 #video-container {
-  min-width: 640px;
-  min-height: 480px;
+//  min-width: 640px;
+//  min-height: 480px;
   border-radius: 10px;
   padding: 10px;
   display: block;
