@@ -23,10 +23,10 @@
 	GAMEPAD.RIGHT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setLift',-1*v)} };
 	
 	*/
-    if (!is_touch_device) return;
+    //if (!is_touch_device) return;
     
           $( function() {
-        $("#main-row").append('<canvas id="touchcontroller" class="row-fluid full-height testoverlay"></canvas>');
+        $("#outter-videocontainer").append('<canvas id="touchcontroller" class="row-fluid full-height testoverlay"></canvas>');
         GameController.init( {
             canvas: 'touchcontroller',
             left: {
