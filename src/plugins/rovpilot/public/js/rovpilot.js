@@ -59,34 +59,34 @@
 	GAMEPAD.LEFT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setThrottle',-1*v)} };
 	GAMEPAD.RIGHT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setLift',-1*v)} };  	
         
-        KEYS[32] = {keydown: function(){ rov.allStop()}};// space (all-stop)
-        KEYS[38] = {keydown: function(){ rov.setThrottle(1)},
-                    keyup:   function(){ rov.setThrottle(0)}}; // up  (forward)
-        KEYS[40] = {keydown: function(){ rov.setThrottle(-1)},
-                    keyup:   function(){ rov.setThrottle(0)}};  // down (aft)       
-        KEYS[37] = {keydown: function(){ rov.setYaw(-1)},
-                    keyup:   function(){ rov.setYaw(0)}};// left (turn left) 
-        KEYS[39] = {keydown: function(){ rov.setYaw(1)},
-                    keyup:   function(){ rov.setYaw(0)}};// right (turn right) 
-        KEYS[16] = {keydown: function(){ rov.setLift(-1)},// shift (lift up)
-                    keyup:   function(){ rov.setLift(0)}};
-        KEYS[17] = {keydown: function(){ rov.setLift(1)}, //ctrl (lift down)
-                    keyup:   function(){ rov.setLift(0)}};
-        KEYS[49] = {keydown: function(){ rov.powerLevel(1)}}; //1
-        KEYS[50] = {keydown: function(){ rov.powerLevel(2)}}; //2
-        KEYS[51] = {keydown: function(){ rov.powerLevel(3)}}; //3
-        KEYS[52] = {keydown: function(){ rov.powerLevel(4)}}; //4
-        KEYS[53] = {keydown: function(){ rov.powerLevel(5)}}; //5
-        KEYS[55] = {keydown: function(){ rov.adjustVerticleTrim(1)}}; //7 (vtrim)
-        KEYS[56] = {keydown: function(){ rov.adjustVerticleTrim(-1)}}; //8 (vttrim)
-        KEYS[57] = {keydown: function(){ rov.adjustThrottleTrim(-1)}}; //9 (ttrim -)
-        KEYS[48] = {keydown: function(){ rov.adjustThrottleTrim(1)}}; //0 (ttrim +)      
-        KEYS[81] = {keydown: function(){ rov.adjustCameraTilt(.1)}}; //Q (tilt up)   
-        KEYS[65] = {keydown: function(){ rov.setCameraTilt(0)}};  //A (tilt fwd)     
-        KEYS[90] = {keydown: function(){ rov.adjustCameraTilt(-.1)}}; //Z (tilt down)  
-        KEYS[80] = {keydown: function(){ rov.adjustLights(.1)}}; //p (brightness up) 
-        KEYS[79] = {keydown: function(){ rov.adjustLights(-.1)}}; //o (brightness down) 
-        KEYS[76] = {keydown: function(){ rov.toggleLasers();}}; //l (laser toggle) 
+        KEYS[32] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.allStop')}};// space (all-stop)
+        KEYS[38] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setThrottle',1)},
+                    keyup:   function(){ cockpitEventEmitter.emit('rovpilot.setThrottle',0)}}; // up  (forward)
+        KEYS[40] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setThrottle',-1)},
+                    keyup:   function(){ cockpitEventEmitter.emit('rovpilot.setThrottle',0)}};  // down (aft)       
+        KEYS[37] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setYaw',-1)},
+                    keyup:   function(){ cockpitEventEmitter.emit('rovpilot.setYaw',0)}};// left (turn left) 
+        KEYS[39] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setYaw',1)},
+                    keyup:   function(){ cockpitEventEmitter.emit('rovpilot.setYaw',0)}};// right (turn right) 
+        KEYS[16] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setLift',-1)},// shift (lift up)
+                    keyup:   function(){ cockpitEventEmitter.emit('rovpilot.setLift',0)}};
+        KEYS[17] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setLift',1)}, //ctrl (lift down)
+                    keyup:   function(){ cockpitEventEmitter.emit('rovpilot.setLift',0)}};
+        KEYS[49] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerLevel',1)}}; //1
+        KEYS[50] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerLevel',2)}}; //2
+        KEYS[51] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerLevel',3)}}; //3
+        KEYS[52] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerLevel',4)}}; //4
+        KEYS[53] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerLevel',5)}}; //5
+        KEYS[55] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustVerticleTrim',1)}}; //7 (vtrim)
+        KEYS[56] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustVerticleTrim',-1)}}; //8 (vttrim)
+        KEYS[57] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustThrottleTrim',-1)}}; //9 (ttrim -)
+        KEYS[48] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustThrottleTrim',1)}}; //0 (ttrim +)      
+        KEYS[81] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustCameraTilt',.1)}}; //Q (tilt up)   
+        KEYS[65] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setCameraTilt',0)}};  //A (tilt fwd)     
+        KEYS[90] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustCameraTilt',-.1)}}; //Z (tilt down)  
+        KEYS[80] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustLights',.1)}}; //p (brightness up) 
+        KEYS[79] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustLights',-.1)}}; //o (brightness down) 
+        KEYS[76] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleLasers');}}; //l (laser toggle) 
         //KEYS[73] = {keydown: function(){ rov.toggleLights();}}; //i (laser lights)
 	KEYS[73] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleLights');}}; //i (laser lights) 
 

@@ -38,3 +38,4 @@ var KeyPad = function() {
 
   return kp;
 }
+var kp = new KeyPad();

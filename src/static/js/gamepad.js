@@ -60,3 +60,5 @@ var GamePad = function() {
 
   return gp;
 }
+
+var gp = new GamePad();
