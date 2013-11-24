@@ -44,6 +44,7 @@ function autoResize(id){
        //     scripts.push('../lib/config.js');
             scripts.push('../plugins/capestatus/public/js/capestatus.js');
             scripts.push('../plugins/rovpilot/public/js/rovpilot.js');
+            scripts.push('../plugins/motor_diags/public/js/motor_diags.js');
             
             frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:{}, scripts:scripts}));
             frameDoc.close();        

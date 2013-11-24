@@ -175,7 +175,6 @@
 
             $("#settings .back-button").click(function() {
               hideSettings();
-	      sendUpdateSettingMessage(socket,{smoothingIncriment:viewmodel.smoothingIncriment()});
             });	    
 
             function hideSettings() {
@@ -227,14 +226,7 @@
 	    //plugin hooks
             setupFrameHandling(socket);
 	   var cockpit = new Cockpit(socket);
-          });
-
-
-	  
-	  function sendUpdateSettingMessage(socket,setting) {
-	    socket.emit('update_settings',setting);
-	  }
-	  
+          });	  
 
 
         </script>

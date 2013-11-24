@@ -12,6 +12,13 @@
 	//TODO: Add Dom's Button settings to UI
 
         // Add required UI elements
+	$("#settings H4:contains('Runtime Settings')").after(
+	          '<div class="control-group"> \
+		      <label class="control-label" for="smoothingIncriment">Motor Response Aggressivness:</label> \
+		      <input type="text" id="smoothingIncriment" /> \
+		  </div>'
+	);
+	
 	$("#diagnostic H3:contains('Diagnostics')").after(
 	           ' <div class="settings-block"> \
                 <h4>Manually test motors</h4> \
@@ -101,6 +108,11 @@
         $("#diagnostic .back-button").click(function (){
             motordiag.SaveSettings();
         });
+	
+	$("#settings .back-button").click(function (){
+            motordiag.SaveSettings2();
+        });
+	
         this.cockpit.socket.on('settings', function(data) {
             motordiag.LoadSettings(data);
         });
@@ -131,7 +143,7 @@
 	    if ('reverse_port_thruster' in settings ) $("#reversePortThruster").val(settings.reverse_port_thruster);
 	    if ('reverse_starbord_thruster' in settings ) $("#reverseStarbordThruster").val(settings.reverse_starbord_thruster);
 	    if ('reverse_lift_thruster' in settings ) $("#reverseLiftThruster").val(settings.reverse_lift_thruster);
-	 //   if ('smoothingIncriment' in settings) self.smoothingIncriment(settings.smoothingIncriment);
+	    if ('smoothingIncriment' in settings) $("#smoothingIncriment").val(settings.smoothingIncriment);
     };
     
     Motor_diags.prototype.SaveSettings = function SaveSettings(){
@@ -143,6 +155,10 @@
 	  this.cockpit.socket.emit('update_settings',{reverse_lift_thruster:$("#reverseLiftThruster").val()});
 	  
     };
+    
+    Motor_diags.prototype.SaveSettings2 = function SaveSettings(){
+          this.cockpit.socket.emit('update_settings',{smoothingIncriment:$("#smoothingIncriment").val()});	  
+    };    
 
     window.Cockpit.plugins.push(Motor_diags);
 
