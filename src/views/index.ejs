@@ -170,7 +170,7 @@
               $("#settings").show('fold');
               cockpit.sendUpdateEnabled=false;
               Mousetrap.bind('esc', hideSettings);
-	      keyboard.unbindKeys();
+	      keyboardHandler.unbindKeys();
             });
 
             $("#settings .back-button").click(function() {
@@ -182,7 +182,7 @@
               $("#settings").hide('fold');
               cockpit.sendUpdateEnabled = true;
               Mousetrap.unbind('esc');
-	      keyboard.bindKeys()
+	      keyboardHandler.bindKeys()
             }
 	    
               /* ------------------------------------------
@@ -195,6 +195,7 @@
                   $("#diagnostic").show('fold');
                   cockpit.sendUpdateEnabled=false;
                   Mousetrap.bind('esc', hideDiagnostic);
+		  keyboardHandler.unbindKeys();
               });
 
               $("#diagnostic .back-button").click(function() {
@@ -205,6 +206,7 @@
                   $("#diagnostic").hide('fold');
                   cockpit.sendUpdateEnabled=true;
                   Mousetrap.unbind('esc');
+		  keyboardHandler.bindKeys();
               }
 
  	      
