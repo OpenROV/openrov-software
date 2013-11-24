@@ -1,6 +1,6 @@
 html { height: 100%; }
 body {
-  padding-top: 65px;
+ // padding-top: 65px; why?
   padding-bottom: 100px;
   position: fixed;
   top: 0;
