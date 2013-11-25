@@ -1,6 +1,6 @@
 #include "AConfig.h"
 #if(HAS_STD_CAMERAMOUNT)
-#include "orov_Servo.h"
+#include "openrov_servo.h"
 #include "Device.h"
 #include "Pin.h"
 #include "CameraMount.h"

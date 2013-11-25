@@ -21,7 +21,7 @@ echo Setting up uploader 1>&2
 
 COUNTER=0
 #setup required environment variables if not already set
-. /opt/openrov/linux/orovconfig.sh
+. /opt/openrov/linux/openrov_config.sh
 
 while [ $COUNTER -lt 9 ]; do
         echo $COUNTER
