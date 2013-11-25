@@ -107,7 +107,63 @@
                         cockpitEventEmitter.emit('rovpilot.setLift',0);
                     }
                 },                
-                false]      //to get rid of defaults    
+                { 
+                    label: 'C-UP',
+                    fontSize: 10,
+                    radius: '5%',
+                    stroke: 2,
+                    backgroundColor: 'blue',
+                    fontColor: '#fff',
+                    offset: { 
+                        x: '5%', y: '-15%' 
+                    },  
+                    touchStart: function() { 
+                        cockpitEventEmitter.emit('rovpilot.adjustCameraTilt',.1);
+                    } 
+                },
+                { 
+                    label: 'C-CEN',
+                    fontSize: 10,
+                    radius: '5%',
+                    stroke: 2,
+                    backgroundColor: 'blue',
+                    fontColor: '#fff',
+                    offset: { 
+                        x: '5%', y: '-5%' 
+                    },  
+                    touchStart: function() { 
+                        cockpitEventEmitter.emit('rovpilot.setCameraTilt',0);
+                    } 
+                },
+                { 
+                    label: 'C-DWN',
+                    fontSize: 10,
+                    radius: '5%',
+                    stroke: 2,
+                    backgroundColor: 'blue',
+                    fontColor: '#fff',
+                    offset: { 
+                        x: '5%', y: '4%' 
+                    },  
+                    touchStart: function() { 
+                        cockpitEventEmitter.emit('rovpilot.adjustCameraTilt',-.1);
+                    } 
+                },                
+                { 
+                    label: 'laser',
+                    fontSize: 13,
+                    radius: '7%',
+                    stroke: 2,
+                    backgroundColor: 'blue',
+                    fontColor: '#fff',
+                    offset: { 
+                        x: '-10%', y: '-15%' 
+                    },  
+                    touchStart: function() { 
+                        cockpitEventEmitter.emit('rovpilot.toggleLasers');
+                    }
+                }
+                ]      //to get rid of defaults    
             }
          });
     });
