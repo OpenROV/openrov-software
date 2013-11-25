@@ -33,8 +33,8 @@
                 type: 'joystick', 
                 position: { left: '15%', bottom: '15%' },
                 touchMove: function( details ) {
-                    cockpitEventEmitter.emit('setThrottle',details.normalizedY);
-                    cockpitEventEmitter.emit('setYaw',details.normalizedX);
+                    cockpitEventEmitter.emit('rovpilot.setThrottle',details.normalizedY);
+                    cockpitEventEmitter.emit('rovpilot.setYaw',details.normalizedX);
                     
                     console.log( details.dx );
                     console.log( details.dy );

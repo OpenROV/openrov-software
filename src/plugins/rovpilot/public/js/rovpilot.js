@@ -52,12 +52,12 @@
 	GAMEPAD.Y		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.adjustCameraTilt',.1)} };	
 	GAMEPAD.B		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.setCameraTilt',0)} };
 	GAMEPAD.A		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.adjustCameraTilt',-.1)} };
-	GAMEPAD.RB		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('toggleAllTrimHold')} };
-	GAMEPAD.START		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('incrimentPowerLevel')} };
+	GAMEPAD.RB		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.toggleAllTrimHold')} };
+	GAMEPAD.START		= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.incrimentPowerLevel')} };
     
-	GAMEPAD.LEFT_STICK_X	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setYaw',v)} };
-	GAMEPAD.LEFT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setThrottle',-1*v)} };
-	GAMEPAD.RIGHT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('setLift',-1*v)} };  	
+	GAMEPAD.LEFT_STICK_X	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('rovpilot.setYaw',v)} };
+	GAMEPAD.LEFT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('rovpilot.setThrottle',-1*v)} };
+	GAMEPAD.RIGHT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('rovpilot.setLift',-1*v)} };  	
         
         KEYS[32] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.allStop')}};// space (all-stop)
         KEYS[38] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setThrottle',1)},
