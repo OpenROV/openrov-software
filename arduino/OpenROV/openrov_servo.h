@@ -42,8 +42,8 @@
    detach()    - Stops an attached servos from pulsing its i/o pin. 
  */
 
-#ifndef orov_Servo_h
-#define orov_Servo_h
+#ifndef openrov_servo_h
+#define openrov_servo_h
 
 #include <inttypes.h>
 
