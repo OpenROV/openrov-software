@@ -32,22 +32,26 @@
             left: {
                 type: 'joystick', 
                 position: { left: '15%', bottom: '15%' },
-                touchMove: function( details ) {
-                    cockpitEventEmitter.emit('rovpilot.setThrottle',details.normalizedY);
-                    cockpitEventEmitter.emit('rovpilot.setYaw',details.normalizedX);
-                    
-                    console.log( details.dx );
-                    console.log( details.dy );
-                    console.log( details.max );
-                    console.log( details.normalizedX );
-                    console.log( details.normalizedY );
+                joystick: {
+                    touchMove: function( details ) {
+                        cockpitEventEmitter.emit('rovpilot.setThrottle',details.normalizedY);
+                        cockpitEventEmitter.emit('rovpilot.setYaw',details.normalizedX);
+                        
+                        console.log( details.dx );
+                        console.log( details.dy );
+                        console.log( details.max );
+                        console.log( details.normalizedX );
+                        console.log( details.normalizedY );
+                        }
                 }
             }, 
             right: { 
                 type: 'joystick', 
                 position: { right: '15%', bottom: '15%' } ,
-                touchMove: function( details ) {
-                    cockpitEventEmitter.emit('setLift',details.normalizedY);
+                joystick: {
+                    touchMove: function( details ) {
+                        cockpitEventEmitter.emit('setLift',details.normalizedY);
+                    }
                 }
             }
         })
