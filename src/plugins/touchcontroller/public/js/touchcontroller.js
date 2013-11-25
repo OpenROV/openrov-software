@@ -30,7 +30,7 @@
         GameController.init( {
             canvas: 'touchcontroller',
             left: {
-                type: 'joystick', 
+                /*type: 'joystick', 
                 position: { left: '15%', bottom: '15%' },
                 joystick: {
                     touchMove: function( details ) {
@@ -43,6 +43,22 @@
                         console.log( details.normalizedX );
                         console.log( details.normalizedY );
                         }
+                        
+                
+                } */
+                type: 'dpad',
+                position: { left: '15%', bottom: '15%' },
+                dpad: {
+                    touchMove: function( details ) {
+                        cockpitEventEmitter.emit('rovpilot.setThrottle',details.normalizedY);
+                        cockpitEventEmitter.emit('rovpilot.setYaw',details.normalizedX);
+                        
+                        console.log( details.dx );
+                        console.log( details.dy );
+                        console.log( details.max );
+                        console.log( details.normalizedX );
+                        console.log( details.normalizedY );
+                        }                    
                 }
             }, 
             right: { 
