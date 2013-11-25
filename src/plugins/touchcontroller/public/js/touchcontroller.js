@@ -30,24 +30,8 @@
         GameController.init( {
             canvas: 'touchcontroller',
             left: {
-                /*type: 'joystick', 
-                position: { left: '15%', bottom: '15%' },
-                joystick: {
-                    touchMove: function( details ) {
-                        cockpitEventEmitter.emit('rovpilot.setThrottle',details.normalizedY);
-                        cockpitEventEmitter.emit('rovpilot.setYaw',details.normalizedX);
-                        
-                        console.log( details.dx );
-                        console.log( details.dy );
-                        console.log( details.max );
-                        console.log( details.normalizedX );
-                        console.log( details.normalizedY );
-                        }
-                        
-                
-                } */
                 type: 'dpad',
-                position: { left: '15%', bottom: '15%' },
+                position: { left: '15%', bottom: '15%' }, 
                 dpad: {
                     touchMove: function( details ) {
                         cockpitEventEmitter.emit('rovpilot.setThrottle',details.normalizedY);
@@ -59,19 +43,74 @@
                         console.log( details.normalizedX );
                         console.log( details.normalizedY );
                         }                    
-                }
+                }         
             }, 
-            right: { 
-                type: 'joystick', 
+            bottom: { 
+                type: 'dpad', 
                 position: { right: '15%', bottom: '15%' } ,
-                joystick: {
+                dpad: {
                     touchMove: function( details ) {
                         cockpitEventEmitter.emit('setLift',details.normalizedY);
                     }
                 }
+            },
+            //label: 'X', radius: '7%', stroke: 2, backgroundColor: 'blue', fontColor: '#fff', 
+            right: { 
+                type: 'buttons',
+                position: { right: '25%', bottom: '15%' }, 
+                buttons: [
+                { 
+                    label: 'lights',
+                    fontSize: 13,
+                    radius: '7%',
+                    stroke: 2,
+                    backgroundColor: 'blue',
+                    fontColor: '#fff',
+                    offset: { 
+                        x: '-10%', y: 0 
+                    },  
+                    touchStart: function() { 
+                        cockpitEventEmitter.emit('rovpilot.toggleLights');
+                    } 
+                },
+                { 
+                    label: 'up',
+                    fontSize: 13,
+                    radius: '7%',
+                    stroke: 2,
+                    backgroundColor: 'blue',
+                    fontColor: '#fff',
+                    offset: { 
+                        x: '-25%', y: '-15%' 
+                    },  
+                    touchStart: function() { 
+                        cockpitEventEmitter.emit('rovpilot.setLift',1);
+                    },
+                    touchEnd:  function() { 
+                        cockpitEventEmitter.emit('rovpilot.setLift',0);
+                    }
+                },
+                { 
+                    label: 'down',
+                    fontSize: 13,
+                    radius: '7%',
+                    stroke: 2,
+                    backgroundColor: 'blue',
+                    fontColor: '#fff',
+                    offset: { 
+                        x: '-25%', y: '0%' 
+                    },  
+                    touchStart: function() { 
+                        cockpitEventEmitter.emit('rovpilot.setLift',-1);
+                    },
+                    touchEnd:  function() { 
+                        cockpitEventEmitter.emit('rovpilot.setLift',0);
+                    }
+                },                
+                false]      //to get rid of defaults    
             }
-        })
-         }); 
+         });
+    });
 
     Touchcontroller = function Touchcontroller(cockpit) {
         console.log("Loading Touchcontroller plugin in the browser.");
