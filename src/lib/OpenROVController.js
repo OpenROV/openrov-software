@@ -160,7 +160,7 @@ var OpenROVController = function(eventLoop) {
   };
   
     controller.sendTilt = function(value) {
-        if (this.NotSafeToControl()) return;
+        if (this.notSafeToControl()) return;
         var servoTilt = physics.mapTiltServo(value);
         var command = 'tilt(' + servoTilt +');';
         hardware.write(command);
