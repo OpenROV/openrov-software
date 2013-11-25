@@ -160,7 +160,7 @@ var OpenROVController = function(eventLoop) {
   };
 
     controller.sendLight = function(value) {
-        if (this.NotSafeToControl()) return;
+        if (this.notSafeToControl()) return;
         var command = 'ligt(' + physics.mapLight(value) +');';
 	hardware.write(command);
     };
