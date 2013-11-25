@@ -118,7 +118,7 @@
         // Instance variables
         this.cockpit = cockpit;
         
- 
+        $(document).trigger("resize");
 
         // Add required UI elements
         //$("#menu").prepend('<div id="example" >[GameController]</div>');
