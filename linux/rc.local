@@ -21,6 +21,10 @@ echo BB-SPI0DEV > $CAPEMGR/slots
 # setup the 'reset' GPIO configuration
 /opt/openrov/linux/reset.sh
 
+if [ -f /var/_RESIZE_ROOT_ ]; then
+  resize2fs /dev/mmcblk0p2
+  rm /var/_RESIZE_ROOT
+fi
 
 exit 0
 
