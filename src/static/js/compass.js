@@ -29,7 +29,7 @@
         var divRect = div.getBoundingClientRect(),
             ctx, x, i, needle;
         div.style.position = 'absolute';
-        div.style.bottom = '0px';
+       // div.style.bottom = '0px';
         div.style.backgroundImage = '-webkit-radial-gradient(50% 50%, circle cover, rgb(68, 68, 68) 0%, black 100%)';
 
         this.visibleWidth = divRect.width*(360/120); // divRect.width;

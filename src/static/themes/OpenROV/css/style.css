@@ -1,7 +1,7 @@
 html { height: 100%; }
 body {
  // padding-top: 65px; why?
-  padding-bottom: 100px;
+ // padding-bottom: 100px;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -91,6 +91,10 @@ body {
   vertical-align: middle;
 }
 
+.navbar-fixed-top {
+  margin-bottom: 0px;
+}
+
 .navbar-fixed-bottom .navbar-inner {
   /* IE10 Consumer Preview */ 
   background-image: -ms-linear-gradient(top, #424242 0%, #141414 100%);
@@ -168,8 +172,17 @@ img.center {
   background-color: black;
 }
 
+#video-container{
+  height: 100%;
+  background-size: 100%;
+//  background-size: cover;
+  background-position: center center;
+  vertical-align: top;
+  background-image: url(../img/no_camera.jpg);
+}
+
 #main-row {
-  padding-bottom:150px; /* this needs to be bigger than footer height*/
+ // padding-bottom:150px; /* this needs to be bigger than footer height*/
 }
 
 #footer{
@@ -184,19 +197,20 @@ img.center {
   height: 100%;
 }
 
-#outher-videocontainer {
-  display: table;
-}
+//#outter-videocontainer {
+//  display: table;
+//  height: 100%;
+//}
 
-#video-container {
+//#video-container {
 //  min-width: 640px;
 //  min-height: 480px;
-  border-radius: 10px;
-  padding: 10px;
-  display: block;
-  vertical-align: middle;
-  margin: 0 auto;
-}
+//  border-radius: 10px;
+//  padding: 10px;
+//  display: block;
+//  vertical-align: middle;
+//  margin: 0 auto;
+//}
 
 #brightnessIndicator {
     width:250px;
@@ -335,6 +349,6 @@ img.center {
 	position: absolute;
 	width: 100%;
 	height: 30px;
-	bottom: 0;
+	bottom: 15px;
 	z-index: 5;
 }

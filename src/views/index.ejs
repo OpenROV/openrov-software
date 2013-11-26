@@ -2,7 +2,25 @@
 <html>
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
+    <!-- meta name="viewport" content="width=device-width" -->
+
+<meta id="Viewport" name="viewport" width="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+<script type="text/javascript">
+$(function(){
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+  var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
+  var mw = 480; // min width of site
+  var ratio =  ww / mw; //calculate ratio
+  if( ww < mw){ //smaller than minimum size
+   $('#Viewport').attr('content', 'initial-scale=' + ratio + ', maximum-scale=' + ratio + ', minimum-scale=' + ratio + ', user-scalable=yes, width=' + ww);
+  }else{ //regular size
+   $('#Viewport').attr('content', 'initial-scale=1.0, maximum-scale=2, minimum-scale=1.0, user-scalable=yes, width=' + ww);
+  }
+}
+});
+</script>    
+
     <title><%= title %></title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/bootstrap-responsive.css" rel="stylesheet">        
@@ -10,6 +28,7 @@
         <link href="css/ui-lightness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
     <% for(var i=0; i<styles.length; i++) {%>
     <link rel="stylesheet" href="<%= styles[i] %>"><% } %>
+    
   </head>
   
   <script src="js/libs/eventemitter2.js"></script>
@@ -64,9 +83,9 @@
         <!-- Main ROW -->
         <div id="main-row" class="container-fluid full-height">
           <div class="row-fluid full-height">
-            <div class="span9 border" id="outter-videocontainer">
-              <div id="video-container" class="center" border='1'>
-                <img src="themes/OpenROV/img/no_camera.jpg" alt="OpenROV" id="video"/>
+            <div class="span9 border full-height" id="outter-videocontainer">
+              <div id="video-container" class="full-height center pagination-centered" border='1'>
+                <!--img src="themes/OpenROV/img/no_camera.jpg" alt="OpenROV" id="video"/-->
 
               </div>
             </div>
@@ -92,7 +111,7 @@
             </div>
           </div>
         </div>
-        <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
+        <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom nav-collapse collapse visible-desktop">
 	    <div class="navbar-inner">
 		<div id="footercontent" class="container-fluid" style="height: 100%">
 		</div>
