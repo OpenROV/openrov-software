@@ -10,14 +10,15 @@
 # bits.
 #
 
-if [ -f /var/_RESIZE_ROOT_PARTITION_ ]; then
-  /home/roboto/devel/openrov-software/linux/expand_root_partition.sh
-  rm /var/_RESIZE_ROOT_PARTITION_
+if [ -f /var/.RESIZE_ROOT_PARTITION ]; then
+  /opt/openrov/linux/expand_root_partition.sh
+  rm /var/.RESIZE_ROOT_PARTITION
+  exit 0
 fi
 
-if [ -f /var/_RESIZE_ROOT_ ]; then
+if [ -f /var/.RESIZE_ROOT ]; then
   resize2fs /dev/mmcblk0p2
-  rm /var/_RESIZE_ROOT_
+  rm /var/.RESIZE_ROOT
 fi
 
 #auto detect configuration and update environment settings
