@@ -22,12 +22,14 @@ var GamePad = function() {
   
     
     gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
-      GAMEPAD[e.control].Gamepad.Event.BUTTON_DOWN();
+      if (GAMEPAD[e.control] !== undefined) 
+        GAMEPAD[e.control].BUTTON_DOWN();
     });
     
     gamepad.bind(Gamepad.Event.AXIS_CHANGED, function(e) {
       if ((new Date().getTime()) < ignoreInputUntil) return; //avoids inacurrate readings when the gamepad has just been connected from affecting the ROV
-      GAMEPAD[e.control].Gamepad.Event.AXIS_CHANGED(e.value);
+      if (GAMEPAD[e.axis] !== undefined) 
+	GAMEPAD[e.axis].AXIS_CHANGED(e.value);
     });
 
   var updateStatus = function() {
@@ -37,12 +39,12 @@ var GamePad = function() {
   gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
     ignoreInputUntil = new Date().getTime() + 1000;
     console.log('Controller connected', device);
-    detectionHandler();
+    cockpitEventEmitter.emit("gamepad.connected");
   });
 
   gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
     console.log('Controller disconnected', device);
-    detectionHandler();
+    cockpitEventEmitter.emit("gamepad.disconnected");
   });
 
   gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
@@ -61,4 +63,4 @@ var GamePad = function() {
   return gp;
 }
 
-var gp = new GamePad();
+var gamepadHandler = new GamePad();

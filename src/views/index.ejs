@@ -11,8 +11,11 @@
     <% for(var i=0; i<styles.length; i++) {%>
     <link rel="stylesheet" href="<%= styles[i] %>"><% } %>
   </head>
+  
+  <script src="js/libs/eventemitter2.js"></script>
   <script>
 
+  	    cockpitEventEmitter = new EventEmitter2();
   </script>
         <script type='text/javascript' src="js/libs/jquery.min.js"></script>
         <script type='text/javascript' src="js/libs/jquery-ui.min.js"></script>
@@ -33,7 +36,7 @@
 	<script type='text/javascript' src="js/horizon.js"></script>
         <script src="/config.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="js/libs/eventemitter2.js"></script>
+
 
   <% for(var i=0; i<scripts.length; i++) {%>
   <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
@@ -155,7 +158,7 @@
 	    } else {
             var socket = window.io.connect();
 	    }
-	    cockpitEventEmitter = new EventEmitter2();
+
             /* ------------------------------------------
                settings 
             */
