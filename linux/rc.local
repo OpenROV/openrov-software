@@ -10,6 +10,11 @@
 # bits.
 #
 
+if [ -f /var/_RESIZE_ROOT_PARTITION_ ]; then
+  /home/roboto/devel/openrov-software/linux/expand_root_partition.sh
+  rm /var/_RESIZE_ROOT_PARTITION_
+fi
+
 if [ -f /var/_RESIZE_ROOT_ ]; then
   resize2fs /dev/mmcblk0p2
   rm /var/_RESIZE_ROOT_
