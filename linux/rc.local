@@ -11,8 +11,10 @@
 #
 
 if [ -f /var/.RESIZE_ROOT_PARTITION ]; then
-  /opt/openrov/linux/expand_root_partition.sh
   rm /var/.RESIZE_ROOT_PARTITION
+  touch /var/.RESIZE_ROOT
+  /opt/openrov/linux/expand_root_partition.sh
+  # the expand script initiates a reboot
   exit 0
 fi
 
