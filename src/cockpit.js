@@ -33,7 +33,7 @@ app.use('/photos',express.static(CONFIG.preferences.get('photoDirectory')));
 app.set('port', CONFIG.port);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs', { pretty: true });
-app.use(express.favicon());
+app.use(express.favicon(__dirname + '/static/favicon.icon'));
 app.use(express.logger('dev'));
 app.use(app.router);
 app.use("/components", express.static(path.join(__dirname, 'bower_components')));
