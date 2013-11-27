@@ -246,7 +246,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
 	   var cockpit = new Cockpit(socket);
 	  
 	  $("#menu").append("<span id='fpsmeter'></span>");
-	  var meter = new FPSMeter($("#fpsmeter")[0],
+	  var meter = new FPSMeter($("#video-container")[0],
 						  {
 						  interval:  100,     // Update interval in milliseconds.
 						  smoothing: 10,      // Spike smoothing strength. 1 means no smoothing.
