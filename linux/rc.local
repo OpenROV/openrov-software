@@ -23,6 +23,11 @@ if [ -f /var/.RESIZE_ROOT ]; then
   rm /var/.RESIZE_ROOT
 fi
 
+if [ ! -f /var/swapfile ]; then
+  bash /opt/openrov/linux/addswapfile.sh
+fi
+
+
 #auto detect configuration and update environment settings
 . /opt/openrov/linux/system-detect.sh || /bin/true
 
