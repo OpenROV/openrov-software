@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <title>OpenROV Dashboard</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.css" rel="stylesheet">        
+        <link rel="stylesheet" href="themes/OpenROV/css/style.css">
+        <link href="css/ui-lightness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+  </head>
+
+  <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="navbar-inner">
+            <div id="menu" class="container-fluid">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <p><a class="brand" href="#"><img src="themes/OpenROV/img/logo.png" class="logo"/>&nbsp;Dashboard</a></p>
+              <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                  <!--<li><a href="#" id="show-diagnostic">Diagnostic</a></li>-->
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main ROW -->
+        <div id="main-row" class="container-fluid full-height">
+            <div class="well">
+                <h2>OpenROV Cockpit</h2>
+                <p><b>Status: </b><span data-bind="text: cockpitStatus()*10">Unknown</span></p>
+                <button>Refresh</button>
+                <button>Start</button>
+                <button>Stop</button>
+            </div>
+            <div class="well">
+                <h2>Cloud9</h2>
+                <p><b>Status: </b><span data-bind="text: cloud9Status()*10">Unkown</span></p>
+                <button>Refresh</button>
+                <button>Start</button>
+                <button>Stop</button>
+            </div>
+            <div class="well">
+                <h2>Network share</h2>
+                <p><b>Status: </b><span data-bind="text: networkshareStatus()*10">Unknown</span></p>
+                <button>Refresh</button>
+                <button>Start</button>
+                <button>Stop</button>
+            </div>
+		</div>
+        
+        
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script type='text/javascript' src="js/libs/jquery.min.js"></script>
+        <script type='text/javascript' src="js/libs/jquery-ui.min.js"></script>
+        <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
+        <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
+        <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
+        <script type='text/javascript' src='js/DashboardViewModel.js'></script>
+    	<script type='text/javascript' src="js/blackbox.js"></script>
+	    <script src="/socket.io/socket.io.js"></script>
+
+        <script>
+      		var viewmodel;
+          $(function() {
+			viewmodel = new OpenRovViewModel();
+            ko.applyBindings(viewmodel);
+
+            var socket = io.connect();
+            socket.on('status', function (data) {
+             viewmodel.updateStatus(data);
+            });
+            
+          });
+        </script>
