@@ -12,8 +12,9 @@ function setupFrameHandling(socket) {
 			$('#video').attr('src', address);
 			console.log('video restarted');
 			}
-		},1000);	
+		},1000);	*/
 	});
+	/*
 	socket.on('VideoStopped', function(data) {
 		clearInterval(videoChecker);
 		console.log('video stopped');

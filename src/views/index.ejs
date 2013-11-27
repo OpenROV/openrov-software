@@ -5,7 +5,8 @@
     <!-- meta name="viewport" content="width=device-width" -->
 
 <meta id="Viewport" name="viewport" width="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-
+        <script type='text/javascript' src="js/libs/jquery.min.js"></script>
+        <script type='text/javascript' src="js/libs/jquery-ui.min.js"></script>	
 <script type="text/javascript">
 $(function(){
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
@@ -36,8 +37,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
 
   	    cockpitEventEmitter = new EventEmitter2();
   </script>
-        <script type='text/javascript' src="js/libs/jquery.min.js"></script>
-        <script type='text/javascript' src="js/libs/jquery-ui.min.js"></script>
+
         <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
         <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
         <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
@@ -55,6 +55,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
 	<script type='text/javascript' src="js/horizon.js"></script>
         <script src="/config.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="bower_components/fpsmeter/dist/fpsmeter.js"></script>
 
 
   <% for(var i=0; i<scripts.length; i++) {%>
@@ -243,6 +244,40 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
 	    //plugin hooks
             setupFrameHandling(socket);
 	   var cockpit = new Cockpit(socket);
+	  
+	  $("#menu").append("<span id='fpsmeter'></span>");
+	  var meter = new FPSMeter($("#fpsmeter")[0],
+						  {
+						  interval:  100,     // Update interval in milliseconds.
+						  smoothing: 10,      // Spike smoothing strength. 1 means no smoothing.
+						  show:      'fps',   // Whether to show 'fps', or 'ms' = frame duration in milliseconds.
+						  toggleOn:  'click', // Toggle between show 'fps' and 'ms' on this event.
+						  decimals:  1,       // Number of decimals in FPS number. 1 = 59.9, 2 = 59.94, ...
+						  maxFps:    60,      // Max expected FPS value.
+						  threshold: 100,     // Minimal tick reporting interval in milliseconds.
+					  
+						  // Meter position
+						  position: 'absolute', // Meter position.
+						  zIndex:   10,         // Meter Z index.
+						  left:     '5px',      // Meter left offset.
+						  top:      '5px',      // Meter top offset.
+						  right:    'auto',     // Meter right offset.
+						  bottom:   'auto',     // Meter bottom offset.
+						  margin:   '0 0 0 0',  // Meter margin. Helps with centering the counter when left: 50%;
+					  
+						  // Theme
+						  theme: 'colorful', // Meter theme. Build in: 'dark', 'light', 'transparent', 'colorful'.
+						  heat:  1,      // Allow themes to use coloring by FPS heat. 0 FPS = red, maxFps = green.
+					  
+						  // Graph
+						  graph:   1, // Whether to show history graph.
+						  history: 20 // How many history states to show in a graph.
+	  });
+	  
+	  setInterval(function(){
+	    meter.tick();
+	  },10);
+	   
           });	  
 
 
