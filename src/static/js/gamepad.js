@@ -58,7 +58,12 @@ var GamePad = function() {
   
   if (!gamepad.init()) {
           console.log('Your browser does not support gamepads, get the latest Google Chrome or Firefox.');
-  }  
+  }
+  
+  if (gp.isAvailable()) { //send an initial is connected if already plugged in.
+    setTimeout(function(){cockpitEventEmitter.emit("gamepad.connected");},1000) //delay for possible other listners
+    
+  }
 
   return gp;
 }

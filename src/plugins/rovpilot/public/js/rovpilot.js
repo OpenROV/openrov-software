@@ -31,6 +31,11 @@
 			<h6>Thrust&nbsp;Factor</h6><div class="label badge" id="thrustfactor">&nbsp;</div> \
 		    </div>');
 	$("#lights").append('<p>press <i>i</i> to toggle lights</p>');
+	$('#rov_status_panel').prepend(
+		     '<div id="gamepad" class="controller well well-small hidden" > \
+			<img src="themes/OpenROV/img/gamepad.png" class="center"> \
+			<p>Use the <i>2 sticks</i> to maneuver.</p> \
+		    </div>');
 
         var self = this;
         setInterval(function() {
@@ -46,6 +51,15 @@
     //so that the reference to this instance is available for further processing
     ROVpilot.prototype.listen = function listen() {
         var rov = this;
+	
+	cockpitEventEmitter.on("gamepad.connected",function(){
+	    $('#gamepad').toggleClass('hidden',false);
+	});
+	
+	cockpitEventEmitter.on("gamepad.disconnected",function(){
+	    $('#gamepad').toggleClass('hidden',true);
+	});	
+	
 	
 	GAMEPAD.DPAD_UP 	= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.adjustLights',.1)} };
 	GAMEPAD.DPAD_DOWN	= {BUTTON_DOWN: function(){cockpitEventEmitter.emit('rovpilot.adjustLights',-.1)} };
