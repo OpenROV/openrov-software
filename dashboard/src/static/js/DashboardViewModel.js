@@ -1,7 +1,14 @@
 function OpenRovViewModel(){
     var self = this;
 
-    self.cockpitStatus = ko.observable('Unkown');
-    self.cloud9Status = ko.observable('Unkown');
-    self.networkshareStatus = ko.observable('Unkown');
+    self.cockpitStatus = ko.observable(new ProcessModel());
+    self.cloud9Status = ko.observable(new ProcessModel());
+    self.networkshareStatus = ko.observable(new ProcessModel());
+}
+
+function ProcessModel() {
+	var self = this;
+
+	self.status = ko.observable('Unkown');
+	self.running = ko.observable(false)
 }

@@ -37,15 +37,15 @@
                   </div>
                   <div class="span4">
                     <h2>OpenROV Cockpit</h2>
-                    <p><b>Status: </b><span data-bind="text: cockpitStatus()">Unknown</span></p>
+                    <p><b>Status: </b><span data-bind="text: cockpitStatus().status()">Unknown</span></p>
                   </div>
                 </div>
               </a>
               <div class="row">
                 <div class="span4 offset2">
-                  <button>Refresh</button>
-                  <button>Start</button>
-                  <button>Stop</button>
+                  <button class="btn" >Refresh</button>
+                  <button class="btn" data-bind="css: { disabled: cockpitStatus().running() }">Start</button>
+                  <button class="btn"  data-bind="css: { disabled: ! cockpitStatus().running() }">Stop</button>
                 </div>
               </div>
             </div>
@@ -57,15 +57,15 @@
                   </div>
                   <div class="span4">
                     <h2>Cloud9</h2>
-                    <p><b>Status: </b><span data-bind="text: cloud9Status()">Unkown</span></p>
+                    <p><b>Status: </b><span data-bind="text: cloud9Status().status()">Unkown</span></p>
                   </div>
                 </div>
               </a>
               <div class="row">
                 <div class="span4 offset2">
-                  <button>Refresh</button>
-                  <button>Start</button>
-                  <button>Stop</button>
+                  <button class="btn" >Refresh</button>
+                  <button class="btn" data-bind="css: { disabled: cloud9Status().running() }">Start</button>
+                  <button class="btn"  data-bind="css: { disabled: ! cloud9Status().running() }">Stop</button>
                 </div>
               </div>
             </div>
@@ -79,15 +79,15 @@
                   <p>
                     <i>Windows:</i> \\192.168.254.1\OpenROV<br>
                     <i>Linux:</i> smb://192.168.254.1/OpenROV<br><br>
-                    <b>Status: </b><span data-bind="text: networkshareStatus()">Unkown</span>
+                    <b>Status: </b><span data-bind="text: networkshareStatus().status()">Unkown</span>
                   </p>
                 </div>
               </div>
               <div class="row">
                 <div class="span4 offset2">
-                  <button>Refresh</button>
-                  <button>Start</button>
-                  <button>Stop</button>
+                  <button class="btn" >Refresh</button>
+                  <button class="btn" data-bind="css: { disabled: networkshareStatus().running() }">Start</button>
+                  <button class="btn"  data-bind="css: { disabled: ! networkshareStatus().running() }">Stop</button>
                 </div>
               </div>
             </div>
