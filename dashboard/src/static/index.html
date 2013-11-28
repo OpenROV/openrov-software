@@ -109,13 +109,10 @@
         <script>
       		var viewmodel;
           $(function() {
-			viewmodel = new OpenRovViewModel();
-            ko.applyBindings(viewmodel);
 
             var socket = io.connect();
-            socket.on('status', function (data) {
-             viewmodel.updateStatus(data);
-            });
+            viewmodel = new DashboardViewModel(socket);
+            ko.applyBindings(viewmodel);
             
           });
         </script>
