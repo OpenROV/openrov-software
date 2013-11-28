@@ -19,9 +19,10 @@ io.configure(function(){ io.set('log level', 1); });
 io.sockets.on('connection', function (socket) {
 
 	socket.on('status-cockpit', function(){
-		n.send('status-cockpit');
+		dashboardEnginesend('status-cockpit');
 	});
-	n.on('message', function(message){
+	
+	dashboardEngineon('message', function(message){
 		if (message.key != undefined) {
 			socket.emit(message.key, message.value);
 		}});
