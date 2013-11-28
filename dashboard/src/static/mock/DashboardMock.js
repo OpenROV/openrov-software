@@ -24,21 +24,23 @@ io.sockets.on('connection', function (socket) {
 	console.log('connected');
 
 	socket.on('status-cockpit', function(){
-		socket.emit('status-cockpit', cockpit.status);
-		process.send({ key: 'status-cockpit', value: cockpit.status);
+		emitCockpitStatus();
 	});
 
 	socket.on('start-cockpit', function(){
 		cockpit.status = 'Running';
-		socket.emit('status-cockpit', cockpit.status);
-		process.send({ key: 'status-cockpit', value: cockpit.status} );
+		emitCockpitStatus();
 	});
 
 	socket.on('stop-cockpit', function(){
 		cockpit.status = 'Stoped'
-		socket.emit('status-cockpit', cockpit.status);
-		process.send({ key: 'status-cockpit', value: cockpit.status);
+		emitCockpitStatus();
 	});
+
+	function emitCockpitStatus() {
+		socket.emit('status-cockpit', cockpit.status);
+		process.send({ key: 'status-cockpit', value: cockpit.status});
+	};
 
 });
 
