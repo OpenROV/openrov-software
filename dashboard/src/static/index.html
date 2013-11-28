@@ -30,25 +30,66 @@
         <!-- Main ROW -->
         <div id="main-row" class="container-fluid full-height">
             <div class="well">
-                <h2>OpenROV Cockpit</h2>
-                <p><b>Status: </b><span data-bind="text: cockpitStatus()*10">Unknown</span></p>
-                <button>Refresh</button>
-                <button>Start</button>
-                <button>Stop</button>
+              <a href="http://192.168.254.1:8080" target="_new">
+                <div class="row">
+                  <div class="span2">
+                    <img src="img/cockpit.png" class="img-polaroid">
+                  </div>
+                  <div class="span4">
+                    <h2>OpenROV Cockpit</h2>
+                    <p><b>Status: </b><span data-bind="text: cockpitStatus()">Unknown</span></p>
+                  </div>
+                </div>
+              </a>
+              <div class="row">
+                <div class="span4 offset2">
+                  <button>Refresh</button>
+                  <button>Start</button>
+                  <button>Stop</button>
+                </div>
+              </div>
             </div>
             <div class="well">
-                <h2>Cloud9</h2>
-                <p><b>Status: </b><span data-bind="text: cloud9Status()*10">Unkown</span></p>
-                <button>Refresh</button>
-                <button>Start</button>
-                <button>Stop</button>
+              <a href="http://192.168.254.1:8080" target="_new">
+                <div class="row">
+                  <div class="span2">
+                    <img src="img/cloud9.png" class="img-polaroid">
+                  </div>
+                  <div class="span4">
+                    <h2>Cloud9</h2>
+                    <p><b>Status: </b><span data-bind="text: cloud9Status()">Unkown</span></p>
+                  </div>
+                </div>
+              </a>
+              <div class="row">
+                <div class="span4 offset2">
+                  <button>Refresh</button>
+                  <button>Start</button>
+                  <button>Stop</button>
+                </div>
+              </div>
             </div>
             <div class="well">
-                <h2>Network share</h2>
-                <p><b>Status: </b><span data-bind="text: networkshareStatus()*10">Unknown</span></p>
-                <button>Refresh</button>
-                <button>Start</button>
-                <button>Stop</button>
+              <div class="row">
+                <div class="span2">
+                  <img src="img/network.png" class="img-polaroid">
+                </div>
+                <div class="span4">
+                  <h2>Network share</h2>
+                  <p>
+                    <i>Windows:</i> \\192.168.254.1\OpenROV<br>
+                    <i>Linux:</i> smb://192.168.254.1/OpenROV<br><br>
+                    <b>Status: </b><span data-bind="text: networkshareStatus()">Unkown</span>
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="span4 offset2">
+                  <button>Refresh</button>
+                  <button>Start</button>
+                  <button>Stop</button>
+                </div>
+              </div>
             </div>
 		</div>
         
