@@ -7,7 +7,7 @@ var express = require('express')
 app.use(express.static(__dirname + '/static/'));
 
 var cp = require('child_process');
-var n = cp.fork(__dirname + '/static/mock/DashboardMock.js');
+var dashboardEngine = cp.fork(__dirname + '/static/mock/DashboardMock.js');
 
 var cockpit = {
 	status : 'Unknown',
@@ -19,10 +19,10 @@ io.configure(function(){ io.set('log level', 1); });
 io.sockets.on('connection', function (socket) {
 
 	socket.on('status-cockpit', function(){
-		dashboardEnginesend('status-cockpit');
+		dashboardEngine.send('status-cockpit');
 	});
 	
-	dashboardEngineon('message', function(message){
+	dashboardEngine.on('message', function(message){
 		if (message.key != undefined) {
 			socket.emit(message.key, message.value);
 		}});
