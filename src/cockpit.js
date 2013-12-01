@@ -63,7 +63,7 @@ app.get('/config.js', function(req, res) {
 
 app.get('/', function (req, res) {
     res.render('index', {
-        title: 'Express'
+        title: 'OpenROV Cockpit'
         ,scripts: scripts
         ,styles: styles
     });
