@@ -170,6 +170,7 @@ img.center {
 #video { 
   border: 2px solid black;
   background-color: black;
+  max-width: 100%;  
 }
 
 #video-container{
@@ -178,7 +179,6 @@ img.center {
 //  background-size: cover;
   background-position: center center;
   vertical-align: top;
-  background-image: url(../img/no_camera.jpg);
 }
 
 #main-row {
