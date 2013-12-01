@@ -8,7 +8,7 @@
 
         // Instance variables
         this.cockpit = cockpit;
-
+	var _socket = this.cockpit.socket;
         $.getScript("bower_components/fpsmeter/dist/fpsmeter.js", function() {
 
             $("#menu").append("<span id='fpsmeter'></span>");
@@ -71,6 +71,7 @@
                 meter.tick();
             }, 32);
             
+            /*
             setInterval(function() {
                 var bmeter = beagletoBrowserMeter;
                 bmeter.tickStart();
@@ -80,6 +81,20 @@
                     var _endtime = new Date();
                 }, 8080, 300)
             },500);
+            */
+
+	    var mysocket = _socket;
+            setInterval(function() {
+                var _starttime = new Date(); 
+                beagletoBrowserMeter.tickStart();
+                mysocket.emit('ping',_starttime)
+            }, 500);            
+            
+            _socket.on('pong', function(id) {
+                beagletoBrowserMeter.tick();
+                var _endtime = new Date();
+                console.log('ping pong: ' + (_endtime-id));
+             });
 
         });
 

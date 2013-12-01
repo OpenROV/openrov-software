@@ -99,6 +99,9 @@ io.sockets.on('connection', function (socket) {
  
   socket.emit('settings',CONFIG.preferences.get());
 
+    socket.on('ping', function(id){
+       socket.emit('pong',id); 
+    });
 
     socket.on('motor_test', function(controls) {
         controller.sendMotorTest(controls.port, controls.starbord, controls.vertical);
