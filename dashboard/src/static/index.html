@@ -44,8 +44,8 @@
               <div class="row">
                 <div class="span4 offset2">
                   <button class="btn" >Refresh</button>
-                  <button class="btn" data-bind="css: { disabled: cockpitStatus().running() }">Start</button>
-                  <button class="btn"  data-bind="css: { disabled: ! cockpitStatus().running() }">Stop</button>
+                  <button class="btn" data-bind="css: { disabled: cockpitStatus().running() }, click: cockpitStart">Start</button>
+                  <button class="btn"  data-bind="css: { disabled: ! cockpitStatus().running() }, click: cockpitStop">Stop</button>
                 </div>
               </div>
             </div>
