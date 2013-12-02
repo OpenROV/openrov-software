@@ -102,8 +102,6 @@
             
             _socket.on('pong', function(id) {
                 _self.beagletoBrowserMeter.tick();
-                var _endtime = new Date();
-                console.log('ping pong: ' + (_endtime-id));
              });
 
         });
