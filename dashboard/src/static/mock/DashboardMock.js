@@ -16,26 +16,35 @@ app.use('/themes', express.static(__dirname + '/../themes'));
 // no debug messages
 //io.configure(function(){ io.set('log level', 1); });
 
-var cockpit = {
-	status : 'Unknown'
-};
-
 io.sockets.on('connection', function (socket) {
-	console.log('connected');
+
+	var cockpit = {
+		status : 'Unknown',
+		start : function() { 
+			cockpit.status = 'Running';
+			emitCockpitStatus();
+		},
+		stop : function() { 
+			cockpit.status = 'Stoped';
+			emitCockpitStatus();
+		},
+	};
+
+	process.on('message', function(message){
+		if (message.key === 'start-cockpit') {
+			cockpit.start();
+		}
+		if (message.key === 'stop-cockpit') {
+			cockpit.stop();
+		}
+	});
 
 	socket.on('status-cockpit', function(){
 		emitCockpitStatus();
 	});
 
-	socket.on('start-cockpit', function(){
-		cockpit.status = 'Running';
-		emitCockpitStatus();
-	});
-
-	socket.on('stop-cockpit', function(){
-		cockpit.status = 'Stoped'
-		emitCockpitStatus();
-	});
+	socket.on('start-cockpit', cockpit.start);
+	socket.on('stop-cockpit', cockpit.stop);
 
 	function emitCockpitStatus() {
 		socket.emit('status-cockpit', cockpit.status);

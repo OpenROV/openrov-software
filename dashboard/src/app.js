@@ -19,7 +19,15 @@ io.configure(function(){ io.set('log level', 1); });
 io.sockets.on('connection', function (socket) {
 
 	socket.on('status-cockpit', function(){
-		dashboardEngine.send('status-cockpit');
+		dashboardEngine.send({ key: 'status-cockpit' });
+	});
+
+	socket.on('start-cockpit', function() {
+		dashboardEngine.send({ key: 'start-cockpit' });
+	});
+
+	socket.on('stop-cockpit', function() {
+		dashboardEngine.send({ key: 'stop-cockpit' });
 	});
 	
 	dashboardEngine.on('message', function(message){
@@ -30,4 +38,3 @@ io.sockets.on('connection', function (socket) {
 });
 
 console.log('Started listening on port: ' + process.env.PORT);
-
