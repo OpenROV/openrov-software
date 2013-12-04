@@ -1,0 +1,20 @@
+<div class="well">
+  <a href="http://192.168.254.1:3131" target="_new">
+    <div class="row">
+      <div class="span2">
+        <img src="img/cloud9.png" class="img-polaroid">
+      </div>
+      <div class="span4">
+        <h2>Cloud9</h2>
+        <p><b>Status: </b><span data-bind="text: cloud9.status()">---</span></p>
+      </div>
+    </div>
+  </a>
+  <div class="row">
+    <div class="span4 offset2">
+      <button class="btn" data-bind="click: cloud9.requestStatus">Refresh</button>
+      <button class="btn" data-bind="css: { disabled: cloud9.running() }, click: cloud9.start">Start</button>
+      <button class="btn"  data-bind="css: { disabled: ! cloud9.running() }, click: cloud9.stop">Stop</button>
+    </div>
+  </div>
+</div>

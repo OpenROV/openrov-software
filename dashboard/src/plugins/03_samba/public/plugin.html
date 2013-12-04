@@ -1,0 +1,22 @@
+<div class="well">
+  <div class="row">
+    <div class="span2">
+      <img src="img/network.png" class="img-polaroid">
+    </div>
+    <div class="span4">
+      <h2>Network share</h2>
+      <p>
+        <i>Windows:</i> \\192.168.254.1\OpenROV<br>
+        <i>Linux:</i> smb://192.168.254.1/OpenROV<br><br>
+        <b>Status: </b><span data-bind="text: samba.status()">Unkown</span>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span4 offset2">
+      <button class="btn" data-bind="click: samba.requestStatus">Refresh</button>
+      <button class="btn" data-bind="css: { disabled: samba.running() }, click: samba.start">Start</button>
+      <button class="btn"  data-bind="css: { disabled: ! samba.running() }, click: samba.stop">Stop</button>
+    </div>
+  </div>
+</div>
