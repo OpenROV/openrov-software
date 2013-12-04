@@ -34,7 +34,6 @@
               <button href="#firmware-upload-dialog" class="btn btn-small" type="button" id="arduinoFirmware-upload" data-bind="css: { \'btn-success\': isValidFirmwareFile() == false,  \'btn-success\': isValidFirmwareFile() }" data-toggle="modal"> \
 	      <i class="icon-upload icon-white"></i> Upload firmware from SD card to Arduino</button> \
             </div>');
-	$("#settings").after('<div class"smackmyass"></div>');
 	$("#settings").after('<div class="modal fade" id="firmware-upload-dialog"> \
 			             <!-- Firmware upload --> \
           <div class="modal-header"> \
