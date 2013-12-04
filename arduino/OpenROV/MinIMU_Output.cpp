@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_POLOLU_MINIMUV)
 /*
 
 MinIMU-9-Arduino-AHRS
@@ -94,3 +96,4 @@ long convert_to_dec(float x)
   return x*10000000;
 }
 
+#endif

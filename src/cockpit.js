@@ -11,22 +11,39 @@ var CONFIG = require('./lib/config')
   , fs=require('fs')
   , express = require('express')
   , app = express()
-  , server = app.listen(CONFIG.port)
+//  , server = app.listen(CONFIG.port)
+  ,server = require("http").createServer(app)
   , io = require('socket.io').listen(server)
   , EventEmitter = require('events').EventEmitter
   , OpenROVCamera = require(CONFIG.OpenROVCamera)
   , OpenROVController = require(CONFIG.OpenROVController)
   , OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController')
-  , logger = require('./lib/logger').create(CONFIG.debug)
+  , logger = require('./lib/logger').create(CONFIG)
   , mkdirp = require('mkdirp')
   , path = require('path')
   , xmpp = require('node-xmpp');
   ;
+  
 
+
+app.configure(function () {
 app.use(express.static(__dirname + '/static/'));
 app.use('/photos',express.directory(CONFIG.preferences.get('photoDirectory')));
 app.use('/photos',express.static(CONFIG.preferences.get('photoDirectory')));
+app.set('port', CONFIG.port);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs', { pretty: true });
+app.use(express.favicon(__dirname + '/static/favicon.icon'));
+app.use(express.logger('dev'));
+app.use(app.router);
+app.use("/components", express.static(path.join(__dirname, 'bower_components')));
+});
 
+// Keep track of plugins js and css to load them in the view
+var scripts = []
+  , styles = []
+  ;
+    
 // setup required directories
 mkdirp(CONFIG.preferences.get('photoDirectory'));
 
@@ -37,10 +54,19 @@ var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({delay : DELAY});
 var controller = new OpenROVController(globalEventLoop);
 var arduinoUploadController = new OpenROVArduinoFirmwareController(globalEventLoop);
+controller.camera = camera;
 
 app.get('/config.js', function(req, res) {
   res.type('application/javascript');
   res.send('var CONFIG = ' + JSON.stringify(CONFIG));
+});
+
+app.get('/', function (req, res) {
+    res.render('index', {
+        title: 'OpenROV Cockpit'
+        ,scripts: scripts
+        ,styles: styles
+    });
 });
 
 // no debug messages
@@ -48,96 +74,7 @@ io.configure(function(){ io.set('log level', 1); });
 
 var connections = 0;
 
-// --move to utility file --
-var getNetworkIPs = (function () {
-    var ignoreRE = /^(127\.0\.0\.1|::1|fe80(:1)?::1(%.*)?)$/i;
 
-    var exec = require('child_process').exec;
-    var cached;
-    var command;
-    var filterRE;
-
-    switch (process.platform) {
-    case 'win32':
-    //case 'win64': // TODO: test
-        command = 'ipconfig';
-        filterRE = /\bIPv[46][^:\r\n]+:\s*([^\s]+)/g;
-        break;
-    case 'darwin':
-        command = 'ifconfig';
-        filterRE = /\binet\s+([^\s]+)/g;
-        // filterRE = /\binet6\s+([^\s]+)/g; // IPv6
-        break;
-    default:
-        command = 'ifconfig';
-        filterRE = /\binet\b[^:]+:\s*([^\s]+)/g;
-        // filterRE = /\binet6[^:]+:\s*([^\s]+)/g; // IPv6
-        break;
-    }
-
-    return function (callback, bypassCache) {
-        if (cached && !bypassCache) {
-            callback(null, cached);
-            return;
-        }
-        // system call
-        exec(command, function (error, stdout, sterr) {
-            cached = [];
-            var ip;
-            var matches = stdout.match(filterRE) || [];
-            //if (!error) {
-            for (var i = 0; i < matches.length; i++) {
-                ip = matches[i].replace(filterRE, '$1')
-                if (!ignoreRE.test(ip)) {
-                    cached.push(ip);
-                }
-            }
-            //}
-            callback(error, cached);
-        });
-    };
-})();
-//
-
-var jid = CONFIG.preferences.get('googletalk_rovid');
-var password = CONFIG.preferences.get('googletalk_rovpassword');
-var pilot = CONFIG.preferences.get('googletalk_rov_pilotid');
-
-if ((jid) && (password)){
-// Establish a connection
-var conn = new xmpp.Client({
-    jid         : jid,
-    password    : password,
-    host        : 'talk.google.com',
-    port        : 5222
-});
-conn.on('online', function(){
-    if (pilot){
- 
-    console.log("ONLINE");
-    
-    getNetworkIPs(function (error, ip) {
-    
-      conn.send(new xmpp.Element('message',
-                                                    { to: pilot,
-                                                      type: 'chat'}).
-                                   c('body').
-                                   t('ROV is online @ ' + ip));
-      conn.end();
-
-      if (error) {
-          console.log('error:', error);
-      }
-    }, false);
-
-
-    }
-    
-});
-conn.on('error', function(e) {
-     console.log(e);
-});
-}
 
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
@@ -145,6 +82,14 @@ io.sockets.on('connection', function (socket) {
   if (connections == 1) controller.start();
     
   socket.send('initialize');  // opens socket with client
+  if(camera.IsCapturing) {
+	socket.emit('videoStarted');
+	console.log("Send videoStarted to client 2");
+  } else {
+	console.log("Trying to restart mjpeg streamer");
+	camera.capture();
+	socket.emit('videoStarted');
+  }
 
   controller.updateSetting();
   setTimeout((function() {
@@ -153,8 +98,10 @@ io.sockets.on('connection', function (socket) {
   controller.requestCapabilities();
  
   socket.emit('settings',CONFIG.preferences.get());
-  socket.emit('videoStarted');
 
+    socket.on('ping', function(id){
+       socket.emit('pong',id); 
+    });
 
     socket.on('motor_test', function(controls) {
         controller.sendMotorTest(controls.port, controls.starbord, controls.vertical);
@@ -171,27 +118,23 @@ io.sockets.on('connection', function (socket) {
         controller.sendLight(value);
     });
     
-    socket.emitPhotos = function(){
-          fs.readdir(CONFIG.preferences.get('photoDirectory'),function(err,files){
-            if(err) throw err;
-            var myfiles = [];
-            files.forEach(function(file){
-              myfiles.push('/photos/' + path.basename(file));
-            });
-            globalEventLoop.emit('photos-updated',myfiles); // trigger files_ready event
-          });    
-    };
-    
-    socket.emitPhotos();
-  
-    socket.on('snapshot', function() {
-        camera.snapshot( function(filename) {
-          console.log('Photo taken: '+ filename);
-          // read all files from current directory
-          socket.emitPhotos();        
-        });
+        socket.on('laser_update', function(value) {
+        controller.sendLaser(value);
+    });
+        
+    socket.on('depth_zero', function(){
+        controller.send('dzer()');
+    });
+
+    socket.on('compass_callibrate', function(){
+        controller.send('ccal()');
+    });
+
+    socket.on('depth_togglewatertype', function(){
+        controller.send('dtwa()');
     });
     
+     
     socket.on('update_settings', function(value){
       for(var property in value)
         if(value.hasOwnProperty(property))
@@ -238,10 +181,16 @@ io.sockets.on('connection', function (socket) {
         console.log('sending settings to web client');
     })
     
-    globalEventLoop.on('photos-updated',function(photos){
-        socket.emit('photos-updated',photos);
-        console.log('sending photos to web client');
-    })    
+  
+
+   globalEventLoop.on('videoStarted', function(){
+	socket.emit('videoStarted');
+        console.log("sent videoStarted to client");
+   });
+
+   globalEventLoop.on('videoStopped', function(){
+	socket.emit('videoStopped');
+   });
 
   arduinoUploadController.initializeSocket(socket);
 
@@ -250,7 +199,9 @@ io.sockets.on('connection', function (socket) {
 });
 
   camera.on('started', function(){
-    console.log("emitted 'videoStated'");
+    console.log("emitted 'videoStarted'");
+    globalEventLoop.emit('videoStarted');
+
   });
 
   camera.capture(function(err) {
@@ -262,7 +213,8 @@ io.sockets.on('connection', function (socket) {
   });
 
 camera.on('error.device', function(err) {
-  console.error('camera emitted an error:', err);
+  console.log('camera emitted an error:', err);
+  globalEventLoop.emit('videoStopped');
 });
 
 if (process.platform === 'linux') {
@@ -279,4 +231,65 @@ if (process.platform === 'linux') {
   });
 }
 
-console.log('Started listening on port: ' + CONFIG.port);
+
+// Prepare dependency map for plugins
+var deps = {
+    server: server
+  , app: app
+  , io: io
+  , rov: controller
+  , config: CONFIG
+  , globalEventLoop: globalEventLoop
+};
+
+
+// Load the plugins
+var dir = path.join(__dirname, 'plugins');
+function getFilter(ext) {
+    return function(filename) {
+        return filename.match(new RegExp('\\.' + ext + '$', 'i'));
+    };
+}
+
+fs.readdir(dir, function (err, files) {
+    if (err) {
+        throw err;
+    }
+
+    files.filter(function (file) {
+        
+        return fs.statSync(path.join(dir,file)).isDirectory();
+    }).forEach(function (plugin) {
+      console.log("Loading " + plugin + " plugin.");
+  
+      // Load the backend code
+      require(path.join(dir, plugin))(plugin, deps);
+  
+      // Add the public assets to a static route
+      if (fs.existsSync(assets = path.join(dir, plugin, 'public'))) {
+        app.use("/plugin/" + plugin, express.static(assets));
+      }
+  
+      // Add the js to the view
+      if (fs.existsSync(js = path.join(assets, 'js'))) {
+          fs.readdirSync(js).filter(getFilter('js')).forEach(function(script) {
+              scripts.push("/plugin/" + plugin + "/js/" + script);
+          });
+      }
+  
+      // Add the css to the view
+      if (fs.existsSync(css = path.join(assets, 'css'))) {
+          fs.readdirSync(css).filter(getFilter('css')).forEach(function(style) {
+              styles.push("/plugin/" + plugin + "/css/" + style);
+          });
+      }
+
+
+    });
+});
+
+// Start the web server
+server.listen(app.get('port'), function() {
+  console.log('Started listening on port: ' + app.get('port'));
+});
+

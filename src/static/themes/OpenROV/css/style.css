@@ -1,12 +1,20 @@
 html { height: 100%; }
 body {
-  padding-top: 65px;
-  padding-bottom: 100px;
+ // padding-top: 65px; why?
+ // padding-bottom: 100px;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.testoverlay {
+    opacity: 0.5;
+    z-index: 3;
+    top: 0px;
+    left: 0px;
+    position: absolute;  
 }
 
 * {
@@ -83,6 +91,10 @@ body {
   vertical-align: middle;
 }
 
+.navbar-fixed-top {
+  margin-bottom: 0px;
+}
+
 .navbar-fixed-bottom .navbar-inner {
   /* IE10 Consumer Preview */ 
   background-image: -ms-linear-gradient(top, #424242 0%, #141414 100%);
@@ -155,47 +167,70 @@ img.center {
     display: block;
 }
 
+.navbar-fixed-top .brand img {
+    height: 32px;
+}
+
+.navbar-fixed-top .nav img {
+    width: 32px;
+    height: 32px;
+}
+
 #video { 
   border: 2px solid black;
   background-color: black;
+  max-width: 100%;  
 }
 
+#video-container{
+  height: 100%;
+  background-size: 100%;
+//  background-size: cover;
+  background-position: center center;
+  vertical-align: top;
+}
+
+
+
 #main-row {
-  padding-bottom:150px; /* this needs to be bigger than footer height*/
+  height: 80%;
+ // padding-bottom:150px; /* this needs to be bigger than footer height*/
 }
 
 #footer{
-  position: relative;
-  margin-top: -150px; /* negative value of footer height */
+  //position: relative;
+  //margin-top: -150px; /* negative value of footer height */
   height: 150px;
-  clear:both;
-  padding-top:20px;  
+  //clear:both;
+  //padding-top:20px;  
 }
 
 .full-height{
   height: 100%;
 }
 
-#outher-videocontainer {
-  display: table;
-}
+//#outter-videocontainer {
+//  display: table;
+//  height: 100%;
+//}
 
-#video-container {
-  min-width: 640px;
-  min-height: 480px;
-  border-radius: 10px;
-  padding: 10px;
-  display: block;
-  vertical-align: middle;
-  margin: 0 auto;
-}
+//#video-container {
+//  min-width: 640px;
+//  min-height: 480px;
+//  border-radius: 10px;
+//  padding: 10px;
+//  display: block;
+//  vertical-align: middle;
+//  margin: 0 auto;
+//}
 
 #brightnessIndicator {
     width:250px;
-    height: 51px;
+    height: 22px;
     border:1px solid black;
     background-image: url('../img/brightness.png');
     background-repeat:no-repeat;
+    margin-top: 14px;
 }
 
 #brightnessIndicator.level0 {
@@ -283,6 +318,24 @@ img.center {
     background-position:0px 0px;
 }
 
+#blackboxstatus{
+    margin:5px 10px;
+    width:30px;
+    height: 30px;
+    background-image: url('../img/bbconnection.png');
+    background-repeat:no-repeat;
+    background-position:0px 0px;
+}
+
+#blackboxstatus.false {
+    background-position:0px 0px;
+}
+
+#blackboxstatus.true {
+    background-position: -29px 0px;
+}
+
+
 #connectionHealth.false {
     background-position:0px 0px;
 }
@@ -309,6 +362,6 @@ img.center {
 	position: absolute;
 	width: 100%;
 	height: 30px;
-	bottom: 0;
+	bottom: 15px;
 	z-index: 5;
 }

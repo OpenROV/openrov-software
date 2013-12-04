@@ -18,7 +18,7 @@ var fork = require('child_process').fork
   , fs = require('fs')
   , path = require('path')
   , CONFIG = require('./config')
-  , logger = require('./logger').create(CONFIG.debug)
+  , logger = require('./logger').create(CONFIG)
   ;
 
 var OpenROVCamera = function (options) {
@@ -30,7 +30,7 @@ var OpenROVCamera = function (options) {
   camera.close = function() {
      _capturing = false; 
     logger.log('sending SIGHUP to capture process');
-    process.kill(capture_process.pid, 'SIGHUP');
+    process.kill(captureProcess.pid, 'SIGHUP');
   }
 
   // Actual camera capture function

@@ -1,0 +1,8 @@
+//css for touchcontroller
+.testoverlay {
+    opacity: 0.5;
+    z-index: 3;
+    top: 0px;
+    left: 0px;
+    position: absolute;
+}

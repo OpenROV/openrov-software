@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 PROGNAME=$(basename $0)
 
 error_exit ()
@@ -18,16 +17,22 @@ error_exit ()
 }
 
 cd $1  || error_exit "$LINENO:"
+echo Setting up uploader 1>&2
 
 COUNTER=0
+#setup required environment variables if not already set
+. /opt/openrov/linux/openrov_config.sh
+
 while [ $COUNTER -lt 9 ]; do
         echo $COUNTER
-        avrdude -P /dev/ttyO1 -c arduino-openrov -b 57600 -D -v -p m328p -U flash:w:.build/uno/firmware.hex 2>&1
-
+        if [ $UPLOAD_REQUIRES_RESET ]
+	then
+        	(sleep 0.0$COUNTER && /opt/openrov/linux/reset.sh 1>&2)
+	fi
+    EXITCODE=`$UPLOAD_TO_ATMEGA_COMMAND 1>&2`
 	if [ $? -eq 0 ] 
 		then
 			echo upload successfull! 1>&2
-			#echo $OUTPUT 1>&2
 			exit 0
 		fi
 	COUNTER=`expr $COUNTER + 1`

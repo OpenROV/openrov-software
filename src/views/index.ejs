@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- meta name="viewport" content="width=device-width" -->
+
+<meta id="Viewport" name="viewport" width="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+        <script type='text/javascript' src="js/libs/jquery.min.js"></script>
+        <script type='text/javascript' src="js/libs/jquery-ui.min.js"></script>	
+<script type="text/javascript">
+$(function(){
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+  var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
+  var mw = 480; // min width of site
+  var ratio =  ww / mw; //calculate ratio
+  if( ww < mw){ //smaller than minimum size
+   $('#Viewport').attr('content', 'initial-scale=' + ratio + ', maximum-scale=' + ratio + ', minimum-scale=' + ratio + ', user-scalable=yes, width=' + ww);
+  }else{ //regular size
+   $('#Viewport').attr('content', 'initial-scale=1.0, maximum-scale=2, minimum-scale=1.0, user-scalable=yes, width=' + ww);
+  }
+}
+});
+</script>    
+
+    <title><%= title %></title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.css" rel="stylesheet">        
+        <link rel="stylesheet" href="themes/OpenROV/css/style.css">
+        <link href="css/ui-lightness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+    <% for(var i=0; i<styles.length; i++) {%>
+    <link rel="stylesheet" href="<%= styles[i] %>"><% } %>
+    
+  </head>
+  
+  <script src="js/libs/eventemitter2.js"></script>
+  <script>
+
+  	    cockpitEventEmitter = new EventEmitter2();
+  </script>
+
+        <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
+        <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
+        <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
+	<script type='text/javascript' src='js/libs/gamepad.js'></script>
+        <script type='text/javascript' src='js/utilities.js'></script>
+        <script type='text/javascript' src="js/keypad.js"></script>
+        <script type='text/javascript' src="js/gamepad.js"></script>
+        <script type='text/javascript' src="js/frame.js"></script>
+	<script type='text/javascript' src="js/cockpit.js"></script>
+	<script src='js/libs/db.js'></script>
+	<script type='text/javascript' src="js/libs/IndexedDBShim.min.js"></script>
+        <script src="/config.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+
+
+
+  <% for(var i=0; i<scripts.length; i++) {%>
+  <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
+
+  <body>
+  
+  
+      <div class="navbar navbar-inverse navbar-fixed-top nav-collapse collapse">
+      <div class="navbar-inner">
+        <a class="brand" href="#"><img src="themes/OpenROV/img/logo.png" class="logo"/>&nbsp;Cockpit</a>
+        <ul class="nav" id="navtoolbar">
+          <li><a href="#"><img id="keyboardpopover" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" /></a></li>
+          <li><a href="#" id="servoTilt"></a></li>
+        </ul>
+        <ul id="menuitems" class="nav pull-right">
+          <li><a href="#" id="show-settings">Settings</a></li>
+          <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
+        </ul>        
+      </div>
+    </div>
+<!--  
+        <div class="navbar navbar-inverse navbar-fixed-top nav-collapse collapse">
+            <div class="navbar-inner">
+            <div id="menu" class="container-fluid">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <p><a class="brand" href="#"><img src="themes/OpenROV/img/logo.png" class="logo"/>&nbsp;Cockpit</a></p>
+              <p><img id="keyboardpopover" width="30px" class="brand logo" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" />
+              <p id="servoTilt"></p>
+              <div class="nav-collapse collapse">
+                <ul id="menuitems" class="nav pull-right">
+                  <li><a href="#" id="show-settings">Settings</a></li>
+                  <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+  -->      
+        <!-- Main ROW -->
+        <div id="main-row" class="container-fluid full-height">
+          <div class="row-fluid full-height">
+            <div class="span9 border full-height" id="outter-videocontainer">
+              <div id="video-container" class="full-height center pagination-centered" border='1'>
+                <!--img src="themes/OpenROV/img/no_camera.jpg" alt="OpenROV" id="video"/-->
+                <video id="video" poster="" autoplay>
+                </video>                
+              </div>
+            </div>
+            <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
+              <div id="buttonPanel" class="controller well well-small"></div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom nav-collapse collapse visible-desktop">
+	    <div class="navbar-inner">
+		<div id="footercontent" class="container-fluid" style="height: 100%">
+		</div>
+	    </div>
+        </div>
+	
+
+        <!-- SETTINGS -->
+        <div class="drop-in-right" id="settings">
+          <div class="back-button"></div><h3>Settings</h3>
+	    <h4>Runtime Settings:</h4>
+	    </div>
+          </div>
+        </div>
+
+        <div class="drop-in-right" id="diagnostic">
+            <div class="back-button"></div><h3>Diagnostics</h3>
+            <div class="settings-block">
+                <h4>Pre-Flight Check</h4>
+            </div>
+	    <div class="settings-block">
+	      <h4>Callibration</h4>
+	      <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
+	      <a href="#" class="btn" id="zero_depth">Zero Depth</a>	      
+	    </div>
+
+        </div>
+        <textarea class="hidden" id="keyboardInstructions">
+            <p>
+                Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
+                Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.
+            </p>
+            <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
+            <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
+		    <p>Use <i>l</i> to toggle callibration lasers.</p>
+        </textarea>
+
+        
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+
+
+	<script> //Load conditional js files
+	  
+	</script>
+
+        <script>
+
+          $(function() {
+	    if (window.io == undefined) {
+	      alert("detected no socket found");
+	      var mysocket = function(){
+		
+	      }
+	      mysocket.prototype.emit = function(x){console.log(x);};
+	      mysocket.prototype.emit = function(x,y){console.log(x);console.log(y);};
+	      simevents = new Object();
+	      mysocket.prototype.on = function(x,y){
+		console.log("registering " + x);
+		if (simevents.x == undefined) {
+		  simevents[x] = [];
+		}
+		simevents[x].push(y);
+	      };
+
+	      var io = new mysocket();
+	      var socket = new mysocket();
+	      CONFIG = new Object();
+	      CONFIG.sample_freq = 20;
+	      
+	    } else {
+            var socket = window.io.connect();
+	    }
+
+            /* ------------------------------------------
+               settings 
+            */
+            var options = {};
+	    var keyboard = null;
+            $("#show-settings").click(function() { 
+              $("#settings").show('fold');
+              cockpit.sendUpdateEnabled=false;
+              Mousetrap.bind('esc', hideSettings);
+	      keyboardHandler.unbindKeys();
+            });
+
+            $("#settings .back-button").click(function() {
+              hideSettings();
+            });	    
+
+            function hideSettings() {
+              $("#settings").hide('fold');
+              cockpit.sendUpdateEnabled = true;
+              Mousetrap.unbind('esc');
+	      keyboardHandler.bindKeys()
+            }
+	    
+              /* ------------------------------------------
+               diagnostic
+               */
+              var options = {};
+	      
+	      
+              $("#show-diagnostic").click(function() {
+                  $("#diagnostic").show('fold');
+                  cockpit.sendUpdateEnabled=false;
+                  Mousetrap.bind('esc', hideDiagnostic);
+		  keyboardHandler.unbindKeys();
+              });
+
+              $("#diagnostic .back-button").click(function() {
+                  hideDiagnostic();
+              });    
+	      
+              function hideDiagnostic() {
+                  $("#diagnostic").hide('fold');
+                  cockpit.sendUpdateEnabled=true;
+                  Mousetrap.unbind('esc');
+		  keyboardHandler.bindKeys();
+              }
+
+ 	      
+	  $('#zero_depth').click(function() {
+            socket.emit('depth_zero');
+          });
+	  
+	  $('#callibrate_compass').click(function() {
+            socket.emit('compass_callibrate');
+          });
+	  
+	  $('#toggle_watertype').click(function() {
+            socket.emit('depth_togglewatertype');
+          });
+ 
+ 
+	    
+	    //plugin hooks
+            setupFrameHandling(socket);
+	   var cockpit = new Cockpit(socket);
+	  
+
+	   
+          });	  
+          
+        //We have a contract for centralizing all keyboad instructions. This code
+        //wires that content to where we display it in a popover.
+        $('#keyboardpopover').hover(function(){
+            $('#keyboardpopover').attr('data-content',$('#keyboardInstructions').text());
+        });
+		
+        $("[rel='popover']").popover();
+        </script>
+
+    </body>
+
+
+</html>
