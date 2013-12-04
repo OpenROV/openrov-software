@@ -31,7 +31,7 @@
 			<h6>Thrust&nbsp;Factor</h6><div class="label badge" id="thrustfactor">&nbsp;</div> \
 		    </div>');
 	$('#keyboardInstructions').append('<p>press <i>i</i> to toggle lights</p>');
-	$('.navbar-fixed-top .nav').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
+	$('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
 
         var self = this;
         setInterval(function() {
