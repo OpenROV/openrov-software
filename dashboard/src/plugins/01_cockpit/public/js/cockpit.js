@@ -14,7 +14,6 @@
 
         dashboard.socket.on('status-cockpit', function(status) {
         	viewModel.status(status);
-   	        viewModel.running((status === "Running"));
         });
 
         // Add required UI elements
@@ -23,6 +22,9 @@
         	'plugin/01_cockpit/plugin.html',
             function() { ko.applyBindings(dashboard.viewModel); }
             );
+
+        setInterval(viewModel.requestStatus, 3000);
+        viewModel.requestStatus();
 
         console.log("Loaded Cockpit plugin.");
     };

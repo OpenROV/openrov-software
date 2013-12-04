@@ -13,8 +13,8 @@
   <div class="row">
     <div class="span4 offset2">
       <button class="btn" data-bind="click: cockpit.requestStatus">Refresh</button>
-      <button class="btn" data-bind="css: { disabled: cockpit.running() }, click: cockpit.start">Start</button>
-      <button class="btn"  data-bind="css: { disabled: ! cockpit.running() }, click: cockpit.stop">Stop</button>
+      <button class="btn" data-bind="css: { disabled: ! cockpit.startable() }, click: cockpit.start">Start</button>
+      <button class="btn"  data-bind="css: { disabled: ! cockpit.stopable() }, click: cockpit.stop">Stop</button>
     </div>
   </div>
 </div>
