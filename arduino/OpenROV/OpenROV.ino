@@ -1,4 +1,4 @@
-#include "AConfig.h"
+#include <Servo.h>
 #include <Arduino.h>
 #include "Motors.h"
 #include "Command.h"
@@ -11,22 +11,8 @@
 
 byte check = 0;
 
-//Include the defined headers in the settings.h file for the different devices that may be wired in.  For
-//devices that have pin numbers wired to a board they are added in the cape or controllerboard cpp file because
-//we need the pin numbers.
-
+//Include the defined headers in the settings.h file for the different devices that may be wired in.
 Settings settings;
-
-
-#if(HAS_STD_CAPE)
-  #include "Cape.h"
-  Cape cape;
-#endif
-
-#if(HAS_OROV_CONTROLLERBOARD_25)
-  #include "controllerboard25.h"
-  Controller25 controller;
-#endif
 
 #if(HAS_STD_LIGHTS)
   #include "Lights.h"
@@ -36,6 +22,11 @@ Settings settings;
 #if(HAS_STD_CALIBRATIONLASERS)
   #include "CalibrationLaser.h"
   CalibrationLaser calibrationLaser;
+#endif
+
+#if(HAS_STD_CAPE)
+  #include "Cape.h"
+  Cape cape;
 #endif
 
 #if(HAS_STD_2X1_THRUSTERS)
@@ -53,8 +44,6 @@ Settings settings;
   CameraMount cameramount;
 #endif
 
-
-
 #if(HAS_POLOLU_MINIMUV)
   #define COMPASS_ENABLED 1
   #define GYRO_ENABLED 1
@@ -62,24 +51,6 @@ Settings settings;
   #include "MinIMU9.h"
   #include <Wire.h> //required to force the Arduino IDE to include the library in the path for the I2C code
   MinIMU9 IMU;
-#endif
-
-#if(HAS_MPU9150)
-  #define COMPASS_ENABLED 1
-  #define GYRO_ENABLED 1
-  #define ACCELEROMETER_ENABLED 1
-  #include "MPU9150.h"
-  #include <Wire.h> //required to force the Arduino IDE to include the library in the path for the I2C code
-
-  MPU9150 IMU;
-#endif
-
-#if(HAS_MS5803_14BA)
-  #define DEAPTH_ENABLED 1
-  #include "MS5803_14BA.h"
-  #include <Wire.h> //required to force the Arduino IDE to include the library in the path for the I2C code
-  #include <SPI.h> //required to force the Arduino IDE to include the library in the path for the SPI code
-  MS5803_14BA DeapthSensor;
 #endif
 
 
@@ -91,7 +62,6 @@ volatile byte wdt_resets = 0; //watchdog resets
 // array[0] will be the number of arguments in the command
 int array[MAX_ARGS]; 
 Timer Output1000ms;
-Timer Output100ms;
 int loops_per_sec;
 
 void setup(){
@@ -115,7 +85,6 @@ void setup(){
   
   pinMode(13, OUTPUT);
   Output1000ms.reset();
-  Output100ms.reset();
   
   DeviceManager::doDeviceSetups();
 }
@@ -133,9 +102,6 @@ void loop(){
     Serial.print(loops_per_sec);
     Serial.println(';');
     loops_per_sec = 0; 
-  }
-  if (Output100ms.elapsed(100)) {
-    OutputNavData();
   }
   
 }

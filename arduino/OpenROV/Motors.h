@@ -1,7 +1,7 @@
 #ifndef __MOTORS_H_
 #define __MOTORS_H_
 
-#include "openrov_servo.h"
+#include <Servo.h>
 
 #define MIDPOINT 1500
 

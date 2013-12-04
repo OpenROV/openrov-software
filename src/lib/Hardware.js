@@ -1,8 +1,7 @@
 var serialPort = require('serialport')
   , EventEmitter = require('events').EventEmitter
   , StatusReader = require('./StatusReader')
-  , CONFIG = require('./config')
-  , logger = require('./logger').create(CONFIG);
+  , CONFIG = require('./config');
 
 function Hardware() {
 	var hardware = new EventEmitter();

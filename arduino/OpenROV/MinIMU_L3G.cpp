@@ -1,5 +1,3 @@
-#include "AConfig.h"
-#if(HAS_POLOLU_MINIMUV)
 #include "MinIMU_L3G.h"
 #include <Wire.h>
 #include <math.h>
@@ -148,4 +146,3 @@ bool L3G::autoDetectAddress(void)
 
   return false;
 }
-#endif

@@ -1,5 +1,3 @@
-#include "AConfig.h"
-#if(HAS_POLOLU_MINIMUV)
 #include "MinIMU9.h"
 #include "MinIMU9AHRS.h"
 #include "MinIMU_I2C.h"
@@ -15,7 +13,11 @@ void MinIMU9::device_setup(){
 
 void MinIMU9::device_loop(Command command){
   if (command.cmp("ccal")){
+    Compass_Calibrate();
     //Todo: Write calibrated values to EPROM
+  }
+  else if (command.cmp("i2cscan")){
+    scan();
   }
 
   sample_MiniMU9();
@@ -24,4 +26,3 @@ void MinIMU9::device_loop(Command command){
   navdata::ROLL = ToDeg(roll);
   navdata::YAW = ToDeg(yaw);
 }
-#endif

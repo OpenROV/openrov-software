@@ -11,7 +11,6 @@ function Hardware() {
 	});
 
 	hardware.connect = function() {
-		console.log('!Serial port opened');
 	};
 
 	hardware.write = function(command) {
@@ -23,7 +22,7 @@ function Hardware() {
 	};
 
 	hardware.close = function() {
-		console.log('!Serial port closed');
+		logger.log('!Serial port closed');
 	};
 
 	var time = 1000;
@@ -38,6 +37,8 @@ function Hardware() {
       var status = reader.parseStatus(data);
       hardware.emit('status',status);
     }
+
+
 
 	return hardware;
 };

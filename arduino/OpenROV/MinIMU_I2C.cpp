@@ -1,5 +1,3 @@
-#include "AConfig.h"
-#if(HAS_POLOLU_MINIMUV)
 /*
 
 MinIMU-9-Arduino-AHRS
@@ -171,4 +169,4 @@ void Compass_Calibrate() {
   
 
 }
-#endif
+

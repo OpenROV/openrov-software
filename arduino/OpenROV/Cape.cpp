@@ -1,5 +1,3 @@
-#include "AConfig.h"
-#if(HAS_STD_CAPE)
 #include "Device.h"
 #include "Pin.h"
 #include "Cape.h"
@@ -53,11 +51,6 @@ double GetTemp(void)
   return (t);
 }
 
-float mapf(long x, long in_min, long in_max, long out_min, long out_max)
-{
-  return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
-}
-
 void Cape::device_setup(){
   time.reset();
   statustime.reset();
@@ -90,14 +83,14 @@ void Cape::device_loop(Command command){
 
   // send voltage and current
   if (statustime.elapsed(100)) {
-    capedata::VOUT = mapf(vout.read(),0,1023,0,50);
-    capedata::IOUT = mapf(average,0,1023,0,5)+.4;
+    capedata::VOUT = vout.read();
+    capedata::IOUT = average;
     capedata::FMEM = freeMemory();
     capedata::ATMP = GetTemp();
     capedata::UTIM = millis(); 
   }  
 }
-#endif
+
 
 
 
