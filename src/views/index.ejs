@@ -58,8 +58,24 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
   <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
 
   <body>
+  
+  
+      <div class="navbar navbar-inverse navbar-fixed-top nav-collapse collapse">
+      <div class="navbar-inner">
+        <a class="brand" href="#"><img src="themes/OpenROV/img/logo.png" class="logo"/>&nbsp;Cockpit</a>
+        <ul class="nav" id="navtoolbar">
+          <li><a href="#"><img id="keyboardpopover" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" /></a></li>
+          <li><a href="#" id="servoTilt"></a></li>
+        </ul>
+        <ul id="menuitems" class="nav pull-right">
+          <li><a href="#" id="show-settings">Settings</a></li>
+          <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
+        </ul>        
+      </div>
+    </div>
+<!--  
         <div class="navbar navbar-inverse navbar-fixed-top nav-collapse collapse">
-          <div class="navbar-inner">
+            <div class="navbar-inner">
             <div id="menu" class="container-fluid">
               <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
@@ -67,18 +83,18 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
                 <span class="icon-bar"></span>
               </a>
               <p><a class="brand" href="#"><img src="themes/OpenROV/img/logo.png" class="logo"/>&nbsp;Cockpit</a></p>
-              <p><img id="keyboardinstructions" width="30px" class="brand logo" src="themes/OpenROV/img/keyboard.png" data-placement="bottom" rel='popover' title="keyboard commands" html="true" data-content="<p>Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver. Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.</p>" ></p>
-
+              <p><img id="keyboardpopover" width="30px" class="brand logo" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" />
+              <p id="servoTilt"></p>
               <div class="nav-collapse collapse">
                 <ul id="menuitems" class="nav pull-right">
                   <li><a href="#" id="show-settings">Settings</a></li>
                   <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
                 </ul>
-              </div><!--/.nav-collapse -->
+              </div>
             </div>
           </div>
         </div>
-        
+  -->      
         <!-- Main ROW -->
         <div id="main-row" class="container-fluid full-height">
           <div class="row-fluid full-height">
@@ -90,17 +106,8 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
               </div>
             </div>
             <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
-              <div id="keyboard" class="controller well well-small" />
-                <div id="servoTilt" class="controller well well-small" >
-                    
-                    <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
-                </div>
-                <div id="lights" class="controller well well-small" >
-
-                    <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
-		    <p>Use <i>l</i> to toggle callibration lasers.</p>
-                </div>
-
+              <div id="buttonPanel" class="controller well well-small"></div>
+          </div>
             </div>
           </div>
         </div>
@@ -132,6 +139,15 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
 	    </div>
 
         </div>
+        <textarea class="hidden" id="keyboardInstructions">
+            <p>
+                Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
+                Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.
+            </p>
+            <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
+            <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
+		    <p>Use <i>l</i> to toggle callibration lasers.</p>
+        </textarea>
 
         
         <!-- Le javascript
@@ -240,7 +256,13 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
 
 	   
           });	  
-
+          
+        //We have a contract for centralizing all keyboad instructions. This code
+        //wires that content to where we display it in a popover.
+        $('#keyboardpopover').hover(function(){
+            $('#keyboardpopover').attr('data-content',$('#keyboardInstructions').text());
+        });
+		
         $("[rel='popover']").popover();
         </script>
 

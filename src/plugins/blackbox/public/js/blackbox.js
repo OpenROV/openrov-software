@@ -101,10 +101,9 @@ function fakeClick(anchorObj) {
 		var blackbox = this;
 
 		// add required UI elements
-                $('#menu').append('<span id="blackboxstatus" class="false pull-right"></span>');
-		$('#menu').append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
-		$('#keyboard').append('<p><i>r</i> to toggle recording of telemetry</p>');
-		$('#keyboardinstructions').attr('data-content',$('#keyboardinstructions').attr('data-content')+'<p><i>r</i> to toggle recording of telemetry</p>');
+                $("#buttonPanel").append('<span id="blackboxstatus" class="false pull-right"></span>');
+		$("#buttonPanel").append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
+		$('#keyboardInstructions').append('<p><i>r</i> to toggle recording of telemetry</p>');
 		$('#exportButton').click(exportData);
 
                 this.cockpit.socket.on('navdata', function(data) {
