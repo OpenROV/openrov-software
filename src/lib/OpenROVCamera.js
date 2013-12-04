@@ -35,6 +35,11 @@ var OpenROVCamera = function (options) {
 
   var options = orutils.mixin(options, default_opts);
   var _capturing = false;
+
+  camera.IsCapturing = function() {
+	return _capturing;
+  }
+
   var args= [ '-i' ,
               '/usr/local/lib/input_uvc.so -r ' + options.resolution + ' -f ' + options.framerate,
               '-o',
@@ -73,18 +78,20 @@ var OpenROVCamera = function (options) {
 
       capture_process = spawn(cmd, args);
       camera.emit('started');
-      console.log('camera started');
-      
       capture_process.stdout.on('data', function (data) {
-        console.log('stdout: ' + data);
+  	logger.log('camera: ' + data);
       });
-      
+
       capture_process.stderr.on('data', function (data) {
-        console.log('stderr: ' + data);
+        logger.log('camera: ' + data);
+//	camera.emit('error.device',data);
       });
+      console.log('camera started');
       
       capture_process.on('exit', function (code) {
         console.log('child process exited with code ' + code);
+	_capturing = false;
+	camera.emit('error.device',code);
       });      
     });
   };

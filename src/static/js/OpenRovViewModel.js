@@ -22,7 +22,7 @@ function OpenRovViewModel(){
     self.currentVoltage = ko.observable(0);
     self.currentCurrent = ko.observable(0);
     self.currentRawCpuUsage = ko.observable(0);
-    self.currentTiltPosition = ko.observable(0);
+    self.currentTiltPosition = ko.observable(1500);
     self.currentBrightness = ko.observable(0);
     self.currentTime = ko.observable(new Date());
     self.sendUpdateEnabled = ko.observable(true);
@@ -39,7 +39,6 @@ function OpenRovViewModel(){
     self.reverseStarbordThruster = ko.observable();
     self.reverseLiftThruster = ko.observable();
     self.capabilities = ko.observable(0);
-    self.savedBrightness = 0;
     
     
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
@@ -69,7 +68,7 @@ function OpenRovViewModel(){
 	});
 
     self.servoTiltStyle = ko.computed(function(){
-        var angle = self.currentTiltPosition()*-45;
+        var angle = (90/500)*self.currentTiltPosition()+90//*-45;
         return "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)";
     });
 
@@ -132,6 +131,7 @@ function OpenRovViewModel(){
 		if ('time' in data) self.currentRunTime(data.time);
 		if ('vout' in data) self.currentVoltage(data.vout);
 		if ('iout' in data) self.currentCurrent(data.iout);
+		if ('servo' in data) self.currentTiltPosition(data.servo);
 		if ('cpuUsage' in data) self.currentRawCpuUsage(data.cpuUsage);
         	self.lastPing(new Date());
 		for (i in data){
@@ -151,30 +151,8 @@ function OpenRovViewModel(){
 	    self.snapshots(data);
 	}
 
-	self.toggleBrightness = function() {
-		var current = self.currentBrightness();
-
-		if (current == 0 && self.savedBrightness == 0) {
-			self.currentBrightness(10);
-		}
-		else if (current == 0 && self.savedBrightness != 0) {
-			self.currentBrightness(self.savedBrightness);
-		}
-		else if (current != 0) {
-			self.savedBrightness = current;
-			self.currentBrightness(0);
-			return;
-		}
-
-		self.savedBrightness = self.currentBrightness();
-	}
-
     self.updateBrightness = function(value) {
-    	if (value == 0) { // value 0 is used to toggle the lights
-    		self.toggleBrightness();
-    		return;
-    	}
-    	var newVal = self.currentBrightness();
+        var newVal = self.currentBrightness();
         newVal += value;
         if(newVal<0 || newVal >10) return;
         self.currentBrightness(newVal);
@@ -220,6 +198,4 @@ function OpenRovViewModel(){
 
     
 
-    setInterval(self.updateConnectionStatus, 1000);
-    setInterval(function () {self.currentTime(new Date())}, 1000);
 }

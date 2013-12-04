@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_STD_2X1_THRUSTERS)
 #include "Device.h"
 #include "Pin.h"
 #include "Thrusters2X1.h"
@@ -5,9 +7,9 @@
 #include "Motors.h"
 #include "Timer.h"
 
-Motors motors(9, 10, 11);
-
-
+//Motors motors(9, 10, 11);
+//Motors motors(6, 7, 8);
+Motors motors(PORT_PIN,VERTICLE_PIN,STARBORD_PIN);
 
 int new_p = MIDPOINT;
 int new_s = MIDPOINT;
@@ -18,6 +20,13 @@ int s = MIDPOINT;
 Timer controltime;
 Timer thrusterOutput;
 boolean bypasssmoothing;
+
+#ifdef ESCPOWER_PIN
+bool canPowerESCs = true;
+Pin escpower("escpower", ESCPOWER_PIN, escpower.digital, escpower.out);
+#else
+boolean canPowerESCs = false;
+#endif
 
 int smoothAdjustedServoPosition(int target, int current){
   // if the MIDPOINT is betwen the change requested in velocity we want to go to MIDPOINT first, and right away.
@@ -48,6 +57,10 @@ void Thrusters::device_setup(){
   thrusterOutput.reset();
   controltime.reset();
   bypasssmoothing = false;
+  #ifdef ESCPOWER_PIN
+    escpower.reset();
+
+  #endif
 }
 
 void Thrusters::device_loop(Command command){
@@ -60,13 +73,37 @@ void Thrusters::device_loop(Command command){
         s = command.args[3];
         if (command.args[4] == 1) bypasssmoothing=true;
       }
-    }    
+    }
+  #ifdef ESCPOWER_PIN
+    else if (command.cmp("escp")) {
+      escpower.write(command.args[1]); //Turn on the ESCs
+      Serial.print(F("log:escpower="));
+      Serial.print(command.args[1]);
+      Serial.println(';');
+    }
+  #endif  
     else if (command.cmp("start")) {
       motors.reset();
     }    
     else if (command.cmp("stop")) {
       motors.stop();
-    } 
+    }
+    else if ((command.cmp("mcal")) && (canPowerESCs)){
+      Serial.println(F("log:Motor Callibration Staring;"));      
+      pinMode(ESCPOWER_PIN, OUTPUT);
+      digitalWrite(ESCPOWER_PIN, LOW); //turn ESCs off
+      motors.go(2000,2000,2000);
+      digitalWrite(ESCPOWER_PIN, HIGH); //turn ESCs on
+      delay(2000);
+      digitalWrite(ESCPOWER_PIN, LOW); //turn ESCs off
+      delay(1000);      
+      digitalWrite(ESCPOWER_PIN, HIGH); //turn ESCs on
+      delay(2000);     
+      motors.go(1000,1000,1000);
+      delay(2000);
+      motors.go(1500,1500,1500);
+      Serial.println(F("log:Motor Callibration Complete;"));
+  }
     
   //to reduce AMP spikes, smooth large power adjustments out. This incirmentally adjusts the motors and servo
   //to their new positions in increments.  The incriment should eventually be adjustable from the cockpit so that
@@ -110,7 +147,7 @@ void Thrusters::device_loop(Command command){
     
   } 
 }
-
+#endif
 
 
 

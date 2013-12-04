@@ -1,0 +1,35 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+
+if [ -f /var/.RESIZE_ROOT_PARTITION ]; then
+  rm /var/.RESIZE_ROOT_PARTITION
+  touch /var/.RESIZE_ROOT
+  /opt/openrov/linux/expand_root_partition.sh
+  # the expand script initiates a reboot
+  exit 0
+fi
+
+if [ -f /var/.RESIZE_ROOT ]; then
+  resize2fs /dev/mmcblk0p2
+  rm /var/.RESIZE_ROOT
+fi
+
+if [ ! -f /var/swapfile ]; then
+  bash /opt/openrov/linux/addswapfile.sh
+fi
+
+
+#auto detect configuration and update environment settings
+. /opt/openrov/linux/system-detect.sh || /bin/true
+
+exit 0
+
