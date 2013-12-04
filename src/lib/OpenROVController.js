@@ -133,7 +133,7 @@ var OpenROVController = function(eventLoop) {
   controller.notSafeToControl = function(){ //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= .20130314034859) return false;
     if (this.Capabilities != 0) return false; //This feature added after the swap to ms on the Arduino
-    console.log('Audrino is at an incompatible version of firmware. Upgrade required before controls will respond');
+    console.log('Arduino is at an incompatible version of firmware. Upgrade required before controls will respond');
     console.log(this.ArduinoFirmwareVersion);
     console.log(this.Capabilities);
     return true;
