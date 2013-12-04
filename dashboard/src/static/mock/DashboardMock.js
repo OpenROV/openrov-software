@@ -30,6 +30,30 @@ io.sockets.on('connection', function (socket) {
 		},
 	};
 
+	var cloud9 = {
+		status : 'Unknown',
+		start : function() { 
+			cloud9.status = 'Running';
+			emitCloud9Status();
+		},
+		stop : function() { 
+			cloud9.status = 'Stoped';
+			emitCloud9Status();
+		},
+	};
+
+	var samba = {
+		status : 'Unknown',
+		start : function() { 
+			samba.status = 'Running';
+			emitSambaStatus();
+		},
+		stop : function() { 
+			samba.status = 'Stoped';
+			emitSambaStatus();
+		},
+	};
+
 	process.on('message', function(message){
 		if (message.key === 'start-cockpit') {
 			cockpit.start();
@@ -37,18 +61,60 @@ io.sockets.on('connection', function (socket) {
 		if (message.key === 'stop-cockpit') {
 			cockpit.stop();
 		}
+		if (message.key === 'status-cockpit') {
+			emitCockpitStatus();
+		}
+
+		if (message.key === 'start-cloud9') {
+			cloud9.start();
+		}
+		if (message.key === 'stop-cloud9') {
+			cloud9.stop();
+		}
+		if (message.key === 'status-cloud9') {
+			emitCloud9Status();
+		}
+
+		if (message.key === 'start-samba') {
+			samba.start();
+		}
+		if (message.key === 'stop-samba') {
+			samba.stop();
+		}
+		if (message.key === 'status-samba') {
+			emitSambaStatus();
+		}
 	});
 
 	socket.on('status-cockpit', function(){
 		emitCockpitStatus();
 	});
-
 	socket.on('start-cockpit', cockpit.start);
 	socket.on('stop-cockpit', cockpit.stop);
+
+	socket.on('status-cloud9', function(){
+		emitCloud9Status();
+	});
+	socket.on('start-cloud9', cloud9.start);
+	socket.on('stop-cloud9', cloud9.stop);
+
+	socket.on('status-samba', function(){
+		emitSambaStatus();
+	});
+	socket.on('start-samba', samba.start);
+	socket.on('stop-samba', samba.stop);
 
 	function emitCockpitStatus() {
 		socket.emit('status-cockpit', cockpit.status);
 		process.send({ key: 'status-cockpit', value: cockpit.status});
+	};
+	function emitCloud9Status() {
+		socket.emit('status-cloud9', cloud9.status);
+		process.send({ key: 'status-cloud9', value: cloud9.status});
+	};
+	function emitSambaStatus() {
+		socket.emit('status-samba', samba.status);
+		process.send({ key: 'status-samba', value: samba.status});
 	};
 
 });
