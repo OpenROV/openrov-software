@@ -2,10 +2,36 @@ var express = require('express')
   , app = express()
   , server = app.listen(process.env.PORT)
   , io = require('socket.io').listen(server)
+  , path = require('path')
+  , fs=require('fs')
   , EventEmitter = require('events').EventEmitter;
 
-app.use(express.static(__dirname + '/static/'));
 
+// Keep track of plugins js and css to load them in the view
+var scripts = []
+  , styles = []
+  ;
+
+app.configure( function() {
+	app.use(express.static(__dirname + '/static/'));
+	app.use(express.favicon());
+	app.use(express.logger('dev'));
+	app.use(app.router);
+
+	app.set('port', process.env.PORT);
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'ejs', { pretty: true });
+});
+
+app.get('/', function (req, res) {
+    res.render('index', {
+        title: 'Express'
+        ,scripts: scripts
+        ,styles: styles
+    });
+});
+
+// Prepare dependency map for plugins
 var cp = require('child_process');
 var dashboardEngine = cp.fork(__dirname + '/static/mock/DashboardMock.js');
 
@@ -16,20 +42,71 @@ var cockpit = {
 // no debug messages
 io.configure(function(){ io.set('log level', 1); });
 
+var deps = {
+    server: server
+  , app: app
+  , io: io
+  , dashboardEngine: dashboardEngine
+};
+
+// Load the plugins
+var dir = path.join(__dirname, 'plugins');
+function getFilter(ext) {
+    return function(filename) {
+        return filename.match(new RegExp('\\.' + ext + '$', 'i'));
+    };
+}
+
+fs.readdir(
+	dir, 
+	function (err, files) {
+	    if (err) {
+	        throw err;
+	    }
+	    files.filter(
+	    	function (file) { return fs.statSync(path.join(dir,file)).isDirectory(); }
+	    	)
+	    .forEach(
+	    	function (plugin) { 
+	    		console.log("Loading " + plugin + " plugin.");
+	    		// Load the backend code
+	    		var pluginPath = path.join(dir, plugin);
+	    		require(pluginPath)(plugin, deps);
+	    		
+  
+      			// Add the public assets to a static route
+      			assets = path.join(dir, plugin, 'public');
+				if (fs.existsSync(assets)) {
+					app.use("/plugin/" + plugin, express.static(assets));
+				}
+  
+				// Add the js to the view
+				if (fs.existsSync(js = path.join(assets, 'js'))) {
+					fs.readdirSync(js)
+						.filter(getFilter('js'))
+						.forEach(
+							function(script) {
+								scripts.push("/plugin/" + plugin + "/js/" + script);
+							});
+				}
+
+				// Add the css to the view
+				if (fs.existsSync(css = path.join(assets, 'css'))) {
+					fs.readdirSync(css)
+						.filter(getFilter('css'))
+						.forEach(
+							function(style) {
+								styles.push("/plugin/" + plugin + "/css/" + style);
+							});
+				}
+    });
+});
+
+
+
+
 io.sockets.on('connection', function (socket) {
 
-	socket.on('status-cockpit', function(){
-		dashboardEngine.send({ key: 'status-cockpit' });
-	});
-
-	socket.on('start-cockpit', function() {
-		dashboardEngine.send({ key: 'start-cockpit' });
-	});
-
-	socket.on('stop-cockpit', function() {
-		dashboardEngine.send({ key: 'stop-cockpit' });
-	});
-	
 	dashboardEngine.on('message', function(message){
 		if (message.key != undefined) {
 			socket.emit(message.key, message.value);
