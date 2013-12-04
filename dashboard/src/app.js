@@ -1,4 +1,4 @@
-var express = require('express')
+var express = require('express')  
   , app = express()
   , server = app.listen(process.env.PORT)
   , io = require('socket.io').listen(server)
@@ -33,7 +33,7 @@ app.get('/', function (req, res) {
 
 // Prepare dependency map for plugins
 var cp = require('child_process');
-var dashboardEngine = cp.fork(__dirname + '/static/mock/DashboardMock.js');
+var dashboardEngine = cp.fork(__dirname + '/../mock/DashboardMock.js');
 
 var cockpit = {
 	status : 'Unknown',
@@ -107,6 +107,7 @@ fs.readdir(
 
 io.sockets.on('connection', function (socket) {
 
+	// redirecting messages to socket-ios
 	dashboardEngine.on('message', function(message){
 		if (message.key != undefined) {
 			socket.emit(message.key, message.value);

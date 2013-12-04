@@ -8,10 +8,10 @@ console.log(__dirname);
 
 app.use(express.static(__dirname));
 app.use('/mockJS', express.static(__dirname + '/mockJS'));
-app.use('/js', express.static(__dirname + '/../js'));
-app.use('/img', express.static(__dirname + '/../img'));
-app.use('/css', express.static(__dirname + '/../css'));
-app.use('/themes', express.static(__dirname + '/../themes'));
+app.use('/js', express.static(__dirname + '/../src/static/js'));
+app.use('/img', express.static(__dirname + '/../src/static/img'));
+app.use('/css', express.static(__dirname + '/../src/static/css'));
+app.use('/themes', express.static(__dirname + '/../src/static/themes'));
 
 // no debug messages
 //io.configure(function(){ io.set('log level', 1); });
