@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_POLOLU_MINIMUV)
 /*
 
 MinIMU-9-Arduino-AHRS
@@ -190,3 +192,4 @@ void sample_MiniMU9() //Main Loop
   }
    
 }
+#endif
