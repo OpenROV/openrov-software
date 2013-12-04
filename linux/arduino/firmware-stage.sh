@@ -22,8 +22,8 @@ PWD=`pwd`
 ARDUINOFILE=$1
 
 echo staging: build dir is $BUILDDIR 1>&2
-cd $BUILDDIR || error_exit "Unable to change directoies"
-/usr/local/bin/ino init  1>&2  || error_exit "Failed to initialize the Arduino project directory, Aborting"
+cd $BUILDDIR || error_exit "Unable to change directory"
+/usr/local/bin/ino init  1>&2  || error_exit "Failed to initialize the Arduino project directory. Aborting"
 rm src/*.ino || error_exit "Cleaning excess project files failed. Aborting"
 
 cd $BUILDDIR/src || error_exit "Unable to change to src folder"
