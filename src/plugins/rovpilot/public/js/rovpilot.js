@@ -30,12 +30,8 @@
 		    '<div class="span1 pull-left"> \
 			<h6>Thrust&nbsp;Factor</h6><div class="label badge" id="thrustfactor">&nbsp;</div> \
 		    </div>');
-	$("#lights").append('<p>press <i>i</i> to toggle lights</p>');
-	$('#rov_status_panel').prepend(
-		     '<div id="gamepad" class="controller well well-small hidden" > \
-			<img src="themes/OpenROV/img/gamepad.png" class="center"> \
-			<p>Use the <i>2 sticks</i> to maneuver.</p> \
-		    </div>');
+	$('#keyboardInstructions').append('<p>press <i>i</i> to toggle lights</p>');
+	$('.navbar-fixed-top .nav').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
 
         var self = this;
         setInterval(function() {

@@ -28,7 +28,7 @@
 	
 	$("#menuitems").append('<li><a href="#" id="show-photos">Photos</a></li>');
 	
-	$("#servoTilt").before('<div class="btn-group"><button id="capture-photo" class="btn">Capture</button></div>');	 	    
+	$("#buttonPanel").append('<button id="capture-photo" class="btn">Capture</button>');	 	    
 	
         // Register the various event handlers
         this.listen();

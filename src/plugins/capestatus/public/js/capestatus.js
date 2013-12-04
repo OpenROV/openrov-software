@@ -21,10 +21,10 @@
 		<div class="span2 pull-right"><h2 id="currentCurrent">&nbsp;</h2><div>&nbsp;</div></div> \
            ');
 	
-	$("#servoTilt").append('<p>Servo Tilt: <img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png" class="center"></p>'); //attr style
+	$("#servoTilt").append('<img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png">'); //attr style
 	
-	$("#lights").append('<p><div id="brightnessIndicator"></div></p>'); //attr class
-
+	//$("#lights").append('<p><div id="brightnessIndicator"></div></p>'); //attr class
+    $('#navtoolbar').append('<li id="brightnessIndicator"></li>');
         // Register the various event handlers
         this.listen();
 	var capes = this;
