@@ -4,7 +4,8 @@ var express = require('express')
   , io = require('socket.io').listen(server)
   , path = require('path')
   , fs=require('fs')
-  , EventEmitter = require('events').EventEmitter;
+  , EventEmitter = require('events').EventEmitter
+  , DashboardEngine = require('./lib/DashboardEngine-mock');
 
 
 // Keep track of plugins js and css to load them in the view
@@ -31,16 +32,14 @@ app.get('/', function (req, res) {
     });
 });
 
-// Prepare dependency map for plugins
-var cp = require('child_process');
-var dashboardEngine = cp.fork(__dirname + '/../mock/DashboardMock.js');
-
 var cockpit = {
 	status : 'Unknown',
 }
 
 // no debug messages
 io.configure(function(){ io.set('log level', 1); });
+
+var dashboardEngine = new DashboardEngine();
 
 var deps = {
     server: server
@@ -107,9 +106,8 @@ io.sockets.on('connection', function (socket) {
 
 	// redirecting messages to socket-ios
 	dashboardEngine.on('message', function(message){
-		if (message.key != undefined) {
-			socket.emit(message.key, message.value);
-		}});
+		socket.emit(message.key, message.value);
+	});
 
 });
 
