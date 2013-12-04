@@ -103,8 +103,6 @@ fs.readdir(
 });
 
 
-
-
 io.sockets.on('connection', function (socket) {
 
 	// redirecting messages to socket-ios

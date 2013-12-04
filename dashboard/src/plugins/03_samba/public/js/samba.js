@@ -14,7 +14,6 @@
 
         dashboard.socket.on('status-samba', function(status) {
         	viewModel.status(status);
-   	        viewModel.running((status === "Running"));
         });
 
         // Add required UI elements
@@ -23,6 +22,10 @@
         	'plugin/03_samba/plugin.html',
             function() { ko.applyBindings(dashboard.viewModel); }
             );
+
+        setInterval(viewModel.requestStatus, 3000);
+        viewModel.requestStatus();
+
     };
 
     window.Dashboard.plugins.push(Samba);

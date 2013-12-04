@@ -15,8 +15,8 @@
   <div class="row">
     <div class="span4 offset2">
       <button class="btn" data-bind="click: samba.requestStatus">Refresh</button>
-      <button class="btn" data-bind="css: { disabled: samba.running() }, click: samba.start">Start</button>
-      <button class="btn"  data-bind="css: { disabled: ! samba.running() }, click: samba.stop">Stop</button>
+      <button class="btn" data-bind="css: { disabled: ! samba.startable() }, click: samba.start">Start</button>
+      <button class="btn"  data-bind="css: { disabled: ! samba.stopable() }, click: samba.stop">Stop</button>
     </div>
   </div>
 </div>

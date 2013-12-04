@@ -13,8 +13,8 @@
   <div class="row">
     <div class="span4 offset2">
       <button class="btn" data-bind="click: cloud9.requestStatus">Refresh</button>
-      <button class="btn" data-bind="css: { disabled: cloud9.running() }, click: cloud9.start">Start</button>
-      <button class="btn"  data-bind="css: { disabled: ! cloud9.running() }, click: cloud9.stop">Stop</button>
+      <button class="btn" data-bind="css: { disabled: ! cloud9.startable() }, click: cloud9.start">Start</button>
+      <button class="btn"  data-bind="css: { disabled: ! cloud9.stopable() }, click: cloud9.stop">Stop</button>
     </div>
   </div>
 </div>
