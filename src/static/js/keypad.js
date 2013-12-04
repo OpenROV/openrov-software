@@ -88,19 +88,24 @@ var KEYS = {
      command: 'light',
      value: -1
   },
-  76: { //l (brightness toggle)
+  73: { //i (brightness toggle)
     command: 'light',
     value: 0
   },
+  76: { //l (laser toggle) 
+     command: 'claser'
+  }
 }
 
 var KeyPad = function() {
   var power = .5; //default to mid power
   var vtrim = 0; //default to no trim
   var ttrim = 0;
+  var tilt = 0;
   var kp = {};
   var servoTiltHandler = function(value){};
   var brightnessHandler = function(value){};
+  var claserHandler = function(){};
   var processKeys = true;
 
   kp.bindServoTilt = function(callback){
@@ -109,6 +114,10 @@ var KeyPad = function() {
 
   kp.bindBrightness = function(callback){
       brightnessHandler=callback;
+  };
+    
+  kp.bindLasers = function(callback){
+    claserHandler=callback;
   };
 
   kp.bindKeys = function(){
@@ -149,10 +158,14 @@ var KeyPad = function() {
     evt.preventDefault();
     if(info.command=='command')
         positions[info.position] = info.value*power;
-    else if(info.command=='tilt')
-        servoTiltHandler(info.value);
+    else if(info.command=='tilt'){
+        tilt+=info.value*(30/360); //30 degree incriments
+	if(info.value == 0) tilt = 0;
+        servoTiltHandler(tilt);}
     else if(info.command=='light')
         brightnessHandler(info.value);
+    else if(info.command=='claser')
+        claserHandler();	
     else if(info.command=='power')
         power=info.value;
     else if(info.command=='vtrim')
@@ -174,8 +187,8 @@ var KeyPad = function() {
        if (info.position == 'lift')
          positions.lift = (1/1000)*vtrim;
     }
-    else if(info.command=='tilt')
-        servoTiltHandler(info.value);
+    //else if(info.command=='tilt')
+    //    servoTiltHandler(info.value);
   });
 
   kp.getPositions = function() {

@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_STD_2X1_THRUSTERS)
 #include "Device.h"
 #include "Pin.h"
 #include "Thrusters2X1.h"
@@ -5,9 +7,9 @@
 #include "Motors.h"
 #include "Timer.h"
 
-Motors motors(9, 10, 11);
-
-
+//Motors motors(9, 10, 11);
+//Motors motors(6, 7, 8);
+Motors motors(PORT_PIN,VERTICLE_PIN,STARBORD_PIN);
 
 int new_p = MIDPOINT;
 int new_s = MIDPOINT;
@@ -110,7 +112,7 @@ void Thrusters::device_loop(Command command){
     
   } 
 }
-
+#endif
 
 
 

@@ -32,9 +32,9 @@
         div.style.bottom = '0px';
         div.style.backgroundImage = '-webkit-radial-gradient(50% 50%, circle cover, rgb(68, 68, 68) 0%, black 100%)';
 
-        this.visibleWidth = divRect.width;
+        this.visibleWidth = divRect.width*(360/120); // divRect.width;
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.visibleWidth * 2;
+        this.canvas.width = this.visibleWidth * 1.5;
         this.canvas.height = divRect.height;
         this.canvas.style.position = 'absolute';
 
@@ -101,8 +101,12 @@
         }
         offset = - angle * (this.visibleWidth / 360);
         offset -= (this.visibleWidth / 2);
+
+
         // '-webkit-transform'
         window.requestAnimationFrame(function () {
+            compass.canvas.getContext('2d').scale((10),1);
+
             compass.canvas.style.webkitTransform = 'translateX(' + offset + 'px)';
         });
     };

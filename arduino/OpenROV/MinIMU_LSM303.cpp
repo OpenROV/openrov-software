@@ -1,3 +1,5 @@
+#include "AConfig.h"
+#if(HAS_POLOLU_MINIMUV)
 #include "MinIMU_LSM303.h"
 #include <Wire.h>
 #include <math.h>
@@ -341,3 +343,4 @@ byte LSM303::detectSA0_A(void)
   else
     return LSM303_SA0_A_HIGH;
 }
+#endif

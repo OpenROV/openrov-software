@@ -22,7 +22,7 @@ function OpenRovViewModel(){
     self.currentVoltage = ko.observable(0);
     self.currentCurrent = ko.observable(0);
     self.currentRawCpuUsage = ko.observable(0);
-    self.currentTiltPosition = ko.observable(0);
+    self.currentTiltPosition = ko.observable(1500);
     self.currentBrightness = ko.observable(0);
     self.currentTime = ko.observable(new Date());
     self.sendUpdateEnabled = ko.observable(true);
@@ -39,6 +39,20 @@ function OpenRovViewModel(){
     self.reverseStarbordThruster = ko.observable();
     self.reverseLiftThruster = ko.observable();
     self.capabilities = ko.observable(0);
+    self.portMotorSpeed = ko.observable(0);
+    self.portMotorSlide = ko.observable(false);
+    self.starbordMotorSpeed = ko.observable(0);
+    self.starbordMotorSlide = ko.observable(false);
+    self.verticalMotorSpeed = ko.observable(0);
+    self.verticalMotorSlide = ko.observable(false);
+
+    self.diagnosticMotors = ko.observableArray([
+    	{ name: "Port Motor", propertyName: 'portMotorSpeed', reversePropertyName: 'reversePortThruster' },
+    	{ name: "Starboard Motor", propertyName: 'starbordMotorSpeed', reversePropertyName: 'reverseStarbordThruster'  },
+    	{ name: "Vertical Motor", propertyName: 'verticalMotorSpeed', reversePropertyName: 'reverseLiftThruster'  },
+    ]);
+    self.diagnosticMotorSpeedButtons = [ -1, 0, 1 ];
+
     self.savedBrightness = 0;
     
     
@@ -69,7 +83,7 @@ function OpenRovViewModel(){
 	});
 
     self.servoTiltStyle = ko.computed(function(){
-        var angle = self.currentTiltPosition()*-45;
+        var angle = (90/500)*self.currentTiltPosition()+90//*-45;
         return "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)";
     });
 
@@ -132,6 +146,7 @@ function OpenRovViewModel(){
 		if ('time' in data) self.currentRunTime(data.time);
 		if ('vout' in data) self.currentVoltage(data.vout);
 		if ('iout' in data) self.currentCurrent(data.iout);
+		if ('servo' in data) self.currentTiltPosition(data.servo);
 		if ('cpuUsage' in data) self.currentRawCpuUsage(data.cpuUsage);
         	self.lastPing(new Date());
 		for (i in data){
@@ -179,6 +194,10 @@ function OpenRovViewModel(){
         if(newVal<0 || newVal >10) return;
         self.currentBrightness(newVal);
     }
+
+    self.setMotorTestSpeed = function(propertyName, value) {
+    	self[propertyName](value);
+    };
     
     ko.bindingHandlers.slider = {
 	init: function (element, valueAccessor, allBindingsAccessor) {

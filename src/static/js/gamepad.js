@@ -48,6 +48,7 @@ var GamePad = function() {
         
     };
 
+    var tilt = 0;
     var ttrim = 0;
     var ltrim = 0;
     gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
@@ -59,13 +60,15 @@ var GamePad = function() {
           brightnessHandler(-1);
           break;
         case 'Y':
-          servoTiltHandler(1);
+          tilt+=(30/360);
+          servoTiltHandler(tilt);
           break;
         case 'B':
           servoTiltHandler(0);
           break;
         case 'A':
-          servoTiltHandler(-1);
+	  tilt-=(30/360);
+          servoTiltHandler(tilt);
           break;
         case 'RB':
           if (ttrim != 0 || ltrim != 0) {
@@ -88,7 +91,7 @@ var GamePad = function() {
     
     switch (e.axis) {
       case 'LEFT_STICK_X':
-        padStatus.position.yaw = e.value*powerLevel;
+        padStatus.position.yaw = e.value*.05;
         break;
       case 'LEFT_STICK_Y':
         if (e.value == 0) {
@@ -101,7 +104,7 @@ var GamePad = function() {
         if (e.value == 0) {
           padStatus.position.lift = ltrim
         } else {
-          padStatus.position.lift = -1*e.value*powerLevel;
+          padStatus.position.lift = -1*e.value;
         }
         break;      
     }
