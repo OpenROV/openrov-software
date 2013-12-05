@@ -32,10 +32,8 @@ sed 's/CUSTOM_BUILD/'"$HASH"'/g' $1/src/Device.cpp.template > $1/src/Device.cpp
 
 rm $1/src/Device.cpp.template
 
-#ino build -m mega2560  1>&2 || error_exit "$LINENO: Compile of the Arduino image failed."
-
 #setup required environment variables if not already set
-. /opt/openrov/linux/orovconfig.sh
+. /opt/openrov/linux/openrov_config.sh
 
 if test "$ROV_BOARD" = "board25"
 then
@@ -46,7 +44,7 @@ then
     #define HAS_OROV_CONTROLLERBOARD_25 (1)
 	#endif
 
-	__EOF__
+__EOF__
 fi
 
 if test "$ROV_BOARD" = "cape"
@@ -55,10 +53,10 @@ then
 	#ifndef __BOARDCONFIG_H__
 	#define __BOARDCONFOG_H__
 	#define HAS_STD_CAPE (1)
-    #define HAS_OROV_CONTROLLERBOARD_25 (0)
+        #define HAS_OROV_CONTROLLERBOARD_25 (0)
 	#endif
 
-	__EOF__
+__EOF__
 fi
 
 

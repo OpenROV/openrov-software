@@ -28,6 +28,8 @@ var navdata = {
     hdgd: 0
 }
 
+var statusdata = new Object();
+
 var settingsCollection = {
     smoothingIncriment: 0,
     deadZone_min: 0,
@@ -50,8 +52,14 @@ var OpenROVController = function(eventLoop) {
     controller.emit('navdata',navdata);
   }), 100);
   
+  setInterval((function() {
+    controller.emit('status',statusdata);
+  }), 1000);   
+  
   hardware.on('status', function(status) {
-    controller.emit('status',status);
+    for (i in status){
+	statusdata[i] = status[i];
+    }	 
 
     if ('ver' in status) {
       controller.ArduinoFirmwareVersion = status.ver;
@@ -125,7 +133,7 @@ var OpenROVController = function(eventLoop) {
   controller.notSafeToControl = function(){ //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= .20130314034859) return false;
     if (this.Capabilities != 0) return false; //This feature added after the swap to ms on the Arduino
-    console.log('Audrino is at an incompatible version of firmware. Upgrade required before controls will respond');
+    console.log('Arduino is at an incompatible version of firmware. Upgrade required before controls will respond');
     console.log(this.ArduinoFirmwareVersion);
     console.log(this.Capabilities);
     return true;

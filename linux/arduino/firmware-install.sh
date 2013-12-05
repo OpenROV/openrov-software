@@ -19,7 +19,7 @@ error_exit ()
 DIR="`dirname \"$0\"`"
 
 echo unpacking $1
-TMPDIR=`$DIR/firmware-unpack.sh $1` || error_exit "Unpacking Fimrware Failed! Aborting"
+TMPDIR=`$DIR/firmware-unpack.sh $1` || error_exit "Unpacking Firmware Failed! Aborting"
 echo unpacked $1 into folder $TMPDIR
 
 echo compilling in $TMPDIR

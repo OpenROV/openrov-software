@@ -32,7 +32,7 @@ echo "# file; however you are also free to add your own entries." >> /etc/udev/r
 echo "#" >> /etc/udev/rules.d/70-persistent-net.rules
 echo "# No persist!" >> /etc/udev/rules.d/70-persistent-net.rules
 
-
-
+# setup the 'reset' GPIO configuration
+/opt/openrov/linux/reset.sh
 
 exit 0
