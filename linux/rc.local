@@ -27,6 +27,10 @@ if [ ! -f /var/swapfile ]; then
   bash /opt/openrov/linux/addswapfile.sh
 fi
 
+# load the device tree overlay for pin 25 (RESET) and SPI
+CAPEMGR=$( find /sys/devices/ -name bone_capemgr* | head -n 1 )
+echo OPENROV-RESET > $CAPEMGR/slots
+echo BB-SPI0DEV > $CAPEMGR/slots
 
 #auto detect configuration and update environment settings
 . /opt/openrov/linux/system-detect.sh || /bin/true
