@@ -6,7 +6,7 @@ OpenROV Cockpit
 Getting started
 ---------------
 
-**If you just getting started and wan't to have working environment for the OpenROV Cokpit, we recommend that you start with using our ready made [OpenROV disk Image](https://github.com/OpenROV/openrov-image/blob/master/README.md)!**
+**If you just getting started and want to have working environment for the OpenROV Cockpit, we recommend that you start with using our ready made [OpenROV disk Image](https://github.com/OpenROV/openrov-image/blob/master/README.md)!**
 
 Introduction
 ------------
@@ -48,7 +48,7 @@ a) ssh rov@<address of rov>
 Step 3
 ------
 
-Customive the name of the image to match your rov#.
+Customize the name of the image to match your rov#.
 
 
 Change from "openrov" (without quotes) to "openrov-XXXX" (without quotes) - where XXXX is your serial number.
@@ -59,7 +59,7 @@ Change from "openrov" (without quotes) to "openrov-XXXX" (without quotes) - wher
 Step 4
 ------
 
-Upload the right firmware on to the arduino that is driving the motors and sensors.  The source code for the arduino is actually installed in the git repo on the beaglebone. The beaglebone has a full arduino development environment and the ability to uplaod the firmware to the ardino.
+Upload the right firmware on to the arduino that is driving the motors and sensors.  The source code for the arduino is actually installed in the git repo on the beaglebone. The beaglebone has a full arduino development environment and the ability to upload the firmware to the arduino.
 
 Since there are multiple versions of the ROV with multiple possible configurations you have to first tailor the options for the firmware to match your ROV.  It defaults to the stock installation for the *current* shipping ROV kit.
 
@@ -67,7 +67,7 @@ a) from the ssh session: sudo pico /opt/openrov/arduino/OpenROV/Aconfig.h
 
 b) put a 1 for the options you have, a 0 if you don't have the option and save.  For most folks you simply need to choose if you have the cape or controllerboard25.
 
-c) Login to the web session for the rov, choose settings, and select the upload firmware to ardino option.
+c) Login to the web session for the rov, choose settings, and select the upload firmware to arduino option.
 
 Updating
 ------------
@@ -79,7 +79,7 @@ The easiest way to upgrade your installation is to ssh on to
 
 3) sudo ./update.sh
 
-This will go to the github repositroy and pull the latest code. You may need to reboot after the update.  There is a known issue where the serial.io project sometimes failes to compile.  You can ignore that, but you may have to try again if it aborts the update.
+This will go to the github repository and pull the latest code. You may need to reboot after the update.  There is a known issue where the serial.io project sometimes fails to compile.  You can ignore that, but you may have to try again if it aborts the update.
 
 How to Contribute
 ------------
@@ -112,4 +112,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
