@@ -53,7 +53,7 @@ then
 	#ifndef __BOARDCONFIG_H__
 	#define __BOARDCONFOG_H__
 	#define HAS_STD_CAPE (1)
-        #define HAS_OROV_CONTROLLERBOARD_25 (0)
+    #define HAS_OROV_CONTROLLERBOARD_25 (0)
 	#endif
 
 __EOF__
