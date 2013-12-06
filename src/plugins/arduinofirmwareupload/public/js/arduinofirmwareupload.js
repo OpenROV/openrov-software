@@ -46,13 +46,13 @@
             <hr> \
             <div class="progress-step"> \
               <p>Overall progress:</p> \
-              <div class="progress progress-striped progress-success active"> \
+              <div class="progress progress-striped progress-success"> \
                 <div class="bar" style="width: 0%;" data-bind="style: { width: overallPercentage() + \'%\' }"></div> \
               </div> \
             </div> \
             <div class="progress-step"> \
               <p>File upload:</p> \
-              <div class="progress progress-striped active"> \
+              <div class="progress progress-striped"> \
                 <div class="bar" style="width: 0%;" data-bind="style: { width: uploadPercentage() + \'%\' }"></div> \
               </div> \
               <ul class="unstyled"> \
