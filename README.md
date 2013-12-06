@@ -65,7 +65,7 @@ Since there are multiple versions of the ROV with multiple possible configuratio
 
 a) from the ssh session: sudo pico /opt/openrov/arduino/OpenROV/Aconfig.h
 
-b) put a 1 for the options you have, a 0 if you don't have the option and save.  For most folks you simply need to choose if you have the cape or controllerboard25.
+b) put a 1 for the options you have, a 0 if you don't have the option and save. For most folks you don't need to do anything because the type of board will be automatically detected. In case you could 
 
 c) Login to the web session for the rov, choose settings, and select the upload firmware to arduino option.
 
