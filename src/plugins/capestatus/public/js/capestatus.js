@@ -31,8 +31,8 @@
         setInterval(function(){capes.updateConnectionStatus();}, 1000);
 
 	setInterval(function () {
-	    $("#localtime").text((new Date()).toLocaleTimeString(), 1000);
-	});
+	    $("#localtime").text((new Date()).toLocaleTimeString());
+	},1000);
     };
     
     //This pattern will hook events in the cockpit and pull them all back
