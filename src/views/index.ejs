@@ -264,6 +264,15 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
         });
 		
         $("[rel='popover']").popover();
+	
+	$('#keyboardInstructions').append('<p><i>capslock</i> to toggle heads up display</p>');
+	KEYS[20] = {keydown: function() {  //capslog
+   		 $('.hud').toggleClass('hidden');
+		 console.log("capslock");
+		},keyup: function() {  //capslog
+   		 $('.hud').toggleClass('hidden');
+		 console.log("capslock");
+		}};	
         </script>
 
     </body>
