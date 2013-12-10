@@ -24,7 +24,7 @@
 	$("#servoTilt").append('<img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png">'); //attr style
 	
 	//$("#lights").append('<p><div id="brightnessIndicator"></div></p>'); //attr class
-    $('#navtoolbar').append('<li id="brightnessIndicator"></li>');
+    $('#navtoolbar').append('<li id="brightnessIndicator" class="level0"></li>');
         // Register the various event handlers
         this.listen();
 	var capes = this;
