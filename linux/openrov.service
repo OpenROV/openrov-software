@@ -62,7 +62,7 @@ DAEMON_ARGS="/opt/openrov/src/app.js"               # path to your node.js serve
 
 DESC="OpenROV NodeJS server"                  # whatever fancy description you like
 
-NODEUSER=root:root                     # USER who OWNS the daemon process (no matter whoever runs the init script)
+NODEUSER=root                     # USER who OWNS the daemon process (no matter whoever runs the init script)
                                             # user:group (if no group is specified, the primary GID for that user is used)
 
 LOCAL_VAR_RUN=/var/run            # in case the init script is run by non-root user, you need to
@@ -111,7 +111,7 @@ SCRIPTNAME=/etc/init.d/$INIT_SCRIPT_NAME
 . /lib/lsb/init-functions
 
 # uncomment to override system setting
-# VERBOSE=yes
+VERBOSE=yes
 
 #
 # Function that starts the daemon/service
@@ -121,10 +121,10 @@ do_start()
 
 	APPLOG_FILE="/var/log/openrov.log"
 	ERRLOG_FILE="/var/log/openrov.err.log"
-	if [ ! -a $APPLOGFILE ];then touch $APPLOG_FILE;fi
-	if [ ! -a $ERRLOGFILE ];then touch $ERRLOG_FILE;fi
-	chown -R $NODEUSER $APPLOGFILE
-	chown -R $NODEUSER $ERRLOGFILE
+	if [ ! -f $APPLOGFILE ];then touch $APPLOG_FILE;fi
+	if [ ! -f $ERRLOGFILE ];then touch $ERRLOG_FILE;fi
+	chown $NODEUSER $APPLOG_FILE
+	chown $NODEUSER $ERRLOG_FILE
 	arg1="1> $APPLOG_FILE"  
 	arg2="2> $ERRLOG_FILE" 
 
@@ -154,7 +154,8 @@ do_stop()
 	#   1 if daemon was already stopped
 	#   2 if daemon could not be stopped
 	#   other if a failure occurred
-	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE  --chuid $NODEUSER --name $DAEMON
+	#start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE  --chuid $NODEUSER --name $DAEMON
+	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE  --chuid $NODEUSER --exec $DAEMON
 	RETVAL="$?"
 	#[ "$VERBOSE" != no ] && [ "$RETVAL" = 1 ] && log_daemon_msg  "  --->  SIGKILL failed => hardkill $DESC" "$INIT_SCRIPT_NAME_NOEXT"
 	[ "$RETVAL" = 2 ] && return 2
