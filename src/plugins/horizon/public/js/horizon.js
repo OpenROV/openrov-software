@@ -68,7 +68,7 @@
         this.speed = 0;
 
         // Add required UI elements
-        $("#video-container").append('<canvas id="horizon" width="640" height="360"></canvas>');
+        $("#video-container").append('<canvas id="horizon" class="hud" width="640" height="360"></canvas>');
         this.ctx = $("#horizon").get(0).getContext('2d');
 
         // Bind to navdata events on websockets

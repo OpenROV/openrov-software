@@ -158,20 +158,19 @@ var OpenROVController = function(eventLoop) {
     var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
     hardware.write(command);
   };
+  
+    controller.sendTilt = function(value) {
+        if (this.notSafeToControl()) return;
+        var servoTilt = physics.mapTiltServo(value);
+        var command = 'tilt(' + servoTilt +');';
+        hardware.write(command);
+    };  
 
-  controller.sendTilt = function(value) {
-    if (this.notSafeToControl()) return;
-    var servoTilt = physics.mapTiltServo(value);
-    var command = 'tilt(' + servoTilt +');';
-    hardware.write(command);
-  };
-
-  controller.sendLight = function(value) {
-    if (this.notSafeToControl()) return;
-    var light = physics.mapLight(value);
-    var command = 'light(' + light +');';
-    hardware.write(command);
-  };
+    controller.sendLight = function(value) {
+        if (this.notSafeToControl()) return;
+        var command = 'ligt(' + physics.mapLight(value) +');';
+	hardware.write(command);
+    };
     
   var claserstate = 0;
   controller.sendLaser = function(value) {

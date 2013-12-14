@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Page Title</title>
+    <script type="text/javascript" src="js/libs/ejs_0.9_alpha_1_production.js"></script>
+
+</head>
+<!-- You need to run Google like this to make this test page work:
+OSX: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --allow-file-access-from-files
+
+to simulate an socket.io message:
+simevents.status[0]({time: 134123111}) // where 0 is the index of the listener you want to make go
+--><body>
+<script type='text/javascript' id='lt_ws' src='http://localhost:49767/socket.io/lighttable/ws.js'></script>
+<script language="JavaScript">
+<!--
+function autoResize(id){
+    var newheight;
+    var newwidth;
+
+
+    newheight=id.contentWindow.document.body.scrollHeight;
+    newwidth=id.contentWindow.document.body.scrollWidth;
+
+
+    id.height= (newheight) + "px";
+    id.width= (newwidth) + "px";
+}
+//-->
+</script>
+    <script>
+        // load the template file, then render it with data
+        var iframe = document.createElement("iframe");
+
+            document.body.appendChild(iframe);
+
+        var frameDoc = iframe.document;
+            if(iframe.contentWindow)
+                frameDoc = iframe.contentWindow.document; // IE
+            // Write into iframe
+            frameDoc.open();
+            var scripts = [];
+       //     scripts.push('../lib/config.js');
+            scripts.push('../plugins/arduinofirmwareupload/public/js/arduinofirmwareupload.js');
+            scripts.push('../plugins/blackbox/public/js/blackbox.js');
+            scripts.push('../plugins/capestatus/public/js/capestatus.js');
+            scripts.push('../plugins/compass/public/js/compass.js');
+            scripts.push('../plugins/fpscounter/public/js/fpscounter.js');
+            scripts.push('../plugins/googletalk_ipregistration/public/js/googletalk_ipregistration.js');
+            scripts.push('../plugins/horizon/public/js/horizon.js');
+            scripts.push('../plugins/photocapture/public/js/photocapture.js');
+            scripts.push('../plugins/rovpilot/public/js/rovpilot.js');
+            scripts.push('../plugins/telemetry/public/js/telemetry.js');
+            scripts.push('../plugins/motor_diags/public/js/motor_diags.js');
+           // scripts.push('../plugins/touchcontroller/public/js/gamecontroller.js');
+            scripts.push('../plugins/touchcontroller/public/js/touchcontroller.js');
+
+            var styles = [];
+            styles.push('../plugins/touchcontroller/public/css/style.css');
+
+
+            frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:styles, scripts:scripts}));
+            frameDoc.close();
+            //autoResize(iframe);
+
+           iframe.height= "720px"; //360px";
+           iframe.width= "1280px";//"567px"; // 
+       // new EJS({url: 'views/index.ejs'}).update('test', {title: "testing", styles:{}, scripts:{}});
+    </script>
+
+
+</body>
+<!--  <frameset cols="250,*">
+    <frame name="controls" src="sidebar.html" />
+    <frame name="test" />
+  </frameset>
+</body>
+  <noframes>
+    <body>
+    </body>
+  </noframes>
+-->
+</html>

@@ -101,9 +101,9 @@ function fakeClick(anchorObj) {
 		var blackbox = this;
 
 		// add required UI elements
-                $('#menu').append('<span id="blackboxstatus" class="false pull-right"></span>');
-		$('#menu').append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
-		$('#keyboard').append('<p><i>r</i> to toggle recording of telemetry</p>');
+                $("#buttonPanel").append('<span id="blackboxstatus" class="false pull-right"></span>');
+		$("#buttonPanel").append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
+		$('#keyboardInstructions').append('<p><i>r</i> to toggle recording of telemetry</p>');
 		$('#exportButton').click(exportData);
 
                 this.cockpit.socket.on('navdata', function(data) {
@@ -126,9 +126,10 @@ function fakeClick(anchorObj) {
          */
         Blackbox.prototype.listen = function listen() {
                 var self = this;
-                $(document).keydown(function(ev) {
-                        self.keyDown(ev);
-                });
+		KEYS[82] = {keydown: function(data) {  //r
+           		 self.keyDown();
+        		}
+		};
         };
 
 	var refreshintervalID;
@@ -159,10 +160,6 @@ function fakeClick(anchorObj) {
          * Process onkeydown. 
          */
         Blackbox.prototype.keyDown = function keyDown(ev) {
-                if ([ev.keyCode] != 82) { //r
-                        return;
-                } 
-                ev.preventDefault();
 		
                 if (!this.recording) {
                         this.openDB(this.toggleRecording());
@@ -184,7 +181,7 @@ function fakeClick(anchorObj) {
 
         Blackbox.prototype.logTelemetryData = function logTelemetryData(){
 		var clone = new Object;
-		for (i in telemetry){
+		for (var i in telemetry){
 			clone[i] = telemetry[i];
 		}
 		clone['timestamp'] = new Date().getTime();
@@ -199,7 +196,7 @@ function fakeClick(anchorObj) {
                  if (!this.recording) {
                         return;
                  }
-		for (i in data){
+		for (var i in data){
 		  telemetry[i] = data[i];
 		}
         };

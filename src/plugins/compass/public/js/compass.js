@@ -11,7 +11,7 @@
         this.cockpit = cockpit;
 
         // Add required UI elements
-        $('#video-container').append('<div id="compass"></div>');
+        $('#video-container').append('<div id="compass" class="hud"></div>');
         var div = $('#compass').get(0);
 
         // Listen to navdata updates
@@ -29,7 +29,7 @@
         var divRect = div.getBoundingClientRect(),
             ctx, x, i, needle;
         div.style.position = 'absolute';
-        div.style.bottom = '0px';
+       // div.style.bottom = '0px';
         div.style.backgroundImage = '-webkit-radial-gradient(50% 50%, circle cover, rgb(68, 68, 68) 0%, black 100%)';
 
         this.visibleWidth = divRect.width*(360/120); // divRect.width;
@@ -37,6 +37,8 @@
         this.canvas.width = this.visibleWidth * 1.5;
         this.canvas.height = divRect.height;
         this.canvas.style.position = 'absolute';
+        this.canvas.className = 'hud';
+    
 
         div.style.overflow = 'hidden';
 
