@@ -184,6 +184,7 @@ img.center {
   background-color: black;
   max-width: 100%;
   vertical-align: middle;
+  height: 100%;
 }
 
 #video-container{
