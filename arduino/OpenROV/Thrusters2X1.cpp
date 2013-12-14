@@ -88,6 +88,7 @@ void Thrusters::device_loop(Command command){
     else if (command.cmp("stop")) {
       motors.stop();
     }
+    #ifdef ESCPOWER_PIN
     else if ((command.cmp("mcal")) && (canPowerESCs)){
       Serial.println(F("log:Motor Callibration Staring;"));      
       pinMode(ESCPOWER_PIN, OUTPUT);
@@ -104,7 +105,7 @@ void Thrusters::device_loop(Command command){
       motors.go(1500,1500,1500);
       Serial.println(F("log:Motor Callibration Complete;"));
   }
-    
+    #endif
   //to reduce AMP spikes, smooth large power adjustments out. This incirmentally adjusts the motors and servo
   //to their new positions in increments.  The incriment should eventually be adjustable from the cockpit so that
   //the pilot could have more aggressive response profiles for the ROV.
