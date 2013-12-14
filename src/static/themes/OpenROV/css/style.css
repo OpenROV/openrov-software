@@ -1,7 +1,5 @@
 html { height: 100%; }
 body {
- // padding-top: 65px; why?
- // padding-bottom: 100px;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -93,6 +91,11 @@ body {
 
 .navbar-fixed-top {
   margin-bottom: 0px;
+  position: relative;
+}
+
+.navbar-fixed-top .navbar-inner {
+  height: 52px;  /*no idea why this element wont expand to fill container height.*/
 }
 
 .navbar-fixed-bottom .navbar-inner {
@@ -185,7 +188,6 @@ img.center {
 #video-container{
   height: 100%;
   background-size: 100%;
-//  background-size: cover;
   background-position: center center;
   vertical-align: top;
 }
@@ -194,35 +196,15 @@ img.center {
 
 #main-row {
   height: 80%;
- // padding-bottom:150px; /* this needs to be bigger than footer height*/
 }
 
 #footer{
-  //position: relative;
-  //margin-top: -150px; /* negative value of footer height */
   height: 150px;
-  //clear:both;
-  //padding-top:20px;  
 }
 
 .full-height{
   height: 100%;
 }
-
-//#outter-videocontainer {
-//  display: table;
-//  height: 100%;
-//}
-
-//#video-container {
-//  min-width: 640px;
-//  min-height: 480px;
-//  border-radius: 10px;
-//  padding: 10px;
-//  display: block;
-//  vertical-align: middle;
-//  margin: 0 auto;
-//}
 
 #brightnessIndicator {
     width:250px;
@@ -362,6 +344,6 @@ img.center {
 	position: absolute;
 	width: 100%;
 	height: 30px;
-	bottom: 15px;
+	bottom: 0px;
 	z-index: 5;
 }
