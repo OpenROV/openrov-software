@@ -67,7 +67,7 @@
 	};
 	if ('iout' in data) $("#currentCurrent").text(data.iout.toFixed(3) + 'A');
 	if ('servo' in data) {
-	    var angle = (90/500)*data.servo+90//*-45;
+	    var angle = ((90/500)*(data.servo)*-1)-90;
 	    $("#servoTiltImage").attr("style", "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)");   
 	};
 	if ('cpuUsage' in data) $("#currentCpuUsage").text((data.cpuUsage*100).toFixed(0) + '%');
