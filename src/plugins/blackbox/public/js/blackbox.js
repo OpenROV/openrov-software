@@ -160,10 +160,6 @@ function fakeClick(anchorObj) {
          * Process onkeydown. 
          */
         Blackbox.prototype.keyDown = function keyDown(ev) {
-          //      if ([ev.keyCode] != 82) { //r
-          //              return;
-          //      } 
-          //      ev.preventDefault();
 		
                 if (!this.recording) {
                         this.openDB(this.toggleRecording());
