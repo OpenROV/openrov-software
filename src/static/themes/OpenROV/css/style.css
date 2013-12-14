@@ -194,15 +194,6 @@ img.center {
   vertical-align: top;
 }
 
-/* The ghost, nudged to maintain perfect centering */
-#video-container:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -0.25em; /* Adjusts for spacing */
-}
-
 #main-row {
   height: 80%;
 }
