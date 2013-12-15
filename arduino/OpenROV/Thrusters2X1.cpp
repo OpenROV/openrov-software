@@ -21,6 +21,13 @@ Timer controltime;
 Timer thrusterOutput;
 boolean bypasssmoothing;
 
+#ifdef ESCPOWER_PIN
+bool canPowerESCs = true;
+Pin escpower("escpower", ESCPOWER_PIN, escpower.digital, escpower.out);
+#else
+boolean canPowerESCs = false;
+#endif
+
 int smoothAdjustedServoPosition(int target, int current){
   // if the MIDPOINT is betwen the change requested in velocity we want to go to MIDPOINT first, and right away.
   if (((current < MIDPOINT) && (MIDPOINT < target)) || ((target < MIDPOINT) && (MIDPOINT < current))){
@@ -50,6 +57,10 @@ void Thrusters::device_setup(){
   thrusterOutput.reset();
   controltime.reset();
   bypasssmoothing = false;
+  #ifdef ESCPOWER_PIN
+    escpower.reset();
+
+  #endif
 }
 
 void Thrusters::device_loop(Command command){
@@ -62,14 +73,39 @@ void Thrusters::device_loop(Command command){
         s = command.args[3];
         if (command.args[4] == 1) bypasssmoothing=true;
       }
-    }    
+    }
+  #ifdef ESCPOWER_PIN
+    else if (command.cmp("escp")) {
+      escpower.write(command.args[1]); //Turn on the ESCs
+      Serial.print(F("log:escpower="));
+      Serial.print(command.args[1]);
+      Serial.println(';');
+    }
+  #endif  
     else if (command.cmp("start")) {
       motors.reset();
     }    
     else if (command.cmp("stop")) {
       motors.stop();
-    } 
-    
+    }
+    #ifdef ESCPOWER_PIN
+    else if ((command.cmp("mcal")) && (canPowerESCs)){
+      Serial.println(F("log:Motor Callibration Staring;"));      
+      pinMode(ESCPOWER_PIN, OUTPUT);
+      digitalWrite(ESCPOWER_PIN, LOW); //turn ESCs off
+      motors.go(2000,2000,2000);
+      digitalWrite(ESCPOWER_PIN, HIGH); //turn ESCs on
+      delay(2000);
+      digitalWrite(ESCPOWER_PIN, LOW); //turn ESCs off
+      delay(1000);      
+      digitalWrite(ESCPOWER_PIN, HIGH); //turn ESCs on
+      delay(2000);     
+      motors.go(1000,1000,1000);
+      delay(2000);
+      motors.go(1500,1500,1500);
+      Serial.println(F("log:Motor Callibration Complete;"));
+  }
+    #endif
   //to reduce AMP spikes, smooth large power adjustments out. This incirmentally adjusts the motors and servo
   //to their new positions in increments.  The incriment should eventually be adjustable from the cockpit so that
   //the pilot could have more aggressive response profiles for the ROV.
