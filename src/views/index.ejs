@@ -81,8 +81,8 @@
           <div class="row-fluid full-height">
             <div class="span9 border full-height" id="outter-videocontainer">
               <div id="video-container" class="full-height center pagination-centered" border='1'>
-                <video id="video" poster="themes/OpenROV/img/no_camera.jpg" autoplay>
-                </video>                
+                <img class="hidden" id="video" src="themes/OpenROV/img/no_camera.jpg"/>
+                <canvas id='video-canvas'/>
               </div>
             </div>
             <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
@@ -250,6 +250,27 @@
    		 $('.hud').toggleClass('hidden');
 		 console.log("capslock");
 		}};	
+		
+		
+		// The next session draws the video img to a canvas which is then managed by the GPU
+		// and is much faster than the browser painting the img tag.
+        var canvas = document.getElementById('video-canvas');
+        var srcImg = document.getElementById('video');
+        var videocontainer = $('#video-container');
+        var newCanvas, newImg;
+        
+        setInterval(function(){
+            var width = videocontainer.innerWidth();
+            var height = videocontainer.innerHeight();
+        
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            var proportionalHeight = width * srcImg.height / srcImg.width
+            ctx.drawImage(srcImg,0,(canvas.height-proportionalHeight)/2,width, proportionalHeight);
+        },64); //only need to redraw at the framerate of source video
+		
         </script>
 
     </body>
