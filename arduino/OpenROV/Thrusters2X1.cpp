@@ -90,19 +90,8 @@ void Thrusters::device_loop(Command command){
     }
     #ifdef ESCPOWER_PIN
     else if ((command.cmp("mcal")) && (canPowerESCs)){
-      Serial.println(F("log:Motor Callibration Staring;"));      
-      pinMode(ESCPOWER_PIN, OUTPUT);
-      digitalWrite(ESCPOWER_PIN, LOW); //turn ESCs off
-      motors.go(2000,2000,2000);
-      digitalWrite(ESCPOWER_PIN, HIGH); //turn ESCs on
-      delay(2000);
-      digitalWrite(ESCPOWER_PIN, LOW); //turn ESCs off
-      delay(1000);      
-      digitalWrite(ESCPOWER_PIN, HIGH); //turn ESCs on
-      delay(2000);     
-      motors.go(1000,1000,1000);
-      delay(2000);
-      motors.go(1500,1500,1500);
+      Serial.println(F("log:Motor Callibration Staring;"));
+      //Experimental. Add calibration code here
       Serial.println(F("log:Motor Callibration Complete;"));
   }
     #endif
