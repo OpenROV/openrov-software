@@ -1,3 +1,4 @@
+
 /*
  *
  * Description:
@@ -47,19 +48,19 @@ var OpenROVController = function(eventLoop) {
   var physics = new ArduinoPhysics();
   var hardware = new Hardware();
   var controller = new EventEmitter();
-  
+
   setInterval((function() {
     controller.emit('navdata',navdata);
   }), 100);
-  
+
   setInterval((function() {
     controller.emit('status',statusdata);
-  }), 1000);   
-  
+  }), 1000);
+
   hardware.on('status', function(status) {
     for (i in status){
 	statusdata[i] = status[i];
-    }	 
+    }
 
     if ('ver' in status) {
       controller.ArduinoFirmwareVersion = status.ver;
@@ -71,7 +72,7 @@ var OpenROVController = function(eventLoop) {
       settingsCollection.deadZone_min = setparts[1];
       settingsCollection.deadZone_max = setparts[2];
       controller.emit('Arduino-settings-reported',settingsCollection)
-    }   	 
+    }
     if ('CAPA' in status) {
       var s = rovsys;
       console.log("RovSys: " + status.CAPA)
@@ -106,7 +107,7 @@ var OpenROVController = function(eventLoop) {
       navdata.thrust=status.fthr;
     }
   });
-  
+
   setup_serial();
 
   hardware.connect();
@@ -117,32 +118,32 @@ var OpenROVController = function(eventLoop) {
   controller.requestCapabilities = function(){
     console.log("Sending rcap to arduino");
     var command = 'rcap();';
-    hardware.write(command);    
+    hardware.write(command);
   };
-  
+
   controller.requestSettings = function(){
     var command = 'reportSetting();';
-    hardware.write(command);    
+    hardware.write(command);
   };
-  
+
   controller.updateSetting = function(){
     var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + physics.mapMotor(CONFIG.preferences.get('deadzone_neg')) + ','+ physics.mapMotor(CONFIG.preferences.get('deadzone_pos')) + ');';
-    hardware.write(command);    
-  };  
+    hardware.write(command);
+  };
 
   controller.notSafeToControl = function(){ //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= .20130314034859) return false;
     if (this.Capabilities != 0) return false; //This feature added after the swap to ms on the Arduino
-    console.log('Arduino is at an incompatible version of firmware. Upgrade required before controls will respond');
+    console.log('Audrino is at an incompatible version of firmware. Upgrade required before controls will respond');
     console.log(this.ArduinoFirmwareVersion);
     console.log(this.Capabilities);
     return true;
   };
-  
+
   controller.send = function(cmd) {
     var command = cmd + ';';
     if(CONFIG.debug_commands) console.error("command", command);
-    if(CONFIG.production) serial.write(command);	
+    if(CONFIG.production) serial.write(command);
   };
 
 
@@ -159,45 +160,44 @@ var OpenROVController = function(eventLoop) {
     hardware.write(command);
   };
 
-  controller.sendTilt = function(value) {
-    if (this.notSafeToControl()) return;
-    var servoTilt = physics.mapTiltServo(value);
-    var command = 'tilt(' + servoTilt +');';
-    hardware.write(command);
-  };
+    controller.sendTilt = function(value) {
+        if (this.notSafeToControl()) return;
+        var servoTilt = physics.mapTiltServo(value);
+        var command = 'tilt(' + servoTilt +');';
+        hardware.write(command);
+    };
 
-  controller.sendLight = function(value) {
-    if (this.notSafeToControl()) return;
-    var light = physics.mapLight(value);
-    var command = 'light(' + light +');';
-    hardware.write(command);
-  };
-    
+    controller.sendLight = function(value) {
+        if (this.notSafeToControl()) return;
+        var command = 'ligt(' + physics.mapLight(value) +');';
+	hardware.write(command);
+    };
+
   var claserstate = 0;
   controller.sendLaser = function(value) {
     if (this.notSafeToControl()) return;
     if (claserstate === 0) {
       claserstate = 255;
-    } 
+    }
     else {
       claserstate = 0;
     }
-    
+
     var command = 'claser(' + claserstate +');';
     hardware.write(command);
-  };    
-    
+  };
+
     controller.stop = function(value) {
         if (this.notSafeToControl()) return;
         var command = 'stop();';
         hardware.write(command);
     };
-    
+
     controller.start = function(value) {
         if (this.notSafeToControl()) return;
         var command = 'start();';
         hardware.write(command);
-    };    
+    };
 
   globalEventLoop.on('register-ArdunoFirmwareVersion', function(val){
         controller.ArduinoFirmwareVersion = val;
@@ -223,3 +223,4 @@ var OpenROVController = function(eventLoop) {
 }
 
 module.exports = OpenROVController;
+
