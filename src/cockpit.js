@@ -20,7 +20,9 @@ var CONFIG = require('./lib/config')
   , OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController')
   , logger = require('./lib/logger').create(CONFIG)
   , mkdirp = require('mkdirp')
-  , path = require('path');
+  , path = require('path')
+  , xmpp = require('node-xmpp');
+  ;
   
 
 

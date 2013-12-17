@@ -17,22 +17,9 @@ function Hardware() {
 	hardware.write = function(command) {
 		console.log('HARDWARE-MOCK:' + command);
 
-        var commandParts = command.split(/\(|\)/);
-        var commandText = commandParts[0];
-
-		if (commandText === 'rcap') {
+		if (command === 'rcap();') {
 			hardware.emit('status', reader.parseStatus("CAPA:255"));
 		}
-        if (commandText === 'ligt') {
-            hardware.emit('status', reader.parseStatus("LIGP:" + commandParts[1]/255.0));
-            console.log("HARDWARE-MOCK return light status");
-        }
-        
-        if (commandText === 'tilt') {
-            hardware.emit('status', reader.parseStatus("servo:" + commandParts[1]));
-            console.log("HARDWARE-MOCK return servo status");
-        }
-                
 	};
 
 	hardware.close = function() {
@@ -48,7 +35,6 @@ function Hardware() {
     setInterval(sendEvent,3000);
     function sendEvent() {
       var data ="vout:1023;iout:125;";
-      
       var status = reader.parseStatus(data);
       hardware.emit('status',status);
     }
