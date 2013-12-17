@@ -663,9 +663,10 @@ Gamepad.prototype._update = function() {
 		this._fire(Gamepad.Event.TICK, this.gamepads);
 	}
 	
-	window.requestAnimationFrame(function() {
-		self._update();
-	});
+	//window.requestAnimationFrame(function() {
+	//	self._update();
+	//});
+	setTimeout(function(){self._update();},250);
 };
 
 /**

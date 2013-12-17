@@ -10,7 +10,7 @@
 #define PORT_PIN 6
 #define VERTICLE_PIN 7
 #define STARBORD_PIN 8
-
+#define ESCPOWER_PIN 16
 class Controller25 : public Device {
   private:
 
