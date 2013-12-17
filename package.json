@@ -17,7 +17,7 @@
     "moment" : "",
     "mkdirp" : "",
     "forever-monitor" : "",
-    "node-xmpp" : ""
+	"optimist" : ""
   },
  "bundleDependencies": [
     "express",
