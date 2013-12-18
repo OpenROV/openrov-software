@@ -36,6 +36,12 @@ var OpenROVCamera = function (options) {
   // Actual camera capture function
   camera.capture = function (callback) {
     captureProcess = fork(path.join(__dirname, 'mock-video-server.js'));
+    captureProcess.on('exit', function(code, signal) {
+      logger.log("Got 'exit' message from camera child. Code: " + code);
+    });
+    captureProcess.on('error', function(err) {
+      logger.log("Got 'error' message from camera child. Error: " + err);
+    });
     camera.emit('started'); 
   };
   return camera;
