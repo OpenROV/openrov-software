@@ -39,21 +39,6 @@ function OpenRovViewModel(){
     self.reverseStarbordThruster = ko.observable();
     self.reverseLiftThruster = ko.observable();
     self.capabilities = ko.observable(0);
-    self.portMotorSpeed = ko.observable(0);
-    self.portMotorSlide = ko.observable(false);
-    self.starbordMotorSpeed = ko.observable(0);
-    self.starbordMotorSlide = ko.observable(false);
-    self.verticalMotorSpeed = ko.observable(0);
-    self.verticalMotorSlide = ko.observable(false);
-
-    self.diagnosticMotors = ko.observableArray([
-    	{ name: "Port Motor", propertyName: 'portMotorSpeed', reversePropertyName: 'reversePortThruster' },
-    	{ name: "Starboard Motor", propertyName: 'starbordMotorSpeed', reversePropertyName: 'reverseStarbordThruster'  },
-    	{ name: "Vertical Motor", propertyName: 'verticalMotorSpeed', reversePropertyName: 'reverseLiftThruster'  },
-    ]);
-    self.diagnosticMotorSpeedButtons = [ -1, 0, 1 ];
-
-    self.savedBrightness = 0;
     
     
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
@@ -166,38 +151,12 @@ function OpenRovViewModel(){
 	    self.snapshots(data);
 	}
 
-	self.toggleBrightness = function() {
-		var current = self.currentBrightness();
-
-		if (current == 0 && self.savedBrightness == 0) {
-			self.currentBrightness(10);
-		}
-		else if (current == 0 && self.savedBrightness != 0) {
-			self.currentBrightness(self.savedBrightness);
-		}
-		else if (current != 0) {
-			self.savedBrightness = current;
-			self.currentBrightness(0);
-			return;
-		}
-
-		self.savedBrightness = self.currentBrightness();
-	}
-
     self.updateBrightness = function(value) {
-    	if (value == 0) { // value 0 is used to toggle the lights
-    		self.toggleBrightness();
-    		return;
-    	}
-    	var newVal = self.currentBrightness();
+        var newVal = self.currentBrightness();
         newVal += value;
         if(newVal<0 || newVal >10) return;
         self.currentBrightness(newVal);
     }
-
-    self.setMotorTestSpeed = function(propertyName, value) {
-    	self[propertyName](value);
-    };
     
     ko.bindingHandlers.slider = {
 	init: function (element, valueAccessor, allBindingsAccessor) {
@@ -239,6 +198,4 @@ function OpenRovViewModel(){
 
     
 
-    setInterval(self.updateConnectionStatus, 1000);
-    setInterval(function () {self.currentTime(new Date())}, 1000);
 }

@@ -10,13 +10,18 @@
 *  and change the pin definitions there.  Things not wired to specific pins but on the I2C bus will
 *  have the address defined in this file.
 */
-//Kit:
-#define HAS_STD_PILOT (1)
-/* The definitions are done in th
-	#define HAS_STD_CAPE (0)
-	#define HAS_OROV_CONTROLLERBOARD_25 (0)
-*/
+
 #include "BoardConfig.h"
+
+//Kit:
+// The boards are auto configure in the on beaglebone build process in the BoardConfig.h which gets
+// created. If running directly in an IDE, the BoardConfig.h wont exist and the #defines below will be
+// used instead.
+
+#if !defined(HAS_STD_CAPE) && !defined(HAS_OROV_CONTROLLERBOARD_25)
+#define HAS_STD_CAPE (0)
+#define HAS_OROV_CONTROLLERBOARD_25 (0)
+#endif
 
 #define HAS_STD_LIGHTS (1)
 #define HAS_STD_CALIBRATIONLASERS (1)

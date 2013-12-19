@@ -16,4 +16,18 @@ var forever = require('forever-monitor');
     console.log('cockpit.js has exited after 3 restarts');
   });
 
+  if (process.platform === 'linux') {
+    process.on('SIGTERM', function() {
+      console.error('got SIGTERM, shutting down...');
+      child.stop();
+    });
+
+    process.on('SIGINT', function() {
+      console.error('got SIGINT, shutting down...');
+      child.stop();
+    });
+  }
+
+
   child.start();
+
