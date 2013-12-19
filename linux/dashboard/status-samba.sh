@@ -1,3 +1,7 @@
 #!/bin/sh
 
-exit 1
+STATUS=`status smbd`
+if [ "$STATUS" = "smbd stop/waiting" ]; then #stopped
+	exit 1
+fi
+exit 0

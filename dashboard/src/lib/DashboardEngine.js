@@ -13,10 +13,14 @@ var DashboardEngine = function() {
 		plugins.forEach(function(plugin){
 			var statusKey = 'status-' + plugin;
 			if (message.key == statusKey) {
-			    status = spawn('sh', [__dirname + '/../../../linux/dashboard/' +statusKey +'.sh']);
+			    status = spawn('sudo', [__dirname + '/../../../linux/dashboard/' +statusKey +'.sh']);
+
+			    status.stderr.on('data', function (data) {
+			    	console.log('stderr: ' + data);
+			    });
 
 			    status.on('close', function (code) {
-			    	 if (code === 0) {
+			    	 if (code === 0) { 
 			    	 	engine.emit('message', { key: statusKey, value: 'Running'})
 			    	 }
 			    	 else if (code === 1) {
