@@ -1,7 +1,7 @@
-var port = 80;
-var express = require('express')  
+var config = require('./lib/config')
+  , express = require('express')  
   , app = express()
-  , server = app.listen(port)
+  , server = app.listen(config.port)
   , io = require('socket.io').listen(server)
   , path = require('path')
   , fs=require('fs')
@@ -20,7 +20,7 @@ app.configure( function() {
 	app.use(express.logger('dev'));
 	app.use(app.router);
 
-	app.set('port', port);
+	app.set('port', config.port);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'ejs', { pretty: true });
 });
@@ -112,4 +112,4 @@ io.sockets.on('connection', function (socket) {
 
 });
 
-console.log('Started listening on port: ' + port);
+console.log('Started listening on port: ' + config.port);
