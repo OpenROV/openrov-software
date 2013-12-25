@@ -1,0 +1,332 @@
+html { height: 100%; }
+body {
+  padding-top: 65px;
+  padding-bottom: 100px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+* {
+  position: relative;
+  z-index: 1;
+}
+.sidebar-nav {
+}
+#telemetry {
+  height: 100%;
+  overflow: scroll;
+}
+.container-fluid {
+      padding-right: 0px;
+      padding-left: 0px;
+  }
+.well {
+    margin-top: 1px;
+    margin-bottom: 0;
+}
+.control-element {
+  padding: 4px;
+  min-width: 50px;
+  border-right: 1px solid grey;
+  height: 100%;
+}
+
+.drop-in-right {
+  position: fixed;
+  display: none;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  width: 500px;
+  border: solid 1px #606060;
+  border-left: solid 4px #606060;
+  z-index: 1039;
+  background-color: white;
+  padding: 5px;
+  padding-left: 15px;
+
+}
+.drop-in-right h3 {
+  float: left;
+  clear: right;
+  margin-top: -4px;
+}
+
+.settings-block {
+  clear: left;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  top: -15px;
+  left: -15px;
+  cursor: pointer;
+  background-image: url('../img/back.png');
+  float: left;
+}
+
+.back-button:hover {
+  background-image:  url('../img/back_dark.png')
+}
+
+.logo {
+  margin-left: 15px;
+}
+
+.navbar-inner img, .navbar-inner a {
+  vertical-align: middle;
+}
+
+.navbar-fixed-bottom .navbar-inner {
+  /* IE10 Consumer Preview */ 
+  background-image: -ms-linear-gradient(top, #424242 0%, #141414 100%);
+
+  /* Mozilla Firefox */ 
+  background-image: -moz-linear-gradient(top, #424242 0%, #141414 100%);
+
+  /* Opera */ 
+  background-image: -o-linear-gradient(top, #424242 0%, #141414 100%);
+
+  /* Webkit (Safari/Chrome 10) */ 
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #424242), color-stop(1, #141414));
+
+  /* Webkit (Chrome 11+) */ 
+  background-image: -webkit-linear-gradient(top, #424242 0%, #141414 100%);
+
+  /* W3C Markup, IE10 Release Preview */ 
+  background-image: linear-gradient(to bottom, #424242 0%, #141414 100%);
+}
+
+.navbar-fixed-bottom h2 {
+  color: rgb(233, 233, 233);
+  text-shadow: 0.1em 0.1em 0.2em black;
+}
+
+.control-group {
+  margin-left: 20px;
+}
+
+.depth-listing {
+  clear: left;
+
+}
+#depth-gauge {
+  position: relative;
+  width: 40px;
+  height: 90px;
+  background-color: white;
+  
+}
+
+.invisible-field input[type="text"]{
+    border: 0;
+    color: #000df6;
+    font-weight: bold;
+    -webkit-box-shadow:none;
+    box-shadow:none;
+    -moz-box-shadow:none;
+    margin-bottom: 0;
+}
+
+.invisible-field label {
+    display: inline;
+}
+
+.controller img {
+    width: 64px;
+    height: 64px;
+}
+
+.center {
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+}
+
+img.center {
+    display: block;
+}
+
+#video { 
+  border: 2px solid black;
+  background-color: black;
+}
+
+#main-row {
+  padding-bottom:150px; /* this needs to be bigger than footer height*/
+}
+
+#footer{
+  position: relative;
+  margin-top: -150px; /* negative value of footer height */
+  height: 150px;
+  clear:both;
+  padding-top:20px;  
+}
+
+.full-height{
+  height: 100%;
+}
+
+#outher-videocontainer {
+  display: table;
+}
+
+#video-container {
+  min-width: 640px;
+  min-height: 480px;
+  border-radius: 10px;
+  padding: 10px;
+  display: block;
+  vertical-align: middle;
+  margin: 0 auto;
+}
+
+#brightnessIndicator {
+    width:250px;
+    height: 51px;
+    border:1px solid black;
+    background-image: url('../img/brightness.png');
+    background-repeat:no-repeat;
+}
+
+#brightnessIndicator.level0 {
+    background-image: none;
+}
+
+#brightnessIndicator.level1 {
+    background-position: 0px -471px;
+}
+
+#brightnessIndicator.level2 {
+    background-position: 0px -418px;
+}
+
+#brightnessIndicator.level3 {
+    background-position: 0px -366px;
+}
+
+#brightnessIndicator.level4 {
+    background-position: 0px -313px;
+}
+
+#brightnessIndicator.level5 {
+    background-position: 0px -261px;
+}
+
+#brightnessIndicator.level6 {
+    background-position: 0px -209px;
+}
+
+#brightnessIndicator.level7 {
+    background-position: 0px -157px;
+}
+
+#brightnessIndicator.level8 {
+    background-position: 0px -104px;
+}
+
+#brightnessIndicator.level9 {
+    background-position: 0px -52px;
+}
+
+#brightnessIndicator.level10 {
+    background-position: 0px 0px;
+}
+
+.battery0 {
+    background: #ffffff;
+}
+
+#batteryIndicator{
+    width:50px;
+    height: 22px;
+    background-image: url('../img/batterylevel.png');
+    background-repeat:no-repeat;
+    background-position:0px 0px;
+}
+
+#batteryIndicator.level1 {
+    background-position:0px 0px;
+}
+
+#batteryIndicator.level2 {
+    background-position: 0px -24px;
+}
+
+#batteryIndicator.level3 {
+    background-position: 0px -49px;
+}
+
+#batteryIndicator.level4 {
+    background-position:0px -73px;
+}
+
+#batteryIndicator.level5 {
+    background-position:0px -96px;
+}
+
+#connectionHealth{
+    margin:5px 10px;
+    width:30px;
+    height: 30px;
+    background-image: url('../img/bbconnection.png');
+    background-repeat:no-repeat;
+    background-position:0px 0px;
+}
+
+#blackboxstatus{
+    margin:5px 10px;
+    width:30px;
+    height: 30px;
+    background-image: url('../img/bbconnection.png');
+    background-repeat:no-repeat;
+    background-position:0px 0px;
+}
+
+#blackboxstatus.false {
+    background-position:0px 0px;
+}
+
+#blackboxstatus.true {
+    background-position: -29px 0px;
+}
+
+
+#connectionHealth.false {
+    background-position:0px 0px;
+}
+
+#connectionHealth.true {
+    background-position: -29px 0px;
+}
+
+#arduiniFirmware-details {
+  width: 95%;
+  height: 90px;
+  margin-top: 10px;
+}
+
+#horizon {
+    opacity: 0.5;
+    position: absolute;
+    z-index: 3;
+    top: 0px;
+    left: 0px;
+}
+
+#compass {
+	position: absolute;
+	width: 100%;
+	height: 30px;
+	bottom: 0;
+	z-index: 5;
+}
