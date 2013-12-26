@@ -7,6 +7,7 @@ var Dpkg = function() {
 
 	dpkg.packages = function() {
 		var dpkgProcess = cp.spawn('dpkg', ['-l', 'openrov-*']);
+
 		var result = [ ];	    
 	    return Lazy(dpkgProcess.stdout)
 	        .lines
