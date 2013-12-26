@@ -235,7 +235,7 @@ copy_rootfs () {
 		--exclude=/mnt/* \
 		--exclude=/media/* \
 		--exclude=/lost+found \
-		--exclude=/boot/* 
+		--exclude=/boot/* \
 		--exclude=/lib/modules/* \
 		-cO  / | tar vxf -  || write_failure
 
