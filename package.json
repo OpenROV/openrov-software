@@ -17,9 +17,12 @@
     "moment" : "",
     "mkdirp" : "",
     "forever-monitor" : "",
-	"optimist" : ""
+	  "optimist" : "",
+    "lazy" : ">= 1.0.11",
+    "sync" : "",
+    "jquery-file-upload-middleware" : ""
   },
- "bundleDependencies": [
+  "bundleDependencies": [
     "express",
     "socket.io",
     "serialport"
