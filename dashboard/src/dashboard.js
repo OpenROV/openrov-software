@@ -6,7 +6,7 @@ var config = require('./lib/config')
   , path = require('path')
   , fs=require('fs')
   , EventEmitter = require('events').EventEmitter
-  , DashboardEngine = require('./lib/DashboardEngine-mock');
+  , DashboardEngine = require('./lib/DashboardEngine');
 
 
 // Keep track of plugins js and css to load them in the view
