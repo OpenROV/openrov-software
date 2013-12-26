@@ -7,11 +7,12 @@
 
         var viewModel = { 
             packages : ko.observableArray(),
-            loading : ko.observable(false)
+            loading : ko.observable(false),
+            installOutput : ko.observable('')
          };
          viewModel.refresh = function() {
             viewModel.loading(true);
-            $.getJSON("/softwarepackages", function(data) { 
+            $.getJSON("/software/packages", function(data) { 
                 viewModel.packages.removeAll();
                 data.forEach(function(item) {
                     viewModel.packages.push(item);
@@ -20,6 +21,12 @@
                 })
             };
  
+        dashboard.socket.on('software-install-status', function(status) {
+            
+            viewModel.installOutput(viewModel.installOutput() + status);
+        });
+
+
         viewModel.refresh();    
         dashboard.viewModel.software = viewModel;
 
@@ -30,7 +37,6 @@
         	'plugin/99_software/plugin.html',
             function() { ko.applyBindings(dashboard.viewModel); }
             );
-
 
         console.log("Loaded Software plugin.");
     };
