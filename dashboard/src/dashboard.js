@@ -47,6 +47,7 @@ var deps = {
   , app: app
   , io: io
   , dashboardEngine: dashboardEngine
+  , socket : undefined
 };
 
 // Load the plugins
@@ -109,6 +110,8 @@ io.sockets.on('connection', function (socket) {
 	dashboardEngine.on('message', function(message){
 		socket.emit(message.key, message.value);
 	});
+
+	deps.socket = socket;
 
 });
 
