@@ -272,6 +272,10 @@ copy_rootfs () {
 	echo "${boot_uuid}  /boot/uboot  auto  defaults  0  0" >> /tmp/rootfs/etc/fstab
 	echo "debugfs         /sys/kernel/debug  debugfs  defaults          0  0" >> /tmp/rootfs/etc/fstab
 	flush_cache
+
+	#OPENROV
+	chroot /tmp/rootfs /usr/bin/dpkg -r openrov-emmc-copy
+
 	umount ${destination}p2 || true
 
 	if [ -e /sys/class/leds/beaglebone\:green\:usr0/trigger ] ; then
