@@ -20,7 +20,7 @@
 	  "optimist" : "",
     "lazy" : ">= 1.0.11",
     "sync" : "",
-    "jquery-file-upload-middleware" : "",
+    "jquery-file-upload-middleware" : ""
   },
   "bundleDependencies": [
     "express",
