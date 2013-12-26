@@ -3,7 +3,8 @@
     <h3>Current software versions</h3>
   </div>
   <div class="modal-body">
-    <ul data-bind="foreach: software.packages">
+    <span data-bind="css: { hidden: ! software.loading() }">Loding...</span>
+    <ul data-bind="foreach: software.packages, css: { hidden: software.loading() }">
       <li>
         <div>
           <span data-bind="text: package"> </span>&nbsp;&dash;&nbsp;<span data-bind="text: version"> </span>
@@ -12,6 +13,7 @@
     </ul>
   </div>
   <div class="modal-footer">
+    <a href="#" class="btn" data-bind="click: software.refresh">Refresh</a>
     <a href="#" class="btn" data-toggle="modal" data-target="#software-dialog" data-bind="">Close</a>
   </div>
 </div>
