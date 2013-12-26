@@ -19,7 +19,8 @@
     "forever-monitor" : "",
 	  "optimist" : "",
     "lazy" : ">= 1.0.11",
-    "sync" : ""
+    "sync" : "",
+    "jquery-file-upload-middleware" : "",
   },
   "bundleDependencies": [
     "express",

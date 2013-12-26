@@ -6,7 +6,7 @@ var config = require('./lib/config')
   , path = require('path')
   , fs=require('fs')
   , EventEmitter = require('events').EventEmitter
-  , DashboardEngine = require('./lib/DashboardEngine');
+  , DashboardEngine = require('./lib/DashboardEngine-mock');
 
 
 // Keep track of plugins js and css to load them in the view
@@ -47,6 +47,7 @@ var deps = {
   , app: app
   , io: io
   , dashboardEngine: dashboardEngine
+  , socket : undefined
 };
 
 // Load the plugins
@@ -109,6 +110,8 @@ io.sockets.on('connection', function (socket) {
 	dashboardEngine.on('message', function(message){
 		socket.emit(message.key, message.value);
 	});
+
+	deps.socket = socket;
 
 });
 

@@ -3,12 +3,10 @@ var EventEmitter = require('events').EventEmitter
   , Lazy = require('lazy');
 
 var Dpkg = function() {
-	var dpkg = { };
+	var dpkg = new EventEmitter();
 
 	dpkg.packages = function() {
 		var dpkgProcess = cp.spawn('dpkg', ['-l', 'openrov-*']);
-
-		var result = [ ];	    
 	    return Lazy(dpkgProcess.stdout)
 	        .lines
 	        .map(String)
@@ -23,6 +21,21 @@ var Dpkg = function() {
 		            version : fields[2]
 				};
 	        })
+	};
+
+	dpkg.install = function(path) {
+		var dpkgProcess = cp.spawn('dpkg', ['-i', path]);
+
+	    dpkgProcess.stderr.on('data', function(data) {
+	      console.log(data.toString());
+	      dpkg.emit("software-install-status", data.toString());
+	    });
+
+	    dpkgProcess.stdout.on('data', function(data) {
+	      console.log(data.toString());
+	      dpkg.emit("software-install-status", data.toString());
+	    });
+
 	};
 	return dpkg;
 }

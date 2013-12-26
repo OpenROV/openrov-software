@@ -1,5 +1,7 @@
-var dpkg = require("../../lib/dpkg")
-  , Sync = require('sync');
+var dpkg = new require("../../lib/dpkg")()
+  , Sync = require('sync')
+  , express = require('express')  
+  , upload = require('jquery-file-upload-middleware');
 
 
 function software(name, deps) {
@@ -11,10 +13,39 @@ function software(name, deps) {
 		});
 	}
 
+	var uploadDir = '/opt/openrov/softwarepackages';
+
+	// configure upload middleware
+    upload.configure({
+        uploadDir: uploadDir,
+        uploadUrl: '/software/upload'
+    });
+
+    upload.on('begin', function (fileInfo) { 
+    	// we don't want safe names - override existing files!
+    	if (fileInfo.name != fileInfo.originalName) {
+    		fileInfo.name = fileInfo.originalName;
+    	}
+    });
+
+    upload.on('end', function (fileInfo) { 
+    	dpkg.install(uploadDir + '/' + fileInfo.name);
+    });
+
+    dpkg.on('software-install-status', function(status) {
+    	deps.socket.emit('software-install-status', status);
+    });
+
+
+    deps.app.configure(function() {
+		deps.app.use('/software/upload', upload.fileHandler());
+        deps.app.use(express.bodyParser());
+     	});
+
 	deps.app
-		.get('/softwarepackages', 
+		.get('/software/packages', 
 			function(req, res) {
-				packages = new dpkg().packages();		
+				packages = dpkg.packages();		
 			    res.send(packageJoin.sync(null));
 	    		return true;
 	    	}
