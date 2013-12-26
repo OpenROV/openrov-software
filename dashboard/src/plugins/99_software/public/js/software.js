@@ -6,17 +6,22 @@
     Software = function(dashboard) {
 
         var viewModel = { 
-            packages : ko.observableArray()
-         }; 
-    
+            packages : ko.observableArray(),
+            loading : ko.observable(false)
+         };
+         viewModel.refresh = function() {
+            viewModel.loading(true);
+            $.getJSON("/softwarepackages", function(data) { 
+                viewModel.packages.removeAll();
+                data.forEach(function(item) {
+                    viewModel.packages.push(item);
+                    });
+                viewModel.loading(false);
+                })
+            };
+ 
+        viewModel.refresh();    
         dashboard.viewModel.software = viewModel;
-
-        $.getJSON("/softwarepackages", function(data) { 
-            viewModel.packages.removeAll();
-            data.forEach(function(item) {
-                viewModel.packages.push(item);
-            });
-        })
 
         // Add required UI elements
         $("#menu-bar").append('<li><a href="#software-dialog" class="btn btn-link" data-toggle="modal">Software versions</a></li>');
