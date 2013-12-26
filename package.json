@@ -17,9 +17,11 @@
     "moment" : "",
     "mkdirp" : "",
     "forever-monitor" : "",
-	"optimist" : ""
+	  "optimist" : "",
+    "lazy" : ">= 1.0.11",
+    "sync" : ""
   },
- "bundleDependencies": [
+  "bundleDependencies": [
     "express",
     "socket.io",
     "serialport"
