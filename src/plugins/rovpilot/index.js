@@ -3,11 +3,11 @@ function rovpilot(name, deps) {
     
     deps.io.sockets.on('connection', function (socket) {
         socket.on('escs_poweron', function(){
-            deps.controller.send('escp(1)');
+            deps.rov.send('escp(1)');
             console.log('escp(1) sent');
         });
         socket.on('escs_poweroff', function(){
-            deps.controller.send('escp(0)');
+            deps.rov.send('escp(0)');
             console.log('escp(0) sent');
         });        
     });       

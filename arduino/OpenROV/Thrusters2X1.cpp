@@ -59,6 +59,7 @@ void Thrusters::device_setup(){
   bypasssmoothing = false;
   #ifdef ESCPOWER_PIN
     escpower.reset();
+    escpower.write(1); //Turn on the ESCs
 
   #endif
 }
