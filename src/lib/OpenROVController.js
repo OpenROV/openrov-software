@@ -147,8 +147,7 @@ var OpenROVController = function(eventLoop) {
 
   controller.send = function(cmd) {
     var command = cmd + ';';
-    if(CONFIG.debug_commands) console.error("command", command);
-    if(CONFIG.production) serial.write(command);
+    hardware.write(command);
   };
 
 

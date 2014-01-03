@@ -31,6 +31,8 @@
 			<h6>Thrust&nbsp;Factor</h6><div class="label badge" id="thrustfactor">&nbsp;</div> \
 		    </div>');
 	$('#keyboardInstructions').append('<p>press <i>i</i> to toggle lights</p>');
+	$('#keyboardInstructions').append('<p>press <i>[</i> to enable ESCs</p>');
+	$('#keyboardInstructions').append('<p>press <i>]</i> to disable ESCs</p>');
 	$('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
 
         var self = this;
@@ -98,7 +100,9 @@
         KEYS[79] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.adjustLights',-.1)}}; //o (brightness down) 
         KEYS[76] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleLasers');}}; //l (laser toggle) 
         //KEYS[73] = {keydown: function(){ rov.toggleLights();}}; //i (laser lights)
-	KEYS[73] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleLights');}}; //i (laser lights) 
+	KEYS[73] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleLights');}}; //i (laser lights)
+	KEYS[219] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOnESCs');}}; //[
+    KEYS[221] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOffESCs');}}; //]
 
 	cockpitEventEmitter.on('rovpilot.allStop',function(){ rov.allStop()});
 	cockpitEventEmitter.on('rovpilot.setThrottle',function(v){ rov.setThrottle(v)});
@@ -113,6 +117,8 @@
 	cockpitEventEmitter.on('rovpilot.toggleLasers',function(v){ rov.toggleLasers()});
 	cockpitEventEmitter.on('rovpilot.toggleLights',function(v){ rov.toggleLights()});
 	cockpitEventEmitter.on('rovpilot.incrimentPowerLevel', function(){ rov.incrimentPowerLevel()});
+	cockpitEventEmitter.on('rovpilot.powerOnESCs', function(){ rov.powerOnESCs()});
+	cockpitEventEmitter.on('rovpilot.powerOffESCs', function(){ rov.powerOffESCs()});
 	
     };
 
@@ -159,6 +165,14 @@
 	}
     };    
     
+    ROVpilot.prototype.powerOnESCs = function powerOnESCs(){
+        this.cockpit.socket.emit('escs_poweron');
+    };
+
+    ROVpilot.prototype.powerOffESCs = function powerOffESCs(){
+        this.cockpit.socket.emit('escs_poweroff');
+    };
+
     ROVpilot.prototype.adjustVerticleTrim = function adjustVerticleTrim(value){
         this.vtrim+=value;
         this.positions.lift = (1/1000)*vtrim;
