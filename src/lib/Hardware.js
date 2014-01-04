@@ -8,6 +8,7 @@ function Hardware() {
 	var hardware = new EventEmitter();
 	var reader = new StatusReader();
 	this.serialConnected = false;
+	this.emitRawSerialData = true;
 	hardware.serial = { };
 	var self = this;	
 	reader.on('Arduino-settings-reported', function(settings) {
@@ -26,10 +27,12 @@ function Hardware() {
          logger.log('!Serial port closed');
 	 self.serialConnected = false;
         });
-
+        
+        var self=this;
 		hardware.serial.on( 'data', function( data ) {
 			var status = reader.parseStatus(data);
 			hardware.emit('status', status);
+			if (true) hardware.emit('serial-recieved', data + '\n');
 		});
 		self.serialConnected = true;
 	};
@@ -39,8 +42,13 @@ function Hardware() {
 
 		if(CONFIG.production && self.serialConnected) {
 			hardware.serial.write(command);
+			if (this.emitRawSerialData) hardware.emit('serial-sent', command);			
 		}
 	};
+	
+	hardware.toggleRawSerialData = function toggleRawSerialData(){
+	    this.emitRawSerialData = !this.emitRawSerialData;
+	}
 
 	hardware.close = function() {
 		hardware.serial.close();

@@ -41,6 +41,11 @@ var OpenROVController = function (eventLoop) {
   setInterval(function () {
     controller.emit('status', statusdata);
   }, 1000);
+  
+  hardware.on('serial-recieved', function(data){
+      globalEventLoop.emit('serial-recieved',data);
+  });
+  
   hardware.on('status', function (status) {
     for (i in status) {
       statusdata[i] = status[i];
