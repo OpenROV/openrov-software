@@ -212,6 +212,11 @@ var OpenROVController = function (eventLoop) {
   globalEventLoop.on('register-ArduinoCapabilities', function (val) {
     controller.Capabilities = val;
   });
+  
+  globalEventLoop.on('SerialMonitor_toggle_rawSerial', function() {
+     hardware.toggleRawSerialData(); 
+  });
+  
   globalEventLoop.on('serial-stop', function () {
     logger.log('Closing serial connection for firmware upload');
     hardware.close();

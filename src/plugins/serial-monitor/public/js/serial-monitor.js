@@ -12,14 +12,20 @@
 
         // Add required UI elements
 	$("#rov_status_panel").append(
-                '<div id="serialmonitor" class="controller well well-small" >\
+                '<div id="serialmonitor" style="display: none;" class="controller well well-small" >\
 		    <textarea id="SerialMonitorList" style="width: 100%; height: 400px;">\
 		    </textarea>\
 		</div>');
-	$('#keyboardInstructions').append('<p><i>h??</i> to toggle raw serial-monitor</p>');
-
+	$('#keyboardInstructions').append('<p><i>u</i> to toggle raw serial-monitor</p>');
 
 	var self = this;
+	
+	KEYS[85] = {keydown: function(data) {  //u
+	    $('#serialmonitor').toggle();
+	    self.cockpit.socket.emit('SerialMonitor_toggle_rawSerial');
+	}};
+	
+
     //    setInterval(function(){self.displaySerialMonitor();}, 1000);	
         // Register the various event handlers
         this.listen();
@@ -48,7 +54,6 @@
     SerialMonitor.prototype.tail = function tail(limit, haystack)
     {
         var lines = this.countNewlines(haystack) + 1;
-        console.log("Lines="+lines);
         if (lines > limit)
         {
             return haystack

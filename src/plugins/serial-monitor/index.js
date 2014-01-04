@@ -16,6 +16,15 @@ SerialMonitor.prototype.listen = function listen(deps){
     deps.globalEventLoop.on('serial-recieved',function(data){
         deps.io.sockets.emit('serial-recieved',data);
     });    
+    
+    //Would prefer to put this on the global eventloop so that Hardware picks it up, but have
+    //to refactor hardware to listen to the global loop first
+    deps.io.sockets.on('connection', function (socket) {
+        socket.on('SerialMonitor_toggle_rawSerial', function(){
+            deps.globalEventLoop.emit('SerialMonitor_toggle_rawSerial');
+        });
+    });
+
 }
 
 module.exports = SerialMonitor;
