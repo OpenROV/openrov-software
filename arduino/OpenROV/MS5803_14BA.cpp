@@ -35,7 +35,8 @@ const byte D2_2048 = 0x56;
 const byte D2_4096 = 0x58;
 const byte AdcRead = 0x00;
 const byte PromBaseAddress = 0xA0;
-
+const bool FreshWater = 0;
+const bool SaltWater = 1;
 //io_timeout is the max wait time in ms for I2C requests to complete
 const int io_timeout = 20;
 
@@ -51,6 +52,7 @@ float DepthOffset = 0;
 float WaterDensity = 1.019716;
 Timer DepthSensorSamples;  
 byte ByteHigh, ByteMiddle, ByteLow;  // Variables for I2C reads
+bool WaterType = FreshWater;
 
 // Program initialization starts here
 
@@ -103,10 +105,10 @@ void MS5803_14BA::device_loop(Command command){
     DepthOffset=Depth;
   }
   else if (command.cmp("dtwa")){
-    if (WaterDensity == 1.019716) {
-      WaterDensity = 1.019716; //need the saltwater value
+    if (WaterType == FreshWater) {
+      WaterType = SaltWater; 
     } else {
-      WaterDensity =  1.019716;
+      WaterType =  FreshWater;
     }
   }  
   
@@ -221,7 +223,19 @@ void MS5803_14BA::device_loop(Command command){
   //log("Pressure in psi is: ");
   //log(Pressure);
   
-  Depth = (Pressure - AtmosPressure) * WaterDensity / 100; 
+  if (WaterType == FreshWater){
+    //FreshWater
+    Depth = (Pressure - AtmosPressure) * WaterDensity / 100;
+  } else {}
+    //SaltWater
+    
+    //formula for correcting for lattitude
+    //Gravity=9.780318*[1.0+(5.2788*10^(-3)+2.36*10^(-5)*x)*x]+1.092*10^(-6)*p; 
+    
+    Gravity = 9.780318;
+    p = Pressure / 100; //decibars
+    Depth = ((((-1.82*pow(10,-15) * p + 2.279*pow(10,-10))*p-2.2512*pow(10,-5))*p)/Gravity;
+  }
   navdata::DEAP = Depth-DepthOffset; 
 
   }
