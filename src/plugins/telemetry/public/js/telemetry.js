@@ -9,6 +9,11 @@
         // Instance variables
         this.cockpit = cockpit;
 	this.telemetry = new Object();
+	this.importantTelemetry = new Object();
+	this.telemetry.TestData=1111;
+	this.telemetry.TestData2=12313;
+	//this.importantTelemetry['TestData2'] =true;
+
 
         // Add required UI elements
 	$("#rov_status_panel").append(
@@ -18,6 +23,7 @@
 		       </li>\
 		    </ul>\
 		</div>');
+	$('#keyboardInstructions').append('<p><i>h</i> to cycle text color of telemetry</p>');
 
 
 	var self = this;
@@ -35,9 +41,33 @@
 	this.cockpit.socket.on('status', function(data) {
             self.logStatusData(data);
         });
+	
+	var textcolor = 0;
+	KEYS[72] = {keydown: function(data) {  //h
+		textcolor+=5;
+		if (textcolor > 255) {
+		    textcolor=0;
+		}
+		$('#TelemetryList')[0].style.color="rgb("+textcolor+","+textcolor+",255)";
+	    }
+	};
+	
+	$('#TelemetryList')[0].addEventListener("click", function(e){self.handleDescendantEvent(e)}, true);
 
     };
     
+    Telemetry.prototype.handleDescendantEvent = function handleDescendantEvent(e) {
+	if (e.type == "click" && e.eventPhase == Event.CAPTURING_PHASE) {
+	   var telemetry_name = e.target.innerText.split(' ')[0];
+	   if (this.importantTelemetry[telemetry_name] ===true) {
+		this.importantTelemetry[telemetry_name] =false;
+	   }else{
+	    this.importantTelemetry[telemetry_name] =true;
+	   }
+
+	}
+    };
+
     Telemetry.prototype.logStatusData = function logStatusData(data){
 	for (var i in data){
 	  this.telemetry[i] = data[i];
@@ -52,6 +82,10 @@
 	    var li = document.createElement("LI");
 	    li.appendChild(document.createElement("SPAN").appendChild(document.createTextNode(item+" ")));
 	    li.appendChild(document.createElement("SPAN").appendChild(document.createTextNode(this.telemetry[item])));
+	    //if (this.importantTelemetry.hasOwnProperty(item)) {
+	    if (this.importantTelemetry[item]===true) {
+		li.setAttribute("class","important");
+	    }
 	    fragment.appendChild(li);
 	  }
 	}

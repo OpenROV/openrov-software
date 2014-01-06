@@ -353,3 +353,9 @@ img.center {
   background-color: black;
   color: blue;
 }
+
+.important {
+  font-size: 30px;
+  font-style: !important;
+  
+}
