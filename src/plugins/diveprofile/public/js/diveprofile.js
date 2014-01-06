@@ -13,12 +13,13 @@
         this.cockpit = cockpit;
 
         // Add required UI elements
-        $("#diagnostic H4:contains('Callibration')").append('<a href="#" class="btn" id="toggle_watertype">Water</a>');
+        $("#diagnostic H4:contains('Callibration')").after('<a href="#" class="btn" id="toggle_watertype">Switch Water Type</a>');
 
         // Listen to navdata updates
         
+        var self = this;
 	$('#toggle_watertype').click(function() {
-           socket.emit('depth_togglewatertype');
+           self.cockpit.socket.emit('depth_togglewatertype');
         });        
     };
     window.Cockpit.plugins.push(DiveProfile);
