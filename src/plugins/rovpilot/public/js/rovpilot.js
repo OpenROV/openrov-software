@@ -144,9 +144,9 @@
     
     ROVpilot.prototype.adjustLights = function adjustLights(value){
         if (this.light==0 && value<0){ //this code rounds the horn so to speak by jumping from zero to max and vise versa
-	  this.light = 1;
+	  this.light = 0; //disabled the round the horn feature
 	} else if (this.light==1 && value>0){
-	  this.light = 0;
+	  this.light = 1; //disabled the round the horn feature
 	} else {
 	  this.light += value;
 	}
