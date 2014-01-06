@@ -105,10 +105,12 @@ void MS5803_14BA::device_loop(Command command){
     DepthOffset=Depth;
   }
   else if (command.cmp("dtwa")){
-    if (WaterType == FreshWater) {
-      WaterType = SaltWater; 
+    if (Settings::water_type == FreshWater) {
+      Settings::water_type = SaltWater;
+      Serial.println(F("dtwa:1;"));
     } else {
-      WaterType =  FreshWater;
+      Settings::water_type =  FreshWater;
+      Serial.println(F("dtwa:0;"));      
     }
   }  
   
@@ -223,10 +225,10 @@ void MS5803_14BA::device_loop(Command command){
   //log("Pressure in psi is: ");
   //log(Pressure);
   
-  if (WaterType == FreshWater){
+  if (Settings::water_type == FreshWater){
     //FreshWater
     Depth = (Pressure - AtmosPressure) * WaterDensity / 100;
-  } else {}
+  } else {
     //SaltWater
     
     //formula for correcting for lattitude

@@ -15,6 +15,7 @@ class Settings : public Device {
     static int deadZone_min;
     static int deadZone_max;
     static int capability_bitarray;
+    static bool water_type;
     
     Settings():Device(){};
     void device_setup();

@@ -30,7 +30,7 @@ catch (err) {
 }
 
 //just odd enough to recognize as defaults
-nconf.defaults({'deadzone_pos':.1,'deadzone_neg':-.1, 'smoothingIncriment':4, 'photoDirectory':'/var/www/openrov/photos'});
+nconf.defaults({'deadzone_pos':.1,'deadzone_neg':-.1, 'smoothingIncriment':4, 'photoDirectory':'/var/www/openrov/photos', 'water_type':0});
 
 module.exports = {
   debug:            process.env.NODE_DEBUG      !== 'false',

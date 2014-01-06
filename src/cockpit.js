@@ -127,11 +127,6 @@ io.sockets.on('connection', function (socket) {
     socket.on('compass_callibrate', function(){
         controller.send('ccal()');
     });
-
-    socket.on('depth_togglewatertype', function(){
-        controller.send('dtwa()');
-    });
-    
      
     socket.on('update_settings', function(value){
       for(var property in value)
