@@ -102,7 +102,8 @@
         //KEYS[73] = {keydown: function(){ rov.toggleLights();}}; //i (laser lights)
 	KEYS[73] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleLights');}}; //i (laser lights)
 	KEYS[219] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOnESCs');}}; //[
-    KEYS[221] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOffESCs');}}; //]
+	KEYS[221] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOffESCs');}}; //]
+	KEYS[77] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleholdHeading');}};  //m 
 
 	cockpitEventEmitter.on('rovpilot.allStop',function(){ rov.allStop()});
 	cockpitEventEmitter.on('rovpilot.setThrottle',function(v){ rov.setThrottle(v)});
@@ -119,9 +120,35 @@
 	cockpitEventEmitter.on('rovpilot.incrimentPowerLevel', function(){ rov.incrimentPowerLevel()});
 	cockpitEventEmitter.on('rovpilot.powerOnESCs', function(){ rov.powerOnESCs()});
 	cockpitEventEmitter.on('rovpilot.powerOffESCs', function(){ rov.powerOffESCs()});
+	cockpitEventEmitter.on('rovpilot.toggleholdHeading', function(){ rov.toggleholdHeading()});
+	cockpitEventEmitter.on('rovpilot.manualMotorThrottle', function(p,v,s){ rov.manualMotorThrottle(p,v,s)});
+	
 	
     };
 
+    var lastSentManualThrottle = new Object();
+    lastSentManualThrottle.port = 0;
+    lastSentManualThrottle.vertical = 0;
+    lastSentManualThrottle.starbord = 0;
+    
+    ROVpilot.prototype.manualMotorThrottle = function manualMotorThrottle(port,vertical,starbord){
+	var maxdiff = 0;
+	maxdiff = Math.max(maxdiff,Math.abs(port-lastSentManualThrottle.port));
+	maxdiff = Math.max(maxdiff,Math.abs(vertical-lastSentManualThrottle.vertical));
+	maxdiff = Math.max(maxdiff,Math.abs(starbord-lastSentManualThrottle.starbord));
+	if (maxdiff > .001) {
+
+	    this.cockpit.socket.emit('motor_test', {
+		port: 1500 + (-port * 500),
+		starbord: 1500 + (-starbord * 500),
+		vertical: 1500 + (vertical * 500)
+	    });
+	    
+	    lastSentManualThrottle.port = port;
+	    lastSentManualThrottle.vertical = vertical;
+	    lastSentManualThrottle.starbord = starbord;	    
+	}
+    }
 
     ROVpilot.prototype.setCameraTilt = function setCameraTilt(value){
         this.tilt=value;
@@ -163,7 +190,11 @@
 	} else {
 	    this.setLights(1);
 	}
-    };    
+    };
+    
+     ROVpilot.prototype.toggleholdHeading = function toggleholdHeading(){
+        this.cockpit.socket.emit('holdHeading_toggle');
+    };   
     
     ROVpilot.prototype.powerOnESCs = function powerOnESCs(){
         this.cockpit.socket.emit('escs_poweron');
