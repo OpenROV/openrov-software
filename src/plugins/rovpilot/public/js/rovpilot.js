@@ -104,7 +104,7 @@
 	KEYS[219] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOnESCs');}}; //[
 	KEYS[221] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOffESCs');}}; //]
 	KEYS[77] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleholdHeading');}};  //m 
-	KEYS[78] = {keydown: function(){ cockpitEventEmitter.emit('alert('d');rovpilot.toggleholdDepth');}};  //d
+	KEYS[78] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleholdDepth');}};  //d
 	
 	cockpitEventEmitter.on('rovpilot.allStop',function(){ rov.allStop()});
 	cockpitEventEmitter.on('rovpilot.setThrottle',function(v){ rov.setThrottle(v)});
@@ -279,11 +279,11 @@
     };      
     
     ROVpilot.prototype.allStop = function allStop(){
-        vtrim = 0;
-        ttrim = 0;
-        positions.throttle = 0;
-        positions.yaw = 0;
-        positions.lift = 0;
+        this.vtrim = 0;
+        this.ttrim = 0;
+        this.positions.throttle = 0;
+        this.positions.yaw = 0;
+        this.positions.lift = 0;
     };
     
     ROVpilot.prototype.sendPilotingData = function sendPilotingData(){ 
