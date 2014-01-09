@@ -10,9 +10,6 @@
         this.cockpit = cockpit;
 	this.telemetry = new Object();
 	this.importantTelemetry = new Object();
-	this.telemetry.TestData=1111;
-	this.telemetry.TestData2=12313;
-	//this.importantTelemetry['TestData2'] =true;
 
 
         // Add required UI elements
