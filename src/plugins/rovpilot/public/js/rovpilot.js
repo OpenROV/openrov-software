@@ -104,7 +104,8 @@
 	KEYS[219] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOnESCs');}}; //[
 	KEYS[221] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.powerOffESCs');}}; //]
 	KEYS[77] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.toggleholdHeading');}};  //m 
-
+	KEYS[78] = {keydown: function(){ cockpitEventEmitter.emit('alert('d');rovpilot.toggleholdDepth');}};  //d
+	
 	cockpitEventEmitter.on('rovpilot.allStop',function(){ rov.allStop()});
 	cockpitEventEmitter.on('rovpilot.setThrottle',function(v){ rov.setThrottle(v)});
 	cockpitEventEmitter.on('rovpilot.setYaw',function(v){ rov.setYaw(v)});
@@ -121,6 +122,7 @@
 	cockpitEventEmitter.on('rovpilot.powerOnESCs', function(){ rov.powerOnESCs()});
 	cockpitEventEmitter.on('rovpilot.powerOffESCs', function(){ rov.powerOffESCs()});
 	cockpitEventEmitter.on('rovpilot.toggleholdHeading', function(){ rov.toggleholdHeading()});
+	cockpitEventEmitter.on('rovpilot.toggleholdDepth', function(){ rov.toggleholdDepth()});	
 	cockpitEventEmitter.on('rovpilot.manualMotorThrottle', function(p,v,s){ rov.manualMotorThrottle(p,v,s)});
 	
 	
@@ -136,12 +138,20 @@
 	maxdiff = Math.max(maxdiff,Math.abs(port-lastSentManualThrottle.port));
 	maxdiff = Math.max(maxdiff,Math.abs(vertical-lastSentManualThrottle.vertical));
 	maxdiff = Math.max(maxdiff,Math.abs(starbord-lastSentManualThrottle.starbord));
+	if (vertical < 0) vertical = vertical*2; //make up for async props
+
 	if (maxdiff > .001) {
 
+//	    this.cockpit.socket.emit('motor_test', {
+//		port: 1500 + (-port * 500),
+//		starbord: 1500 + (-starbord * 500),
+//		vertical: 1500 + (vertical * 500)
+//	    });
+	    
 	    this.cockpit.socket.emit('motor_test', {
-		port: 1500 + (-port * 500),
-		starbord: 1500 + (-starbord * 500),
-		vertical: 1500 + (vertical * 500)
+		port: -port * this.power ,
+		starbord: -starbord * this.power,
+		vertical: vertical * this.power 
 	    });
 	    
 	    lastSentManualThrottle.port = port;
@@ -194,7 +204,11 @@
     
      ROVpilot.prototype.toggleholdHeading = function toggleholdHeading(){
         this.cockpit.socket.emit('holdHeading_toggle');
-    };   
+    };
+    
+     ROVpilot.prototype.toggleholdDepth = function toggleholdDepth(){
+        this.cockpit.socket.emit('holdDepth_toggle');
+    };      
     
     ROVpilot.prototype.powerOnESCs = function powerOnESCs(){
         this.cockpit.socket.emit('escs_poweron');

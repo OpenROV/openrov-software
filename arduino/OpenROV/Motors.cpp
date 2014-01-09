@@ -18,6 +18,18 @@ void Motors::go(int p, int v, int s){
   starbord.writeMicroseconds(s);
 }
 
+void Motors::goport(int p){
+  port.writeMicroseconds(p);  
+}
+
+void Motors::govertical(int v){
+  vertical.writeMicroseconds(v);  
+}
+
+void Motors::gostarbord(int s){
+  starbord.writeMicroseconds(s);  
+}
+
 void Motors::stop(){
   port.writeMicroseconds(MIDPOINT);
   vertical.writeMicroseconds(MIDPOINT);

@@ -132,7 +132,7 @@ var OpenROVController = function(eventLoop) {
   };
 
   controller.updateSetting = function(){
-    var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + physics.mapMotor(CONFIG.preferences.get('deadzone_neg')) + ','+ physics.mapMotor(CONFIG.preferences.get('deadzone_pos')) + ',' + CONFIG.preferences.get('water_type')');';
+    var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + physics.mapMotor(CONFIG.preferences.get('deadzone_neg')) + ','+ physics.mapMotor(CONFIG.preferences.get('deadzone_pos')) + ',' + CONFIG.preferences.get('water_type') + ';';
     hardware.write(command);
   };
 

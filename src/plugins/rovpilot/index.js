@@ -9,7 +9,15 @@ function rovpilot(name, deps) {
         socket.on('escs_poweroff', function(){
             deps.rov.send('escp(0)');
             console.log('escp(0) sent');
-        });        
+        });  
+        socket.on('holdHeading_toggle', function(){
+            deps.rov.send('holdHeading_toggle()');
+            console.log('holdHeading_toggle() sent');
+        });
+        socket.on('holdDepth_toggle', function(){
+            deps.rov.send('holdDepth_toggle()');
+            console.log('holdDepth_toggle() sent');
+        });            
     });       
 };
 

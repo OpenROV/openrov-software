@@ -48,8 +48,10 @@ void CameraMount::device_setup(){
 
 void CameraMount::device_loop(Command command){
     if (command.cmp("tilt")) {
-      tilt_val = command.args[1];
-      cameraMountdata::CMTG = tilt_val;
+      if ((command.args[1] > 999) && (command.args[1] < 2001)){
+        tilt_val = command.args[1];
+        cameraMountdata::CMTG = tilt_val;
+      }
     }
     if (tilt_val != new_tilt){
       new_tilt = smoothAdjustedCameraPosition(tilt_val,new_tilt);

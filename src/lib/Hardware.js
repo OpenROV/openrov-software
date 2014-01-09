@@ -7,8 +7,9 @@ var serialPort = require('serialport')
 function Hardware() {
 	var hardware = new EventEmitter();
 	var reader = new StatusReader();
+	this.serialConnected = false;
 	hardware.serial = { };
-
+	var self = this;	
 	reader.on('Arduino-settings-reported', function(settings) {
 		hardware.emit('Arduino-settings-reported', settings);
 	});
@@ -23,24 +24,27 @@ function Hardware() {
         
         hardware.serial.on( 'close', function (data) {
          logger.log('!Serial port closed');
+	 self.serialConnected = false;
         });
 
 		hardware.serial.on( 'data', function( data ) {
 			var status = reader.parseStatus(data);
 			hardware.emit('status', status);
 		});
+		self.serialConnected = true;
 	};
 
 	hardware.write = function(command) {
 		logger.command(command);
 
-		if(CONFIG.production) {
+		if(CONFIG.production && self.serialConnected) {
 			hardware.serial.write(command);
 		}
 	};
 
 	hardware.close = function() {
 		hardware.serial.close();
+		self.serialConnected = false;
 	};
 	return hardware;
 };
