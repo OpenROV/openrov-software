@@ -13,6 +13,9 @@ class Motors {
   public:
   
     Motors(int p_pin, int v_pin, int s_pin);
+    void goport(int p);
+    void govertical(int v);
+    void gostarbord(int s);
     void reset();
     void go(int p, int v, int s);
     void stop();

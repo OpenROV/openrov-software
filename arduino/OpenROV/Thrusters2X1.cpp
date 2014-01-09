@@ -75,6 +75,31 @@ void Thrusters::device_loop(Command command){
         if (command.args[4] == 1) bypasssmoothing=true;
       }
     }
+    
+  if (command.cmp("port")) {
+      //ignore corrupt data
+      if (command.args[1]>999 && command.args[1]<2001) {       
+        p = command.args[1];
+        if (command.args[2] == 1) bypasssmoothing=true;
+      }
+  }
+  
+  if (command.cmp("vertical")) {
+      //ignore corrupt data
+      if (command.args[1]>999 && command.args[1]<2001) {       
+        v = command.args[1];
+        if (command.args[2] == 1) bypasssmoothing=true;
+      }
+  }
+  
+  if (command.cmp("starbord")) {
+      //ignore corrupt data
+      if (command.args[1]>999 && command.args[1]<2001) {       
+        s = command.args[1];
+        if (command.args[2] == 1) bypasssmoothing=true;
+      }
+  }  
+    
   #ifdef ESCPOWER_PIN
     else if (command.cmp("escp")) {
       escpower.write(command.args[1]); //Turn on the ESCs

@@ -234,9 +234,9 @@ void MS5803_14BA::device_loop(Command command){
     //formula for correcting for lattitude
     //Gravity=9.780318*[1.0+(5.2788*10^(-3)+2.36*10^(-5)*x)*x]+1.092*10^(-6)*p; 
     
-    Gravity = 9.780318;
-    p = Pressure / 100; //decibars
-    Depth = ((((-1.82*pow(10,-15) * p + 2.279*pow(10,-10))*p-2.2512*pow(10,-5))*p)/Gravity;
+    float Gravity = 9.780318;
+    float p = Pressure / 100; //decibars
+    Depth = ((((-1.82*pow(10,-15) * p + 2.279*pow(10,-10))*p-2.2512*pow(10,-5))*p))/Gravity;
   }
   navdata::DEAP = Depth-DepthOffset; 
 
