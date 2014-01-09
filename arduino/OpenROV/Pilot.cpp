@@ -44,7 +44,7 @@ void Pilot::device_loop(Command command){
         hdg_Error_Integral = 0;  // Reset error integrator
         tgt_Hdg = 0;  // 500 = system not in hdg hold
   
-        int argsToSend[] = {1500,1500,1500,3}; //include number of parms as last parm
+        int argsToSend[] = {3,1500,1500,1500}; //include number of parms as last parm
         command.pushCommand("go",argsToSend);  
         Serial.println(F("log:hold_disabled;"));      
               
@@ -66,7 +66,7 @@ void Pilot::device_loop(Command command){
         raw_lift = 0;
         target_depth = 0;  // 500 = system not in hdg hold
   
-        int argsToSend[] = {1500,1500,1500,3}; //include number of parms as last parm
+        int argsToSend[] = {3,1500,1500,1500}; //include number of parms as last parm
         command.pushCommand("go",argsToSend);  
         Serial.println(F("log:depth_hold_disabled;"));      
               
@@ -92,8 +92,8 @@ void Pilot::device_loop(Command command){
       
       if (_depthHoldEnabled)
       {
-        depth = navdata::DEAP;
-        depth_Error = depth-target_depth;
+        depth = navdata::DEAP*100;
+        depth_Error = depth-target_depth*100;
         
         raw_lift = -1 * hdg_Error * loop_Gain;
         lift = constrain(raw_lift, -400, 200);
