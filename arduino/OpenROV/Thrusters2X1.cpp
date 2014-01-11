@@ -17,6 +17,10 @@ int new_v = MIDPOINT;
 int p = MIDPOINT;
 int v = MIDPOINT;
 int s = MIDPOINT;
+
+float trg_throttle,trg_yaw,trg_lift;
+int trg_motor_power;
+
 Timer controltime;
 Timer thrusterOutput;
 boolean bypasssmoothing;
@@ -98,7 +102,59 @@ void Thrusters::device_loop(Command command){
         s = command.args[1];
         if (command.args[2] == 1) bypasssmoothing=true;
       }
+  }
+  
+  if (command.cmp("thro") || command.cmp("yaw")){
+    if (command.cmp("thro")){
+      if (command.args[1]>=-100 && command.args[1]<=100) {    
+        trg_throttle = command.args[1]/100.0;
+      }
+    }
+    if (trg_throttle>=0){
+      p = 1500 + 500*trg_throttle;
+      s = p;
+    } else {
+      p = 1500 + 250*trg_throttle;
+      s = p;        
+    }
+    trg_motor_power = s;    
+    
+    if (command.cmp("yaw")) {
+        //ignore corrupt data
+        if (command.args[1]>=-100 && command.args[1]<=100) { //percent of max turn      
+          trg_yaw = command.args[1]/100.0;
+          int turn = trg_yaw*250; //max range due to reverse range
+          int sign=0;
+          sign = (turn>0) - (turn<0);
+          if (trg_throttle >=0){
+            int offset = (abs(turn)+trg_motor_power)-2000;
+            if (offset < 0) offset = 0;
+            p = trg_motor_power+turn-offset;
+            s = trg_motor_power-turn-offset;
+          } else {
+            int offset = 1000-(trg_motor_power-abs(turn));
+            if (offset < 0) offset = 0;
+            p = trg_motor_power+turn+offset;
+            s = trg_motor_power-turn+offset;          
+          }
+  
+  
+        }
+    }
+    
+  }
+  
+  if (command.cmp("lift")){
+    if (command.args[1]>=-100 && command.args[1]<=100) {    
+      trg_lift = command.args[1]/100.0;
+      if (trg_lift>=0){
+        v = 1500 + 500*trg_lift;
+      } else {
+        v = 1500 + 250*trg_lift;
+      }
+    }
   }  
+  
     
   #ifdef ESCPOWER_PIN
     else if (command.cmp("escp")) {

@@ -2,8 +2,11 @@
 #define __MOTORS_H_
 
 #include "openrov_servo.h"
-
+#include <Arduino.h>
 #define MIDPOINT 1500
+#define port_motor 0
+#define vertical_motor 1
+#define starbord_motor 2
 
 class Motors {
   private:
@@ -20,7 +23,8 @@ class Motors {
     void go(int p, int v, int s);
     void stop();
     bool attached();
-    
+    static float motor_positive_modifer[3];
+    static float motor_negative_modifer[3];
 };
 
 #endif

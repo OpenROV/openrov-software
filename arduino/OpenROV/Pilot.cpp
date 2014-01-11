@@ -13,7 +13,7 @@ int hdg = 0;
 int hdg_Error;
 int raw_Left, raw_Right;
 int left, right;  // motor outputs in microseconds, +/-500
-int loop_Gain = 4;
+int loop_Gain = 1;
 int integral_Divisor = 100;
 long hdg_Error_Integral = 0;
 int tgt_Hdg = 0;
@@ -24,6 +24,7 @@ int depth_Error = 0;
 int raw_lift =0;
 int lift = 0;
 int target_depth;
+int raw_yaw, yaw;
 
 
 
@@ -44,18 +45,24 @@ void Pilot::device_loop(Command command){
         hdg_Error_Integral = 0;  // Reset error integrator
         tgt_Hdg = 0;  // 500 = system not in hdg hold
   
-        int argsToSend[] = {3,1500,1500,1500}; //include number of parms as last parm
-        command.pushCommand("go",argsToSend);  
+        int argsToSend[] = {1,00}; //include number of parms as last parm
+        command.pushCommand("yaw",argsToSend);  
         Serial.println(F("log:hold_disabled;"));      
               
       } else {
-        Serial.println("log:In loop;");
         _headingHoldEnabled = true;
-        _headingHoldTarget = navdata::HDGD;
+        if(command.args[0]==0){
+          _headingHoldTarget = navdata::HDGD;
+        } else {
+          _headingHoldTarget = command.args[1];
+        }
         tgt_Hdg = _headingHoldTarget;
         Serial.print(F("log:hold_enabled on="));
         Serial.print(tgt_Hdg);
         Serial.println(';');
+        Serial.print(F("thdg:"));
+        Serial.print(tgt_Hdg);
+        Serial.println(';');        
       }
     }
     
@@ -66,17 +73,24 @@ void Pilot::device_loop(Command command){
         raw_lift = 0;
         target_depth = 0;  // 500 = system not in hdg hold
   
-        int argsToSend[] = {3,1500,1500,1500}; //include number of parms as last parm
-        command.pushCommand("go",argsToSend);  
+        int argsToSend[] = {1,0}; //include number of parms as last parm
+        command.pushCommand("lift",argsToSend);  
         Serial.println(F("log:depth_hold_disabled;"));      
               
       } else {
         _depthHoldEnabled = true;
-        _depthHoldTarget = navdata::DEAP;
+        if(command.args[0]==0){        
+          _depthHoldTarget = navdata::DEAP*100;  //casting to cm
+        } else {
+          _depthHoldTarget = command.args[1];
+        }
         target_depth = _depthHoldTarget;
         Serial.print(F("log:dhold_enabled on="));
         Serial.print(target_depth);
         Serial.println(';');
+        Serial.print(F("tdpt:"));
+        Serial.print(target_depth);
+        Serial.println(';');         
       }
     }     
 
@@ -93,17 +107,17 @@ void Pilot::device_loop(Command command){
       if (_depthHoldEnabled)
       {
         depth = navdata::DEAP*100;
-        depth_Error = depth-target_depth*100;
+        depth_Error = depth-target_depth;
         
-        raw_lift = -1 * hdg_Error * loop_Gain;
-        lift = constrain(raw_lift, -400, 200);
+        raw_lift = depth_Error * loop_Gain;
+        lift = constrain(raw_lift, -50, 50);
         
         Serial.println(F("log:dhold pushing command;"));
         Serial.print(F("dp_er:"));
         Serial.print(depth_Error);
         Serial.println(';');        
-        int argsToSend[] = {1,1500+lift}; //include number of parms as last parm
-        command.pushCommand("vertical",argsToSend);         
+        int argsToSend[] = {1,lift}; //include number of parms as last parm
+        command.pushCommand("lift",argsToSend);         
         
       }
 
@@ -131,26 +145,21 @@ void Pilot::device_loop(Command command){
         hdg_Error_Integral = hdg_Error_Integral + hdg_Error;
         
         // Calculator motor outputs
-        raw_Left = -1 * hdg_Error * loop_Gain;
-        raw_Right = hdg_Error * loop_Gain;
+        raw_yaw = -1 * hdg_Error * loop_Gain;
+
         // raw_Left = raw_Left - (hdg_Error_Integral / integral_Divisor);
         // raw_Right = raw_Right + (hdg_Error_Integral / integral_Divisor);
 
         // Constrain and output to motors
         
-        left = constrain(raw_Left, -200, 200);
-        right = constrain(raw_Right, -200, 200);
+        yaw = constrain(raw_yaw, -50, 50);
         Serial.println(F("log:hold pushing command;"));
         Serial.print(F("p_er:"));
         Serial.print(hdg_Error);
         Serial.println(';');        
-        //int argsToSend[] = {3,1500+left,1500,1500+right}; //include number of parms as last parm
-        //command.pushCommand("go",argsToSend);
-        int argsToSend[] = {1,1500+left}; //include number of parms as last parm
-        command.pushCommand("port",argsToSend);
-        argsToSend[0] = 1;
-        argsToSend[1] =1500+right; //include number of parms as last parm
-        command.pushCommand("starbord",argsToSend);        
+
+        int argsToSend[] = {1,yaw}; //include number of parms as last parm
+        command.pushCommand("yaw",argsToSend);       
       }
 
       
