@@ -13,6 +13,7 @@
         this.ttrim = 0;
         this.tilt = 0;
         this.light = 0;
+	this.sendToROVEnabled = true;
         this.positions = {
             throttle: 0,
             yaw: 0,
@@ -70,7 +71,7 @@
 	GAMEPAD.LEFT_STICK_X	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('rovpilot.setYaw',v)} };
 	GAMEPAD.LEFT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('rovpilot.setThrottle',-1*v)} };
 	GAMEPAD.RIGHT_STICK_Y	= {AXIS_CHANGED: function(v){cockpitEventEmitter.emit('rovpilot.setLift',-1*v)} };  	
-        
+
         KEYS[32] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.allStop')}};// space (all-stop)
         KEYS[38] = {keydown: function(){ cockpitEventEmitter.emit('rovpilot.setThrottle',1)},
                     keyup:   function(){ cockpitEventEmitter.emit('rovpilot.setThrottle',0)}}; // up  (forward)
@@ -124,7 +125,8 @@
 	cockpitEventEmitter.on('rovpilot.toggleholdHeading', function(){ rov.toggleholdHeading()});
 	cockpitEventEmitter.on('rovpilot.toggleholdDepth', function(){ rov.toggleholdDepth()});	
 	cockpitEventEmitter.on('rovpilot.manualMotorThrottle', function(p,v,s){ rov.manualMotorThrottle(p,v,s)});
-	
+	cockpitEventEmitter.on('rovpilot.disable', function(){rov.disablePilot()});
+	cockpitEventEmitter.on('rovpilot.enable', function(){rov.enablePilot()});
 	
     };
 
@@ -132,6 +134,16 @@
     lastSentManualThrottle.port = 0;
     lastSentManualThrottle.vertical = 0;
     lastSentManualThrottle.starbord = 0;
+    
+    ROVpilot.prototype.disablePilot = function disablePilot(){
+	this.sendToROVEnabled = false;
+	console.log("disabled rov pilot.");
+    };
+    
+    ROVpilot.prototype.enablePilot = function enablePilot(){
+	this.sendToROVEnabled = true;
+	console.log("enabled rov pilot.");	
+    };    
     
     ROVpilot.prototype.manualMotorThrottle = function manualMotorThrottle(port,vertical,starbord){
 	var maxdiff = 0;
@@ -302,8 +314,12 @@
 	    }
 	}
 	      
-        if(this.sendUpdateEnabled && updateRequired){
-            this.cockpit.socket.emit('control_update', controls);
+        if((this.sendUpdateEnabled && updateRequired)||(this.sendToROVEnabled==false)){
+	    if (this.sendToROVEnabled) {
+		this.cockpit.socket.emit('control_update', controls);
+
+	    }
+	    cockpitEventEmitter.emit('rovpilot.control_update',controls);
 	    this.priorControls = controls;
         };
     }

@@ -38,8 +38,7 @@ const  DEAPTH_CAPABLE = 6;
             try{
                 new plugin(cockpit);
             } catch(err){
-                console.log("error loading a plugin");
-		console.log(err.message);
+                console.log("error loading a plugin!!!" + err);
             }
         });
         Cockpit.plugins = []; //flush them out for now. May move to a loaded array if we use in the future

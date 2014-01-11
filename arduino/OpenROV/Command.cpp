@@ -48,7 +48,7 @@ boolean getSerialString(){
     return false;
 }
 
-    int Command::_array[MAX_ARGS];
+ //   int Command::_array[MAX_ARGS];
     int Command::args[MAX_ARGS];
     char Command::_commandText[DATABUFFERSIZE+1] ;
 
@@ -67,7 +67,7 @@ boolean Command::cmp(char const* targetcommand){
 boolean Command::get(){
   commandReady = false;
   strcpy(_commandText,"");
-
+  for (int i = 0;i<MAX_ARGS;i++){args[i]=0;}
  
   if(getSerialString()){
     //String available for parsing.  Parse it here
@@ -150,7 +150,7 @@ void Command::parse(){
     pch = strtok (NULL," ,();");
   }
   Serial.println(");"); 
-  args[0] = i;
+  args[0] = i-1;
 }
 
 

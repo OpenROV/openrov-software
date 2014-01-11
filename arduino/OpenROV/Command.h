@@ -16,7 +16,7 @@ class InternalCommand {
 
 class Command {
   private:
-    static int _array[MAX_ARGS];
+//    static int _array[MAX_ARGS];
     static char _commandText[DATABUFFERSIZE+1];
     void parse();
     		

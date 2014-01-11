@@ -19,7 +19,7 @@
         this.cockpit.socket.on('navdata', function(data) {
             if (!jQuery.isEmptyObject(data)) {
                 requestAnimationFrame(function() {
-                    compass.moveTo(data.yaw);
+                    compass.moveTo(data.hdgd);
                 });
             }
  
