@@ -1,3 +1,5 @@
+[![Views in the last 24 hours](https://sourcegraph.com/api/repos/github.com/OpenROV/openrov-software/counters/views-24h.png)](https://sourcegraph.com/github.com/OpenROV/openrov-software)
+[![Build Status](https://secure.travis-ci.org/OpenROV/openrov-software.png?branch=controlboard25)](http://travis-ci.org/OpenROV/openrov-software)
 OpenROV Cockpit
 ================
 
