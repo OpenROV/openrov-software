@@ -33,10 +33,10 @@
 		    </div>');
 	$('#keyboardInstructions').append('<p>press <i>i</i> to toggle lights</p>');
 	$('#keyboardInstructions').append('<p>press <i>[</i> to enable ESCs</p>');
-	$('#keyboardInstructions').append('<p>press <i>]</i> to disable ESCs</p>');
-	$('#keyboardInstructions').append('<p>press <i>m</i> to toggle heading hold (BETA)</p>');
-	$('#keyboardInstructions').append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
-	$('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
+    $('#keyboardInstructions').append('<p>press <i>]</i> to disable ESCs</p>');
+    $('#keyboardInstructions').append('<p>press <i>m</i> to toggle heading hold (BETA)</p>');
+    $('#keyboardInstructions').append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
+    $('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
 
         var self = this;
         setInterval(function() {
@@ -234,12 +234,12 @@
 
     ROVpilot.prototype.adjustVerticleTrim = function adjustVerticleTrim(value){
         this.vtrim+=value;
-        this.positions.lift = (1/1000)*vtrim;
+        this.positions.lift = (1/1000)*this.vtrim;
     };
 
     ROVpilot.prototype.adjustThrottleTrim = function adjustThrottleTrim(value){
         this.ttrim+=value;
-        this.positions.throttle = (1/1000)*ttrim;
+        this.positions.throttle = (1/1000)*this.ttrim;
     };
 
     ROVpilot.prototype.toggleAllTrimHold = function toggleAllTrimHold(){
