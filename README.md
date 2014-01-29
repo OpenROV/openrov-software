@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/OpenROV/openrov-software/badge.png)](https://coveralls.io/r/OpenROV/openrov-software)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/OpenROV/openrov-software/badges/quality-score.png?s=c24130cbf17aaa23f2680e3b45a0ec675ef2037f)](https://scrutinizer-ci.com/g/OpenROV/openrov-software/)
 [![Code Coverage](https://scrutinizer-ci.com/g/OpenROV/openrov-software/badges/coverage.png?s=e356e3047940fb7ea47e36477c6064e23fee12c0)](https://scrutinizer-ci.com/g/OpenROV/openrov-software/)
+
 OpenROV Cockpit
 ================
 
@@ -12,7 +13,8 @@ OpenROV Cockpit
 Getting started
 ---------------
 
-**If you just getting started and want to have working environment for the OpenROV Cockpit, we recommend that you start with using our ready made [OpenROV disk Image](https://github.com/OpenROV/openrov-image/blob/master/README.md)!**
+**If you just getting started and want to have working environment for the OpenROV Cockpit, we recommend that you start with using our last stable release from our [releases page](https://github.com/OpenROV/openrov-software/releases).  If you want to explore building your own image from scratch, refer to our  
+[OpenROV disk Image](https://github.com/OpenROV/openrov-image/blob/master/README.md) project.
 
 Introduction
 ------------
