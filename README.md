@@ -1,5 +1,5 @@
 [![Views in the last 24 hours](https://sourcegraph.com/api/repos/github.com/OpenROV/openrov-software/counters/views-24h.png)](https://sourcegraph.com/github.com/OpenROV/openrov-software)
-[![Build Status](https://secure.travis-ci.org/OpenROV/openrov-software.png?branch=controlboard25)](http://travis-ci.org/OpenROV/openrov-software)
+[![Build Status](https://secure.travis-ci.org/OpenROV/openrov-software.png?branch=master)](http://travis-ci.org/OpenROV/openrov-software)
 [![Code Climate](https://codeclimate.com/github/OpenROV/openrov-software.png)](https://codeclimate.com/github/OpenROV/openrov-software)
 [![Coverage Status](https://coveralls.io/repos/OpenROV/openrov-software/badge.png)](https://coveralls.io/r/OpenROV/openrov-software)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/OpenROV/openrov-software/badges/quality-score.png?s=c24130cbf17aaa23f2680e3b45a0ec675ef2037f)](https://scrutinizer-ci.com/g/OpenROV/openrov-software/)
