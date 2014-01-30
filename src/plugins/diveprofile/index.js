@@ -1,11 +1,11 @@
 function example(name, deps) {
-    console.log("This is where DiveProfile plugin code would execute in the node process.");    
-  
+    console.log("This is where DiveProfile plugin code would execute in the node process.");
+
     deps.io.sockets.on('connection', function (socket) {
         socket.on('depth_togglewatertype', function(){
-            controller.send('dtwa()');
+            deps.rov.send('dtwa()');
         });
-    });        
+    });
 
 };
 
