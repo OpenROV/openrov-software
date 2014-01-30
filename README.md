@@ -27,6 +27,10 @@ We designed the onboard video platform using several key technologies:
 
 Combining these great technologies provides a lot of power and room for future growth.  But is also provides well documented means to extend OpenROV.  With Node.js and Socket.io, not only are we able to stream video to a web browser by updating an image, but we are also able to control the ROV and view valuable sensor information.  This is just the beginning.  
 
+Note on Repository Branches
+---------------------------
+
+The "master" branch is the most current development branch of the code.  All work is done outside and submited as pull requests that *should* be working before they are merged.  There will also be a `<release>`-maintanence branch that has the code from the last stable release.  There may also be a `<release>`-alpha|beta|rc1 which is the next release that is being stabalized.  This will more than likely change as committers come and go, but that it what it looks like today.
 
 Requirements
 ------------
