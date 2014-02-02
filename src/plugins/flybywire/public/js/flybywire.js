@@ -9,7 +9,7 @@
         // Instance variables
         this.cockpit = cockpit;
 	this.flybywireControlActive = false;
-	this.originalsettings = new Object();
+  this.originalsettings = {};
 	this.leftx = 0;
 	this.lefty = 0;
 	this.rightx = 0;
@@ -19,16 +19,16 @@
 	this.targetDepth = 0;
 	this.targetThrottle = 0;
 	this.maxDegreeOfHeadingChange = 5;
-	this.maxDepthChange = .10;
+	this.maxDepthChange = 0.10;
 
         // Add required UI elements
         $('#keyboardInstructions').append('<p><i>g</i> to toggle flybywire</p>');
 	this.listen();
     };
-        
+
     FlyByWire.prototype.listen = function listen() {
         var rov = this;
-        
+
         KEYS[71] = {keydown: function(){rov.toggleControl(); }};// g
 	cockpitEventEmitter.on('rovpilot.control_update',function(controls){if (rov.flybywireControlActive) {rov.processControlChanges(controls)}});
 
@@ -38,26 +38,26 @@
             }
 	});
     };
-    
+
     FlyByWire.prototype.processControlChanges = function processControlChanges(controls) {
 	if (controls.throttle != this.targetThrottle) {
 	    this.targetThrottle = controls.throttle ;
-	    this.cockpit.socket.emit('thro',controls.throttle);    
+	    this.cockpit.socket.emit('thro',controls.throttle);
 	}
 
-	if (controls.yaw != 0) {
+	if (controls.yaw !== 0) {
 	    this.targetHeading += this.maxDegreeOfHeadingChange * controls.yaw;
 	    if (this.targetHeading >= 360)  this.targetHeading-=360;
-	    if (this.targetHeading < 0)  this.targetHeading+=360;	    
+	    if (this.targetHeading < 0)  this.targetHeading+=360;
 	    this.cockpit.socket.emit('holdHeading_on',this.targetHeading);
 	}
-	
-	if (controls.lift != 0) {
+
+	if (controls.lift !== 0) {
 	    if ((controls.lift<0) && (this.targetDepth<=0)) return;
 	    this.targetDepth += this.maxDepthChange * controls.lift;
-	    if (this.targetDepth < 0)  this.targetDepth=0;    
+	    if (this.targetDepth < 0)  this.targetDepth=0;
 	    this.cockpit.socket.emit('holdDepth_on',this.targetDepth);
-	}	
+	}
 
     };
 
@@ -70,7 +70,7 @@
 	    rov.originalsettings.lsy = GAMEPAD.LEFT_STICK_Y ;
 	    rov.originalsettings.rsx = GAMEPAD.RIGHT_STICK_X ;
 	    rov.originalsettings.rsy = GAMEPAD.RIGHT_STICK_Y ;
-	    
+
 	    GAMEPAD.LEFT_STICK_X    = {AXIS_CHANGED: function(v){
 		var direction;
 		rov.leftx = -v;
@@ -79,7 +79,7 @@
 		} else {
 		    direction=-1;
 		}
-		rov.lift = direction * Math.max(Math.abs(rov.leftx),Math.abs(rov.rightx));		
+		rov.lift = direction * Math.max(Math.abs(rov.leftx),Math.abs(rov.rightx));
 		cockpitEventEmitter.emit('rovpilot.manualMotorThrottle',rov.lefty,rov.lift,rov.righty);
 	    } };
 	    GAMEPAD.LEFT_STICK_Y    = {AXIS_CHANGED: function(v){
@@ -96,25 +96,25 @@
 		} else {
 		    direction=-1;
 		}
-		rov.lift = direction * Math.max(Math.abs(rov.leftx),Math.abs(rov.rightx));	
+		rov.lift = direction * Math.max(Math.abs(rov.leftx),Math.abs(rov.rightx));
 		cockpitEventEmitter.emit('rovpilot.manualMotorThrottle',rov.lefty,rov.lift,rov.righty);
 		console.log("rov.lift:" + rov.lift);
-	    } };  
-	   
+	    } };
+
 	    GAMEPAD.RIGHT_STICK_Y   = {AXIS_CHANGED: function(v){
 		var direction;
 		rov.righty = v;
 		cockpitEventEmitter.emit('rovpilot.manualMotorThrottle',rov.lefty,rov.lift,rov.righty);
 		}
 	    };
-	    
+
 	    //			LEFT_TRIGGER: 6,
 		//	RIGHT_TRIGGER: 7,
 	    this.cockpit.socket.emit('holdHeading_toggle');
 	    this.cockpit.socket.emit('holdDepth_toggle');
 	    rov.flybywireControlActive = true;
 	    console.log("FlyByWire Control Active");
-	} else {	    
+	} else {
 	    GAMEPAD.LEFT_STICK_X = rov.originalsettings.lsx;
 	    GAMEPAD.LEFT_STICK_Y = rov.originalsettings.lsy;
 	    GAMEPAD.RIGHT_STICK_X = rov.originalsettings.rsx;
@@ -125,7 +125,7 @@
 	    this.cockpit.socket.emit('holdDepth_toggle');
 	    console.log("FlyByWire Control Deactivated");
 	}
-	
+
     };
     window.Cockpit.plugins.push(FlyByWire);
 
