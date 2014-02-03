@@ -1,0 +1,5 @@
+imports:
+    - javascript
+
+filter:
+    excluded_paths: [src/static/js/libs/*, dashboard/src/static/js/libs/*]
