@@ -3,7 +3,7 @@ var OFFSET = 1500;
 var ArduinoPhysics = function() {
 
     var physics = {};
-      var CONFIG = require('./config');
+    var CONFIG = require('./config');
     //For mapping to the motor Microseconds range from 1000 to 2000. This
     //is mostly a pass through for now as we want to keep the numbers consistent
     //from the UI to the controller for ease of troubleshooting for now.
@@ -21,14 +21,14 @@ var ArduinoPhysics = function() {
       var result;
       if (val<0) result = mapA(val,-1,0,1000,physics.mapRawMotor(CONFIG.preferences.get('deadzone_neg')));
       if (val>0) result = mapA(val,0,1,physics.mapRawMotor(CONFIG.preferences.get('deadzone_pos')),2000);
-      if (val==0) result=1500; 
+      if (val===0) result=1500; 
       result = Math.round(result);
       return result;
     };   
     
     physics.unmapMotor = function (val){
       val = mapA(val,1000,2000,-1,1);
-    }
+    };
 
     physics.mapMotors = function(throttle, yaw, vertical){
         var port = 0,
@@ -43,7 +43,7 @@ var ArduinoPhysics = function() {
             port: physics.mapMotor(port),
             starbord: physics.mapMotor(starbord),
             vertical: physics.mapMotor(vertical)
-        }
+        };
     };
 
     physics.mapVoltageReading = function(voltage){
@@ -52,11 +52,11 @@ var ArduinoPhysics = function() {
 
     //INA169 calculation, VOUT = (IS) (RS) (1000µA/V) (RL)
     physics.mapCurrentReading = function(voltage){
-        return mapA(voltage, 0, 1023, 0, 5) + .4; //add offset
+        return mapA(voltage, 0, 1023, 0, 5) + 0.4; //add offset
     };
 
     physics.mapTiltServo = function (value) {
-        value= limit(value,-.7,.7);
+        value= limit(value,-0.7,0.7);
       return mapA(value,-1,1,1000,2000);
     };
 
@@ -65,7 +65,7 @@ var ArduinoPhysics = function() {
     };
 
     return physics;
-}
+};
 
 function mapA(x, in_min, in_max, out_min, out_max)
 {
