@@ -2,4 +2,4 @@ imports:
     - javascript
 
 filter:
-    excluded_paths: [src/static/js/libs/*, dashboard/src/static/js/libs/*, dashboard/src/plugins/99_software/public/js/*.min.js]
+    excluded_paths: [src/static/bower_components/*,src/static/js/libs/*, dashboard/src/static/js/libs/*, dashboard/src/plugins/99_software/public/js/*.min.js]
