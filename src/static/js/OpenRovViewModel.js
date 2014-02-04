@@ -1,15 +1,17 @@
 
 // These constants map to the arduino device.h file's constants for capabilities of the ROV
+/* jshint -W104 */
 const  LIGHTS_CAPABLE = 1;
 const  CALIBRATION_LASERS_CAPABLE = 2;
 const  CAMERA_MOUNT_1_AXIS_CAPABLE = 3;
 const  COMPASS_CAPABLE = 4;
 const  ORIENTATION_CAPABLE = 5;
 const  DEAPTH_CAPABLE = 6;
+/* jshint +W104 */
 
 function OpenRovViewModel(){
     var self = this;
-    self.telemetry = new Object();
+    self.telemetry = {};
     self.unitMeasurement = ko.observable("metric");
     self.unitTemperature = ko.observable("celsius");
 
@@ -43,32 +45,28 @@ function OpenRovViewModel(){
     
     self.currentCpuUsage = ko.computed(function(){ return (self.currentRawCpuUsage()*100).toFixed(0);});
 
-	self.convertedDepth = ko.computed(function(){
-		switch(self.unitMeasurement()){
-			case "metric":
-				return self.currentDepth()/100+"m";
-				break;
-			case "imperial":
-				return (self.currentDepth()/30.48).toFixed(2)+"ft";
-				break;
-			default: return "--";
-		}
-	});
+    self.convertedDepth = ko.computed(function(){
+        switch(self.unitMeasurement()){
+            case "metric":
+                return self.currentDepth()/100+"m";
+            case "imperial":
+                return (self.currentDepth()/30.48).toFixed(2)+"ft";
+            default: return "--";
+        }
+    });
 
-	self.convertedTemperature = ko.computed(function(){
-		switch(self.unitTemperature()){
-			case "celsius":
-				return self.currentTemperature().toFixed(2)+"&deg;C";
-				break;
-			case "farenheit":
-				return ((9/5)*self.currentTemperature()+32).toFixed(2)+"&deg;F";
-				break;
-			default: return "--";
-		}
-	});
+    self.convertedTemperature = ko.computed(function(){
+        switch(self.unitTemperature()){
+            case "celsius":
+                return self.currentTemperature().toFixed(2)+"&deg;C";
+            case "farenheit":
+                return ((9/5)*self.currentTemperature()+32).toFixed(2)+"&deg;F";
+            default: return "--";
+        }
+    });
 
     self.servoTiltStyle = ko.computed(function(){
-        var angle = (90/500)*self.currentTiltPosition()+90//*-45;
+        var angle = (90/500)*self.currentTiltPosition()+90;//*-45;
         return "-webkit-transform: rotate("+angle+"deg); -moz-transform: rotate("+angle+"deg);transform: rotate("+angle+"deg)";
     });
 
@@ -104,98 +102,91 @@ function OpenRovViewModel(){
             return msToTime(self.currentRunTime());
         });
 
-	self.arduinoFirmwareVM = new ArduinoFirmwareViewModel();
-	
-	self.updateSettings = function(settings){
-	    if ('deadzone_pos' in settings) self.deadzone_pos(settings.deadzone_pos);
-	    if ('deadzone_neg' in settings) self.deadzone_neg(settings.deadzone_neg);
-	    if ('smoothingIncriment' in settings) self.smoothingIncriment(settings.smoothingIncriment);
-	    if ('reverse_port_thruster' in settings ) self.reversePortThruster(settings.reverse_port_thruster);
-	    if ('reverse_starbord_thruster' in settings ) self.reverseStarbordThruster(settings.reverse_starbord_thruster);
-	    if ('reverse_lift_thruster' in settings ) self.reverseLiftThruster(settings.reverse_lift_thruster);
-	    if ('googletalk_rovid' in settings) self.googleTalkROVid(settings.googletalk_rovid);
-	    if ('googletalk_rovpassword' in settings) self.googleTalkROVpassword(settings.googletalk_rovpassword);
-	    if ('googletalk_rov_pilotid' in settings) self.googleTalkPilotId(settings.googletalk_rov_pilotid);
-	}
-	
-	self.updateRovsys = function(data){
-	    console.log('got RovSys update from Arduino');
-	    if ('capabilities' in data) {
-		self.capabilities(data.capabilities);
-	    }
-	}
-	
-	self.updateStatus = function(data) {
-		if ('depth' in data) self.currentDepth(data.depth);
-		if ('temp' in data) self.currentTemperature(data.temp);
-		if ('time' in data) self.currentRunTime(data.time);
-		if ('vout' in data) self.currentVoltage(data.vout);
-		if ('iout' in data) self.currentCurrent(data.iout);
-		if ('servo' in data) self.currentTiltPosition(data.servo);
-		if ('cpuUsage' in data) self.currentRawCpuUsage(data.cpuUsage);
-        	self.lastPing(new Date());
-		for (i in data){
-		  self.telemetry[i] = data[i];
-		}
-		self.rawTelemetry([]);
-		for (var item in self.telemetry){
-		  if (self.telemetry.hasOwnProperty(item)) {
-		    self.rawTelemetry().push({ key: item, value: self.telemetry[item] });
-		  }
-		};
-		self.rawTelemetry.valueHasMutated();
-		
-	}
-	
-	self.updatePhotos = function(data) {
-	    self.snapshots(data);
-	}
+    self.arduinoFirmwareVM = new ArduinoFirmwareViewModel();
+    
+    self.updateSettings = function(settings){
+        if ('deadzone_pos' in settings) self.deadzone_pos(settings.deadzone_pos);
+        if ('deadzone_neg' in settings) self.deadzone_neg(settings.deadzone_neg);
+        if ('smoothingIncriment' in settings) self.smoothingIncriment(settings.smoothingIncriment);
+        if ('reverse_port_thruster' in settings ) self.reversePortThruster(settings.reverse_port_thruster);
+        if ('reverse_starbord_thruster' in settings ) self.reverseStarbordThruster(settings.reverse_starbord_thruster);
+        if ('reverse_lift_thruster' in settings ) self.reverseLiftThruster(settings.reverse_lift_thruster);
+        if ('googletalk_rovid' in settings) self.googleTalkROVid(settings.googletalk_rovid);
+        if ('googletalk_rovpassword' in settings) self.googleTalkROVpassword(settings.googletalk_rovpassword);
+        if ('googletalk_rov_pilotid' in settings) self.googleTalkPilotId(settings.googletalk_rov_pilotid);
+    };
+    
+    self.updateRovsys = function(data){
+        console.log('got RovSys update from Arduino');
+        if ('capabilities' in data) {
+        self.capabilities(data.capabilities);
+        }
+    };
+    
+    self.updateStatus = function(data) {
+        if ('depth' in data) self.currentDepth(data.depth);
+        if ('temp' in data) self.currentTemperature(data.temp);
+        if ('time' in data) self.currentRunTime(data.time);
+        if ('vout' in data) self.currentVoltage(data.vout);
+        if ('iout' in data) self.currentCurrent(data.iout);
+        if ('servo' in data) self.currentTiltPosition(data.servo);
+        if ('cpuUsage' in data) self.currentRawCpuUsage(data.cpuUsage);
+            self.lastPing(new Date());
+        for (i in data){
+          self.telemetry[i] = data[i];
+        }
+        self.rawTelemetry([]);
+        for (var item in self.telemetry){
+          if (self.telemetry.hasOwnProperty(item)) {
+            self.rawTelemetry().push({ key: item, value: self.telemetry[item] });
+          }
+        }
+        self.rawTelemetry.valueHasMutated();
+    };
+    
+    self.updatePhotos = function(data) {
+        self.snapshots(data);
+    };
 
     self.updateBrightness = function(value) {
         var newVal = self.currentBrightness();
         newVal += value;
         if(newVal<0 || newVal >10) return;
         self.currentBrightness(newVal);
-    }
+    };
     
     ko.bindingHandlers.slider = {
-	init: function (element, valueAccessor, allBindingsAccessor) {
-	    var options = allBindingsAccessor().sliderOptions || {};
-	    var sliderValues = ko.utils.unwrapObservable(valueAccessor());
+        init: function (element, valueAccessor, allBindingsAccessor) {
+            var options = allBindingsAccessor().sliderOptions || {};
+            var sliderValues = ko.utils.unwrapObservable(valueAccessor());
 
-	    if(sliderValues.min !== undefined) {
-		options.range = true;
-		options.values = [0,0];
-	    }        
-	    
-	    options.slide = function(e, ui) {
-		if(sliderValues.min) {
-		    sliderValues.min(ui.values[0]);
-		    sliderValues.max(ui.values[1]);                                 
-		} else {
-		    valueAccessor()(ui.value);
-		}
-	    };
-	    
-	    ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-		$(element).slider("destroy");
-	    });
-	    
-	    $(element).slider(options);
-	},
-	update: function (element, valueAccessor) {
-	    var sliderValues = ko.toJS(valueAccessor());
-	    if(sliderValues.min !== undefined) {
-		$(element).slider("values", [sliderValues.min, sliderValues.max]);
-	    } else {
-		$(element).slider("value", sliderValues);
-	    }
-	    
-    
-	}
+            if(sliderValues.min !== undefined) {
+            options.range = true;
+            options.values = [0,0];
+            }        
+            
+            options.slide = function(e, ui) {
+            if(sliderValues.min) {
+                sliderValues.min(ui.values[0]);
+                sliderValues.max(ui.values[1]);                                 
+            } else {
+                valueAccessor()(ui.value);
+            }
+            };
+            
+            ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                $(element).slider("destroy");
+            });
+            
+            $(element).slider(options);
+        },
+        update: function (element, valueAccessor) {
+            var sliderValues = ko.toJS(valueAccessor());
+            if(sliderValues.min !== undefined) {
+            $(element).slider("values", [sliderValues.min, sliderValues.max]);
+            } else {
+            $(element).slider("value", sliderValues);
+            }
+        }
     };    
-    
-
-    
-
 }
