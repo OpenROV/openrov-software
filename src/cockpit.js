@@ -81,12 +81,12 @@ io.sockets.on('connection', function (socket) {
     
   socket.send('initialize');  // opens socket with client
   if(camera.IsCapturing) {
-	socket.emit('videoStarted');
-	console.log("Send videoStarted to client 2");
+  socket.emit('videoStarted');
+  console.log("Send videoStarted to client 2");
   } else {
-	console.log("Trying to restart mjpeg streamer");
-	camera.capture();
-	socket.emit('videoStarted');
+  console.log("Trying to restart mjpeg streamer");
+  camera.capture();
+  socket.emit('videoStarted');
   }
 
   controller.updateSetting();
@@ -154,35 +154,35 @@ io.sockets.on('connection', function (socket) {
 
     controller.on('status',function(status){
         socket.volatile.emit('status',status);
-    })
+    });
 
     controller.on('navdata',function(navdata){
         socket.volatile.emit('navdata',navdata);
-    })
+    });
     
     controller.on('rovsys', function(data){
         socket.emit('rovsys',data);
-    })
+    });
     
     controller.on('Arduino-settings-reported',function(settings){
         socket.emit('settings',settings);
         console.log('sending arduino settings to web client');
-    })
-    
+    });
+  
     controller.on('settings-updated',function(settings){
         socket.emit('settings',settings);
         console.log('sending settings to web client');
-    })
+    });
     
   
 
    globalEventLoop.on('videoStarted', function(){
-	socket.emit('videoStarted');
+  socket.emit('videoStarted');
         console.log("sent videoStarted to client");
    });
 
    globalEventLoop.on('videoStopped', function(){
-	socket.emit('videoStopped');
+  socket.emit('videoStopped');
    });
 
   arduinoUploadController.initializeSocket(socket);
@@ -285,4 +285,6 @@ fs.readdir(dir, function (err, files) {
 server.listen(app.get('port'), function() {
   console.log('Started listening on port: ' + app.get('port'));
 });
+
+
 
