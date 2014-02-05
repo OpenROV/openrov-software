@@ -89,59 +89,10 @@ volatile byte wdt_resets = 0; //watchdog resets
 
 // IMPORTANT!
 // array[0] will be the number of arguments in the command
-int array[MAX_ARGS]; 
+int array[MAX_ARGS];
 Timer Output1000ms;
 Timer Output100ms;
 int loops_per_sec;
-
-void setup(){
-  disableWatchdog();
-  enableWatchdog();
-  Serial.begin(115200);
-  //watchdogOn();
-
-  check = EEPROM.read(0);
-  
-  // if the watchdog triggered and the ISR completed, the first EEPROM byte will be a "1"
-  if(check == 1)
-  {
-    wdt_resets = EEPROM.read(1);
-    EEPROM.write(0,0); // reset byte so the EEPROM is not read on next startup
-    Serial.println("log:Watchdog was triggered and the following was read from EEPROM;");
-    Serial.print("log:");
-    Serial.println(wdt_resets);
-    Serial.print(';');
-  }
-  
-  pinMode(13, OUTPUT);
-  Output1000ms.reset();
-  Output100ms.reset();
-  
-  DeviceManager::doDeviceSetups();
-}
-
-
-void loop(){
-  wdt_reset();
-  cmd.get();
-  
-  DeviceManager::doDeviceLoops(cmd);
-  loops_per_sec++;
-  if (Output1000ms.elapsed(1000)) {
-    OutputSharedData(); 
-    Serial.print(F("alps:"));
-    Serial.print(loops_per_sec);
-    Serial.println(';');
-    loops_per_sec = 0; 
-  }
-  if (Output100ms.elapsed(100)) {
-    OutputNavData();
-  }
-  
-}
-
-
-
 
 /* sets the watchdog timer both interrupt and reset mode with an 8 second timeout */
 void enableWatchdog()
@@ -164,6 +115,57 @@ void disableWatchdog()
   WDTCSR = 0x00;
   sei();
 }
+
+void setup(){
+  disableWatchdog();
+  enableWatchdog();
+  Serial.begin(115200);
+  //watchdogOn();
+
+  check = EEPROM.read(0);
+
+  // if the watchdog triggered and the ISR completed, the first EEPROM byte will be a "1"
+  if(check == 1)
+  {
+    wdt_resets = EEPROM.read(1);
+    EEPROM.write(0,0); // reset byte so the EEPROM is not read on next startup
+    Serial.println("log:Watchdog was triggered and the following was read from EEPROM;");
+    Serial.print("log:");
+    Serial.println(wdt_resets);
+    Serial.print(';');
+  }
+
+  pinMode(13, OUTPUT);
+  Output1000ms.reset();
+  Output100ms.reset();
+
+  DeviceManager::doDeviceSetups();
+}
+
+
+void loop(){
+  wdt_reset();
+  cmd.get();
+
+  DeviceManager::doDeviceLoops(cmd);
+  loops_per_sec++;
+  if (Output1000ms.elapsed(1000)) {
+    OutputSharedData();
+    Serial.print(F("alps:"));
+    Serial.print(loops_per_sec);
+    Serial.println(';');
+    loops_per_sec = 0;
+  }
+  if (Output100ms.elapsed(100)) {
+    OutputNavData();
+  }
+
+}
+
+
+
+
+
 
 /* this is called when the watchdog times out and before the reset */
 ISR(WDT_vect)
