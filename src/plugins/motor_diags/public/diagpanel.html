@@ -1,0 +1,53 @@
+<h4>Manually test motors</h4>
+<div id="motordiags">
+   <div class="control-group invisible-field">
+      <label class="control-label" for="portMotorSpeed">Port Motor</label>
+      <input type="text" data-bind="value: portMotorSpeed" />
+      <div class="controls">
+         <div id="portMotorSpeed"></div>
+      </div>
+      <div  class="text-center">
+         <div  data-bind="foreach: diagnosticMotorSpeedButtons">
+            <button class="btn" type="button" data-bind="text: $data,
+               click: function(data, event) { $parent.setMotorTestSpeed('portMotorSpeed', $data)}"></button>
+         </div>
+         <label class="" for="reverse-port-thruster">
+         <input type="checkbox" data-bind="checked: reversePortThruster" id="reverse-port-thruster" />
+         Reverse Port Thruster
+         </label>
+      </div>
+   </div>
+   <div class="control-group invisible-field">
+      <label class="control-label" for="starbordMotorSpeed">Starboard Motor</label>
+      <input type="text"  data-bind="value: starbordMotorSpeed" />
+      <div class="controls">
+         <div id="starbordMotorSpeed"></div>
+      </div>
+      <div  class="text-center">
+         <div  data-bind="foreach: diagnosticMotorSpeedButtons">
+            <button class="btn" type="button" data-bind="text: $data,
+               click: function(data, event) { $parent.setMotorTestSpeed('starbordMotorSpeed', $data)}"></button>
+         </div>
+         <label class="" for="reverse-starbord-thruster"><input type="checkbox" data-bind="checked: reverseStarbordThruster" />
+         Reverse Starbord Thruster
+         </label>
+      </div>
+   </div>
+   <div class="control-group invisible-field">
+      <label class="control-label" for="verticalMotorSpeedVal">Vertical Motor</label>
+      <input type="text"  data-bind="value: verticalMotorSpeed" />
+      <div class="controls">
+         <div id="verticalMotorSpeed"></div>
+      </div>
+      <div  class="text-center">
+         <div  data-bind="foreach: diagnosticMotorSpeedButtons">
+            <button class="btn" type="button" data-bind="text: $data,
+               click: function(data, event) { $parent.setMotorTestSpeed('verticalMotorSpeed', $data)}"></button>
+         </div>
+         <label class="control-label" for="reverse-lift-thruster">
+         <input type="checkbox" data-bind="checked: reverseLiftThruster" />
+         Reverse Verticle Thruster
+         </label>
+      </div>
+   </div>
+</div>
