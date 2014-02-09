@@ -7,11 +7,15 @@
     this.cockpit = cockpit;
     this.snapshots = ko.observableArray([]);
     // Add required UI elements
-    $('#diagnostic').after('<div id="photospanel"></div>');
+    $('#diagnostic').after('<div class="drop-in-right" id="photos"></div>');
     $('#menuitems').append('<li><a href="#" id="show-photos">Photos</a></li>');
     $('#buttonPanel').append('<button id="capture-photo" class="btn">Capture</button>');
     var self = this;
-    $('#photospanel').load('../plugins/photocapture/public/photospanel.html', function () {
+
+    var jsFileLocation = $('script[src*=photocapture]').attr('src');  // the js file path
+    jsFileLocation = jsFileLocation.replace('photocapture.js', '');   // the js folder path
+
+    $('#photos').load(jsFileLocation+'../photospanel.html', function () {
       // Register the various event handlers
       self.listen();
       ko.applyBindings(self, $('#photos')[0]);
@@ -37,7 +41,8 @@
     $('#show-photos').click(function () {
       $('#photos').show('fold');
       photoc.cockpit.sendUpdateEnabled = false;
-      Mousetrap.bind('esc', photoc.hidePhotos);
+      var self = photoc;
+      Mousetrap.bind('esc', function(){self.hidePhotos();});
     });
     $('#photos .back-button').click(function () {
       photoc.hidePhotos();
