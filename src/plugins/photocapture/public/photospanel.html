@@ -1,0 +1,14 @@
+<!-- photos -->
+
+   <div class="back-button"></div>
+   <h3>Photos</h3>
+   <div class="settings-block" style="position: relative; overflow: auto; height: 100%">
+      <ul class="thumbnails" data-bind="foreach: snapshots">
+         <li class="">
+            <a target="_blank" data-bind="attr: { href: $data}" class="thumbnail">
+            <img data-bind="attr: { src: $data}"  width="260" height="180" alt="">
+            </a>
+         </li>
+      </ul>
+   </div>
+
