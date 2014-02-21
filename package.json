@@ -8,7 +8,7 @@
     "url": "git://github.com/OpenROV/openrov-software.git"
   },
   "dependencies": {
-    "express": ">= 3.0.0rc5",
+    "express": ">= 3.4.8",
     "serialport": ">= 1.0.8",
     "ejs": "~0.8.3",
     "socket.io": "",
@@ -28,6 +28,6 @@
     "serialport"
   ],
   "engines": {
-    "node": ">= 0.8.11"
+    "node": ">= 0.10.15"
   }
 }
