@@ -10,6 +10,7 @@
     $('#diagnostic').after('<div class="drop-in-right" id="photos"></div>');
     $('#menuitems').append('<li><a href="#" id="show-photos">Photos</a></li>');
     $('#buttonPanel').append('<button id="capture-photo" class="btn">Capture</button>');
+    $('#keyboardInstructions').append('<p>press <i>c</i> to capture an image</p>');
     var self = this;
 
     var jsFileLocation = $('script[src*=photocapture]').attr('src');  // the js file path
@@ -38,6 +39,16 @@
       photoc.cockpit.socket.emit('snapshot');
       console.log('send snapshot request to server');
     });
+    GAMEPAD.LB = {
+      BUTTON_DOWN: function () {
+        photoc.cockpit.socket.emit('snapshot');
+      }
+    };
+    KEYS[67] = { //c
+      keydown: function () {
+        photoc.cockpit.socket.emit('snapshot');
+      }
+    };
     $('#show-photos').click(function () {
       $('#photos').show('fold');
       photoc.cockpit.sendUpdateEnabled = false;
