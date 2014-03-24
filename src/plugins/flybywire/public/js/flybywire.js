@@ -34,11 +34,7 @@
         rov.processControlChanges(controls);
       }
     });
-    this.cockpit.socket.on('navdata', function (data) {
-      if (!jQuery.isEmptyObject(data)) {
-        data.hdgd();
-      }
-    });
+
   };
   FlyByWire.prototype.processControlChanges = function processControlChanges(controls) {
     if (controls.throttle != this.targetThrottle) {

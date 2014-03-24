@@ -41,6 +41,9 @@ var OpenROVController = function (eventLoop) {
   setInterval(function () {
     controller.emit('status', statusdata);
   }, 1000);
+  hardware.on('serial-recieved', function (data) {
+    globalEventLoop.emit('serial-recieved', data);
+  });
   hardware.on('status', function (status) {
     for (i in status) {
       statusdata[i] = status[i];
@@ -206,6 +209,9 @@ var OpenROVController = function (eventLoop) {
   });
   globalEventLoop.on('register-ArduinoCapabilities', function (val) {
     controller.Capabilities = val;
+  });
+  globalEventLoop.on('SerialMonitor_toggle_rawSerial', function () {
+    hardware.toggleRawSerialData();
   });
   globalEventLoop.on('serial-stop', function () {
     logger.log('Closing serial connection for firmware upload');
