@@ -2,7 +2,7 @@ var serialPort = require('serialport'), EventEmitter = require('events').EventEm
 function Hardware() {
   var hardware = new EventEmitter();
   var reader = new StatusReader();
-  this.serialConnected = false;
+  var serialConnected = false;
   var emitRawSerialData = false;
   hardware.serial = {};
   var self = this;
@@ -14,25 +14,29 @@ function Hardware() {
       baudrate: CONFIG.serial_baud,
       parser: serialPort.parsers.readline('\r\n')
     });
+    serialConnected = true;
+    logger.log('!Serial port open');
     hardware.serial.on('close', function (data) {
       logger.log('!Serial port closed');
-      self.serialConnected = false;
+      serialConnected = false;
     });
-    var self = this;
+
     hardware.serial.on('data', function (data) {
       var status = reader.parseStatus(data);
       hardware.emit('status', status);
       if (emitRawSerialData)
         hardware.emit('serial-recieved', data + '\n');
     });
-    self.serialConnected = true;
+
   };
   hardware.write = function (command) {
-    logger.command(command);
-    if (CONFIG.production && self.serialConnected) {
+    logger.log(command);
+    if (CONFIG.production && serialConnected) {
       hardware.serial.write(command);
       if (emitRawSerialData)
         hardware.emit('serial-sent', command);
+    } else {
+        logger.log('DID NOT SEND');
     }
   };
   hardware.toggleRawSerialData = function toggleRawSerialData() {
@@ -40,7 +44,7 @@ function Hardware() {
   };
   hardware.close = function () {
     hardware.serial.close();
-    self.serialConnected = false;
+    serialConnected = false;
   };
   return hardware;
 }
