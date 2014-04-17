@@ -21,6 +21,12 @@ fi
 if [ -f /var/.RESIZE_ROOT ]; then
   resize2fs /dev/mmcblk0p2
   rm /var/.RESIZE_ROOT
+	if [ -e /sys/class/leds/beaglebone\:green\:usr0/trigger ] ; then
+		echo default-on > /sys/class/leds/beaglebone\:green\:usr0/trigger
+		echo default-off > /sys/class/leds/beaglebone\:green\:usr1/trigger
+		echo default-on > /sys/class/leds/beaglebone\:green\:usr2/trigger
+		echo default-off > /sys/class/leds/beaglebone\:green\:usr3/trigger
+	fi
 fi
 
 if [ ! -f /var/swapfile ]; then
