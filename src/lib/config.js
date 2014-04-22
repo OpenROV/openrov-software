@@ -32,10 +32,10 @@ nconf.defaults({
   'photoDirectory': '/var/www/openrov/photos',
   'water_type': 0,
   'thrust_modifier_port': 1,
-  'thrust_modifier_vertical': 1,
+  'thrust_modifier_vertical': -1,
   'thrust_modifier_starbord': 1,
   'thrust_modifier_nport': 2,
-  'thrust_modifier_nvertical': 2,
+  'thrust_modifier_nvertical': -2,
   'thrust_modifier_nstarbord': 2
 });
 module.exports = {
