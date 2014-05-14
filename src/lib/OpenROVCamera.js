@@ -45,7 +45,7 @@ var OpenROVCamera = function (options) {
               '-o',
               '/usr/local/lib/output_http.so -p ' + options.port
             ];
-            
+
   // End camera process gracefully
   camera.close = function() {
     if (!_capturing) return;
@@ -61,11 +61,14 @@ var OpenROVCamera = function (options) {
     request('http://localhost:' + options.port +'/?action=snapshot').pipe(fs.createWriteStream(filename));
     callback(filename);
   }
-  
+
   // Actual camera capture starting mjpg-stremer
-   
+
   camera.capture = function (callback) {
     logger.log('initiating camera on', options.device);
+
+    logger.log('ensure beagle is at 100% cpu for this camera');
+    spawn('cpufreq-set',['-g','performance']);
 
     // if camera working, should be at options.device (most likely /dev/video0 or similar)
     fs.exists(options.device, function(exists) {
@@ -87,12 +90,12 @@ var OpenROVCamera = function (options) {
 //	camera.emit('error.device',data);
       });
       console.log('camera started');
-      
+
       capture_process.on('exit', function (code) {
         console.log('child process exited with code ' + code);
 	_capturing = false;
 	camera.emit('error.device',code);
-      });      
+      });
     });
   };
   return camera;
