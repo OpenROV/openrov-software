@@ -32,9 +32,9 @@
        // div.style.bottom = '0px';
         div.style.backgroundImage = '-webkit-radial-gradient(50% 50%, circle cover, rgb(68, 68, 68) 0%, black 100%)';
 
-        this.visibleWidth = divRect.width*(360/120); // divRect.width;
+        this.visibleWidth = divRect.width*(720/120); // divRect.width;
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.visibleWidth * 1.5;
+        this.canvas.width = this.visibleWidth * 2;
         this.canvas.height = divRect.height;
         this.canvas.style.position = 'absolute';
         this.canvas.className = 'hud';
@@ -46,21 +46,21 @@
 
         x = 0;
         ctx.textAlign = 'center';
-        for (i = 0; i < 36 * 2; i += 1.5) {
+        for (i = 0; i < 360 * 2; i += 1) {
             ctx.beginPath();
             ctx.moveTo(x, 0);
 
-            if (i % 9 === 0) {
+            if (i % 90 === 0) {
                 ctx.fillStyle = 'white';
                 ctx.font = 'bold';
-                ctx.fillText(headings[i / 9 % 4], x, 24);
+                ctx.fillText(headings[i / 90 % 4], x, 24);
                 ctx.strokeStyle = 'white';
                 ctx.lineTo(x, 10);
                 ctx.lineWidth = 2;
-            } else if (i % 3 === 0) {
+            } else if (i % 10 === 0) {
                 ctx.fillStyle = '#CCC';
                 ctx.font = 'normal';
-                ctx.fillText(i % 36, x, 24);
+                ctx.fillText(i % 360, x, 24);
                 ctx.strokeStyle = 'white';
                 ctx.lineWidth = 1;
                 ctx.lineTo(x, 7);
@@ -70,7 +70,7 @@
                 ctx.lineWidth = 0.5;
             }
             ctx.stroke();
-            x += this.visibleWidth / 24;
+            x += this.visibleWidth / 720;
         }
         div.appendChild(this.canvas);
 
@@ -79,7 +79,7 @@
         needle.height = 15;
         needle.style.top = 0;
 
-        needle.style.left = Math.floor(this.visibleWidth / 2 - needle.width / 2) + 'px';
+        needle.style.left = Math.floor(this.visibleWidth / 2 * (120/720) - needle.width / 2) + 'px';
         needle.style.position = 'absolute';
         ctx = needle.getContext('2d');
         ctx.fillStyle = 'red';
@@ -101,13 +101,14 @@
         while (angle < -180) {
             angle += 360;
         }
-        offset = - angle * (this.visibleWidth / 360);
+        offset = - angle * (this.visibleWidth / 720);
         offset -= (this.visibleWidth / 2);
 
 
         // '-webkit-transform'
         window.requestAnimationFrame(function () {
-            compass.canvas.getContext('2d').scale((10),1);
+           // compass.canvas.getContext('2d').scale((10),1);
+           compass.canvas.style.webkitTransform = 'scale(,1)' + offset + 'px)';
 
             compass.canvas.style.webkitTransform = 'translateX(' + offset + 'px)';
         });

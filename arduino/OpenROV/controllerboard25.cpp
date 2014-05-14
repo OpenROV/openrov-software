@@ -152,6 +152,7 @@ void Controller25::device_loop(Command command){
   } 
   
   if (onesecondtimer.elapsed (1000)){
+    readTemp();
     Serial.print(F("BRDT:"));
     Serial.print(celsiusTempRead);
     Serial.print(';');

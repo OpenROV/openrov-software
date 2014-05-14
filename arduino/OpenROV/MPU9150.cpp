@@ -15,8 +15,13 @@
 #include "Timer.h"
 
 MPU9150Lib MPU;                                              // the MPU object
-CALLIB_DATA calData;
+int MPUDeviceId = 1;
+boolean DidInit = false;
+boolean InCallibrationMode = false;
+Timer MPU9150ReInit;
+CALLIB_DATA calData; 
 Timer calibration_timer;
+int counter = 0;
 //  MPU_UPDATE_RATE defines the rate (in Hz) at which the MPU updates the sensor data and DMP output
 
 //  MPU_UPDATE_RATE defines the rate (in Hz) at which the MPU updates the sensor data and DMP output
@@ -34,52 +39,86 @@ Timer calibration_timer;
 
 #define  MPU_MAG_MIX_GYRO_ONLY          0                   // just use gyro yaw
 #define  MPU_MAG_MIX_MAG_ONLY           1                   // just use magnetometer and no gyro yaw
-#define  MPU_MAG_MIX_GYRO_AND_MAG       10                  // a good mix value
-#define  MPU_MAG_MIX_GYRO_AND_SOME_MAG  50                  // mainly gyros with a bit of mag correction
+#define  MPU_MAG_MIX_GYRO_AND_MAG       10                  // a good mix value 
+#define  MPU_MAG_MIX_GYRO_AND_SOME_MAG  50                  // mainly gyros with a bit of mag correction 
 
 //  MPU_LPF_RATE is the low pas filter rate and can be between 5 and 188Hz
 
-#define MPU_LPF_RATE   40
+#define MPU_LPF_RATE   5
+
 
 void MPU9150::device_setup(){
   //Todo: Read calibration values from EPROM
   Wire.begin();
-  MPU.selectDevice(1);
-  MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_AND_MAG, MAG_UPDATE_RATE, MPU_LPF_RATE);
+  MPU.selectDevice(MPUDeviceId);
+  //  MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_AND_MAG, MAG_UPDATE_RATE, MPU_LPF_RATE); 
+  if (!MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_AND_MAG, MAG_UPDATE_RATE, MPU_LPF_RATE)){
+	Serial.println(F("log:Trying other MPU9150 address to init;"));
+	Serial.print(F("log:IMU Address was :"));
+	Serial.print(1);
+	MPUDeviceId = !MPUDeviceId;
+	Serial.print(F(" but is now:"));
+	Serial.print(MPUDeviceId);
+	Serial.println(";");
+	MPU.selectDevice(MPUDeviceId);
+	if (MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_AND_MAG, MAG_UPDATE_RATE, MPU_LPF_RATE)){
+		DidInit = true;
+		Serial.println(F("log:Init worked the second time;"));
+	} else {
+		Serial.println(F("log:Failed to init on both addresses;"));
+	}
+  } else {
+	DidInit = true;
+	Serial.println(F("log:init on primary addresses;"));
+  }                             // start the MPU
   Settings::capability_bitarray |= (1 << COMPASS_CAPABLE);
   Settings::capability_bitarray |= (1 << ORIENTATION_CAPABLE);
+  MPU9150ReInit.reset();
 }
 
 void MPU9150::device_loop(Command command){
+  if (!DidInit){
+    if( MPU9150ReInit.elapsed(30000)){
+	MPU9150::device_setup();
+    }
+     return;
+  }
   if (command.cmp("ccal")){
    // Compass_Calibrate();
    // The IMU needs both Magnatrometer and Acceleromter to be calibrated. This attempts to do them both at the same time
-    calLibRead(DEVICE_TO_CALIBRATE, &calData);               // pick up existing accel data if there
+    calLibRead(MPUDeviceId, &calData);               // pick up existing accel data if there   
 
     calData.accelValid = false;
     calData.accelMinX = 0x7fff;                              // init accel cal data
     calData.accelMaxX = 0x8000;
-    calData.accelMinY = 0x7fff;
+    calData.accelMinY = 0x7fff;                              
     calData.accelMaxY = 0x8000;
-    calData.accelMinZ = 0x7fff;
-    calData.accelMaxZ = 0x8000;
-
+    calData.accelMinZ = 0x7fff;                             
+    calData.accelMaxZ = 0x8000; 
+    
     calData.magValid = false;
     calData.magMinX = 0x7fff;                                // init mag cal data
     calData.magMaxX = 0x8000;
-    calData.magMinY = 0x7fff;
+    calData.magMinY = 0x7fff;                              
     calData.magMaxY = 0x8000;
-    calData.magMinZ = 0x7fff;
-    calData.magMaxZ = 0x8000;
-
-    MPU.useAccelCal(false);
+    calData.magMinZ = 0x7fff;                             
+    calData.magMaxZ = 0x8000;    
+    
+    MPU.useAccelCal(false); 
     //MPU.init(MPU_UPDATE_RATE, 5, 1, MPU_LPF_RATE);
-
-    int counter = 359;
+    
+    counter = 359;
+    InCallibrationMode = true;
     calibration_timer.reset();
     Serial.println(F("!!!:While the compass counts down from 360 to 0, rotate the ROV slowly in all three axis;"));
 
-    while(counter>0){
+  }
+
+  if (InCallibrationMode){
+    bool changed = false;
+
+    
+    if(counter>0){
       if (MPU.read()) {                                        // get the latest data
         changed = false;
         if (MPU.m_rawAccel[VEC3_X] < calData.accelMinX) {
@@ -129,7 +168,7 @@ void MPU9150::device_loop(Command command){
          if (MPU.m_rawMag[VEC3_Z] > calData.magMaxZ) {
           calData.magMaxZ = MPU.m_rawMag[VEC3_Z];
           changed = true;
-        }
+        }        
 
         if (changed) {
           Serial.print(F("dia:accel.MinX=")); Serial.print(calData.accelMinX); Serial.println(";");
@@ -149,19 +188,37 @@ void MPU9150::device_loop(Command command){
       if (calibration_timer.elapsed (1000)) {
         counter--;
         navdata::HDGD = counter;
+        Serial.print(F("hdgd:"));
+        Serial.print(navdata::HDGD);
+        Serial.print(';');        
       }
     }
-    calData.accelValid = true;
-    calData.magValid = true;
-    calLibWrite(DEVICE_TO_CALIBRATE, &calData);
-    Serial.println(F("log:Accel cal data saved for device;"));
-
+    if (counter <= 0){
+      calData.accelValid = true;
+      calData.magValid = true;
+      calLibWrite(MPUDeviceId, &calData);
+      Serial.println(F("log:Accel cal data saved for device;"));
+      InCallibrationMode = false;
+    }
+    return;  //prevents the normal read and reporting of IMU data
   }
   else if (command.cmp("i2cscan")){
    // scan();
   }
+//    MPU.selectDevice(MPUDeviceId);
     MPU.read();
-    navdata::HDGD = MPU.m_fusedEulerPose[VEC3_Z] * RAD_TO_DEGREE + 180;  //need to confirm
+//    {
+//        Serial.println(F("log:SwappingIMUAddress;"));
+//        MPUDeviceId = !MPUDeviceId;
+//        MPU.selectDevice(MPUDeviceId);
+//        if(!MPU.read()){
+//		Serial.println(F("log:Failed to read IMU on both addresses. Sleeping for 1 minute"));
+//		DidInit = false;
+//	}
+//    }
+    navdata::HDGD = MPU.m_fusedEulerPose[VEC3_Z] * RAD_TO_DEGREE;
+    //To convert to-180/180 to 0/360
+    if (navdata::HDGD < 0) navdata::HDGD+=360;
     navdata::PITC = MPU.m_fusedEulerPose[VEC3_X] * RAD_TO_DEGREE;
     navdata::ROLL = MPU.m_fusedEulerPose[VEC3_Y] * RAD_TO_DEGREE;
     navdata::YAW = MPU.m_fusedEulerPose[VEC3_Z] * RAD_TO_DEGREE;
