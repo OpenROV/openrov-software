@@ -28,7 +28,7 @@ try {
 nconf.defaults({
   'deadzone_pos': 0.1,
   'deadzone_neg': -0.1,
-  'smoothingIncriment': 4,
+  'smoothingIncriment': 40,
   'photoDirectory': '/var/www/openrov/photos',
   'water_type': 0,
   'thrust_modifier_port': 1,
