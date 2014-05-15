@@ -666,7 +666,7 @@ Gamepad.prototype._update = function() {
 	//window.requestAnimationFrame(function() {
 	//	self._update();
 	//});
-	setTimeout(function(){self._update();},250);
+	setTimeout(function(){self._update();},100);
 };
 
 /**
