@@ -19,19 +19,19 @@ int MPUDeviceId = 1;
 boolean DidInit = false;
 boolean InCallibrationMode = false;
 Timer MPU9150ReInit;
-CALLIB_DATA calData; 
+CALLIB_DATA calData;
 Timer calibration_timer;
 int counter = 0;
 //  MPU_UPDATE_RATE defines the rate (in Hz) at which the MPU updates the sensor data and DMP output
 
 //  MPU_UPDATE_RATE defines the rate (in Hz) at which the MPU updates the sensor data and DMP output
 
-#define MPU_UPDATE_RATE  (20)
+#define MPU_UPDATE_RATE  (40)
 
 //  MAG_UPDATE_RATE defines the rate (in Hz) at which the MPU updates the magnetometer data
 //  MAG_UPDATE_RATE should be less than or equal to the MPU_UPDATE_RATE
 
-#define MAG_UPDATE_RATE  (10)
+#define MAG_UPDATE_RATE  (40)
 
 //  MPU_MAG_MIX defines the influence that the magnetometer has on the yaw output.
 //  The magnetometer itself is quite noisy so some mixing with the gyro yaw can help
@@ -39,20 +39,20 @@ int counter = 0;
 
 #define  MPU_MAG_MIX_GYRO_ONLY          0                   // just use gyro yaw
 #define  MPU_MAG_MIX_MAG_ONLY           1                   // just use magnetometer and no gyro yaw
-#define  MPU_MAG_MIX_GYRO_AND_MAG       10                  // a good mix value 
-#define  MPU_MAG_MIX_GYRO_AND_SOME_MAG  50                  // mainly gyros with a bit of mag correction 
-
+#define  MPU_MAG_MIX_GYRO_AND_MAG       10                  // a good mix value
+#define  MPU_MAG_MIX_GYRO_AND_SOME_MAG  50                  // mainly gyros with a bit of mag correction
+#define  MPU_MAG_MIX_GYRO_AND_LITTLE_MAG 80
 //  MPU_LPF_RATE is the low pas filter rate and can be between 5 and 188Hz
 
-#define MPU_LPF_RATE   5
+#define MPU_LPF_RATE   40
 
 
 void MPU9150::device_setup(){
   //Todo: Read calibration values from EPROM
   Wire.begin();
   MPU.selectDevice(MPUDeviceId);
-  //  MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_AND_MAG, MAG_UPDATE_RATE, MPU_LPF_RATE); 
-  if (!MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_AND_MAG, MAG_UPDATE_RATE, MPU_LPF_RATE)){
+  //  MAG fusion temprorarily disabled until we dial in the noisy MAG readings
+  if (!MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_ONLY, MAG_UPDATE_RATE, MPU_LPF_RATE)){
 	Serial.println(F("log:Trying other MPU9150 address to init;"));
 	Serial.print(F("log:IMU Address was :"));
 	Serial.print(1);
@@ -61,7 +61,7 @@ void MPU9150::device_setup(){
 	Serial.print(MPUDeviceId);
 	Serial.println(";");
 	MPU.selectDevice(MPUDeviceId);
-	if (MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_AND_MAG, MAG_UPDATE_RATE, MPU_LPF_RATE)){
+	if (MPU.init(MPU_UPDATE_RATE, MPU_MAG_MIX_GYRO_ONLY, MAG_UPDATE_RATE, MPU_LPF_RATE)){
 		DidInit = true;
 		Serial.println(F("log:Init worked the second time;"));
 	} else {
@@ -86,27 +86,27 @@ void MPU9150::device_loop(Command command){
   if (command.cmp("ccal")){
    // Compass_Calibrate();
    // The IMU needs both Magnatrometer and Acceleromter to be calibrated. This attempts to do them both at the same time
-    calLibRead(MPUDeviceId, &calData);               // pick up existing accel data if there   
+    calLibRead(MPUDeviceId, &calData);               // pick up existing accel data if there
 
-    calData.accelValid = false;
-    calData.accelMinX = 0x7fff;                              // init accel cal data
-    calData.accelMaxX = 0x8000;
-    calData.accelMinY = 0x7fff;                              
-    calData.accelMaxY = 0x8000;
-    calData.accelMinZ = 0x7fff;                             
-    calData.accelMaxZ = 0x8000; 
-    
+//    calData.accelValid = false;
+//    calData.accelMinX = 0x7fff;                              // init accel cal data
+//    calData.accelMaxX = 0x8000;
+//    calData.accelMinY = 0x7fff;
+//    calData.accelMaxY = 0x8000;
+//    calData.accelMinZ = 0x7fff;
+//    calData.accelMaxZ = 0x8000;
+
     calData.magValid = false;
     calData.magMinX = 0x7fff;                                // init mag cal data
     calData.magMaxX = 0x8000;
-    calData.magMinY = 0x7fff;                              
+    calData.magMinY = 0x7fff;
     calData.magMaxY = 0x8000;
-    calData.magMinZ = 0x7fff;                             
-    calData.magMaxZ = 0x8000;    
-    
-    MPU.useAccelCal(false); 
-    //MPU.init(MPU_UPDATE_RATE, 5, 1, MPU_LPF_RATE);
-    
+    calData.magMinZ = 0x7fff;
+    calData.magMaxZ = 0x8000;
+
+ //   MPU.useAccelCal(false);
+    MPU.init(MPU_UPDATE_RATE, 5, MAG_UPDATE_RATE);
+
     counter = 359;
     InCallibrationMode = true;
     calibration_timer.reset();
@@ -117,7 +117,7 @@ void MPU9150::device_loop(Command command){
   if (InCallibrationMode){
     bool changed = false;
 
-    
+
     if(counter>0){
       if (MPU.read()) {                                        // get the latest data
         changed = false;
@@ -168,7 +168,7 @@ void MPU9150::device_loop(Command command){
          if (MPU.m_rawMag[VEC3_Z] > calData.magMaxZ) {
           calData.magMaxZ = MPU.m_rawMag[VEC3_Z];
           changed = true;
-        }        
+        }
 
         if (changed) {
           Serial.print(F("dia:accel.MinX=")); Serial.print(calData.accelMinX); Serial.println(";");
@@ -185,20 +185,21 @@ void MPU9150::device_loop(Command command){
           Serial.print(F("dia:mag.maxZ=")); Serial.print(calData.magMaxZ); Serial.println(";");
         }
       }
-      if (calibration_timer.elapsed (1000)) {
+      if (calibration_timer.elapsed (100)) {
         counter--;
         navdata::HDGD = counter;
         Serial.print(F("hdgd:"));
         Serial.print(navdata::HDGD);
-        Serial.print(';');        
+        Serial.print(';');
       }
     }
     if (counter <= 0){
-      calData.accelValid = true;
+   //   calData.accelValid = true;
       calData.magValid = true;
       calLibWrite(MPUDeviceId, &calData);
       Serial.println(F("log:Accel cal data saved for device;"));
       InCallibrationMode = false;
+      MPU9150::device_setup();
     }
     return;  //prevents the normal read and reporting of IMU data
   }
