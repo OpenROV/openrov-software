@@ -8,7 +8,7 @@
 
         // Instance variables
         this.cockpit = cockpit;
-        this.power = .5; //default to mid power
+        this.power = .1; //default to mid power
         this.vtrim = 0; //default to no trim
         this.ttrim = 0;
         this.tilt = 0;
