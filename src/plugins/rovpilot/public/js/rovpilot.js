@@ -5,7 +5,7 @@
     console.log('Loading ROVpilot plugin in the browser.');
     // Instance variables
     this.cockpit = cockpit;
-    this.power = 0.5;
+    this.power = 0.1;
     //default to mid power
     this.vtrim = 0;
     //default to no trim
