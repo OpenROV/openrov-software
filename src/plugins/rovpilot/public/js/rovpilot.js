@@ -44,7 +44,7 @@
         }, SAMPLE_PERIOD);
 
         this.listen();
-	$("#thrustfactor").text(4);
+	$("#thrustfactor").text(2);
 
     };
 
