@@ -37,7 +37,7 @@
       self.sendPilotingData();
     }, SAMPLE_PERIOD);
     this.listen();
-    $('#thrustfactor').text(4);
+    $('#thrustfactor').text(2);
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
