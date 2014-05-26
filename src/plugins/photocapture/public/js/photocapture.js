@@ -12,11 +12,11 @@
     $('#buttonPanel').append('<button id="capture-photo" class="btn">Capture</button>');
     $('#keyboardInstructions').append('<p>press <i>c</i> to capture an image</p>');
     var self = this;
-
-    var jsFileLocation = $('script[src*=photocapture]').attr('src');  // the js file path
-    jsFileLocation = jsFileLocation.replace('photocapture.js', '');   // the js folder path
-
-    $('#photos').load(jsFileLocation+'../photospanel.html', function () {
+    var jsFileLocation = $('script[src*=photocapture]').attr('src');
+    // the js file path
+    jsFileLocation = jsFileLocation.replace('photocapture.js', '');
+    // the js folder path
+    $('#photos').load(jsFileLocation + '../photospanel.html', function () {
       // Register the various event handlers
       self.listen();
       ko.applyBindings(self, $('#photos')[0]);
@@ -44,7 +44,7 @@
         photoc.cockpit.socket.emit('snapshot');
       }
     };
-    KEYS[67] = { //c
+    KEYS[67] = {
       keydown: function () {
         photoc.cockpit.socket.emit('snapshot');
       }
@@ -53,7 +53,9 @@
       $('#photos').show('fold');
       photoc.cockpit.sendUpdateEnabled = false;
       var self = photoc;
-      Mousetrap.bind('esc', function(){self.hidePhotos();});
+      Mousetrap.bind('esc', function () {
+        self.hidePhotos();
+      });
     });
     $('#photos .back-button').click(function () {
       photoc.hidePhotos();

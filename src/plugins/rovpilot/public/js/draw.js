@@ -14,10 +14,10 @@
  * Source: http://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
  */
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
-  if (typeof stroke == "undefined" ) {
+  if (typeof stroke == 'undefined') {
     stroke = true;
   }
-  if (typeof radius === "undefined") {
+  if (typeof radius === 'undefined') {
     radius = 5;
   }
   ctx.beginPath();
@@ -36,5 +36,5 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   }
   if (fill) {
     ctx.fill();
-  }        
+  }
 }

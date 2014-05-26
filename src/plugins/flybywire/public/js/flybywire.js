@@ -34,7 +34,6 @@
         rov.processControlChanges(controls);
       }
     });
-
   };
   FlyByWire.prototype.processControlChanges = function processControlChanges(controls) {
     if (controls.throttle != this.targetThrottle) {

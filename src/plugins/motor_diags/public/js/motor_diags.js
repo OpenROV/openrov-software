@@ -42,10 +42,10 @@
     $('#settings H4:contains(\'Runtime Settings\')').after('<div class="control-group"> \t\t      <label class="control-label" for="smoothingIncriment">Motor Response Aggressivness:</label> \t\t      <input type="text" id="smoothingIncriment" /> \t\t  </div>');
     $('#diagnostic H3:contains(\'Diagnostics\')').append('<div id="diagpanel"></div>');
     var self = this;
-
-    var jsFileLocation = $('script[src*=motor_diags]').attr('src');  // the js file path
-    jsFileLocation = jsFileLocation.replace('motor_diags.js', '');   // the js folder path
-
+    var jsFileLocation = $('script[src*=motor_diags]').attr('src');
+    // the js file path
+    jsFileLocation = jsFileLocation.replace('motor_diags.js', '');
+    // the js folder path
     $('#diagpanel').load(jsFileLocation + '../diagpanel.html', function () {
       // Register the various event handlers
       self.listen();
