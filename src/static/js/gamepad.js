@@ -41,7 +41,7 @@ var GamePad = function () {
     console.log('Unsupported controller connected', device);
   });
   gp.isAvailable = function () {
-    if (gamepad.count() == 0)
+    if (gamepad.count() === 0)
       return false;
     return true;
   };

@@ -53,7 +53,7 @@ function ArduinoFirmwareViewModel() {
     return percentage;
   });
   self.inProgress = ko.computed(function () {
-    return self.stepsDone() != 0;
+    return self.stepsDone() !== 0;
   });
   self.updateStatus = function (data) {
     if (data.errorMessage) {

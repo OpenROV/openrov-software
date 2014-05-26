@@ -1,4 +1,4 @@
-var os = require('./os-utils'), EventEmitter = require('events').EventEmitter;
+var os = require('os-utils'), EventEmitter = require('events').EventEmitter;
 var CPUUsage = 10;
 var StatusReader = function () {
   var reader = new EventEmitter();

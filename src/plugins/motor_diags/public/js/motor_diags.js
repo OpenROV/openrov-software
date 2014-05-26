@@ -1,5 +1,4 @@
 /*jshint multistr: true*/
-/*jslint es5: true */
 (function (window, $, undefined) {
   'use strict';
   var Motor_diags;
