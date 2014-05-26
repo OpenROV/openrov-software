@@ -12,39 +12,28 @@
  * letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  *
  */
-
-var fork = require('child_process').fork
-  , EventEmitter = require('events').EventEmitter
-  , fs = require('fs')
-  , path = require('path')
-  , CONFIG = require('./config')
-  , logger = require('./logger').create(CONFIG)
-  ;
-
+var fork = require('child_process').fork, EventEmitter = require('events').EventEmitter, fs = require('fs'), path = require('path'), CONFIG = require('./config'), logger = require('./logger').create(CONFIG);
 var OpenROVCamera = function (options) {
   var camera = new EventEmitter();
   var _capturing = false;
   var captureProcess;
-
   // End camera process gracefully
-  camera.close = function() {
-     _capturing = false; 
+  camera.close = function () {
+    _capturing = false;
     logger.log('sending SIGHUP to capture process');
     process.kill(captureProcess.pid, 'SIGHUP');
-  }
-
+  };
   // Actual camera capture function
   camera.capture = function (callback) {
     captureProcess = fork(path.join(__dirname, 'mock-video-server.js'));
-    captureProcess.on('exit', function(code, signal) {
-      logger.log("Got 'exit' message from camera child. Code: " + code);
+    captureProcess.on('exit', function (code, signal) {
+      logger.log('Got \'exit\' message from camera child. Code: ' + code);
     });
-    captureProcess.on('error', function(err) {
-      logger.log("Got 'error' message from camera child. Error: " + err);
+    captureProcess.on('error', function (err) {
+      logger.log('Got \'error\' message from camera child. Error: ' + err);
     });
-    camera.emit('started'); 
+    camera.emit('started');
   };
   return camera;
 };
-
 module.exports = OpenROVCamera;

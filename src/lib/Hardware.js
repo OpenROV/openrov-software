@@ -20,14 +20,12 @@ function Hardware() {
       logger.log('!Serial port closed');
       serialConnected = false;
     });
-
     hardware.serial.on('data', function (data) {
       var status = reader.parseStatus(data);
       hardware.emit('status', status);
       if (emitRawSerialData)
         hardware.emit('serial-recieved', data + '\n');
     });
-
   };
   hardware.write = function (command) {
     logger.log(command);
@@ -36,7 +34,7 @@ function Hardware() {
       if (emitRawSerialData)
         hardware.emit('serial-sent', command);
     } else {
-        logger.log('DID NOT SEND');
+      logger.log('DID NOT SEND');
     }
   };
   hardware.toggleRawSerialData = function toggleRawSerialData() {

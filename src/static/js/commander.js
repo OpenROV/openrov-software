@@ -1,4 +1,4 @@
-var Commander = function() {
+var Commander = function () {
   var client = {};
-  client.send
-}
+  client.send;
+};
