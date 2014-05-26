@@ -20,7 +20,7 @@ var OpenROVCamera = function (options) {
       framerate: CONFIG.video_frame_rate,
       port: CONFIG.video_port
     };
-  var options = orutils.mixin(options, default_opts);
+  options = orutils.mixin(options, default_opts);
   var _capturing = false;
   camera.IsCapturing = function () {
     return _capturing;

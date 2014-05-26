@@ -142,7 +142,7 @@ var OpenROVArduinoFirmwareController = function (eventLoop) {
     controller.socket.emit('arduinoFirmware-status', data);
   });
   controller.handleUploadedFile = function (socket, filename) {
-    if (filename.length == 0) {
+    if (filename.length === 0) {
       logger.log('going to install from the source folder');
       controller.installer.installfromsource();
     } else {

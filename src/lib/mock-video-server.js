@@ -65,7 +65,7 @@ function capture(res) {
   if (mockImages) {
     mockImages = mockImages.filter(isImage).sort();
   }
-  if (mockImages.length == 0) {
+  if (mockImages.length === 0) {
     console.error('Cound\'t find any mock images in path: ' + imagePath);
     return;
   }

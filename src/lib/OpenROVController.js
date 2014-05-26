@@ -45,7 +45,7 @@ var OpenROVController = function (eventLoop) {
     globalEventLoop.emit('serial-recieved', data);
   });
   hardware.on('status', function (status) {
-    for (i in status) {
+    for (var i in status) {
       statusdata[i] = status[i];
     }
     if ('ver' in status) {
@@ -67,11 +67,9 @@ var OpenROVController = function (eventLoop) {
       controller.emit('rovsys', s);
     }
     if ('cmd' in status) {
-      var s = rovsys;
       console.log('cmd: ' + status.cmd);
     }
     if ('log' in status) {
-      var s = rovsys;
       console.log('log: ' + status.log);
     }
     if ('hdgd' in status) {
@@ -141,7 +139,7 @@ var OpenROVController = function (eventLoop) {
     //Arduino is OK to accept commands
     if (this.ArduinoFirmwareVersion >= 0.20130314034859)
       return false;
-    if (this.Capabilities != 0)
+    if (this.Capabilities !== 0)
       return false;
     //This feature added after the swap to ms on the Arduino
     console.log('Audrino is at an incompatible version of firmware. Upgrade required before controls will respond');

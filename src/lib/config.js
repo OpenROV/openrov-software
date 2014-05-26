@@ -12,7 +12,7 @@ var HardwarePath = './lib/Hardware';
 var argv = require('optimist').argv;
 var getLibPath = function (lib) {
   var result = lib;
-  if (process.env.USE_MOCK === 'true' || argv.mock != undefined) {
+  if (process.env.USE_MOCK === 'true' || argv.mock !== undefined) {
     result += '-mock';
   }
   return result;

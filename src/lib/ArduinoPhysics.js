@@ -20,7 +20,7 @@ var ArduinoPhysics = function () {
       result = mapA(val, -1, 0, 1000, physics.mapRawMotor(CONFIG.preferences.get('deadzone_neg')));
     if (val > 0)
       result = mapA(val, 0, 1, physics.mapRawMotor(CONFIG.preferences.get('deadzone_pos')), 2000);
-    if (val == 0)
+    if (val === 0)
       result = 1500;
     result = Math.round(result);
     return result;
