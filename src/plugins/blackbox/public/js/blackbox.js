@@ -134,7 +134,7 @@
     blackbox.logTelemetryData();
   };
   /*
-         * Process onkeydown. 
+         * Process onkeydown.
          */
   Blackbox.prototype.keyDown = function keyDown(ev) {
     if (!this.recording) {
@@ -194,12 +194,12 @@
     }).done(function (s) {
       server = s;
       idb = server.db();
-      callback;
+      callback();
     });
   };
   Blackbox.prototype.closeDB = function closeDB(callback) {
     server.close();
-    callback;
+    callback();
   };
   window.Cockpit.plugins.push(Blackbox);
 }(window, document));

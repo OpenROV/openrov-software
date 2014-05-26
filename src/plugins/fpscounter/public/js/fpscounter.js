@@ -90,11 +90,12 @@
     };
   };
   FPSCounter.prototype.toggleDisplay = function toggleDisplay() {
-    this.meter.isPaused ? this.meter.show() : this.meter.hide();
+    //This has been working so not going to refactor to make jshint happy just yet
+    this.meter.isPaused ? this.meter.show() : this.meter.hide();//  jshint ignore:line
   };
   FPSCounter.ping = function ping(target, callback, port, timeout) {
-    var timeout = timeout == null ? 100 : timeout;
-    var port = port || 80;
+    timeout = timeout === null ? 100 : timeout;
+    port = port || 80;
     var img = new Image();
     img.onerror = function () {
       if (!img)

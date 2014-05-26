@@ -1,5 +1,4 @@
 /*jshint multistr: true*/
-/*jslint es5: true */
 (function (window, $, undefined) {
   'use strict';
   var Arduinofirmwareupload;
@@ -14,7 +13,7 @@
     ko.applyBindings(this.arduinoFirmwareVM);
     var self = this;
     /* ------------------------------------------
-               firmware upload 
+               firmware upload
             */
     var selectedFile;
     var fileReader = new FileReader();
@@ -70,9 +69,9 @@
       //The Next Blocks Starting Position
       var NewFile;
       //The Variable that will hold the new Block of Data
-      if (selectedFile.slice != undefined) {
+      if (selectedFile.slice !== undefined) {
         NewFile = selectedFile.slice(Place, Place + Math.min(524288, selectedFile.size - Place));
-      } else if (selectedFile.webkitSlice != undefined) {
+      } else if (selectedFile.webkitSlice !== undefined) {
         NewFile = selectedFile.webkitSlice(Place, Place + Math.min(524288, selectedFile.size - Place));
       }
       fileReader.readAsBinaryString(NewFile);
@@ -149,7 +148,7 @@ function ArduinoFirmwareViewModel() {
     return percentage;
   });
   self.inProgress = ko.computed(function () {
-    return self.stepsDone() != 0;
+    return self.stepsDone() !== 0;
   });
   self.updateStatus = function (data) {
     if (data.errorMessage) {
