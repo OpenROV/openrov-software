@@ -1,3 +1,4 @@
+/*jshint esnext:true */
 (function (window, document) {
   // These constants map to the arduino device.h file's constants for capabilities of the ROV
   const LIGHTS_CAPABLE = 1;
