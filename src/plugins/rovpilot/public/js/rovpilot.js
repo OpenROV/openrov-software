@@ -360,11 +360,6 @@
       vertical = vertical * 2;
     //make up for async props
     if (maxdiff > 0.001) {
-      //	    this.cockpit.socket.emit('motor_test', {
-      //		port: 1500 + (-port * 500),
-      //		starbord: 1500 + (-starbord * 500),
-      //		vertical: 1500 + (vertical * 500)
-      //	    });
       this.cockpit.socket.emit('motor_test', {
         port: -port * this.power,
         starbord: -starbord * this.power,
@@ -396,7 +391,7 @@
     this.cockpit.socket.emit('brightness_update', this.light);
   };
   ROVpilot.prototype.adjustLights = function adjustLights(value) {
-    if (this.light == 0 && value < 0) {
+    if (this.light === 0 && value < 0) {
       //this code rounds the horn so to speak by jumping from zero to max and vise versa
       this.light = 0;  //disabled the round the horn feature
     } else if (this.light == 1 && value > 0) {
@@ -445,12 +440,12 @@
   };
   ROVpilot.prototype.setThrottle = function setThrottle(value) {
     this.positions.throttle = value;
-    if (value == 0)
+    if (value === 0)
       this.positions.throttle = this.ttrim;
   };
   ROVpilot.prototype.setLift = function setLift(value) {
     this.positions.lift = value;
-    if (value == 0)
+    if (value === 0)
       this.positions.lift = this.vtrim;
   };
   ROVpilot.prototype.setYaw = function setYaw(value) {
@@ -503,7 +498,7 @@
         updateRequired = true;
       }
     }
-    if (this.sendUpdateEnabled && updateRequired || this.sendToROVEnabled == false) {
+    if (this.sendUpdateEnabled && updateRequired || this.sendToROVEnabled === false) {
       if (this.sendToROVEnabled) {
         this.cockpit.socket.emit('control_update', controls);
       }
