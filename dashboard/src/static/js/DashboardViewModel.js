@@ -1,6 +1,4 @@
-function DashboardViewModel(socket){
-    var viewModel = {
-    };
-
-    return viewModel;
+function DashboardViewModel(socket) {
+  var viewModel = {};
+  return viewModel;
 }
