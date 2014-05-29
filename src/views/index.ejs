@@ -89,36 +89,35 @@
     </div>
   </div>
 
+        <!-- SETTINGS -->
+        <div class="drop-in-right" id="settings">
+          <div class="back-button"></div><h3>Settings</h3>
+      <h4>Runtime Settings:</h4>
+      </div>
+          </div>
+        </div>
 
-  <!-- SETTINGS -->
-  <div class="drop-in-right" id="settings">
-    <div class="back-button"></div>
-    <h3>Settings</h3>
-    <h4>Runtime Settings:</h4>
-  </div>
+        <div class="drop-in-right" id="diagnostic">
+            <div class="back-button"></div><h3>Diagnostics</h3>
+            <div class="settings-block">
+                <h4>Pre-Flight Check</h4>
+            </div>
+      <div class="settings-block">
+        <h4>Callibration</h4>
+        <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
+        <a href="#" class="btn" id="zero_depth">Zero Depth</a>
+      </div>
 
-  <div class="drop-in-right" id="diagnostic">
-    <div class="back-button"></div>
-    <h3>Diagnostics</h3>
-    <div class="settings-block">
-      <h4>Pre-Flight Check</h4>
-    </div>
-    <div class="settings-block">
-      <h4>Callibration</h4>
-      <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
-      <a href="#" class="btn" id="zero_depth">Zero Depth</a>
-    </div>
-  </div>
-  <div class="hidden" id="keyboardInstructions">
-    <p>
-      Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
-      Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.
-    </p>
-    <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
-    <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
-    <p>Use <i>l</i> to toggle callibration lasers.</p>
-  </div>
-
+        </div>
+        <div class="hidden" id="keyboardInstructions">
+            <p>
+                Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
+                Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.
+            </p>
+            <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
+            <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
+        <p>Use <i>l</i> to toggle callibration lasers.</p>
+        </div>
 
         <!-- Le javascript
         ================================================== -->
@@ -127,41 +126,41 @@
         <script>
 
           $(function() {
-	    if (window.io == undefined) {
-	      alert("detected no socket found");
-	      var mysocket = function(){
+          if (window.io == undefined) {
+            alert("detected no socket found");
+            var mysocket = function(){
 
-	      }
-	      mysocket.prototype.emit = function(x){console.log(x);};
-	      mysocket.prototype.emit = function(x,y){console.log(x);console.log(y);};
-	      simevents = new Object();
-	      mysocket.prototype.on = function(x,y){
-		console.log("registering " + x);
-		if (simevents.x == undefined) {
-		  simevents[x] = [];
-		}
-		simevents[x].push(y);
-	      };
+            }
+        mysocket.prototype.emit = function(x){console.log(x);};
+        mysocket.prototype.emit = function(x,y){console.log(x);console.log(y);};
+        simevents = new Object();
+        mysocket.prototype.on = function(x,y){
+    console.log("registering " + x);
+    if (simevents.x == undefined) {
+      simevents[x] = [];
+    }
+    simevents[x].push(y);
+        };
 
-	      var io = new mysocket();
-	      var socket = new mysocket();
-	      CONFIG = new Object();
-	      CONFIG.sample_freq = 20;
+        var io = new mysocket();
+        var socket = new mysocket();
+        CONFIG = new Object();
+        CONFIG.sample_freq = 20;
 
-	    } else {
+      } else {
             var socket = window.io.connect();
-	    }
+      }
 
             /* ------------------------------------------
                settings
             */
             var options = {};
-	    var keyboard = null;
+      var keyboard = null;
             $("#show-settings").click(function() {
               $("#settings").show('fold');
               cockpit.sendUpdateEnabled=false;
               Mousetrap.bind('esc', hideSettings);
-	      keyboardHandler.unbindKeys();
+        keyboardHandler.unbindKeys();
             });
 
             $("#settings .back-button").click(function() {
@@ -172,7 +171,7 @@
               $("#settings").hide('fold');
               cockpit.sendUpdateEnabled = true;
               Mousetrap.unbind('esc');
-	      keyboardHandler.bindKeys()
+        keyboardHandler.bindKeys()
             }
 
               /* ------------------------------------------
@@ -185,7 +184,7 @@
                   $("#diagnostic").show('fold');
                   cockpit.sendUpdateEnabled=false;
                   Mousetrap.bind('esc', hideDiagnostic);
-		  keyboardHandler.unbindKeys();
+      keyboardHandler.unbindKeys();
               });
 
               $("#diagnostic .back-button").click(function() {
@@ -196,21 +195,21 @@
                   $("#diagnostic").hide('fold');
                   cockpit.sendUpdateEnabled=true;
                   Mousetrap.unbind('esc');
-		  keyboardHandler.bindKeys();
+      keyboardHandler.bindKeys();
               }
 
 
-	  $('#zero_depth').click(function() {
+    $('#zero_depth').click(function() {
             socket.emit('depth_zero');
           });
 
-	  $('#callibrate_compass').click(function() {
+    $('#callibrate_compass').click(function() {
             socket.emit('compass_callibrate');
           });
 
-	    //plugin hooks
+      //plugin hooks
             setupFrameHandling(socket);
-	   var cockpit = new Cockpit(socket);
+     var cockpit = new Cockpit(socket);
 
 
 
@@ -224,15 +223,15 @@
 
         $("[rel='popover']").popover();
 
-	$('#keyboardInstructions').append('<p><i>\\</i> to toggle heads up display</p>');
-	KEYS[220] = {keydown: function() {  //capslog
-   		 $('.hud').toggleClass('hidden');
-		 console.log("capslock");
-		}};
+  $('#keyboardInstructions').append('<p><i>\\</i> to toggle heads up display</p>');
+  KEYS[220] = {keydown: function() {  //capslog
+       $('.hud').toggleClass('hidden');
+     console.log("capslock");
+    }};
 
 
-		// The next session draws the video img to a canvas which is then managed by the GPU
-		// and is much faster than the browser painting the img tag.
+    // The next session draws the video img to a canvas which is then managed by the GPU
+    // and is much faster than the browser painting the img tag.
         var canvas = document.getElementById('video-canvas');
         var srcImg = document.getElementById('video');
         var videocontainer = $('#video-container');
