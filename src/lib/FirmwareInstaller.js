@@ -7,7 +7,7 @@
  * This file acts as a mock implementation for the camera module. It reads jpg files from a directory and returns them.
  *
  */
-var EventEmitter = require('events').EventEmitter, fs = require('fs'), path = require('path'), CONFIG = require('./config'), logger = require('./logger').create(CONFIG), spawn = require('child_process').spawn, avrdude = require('./avrdude');
+var EventEmitter = require('events').EventEmitter, fs = require('fs'), path = require('path'), CONFIG = require('./config'), logger = require('./logger').create(CONFIG), spawn = require('child_process').spawn;
 var FirmwareInstaller = function (eventLoop) {
   var globalEventLoop = eventLoop;
   var installer = new EventEmitter();
