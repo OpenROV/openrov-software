@@ -41,7 +41,7 @@ function autoResize(id){
             // Write into iframe
             frameDoc.open();
             var scripts = [];
-       //     scripts.push('../lib/config.js');
+    /*   //     scripts.push('../lib/config.js');
             scripts.push('../plugins/arduinofirmwareupload/public/js/arduinofirmwareupload.js');
             scripts.push('../plugins/blackbox/public/js/blackbox.js');
             scripts.push('../plugins/capestatus/public/js/capestatus.js');
@@ -58,17 +58,21 @@ function autoResize(id){
             scripts.push('../plugins/diveprofile/public/js/diveprofile.js');
             scripts.push('../plugins/tankcontrol/public/js/tankcontrol.js');
             scripts.push('../plugins/flybywire/public/js/flybywire.js');
+*/
+            // Add you plugin here !!!
+            scripts.push('../plugins/visualisation3d/public/js/Babylon.js');
+            scripts.push('../plugins/visualisation3d/public/js/visualisation3d.js');
 
             var styles = [];
             styles.push('../plugins/touchcontroller/public/css/style.css');
-
+            styles.push('../plugins/visualisation3d/public/css/style.css');
 
             frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:styles, scripts:scripts}));
             frameDoc.close();
             //autoResize(iframe);
 
            iframe.height= "720px"; //360px";
-           iframe.width= "1280px";//"567px"; // 
+           iframe.width= "1280px";//"567px"; //
        // new EJS({url: 'views/index.ejs'}).update('test', {title: "testing", styles:{}, scripts:{}});
     </script>
 
