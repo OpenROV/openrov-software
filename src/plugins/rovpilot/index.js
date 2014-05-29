@@ -27,16 +27,16 @@ function rovpilot(name, deps) {
       console.log('holdDepth_toggle(' + dpt * 100 + ')');
     });
     socket.on('thro', function (x) {
-      deps.rov.send('thro(' + x + ')');
-      console.log('thro(' + x + ')');
+      deps.rov.send('thro(' + x * 100 + ')');
+      console.log('thro(' + x * 100+ ')');
     });
     socket.on('yaw', function (x) {
-      deps.rov.send('yaw(' + x + ')');
-      console.log('yaw(' + x + ')');
+      deps.rov.send('yaw(' + x * 100+ ')');
+      console.log('yaw(' + x * 100+ ')');
     });
     socket.on('lift', function (x) {
-      deps.rov.send('lift(' + x + ')');
-      console.log('lift(' + x + ')');
+      deps.rov.send('lift(' + x * 100+ ')');
+      console.log('lift(' + x * 100+ ')');
     });
   });
 }
