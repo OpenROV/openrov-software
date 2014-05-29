@@ -1,0 +1,6 @@
+{
+  "name": "static openrov",
+  "dependencies": {
+    "fpsmeter": "~0.3.1"
+  }
+}
