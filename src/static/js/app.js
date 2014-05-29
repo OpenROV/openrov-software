@@ -1,6 +1,6 @@
 $(function() {
   if (window.io == undefined) {
-    alert("detected no socket found");
+    console.warn && console.warn("! detected no socket found !");
     var mysocket = function(){}
     mysocket.prototype.emit = function(x){console.log(x);};
     mysocket.prototype.emit = function(x,y){console.log(x);console.log(y);};
