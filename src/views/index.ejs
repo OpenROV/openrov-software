@@ -59,78 +59,84 @@
   <% for(var i=0; i<scripts.length; i++) {%>
   <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
 
-  <body>
+<body>
 
+  <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
+    <div class="navbar-inner">
+      <a class="brand" href="#">
+        <img src="themes/OpenROV/img/logo.png" class="logo"/>
+        <span class='sub-brand'>Cockpit</span>
+      </a>
+      <ul class="nav" id="navtoolbar">
+        <li>
+          <a href="#">
+            <img id="keyboardpopover" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" />
+          </a>
+        </li>
+        <li>
+          <a href="#" id="servoTilt"></a>
+        </li>
+      </ul>
+      <ul id="menuitems" class="nav pull-right">
+        <li>
+          <a href="#" id="show-settings">Settings</a>
+        </li>
+        <li>
+          <a href="#" id="show-diagnostic">Diagnostic</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-      <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
-      <div class="navbar-inner">
-        <a class="brand" href="#">
-          <img src="themes/OpenROV/img/logo.png" class="logo"/>
-          <span class='sub-brand'>Cockpit</span>
-        </a>
-        <ul class="nav" id="navtoolbar">
-          <li><a href="#"><img id="keyboardpopover" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" /></a></li>
-          <li><a href="#" id="servoTilt"></a></li>
-        </ul>
-        <ul id="menuitems" class="nav pull-right">
-          <li><a href="#" id="show-settings">Settings</a></li>
-          <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
-        </ul>
+  <!-- Main ROW -->
+  <div id="main-row" class="container-fluid full-height">
+    <div class="row-fluid full-height">
+      <div class="span9 border full-height" id="outter-videocontainer">
+        <div id="video-container" class="full-height center pagination-centered">
+          <img class="hidden" id="video" src="themes/OpenROV/img/no_camera.jpg"/>
+          <canvas id='video-canvas'></canvas>
+        </div>
+      </div>
+      <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
+        <div id="buttonPanel" class="controller well well-small"></div>
       </div>
     </div>
-
-        <!-- Main ROW -->
-        <div id="main-row" class="container-fluid full-height">
-          <div class="row-fluid full-height">
-            <div class="span9 border full-height" id="outter-videocontainer">
-              <div id="video-container" class="full-height center pagination-centered" border='1'>
-                <img class="hidden" id="video" src="themes/OpenROV/img/no_camera.jpg"/>
-                <canvas id='video-canvas'/>
-              </div>
-            </div>
-            <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
-              <div id="buttonPanel" class="controller well well-small"></div>
-          </div>
-            </div>
-          </div>
-        </div>
-        <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom nav-collapse collapse visible-desktop">
-	    <div class="navbar-inner">
-		<div id="footercontent" class="container-fluid" style="height: 100%">
-		</div>
-	    </div>
-        </div>
+  </div>
+  <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom nav-collapse collapse visible-desktop">
+    <div class="navbar-inner">
+      <div id="footercontent" class="container-fluid" style="height: 100%"></div>
+    </div>
+  </div>
 
 
-        <!-- SETTINGS -->
-        <div class="drop-in-right" id="settings">
-          <div class="back-button"></div><h3>Settings</h3>
-	    <h4>Runtime Settings:</h4>
-	    </div>
-          </div>
-        </div>
+  <!-- SETTINGS -->
+  <div class="drop-in-right" id="settings">
+    <div class="back-button"></div>
+    <h3>Settings</h3>
+    <h4>Runtime Settings:</h4>
+  </div>
 
-        <div class="drop-in-right" id="diagnostic">
-            <div class="back-button"></div><h3>Diagnostics</h3>
-            <div class="settings-block">
-                <h4>Pre-Flight Check</h4>
-            </div>
-	    <div class="settings-block">
-	      <h4>Callibration</h4>
-	      <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
-	      <a href="#" class="btn" id="zero_depth">Zero Depth</a>
-	    </div>
-
-        </div>
-        <div class="hidden" id="keyboardInstructions">
-            <p>
-                Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
-                Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.
-            </p>
-            <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
-            <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
-		    <p>Use <i>l</i> to toggle callibration lasers.</p>
-        </div>
+  <div class="drop-in-right" id="diagnostic">
+    <div class="back-button"></div>
+    <h3>Diagnostics</h3>
+    <div class="settings-block">
+      <h4>Pre-Flight Check</h4>
+    </div>
+    <div class="settings-block">
+      <h4>Callibration</h4>
+      <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
+      <a href="#" class="btn" id="zero_depth">Zero Depth</a>
+    </div>
+  </div>
+  <div class="hidden" id="keyboardInstructions">
+    <p>
+      Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
+      Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.
+    </p>
+    <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
+    <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
+    <p>Use <i>l</i> to toggle callibration lasers.</p>
+  </div>
 
 
         <!-- Le javascript
