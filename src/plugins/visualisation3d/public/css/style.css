@@ -1,0 +1,8 @@
+
+#renderCanvas {
+    opacity: 0.7;
+    position: absolute;
+    z-index: 3;
+    bottom: 0px;
+    right: 0px;
+}
