@@ -7,22 +7,40 @@
     <meta id="Viewport" name="viewport" width="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <script type='text/javascript' src="js/libs/jquery.min.js"></script>
     <script type='text/javascript' src="js/libs/jquery-ui.min.js"></script>
-
     <script type="text/javascript">
-    // this code again helps prevent scrolling and sets viewport for mobile
-    $(function(){
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
-      var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
-      var mw = 480; // min width of site
-      var ratio =  ww / mw; //calculate ratio
-      if( ww < mw){ //smaller than minimum size
-       $('#Viewport').attr('content', 'initial-scale=' + ratio + ', maximum-scale=' + ratio + ', minimum-scale=' + ratio + ', user-scalable=yes, width=' + ww);
-      }else{ //regular size
-       $('#Viewport').attr('content', 'initial-scale=1.0, maximum-scale=2, minimum-scale=1.0, user-scalable=yes, width=' + ww);
+      // this code again helps prevent scrolling and sets viewport for mobile
+      $(function(){
+      if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+        var ww = ( $(window).width() < window.screen.width ) ? $(window).width() : window.screen.width; //get proper width
+        var mw = 480; // min width of site
+        var ratio =  ww / mw; //calculate ratio
+        if( ww < mw){ //smaller than minimum size
+         $('#Viewport').attr('content', 'initial-scale=' + ratio + ', maximum-scale=' + ratio + ', minimum-scale=' + ratio + ', user-scalable=yes, width=' + ww);
+        }else{ //regular size
+         $('#Viewport').attr('content', 'initial-scale=1.0, maximum-scale=2, minimum-scale=1.0, user-scalable=yes, width=' + ww);
+        }
       }
-    }
-    });
+      });
     </script>
+
+    <script src="js/libs/eventemitter2.js"></script>
+    <script type="text/javascript"> cockpitEventEmitter = new EventEmitter2(); </script>
+    <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
+    <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
+    <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
+    <script type='text/javascript' src='js/libs/gamepad.js'></script>
+    <script type='text/javascript' src='js/utilities.js'></script>
+    <script type='text/javascript' src="js/keypad.js"></script>
+    <script type='text/javascript' src="js/gamepad.js"></script>
+    <script type='text/javascript' src="js/frame.js"></script>
+    <script type='text/javascript' src="js/cockpit.js"></script>
+    <script src='js/libs/db.js'></script>
+    <script type='text/javascript' src="js/libs/IndexedDBShim.min.js"></script>
+    <script src="/config.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <% for(var i=0; i<scripts.length; i++) {%>
+    <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
 
     <title><%= title %></title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -31,60 +49,23 @@
         <link href="css/ui-lightness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
     <% for(var i=0; i<styles.length; i++) {%>
     <link rel="stylesheet" href="<%= styles[i] %>"><% } %>
-
   </head>
-
-  <script src="js/libs/eventemitter2.js"></script>
-  <script>
-
-  	    cockpitEventEmitter = new EventEmitter2();
-  </script>
-
-        <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
-        <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
-        <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
-	<script type='text/javascript' src='js/libs/gamepad.js'></script>
-        <script type='text/javascript' src='js/utilities.js'></script>
-        <script type='text/javascript' src="js/keypad.js"></script>
-        <script type='text/javascript' src="js/gamepad.js"></script>
-        <script type='text/javascript' src="js/frame.js"></script>
-	<script type='text/javascript' src="js/cockpit.js"></script>
-	<script src='js/libs/db.js'></script>
-	<script type='text/javascript' src="js/libs/IndexedDBShim.min.js"></script>
-        <script src="/config.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-
-
-
-  <% for(var i=0; i<scripts.length; i++) {%>
-  <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
-
-<body>
-
-  <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
-    <div class="navbar-inner">
-      <a class="brand" href="#">
-        <img src="themes/OpenROV/img/logo.png" class="logo"/>
-        <span class='sub-brand'>Cockpit</span>
-      </a>
-      <ul class="nav" id="navtoolbar">
-        <li>
-          <a href="#">
-            <img id="keyboardpopover" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" />
-          </a>
-        </li>
-        <li>
-          <a href="#" id="servoTilt"></a>
-        </li>
-      </ul>
-      <ul id="menuitems" class="nav pull-right">
-        <li>
-          <a href="#" id="show-settings">Settings</a>
-        </li>
-        <li>
-          <a href="#" id="show-diagnostic">Diagnostic</a>
-        </li>
-      </ul>
+  <body>
+      <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
+      <div class="navbar-inner">
+        <a class="brand" href="#">
+          <img src="themes/OpenROV/img/logo.png" class="logo"/>
+          <span class='sub-brand'>Cockpit</span>
+        </a>
+        <ul class="nav" id="navtoolbar">
+          <li><a href="#"><img id="keyboardpopover" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" /></a></li>
+          <li><a href="#" id="servoTilt"></a></li>
+        </ul>
+        <ul id="menuitems" class="nav pull-right">
+          <li><a href="#" id="show-settings">Settings</a></li>
+          <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 
