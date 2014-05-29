@@ -1,0 +1,9 @@
+{
+  "name": "static-openrov",
+  "dev-dependencies": {
+    "bower": "^1.3.3"
+  },
+  "scripts": {
+    "bower": "bower install"
+  }
+}
