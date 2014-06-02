@@ -65,49 +65,7 @@
       rov.originalsettings.lsy = GAMEPAD.LEFT_STICK_Y;
       rov.originalsettings.rsx = GAMEPAD.RIGHT_STICK_X;
       rov.originalsettings.rsy = GAMEPAD.RIGHT_STICK_Y;
-      GAMEPAD.LEFT_STICK_X = {
-        AXIS_CHANGED: function (v) {
-          var direction;
-          rov.leftx = -v;
-          if (rov.leftx + rov.rightx >= 0) {
-            direction = 1;
-          } else {
-            direction = -1;
-          }
-          rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-          cockpitEventEmitter.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-        }
-      };
-      GAMEPAD.LEFT_STICK_Y = {
-        AXIS_CHANGED: function (v) {
-          var direction;
-          rov.lefty = v;
-          cockpitEventEmitter.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-        }
-      };
-      GAMEPAD.RIGHT_STICK_X = {
-        AXIS_CHANGED: function (v) {
-          var direction;
-          rov.rightx = v;
-          if (rov.leftx + rov.rightx >= 0) {
-            direction = 1;
-          } else {
-            direction = -1;
-          }
-          rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-          cockpitEventEmitter.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-          console.log('rov.lift:' + rov.lift);
-        }
-      };
-      GAMEPAD.RIGHT_STICK_Y = {
-        AXIS_CHANGED: function (v) {
-          var direction;
-          rov.righty = v;
-          cockpitEventEmitter.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-        }
-      };
-      //			LEFT_TRIGGER: 6,
-      //	RIGHT_TRIGGER: 7,
+
       this.cockpit.socket.emit('holdHeading_toggle');
       this.cockpit.socket.emit('holdDepth_toggle');
       rov.flybywireControlActive = true;
