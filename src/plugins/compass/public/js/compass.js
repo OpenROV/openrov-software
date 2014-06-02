@@ -65,6 +65,7 @@
     }
     div.appendChild(this.canvas);
     needle = document.createElement('canvas');
+    needle.id = "needle";
     needle.width = 15;
     needle.height = 15;
     needle.style.top = 0;
@@ -79,6 +80,18 @@
     ctx.fill();
     div.appendChild(needle);
     this.moveTo(0);
+
+    var self = this;
+    // Bind on window events to resize
+    $(window).resize(function (event) {
+
+      //Bandaid. The entire compass should be moved in to a draw function that gets cleared and redrawn on resize.
+      var div = $('#compass').get(0);
+      var needle = document.getElementById('needle');
+      var divRect = div.getBoundingClientRect(), ctx, x, i, needle;
+      var visibleWidth = divRect.width * (720 / 120);
+      needle.style.left = Math.floor(visibleWidth / 2 * (120 / 720) - needle.width / 2) + 'px';
+    });
   };
   Compass.prototype.moveTo = function (angle) {
     var offset, compass = this;
