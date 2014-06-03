@@ -125,7 +125,7 @@ void MS5803_14BA::device_loop(Command command){
   unsigned int millis_start = millis();
   while (Wire.available() < 3) {
     if (io_timeout > 0 && ((unsigned int)millis() - millis_start) > io_timeout) {
-      log("Failed to read Depth from I2C");
+      Serial.println("log:Failed to read Depth from I2C");
       return;
     }
   }
@@ -146,7 +146,7 @@ void MS5803_14BA::device_loop(Command command){
   millis_start = millis();
   while (Wire.available() < 3) {
     if (io_timeout > 0 && ((unsigned int)millis() - millis_start) > io_timeout) {
-      log("Failed to read Depth from I2C");
+      Serial.println("log:Failed to read Depth from I2C");
       return;
     }
   }
