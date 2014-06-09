@@ -10,29 +10,38 @@
 # bits.
 #
 
+echo none > /sys/class/leds/beaglebone\:green\:usr0/trigger
+echo none > /sys/class/leds/beaglebone\:green\:usr1/trigger
+echo none > /sys/class/leds/beaglebone\:green\:usr2/trigger
+echo none > /sys/class/leds/beaglebone\:green\:usr3/trigger
+
 if [ -f /var/.RESIZE_ROOT_PARTITION ]; then
   rm /var/.RESIZE_ROOT_PARTITION
   touch /var/.RESIZE_ROOT
+
+  echo 255 > /sys/class/leds/beaglebone\:green\:usr0/brightness
+  echo 255 > /sys/class/leds/beaglebone\:green\:usr1/brightness
+
   /opt/openrov/linux/expand_root_partition.sh
   # the expand script initiates a reboot
   exit 0
 fi
 
 if [ -f /var/.RESIZE_ROOT ]; then
+  echo 255 > /sys/class/leds/beaglebone\:green\:usr0/brightness
+  echo 0 > /sys/class/leds/beaglebone\:green\:usr1/brightness
+  echo 255 > /sys/class/leds/beaglebone\:green\:usr2/brightness
+  echo 0 > /sys/class/leds/beaglebone\:green\:usr3/brightness
   resize2fs /dev/mmcblk0p2
   rm /var/.RESIZE_ROOT
-	if [ -e /sys/class/leds/beaglebone\:green\:usr0/trigger ] ; then
-		echo default-on > /sys/class/leds/beaglebone\:green\:usr0/trigger
-		echo default-off > /sys/class/leds/beaglebone\:green\:usr1/trigger
-		echo default-on > /sys/class/leds/beaglebone\:green\:usr2/trigger
-		echo default-off > /sys/class/leds/beaglebone\:green\:usr3/trigger
-	fi
 fi
 
 if [ ! -f /var/swapfile ]; then
   bash /opt/openrov/linux/addswapfile.sh
 fi
 
+/opt/openrov/linux/slide-leds.sh  
+ 
 # load the device tree overlay for pin 25 (RESET) and SPI
 CAPEMGR=$( find /sys/devices/ -name bone_capemgr* | head -n 1 )
 echo OPENROV-RESET > $CAPEMGR/slots
