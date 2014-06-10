@@ -73,7 +73,14 @@ LOCAL_VAR_RUN=/var/run            # in case the init script is run by non-root u
                                             #         (see here: https://github.com/isaacs/npm/blob/master/README.md)
 
 NAME=node                                   # name of the node.js executable
-DAEMON=/opt/node/bin/$NAME                 # this SHOULD POINT TO where your node executable is
+if [ -f /opt/node/bin/$NAME ]; then
+        DAEMON=/opt/node/bin/$NAME
+elif [ -f /usr/bin/node ]; then
+        DAEMON=/usr/bin/$NAME
+else
+        echo "Couldn't find node!"
+        exit 1
+fi
 #
 #                                                                              #
 #                   END </MODIFY TO REFLECT YOUR SETTINGS>                     #

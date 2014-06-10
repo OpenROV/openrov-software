@@ -1,7 +1,6 @@
 #!/bin/sh
 
-stop nmbd
-stop smbd
+service samba stop
 RESULT=$?
 if [ $RESULT = 0 ]; then #running
 	exit 0
