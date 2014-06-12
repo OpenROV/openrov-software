@@ -49,8 +49,8 @@ var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
   connections += 1;
-  /*if (connections == 1)
-    controller.start();*/
+  if (connections == 1)
+    controller.start();
   socket.send('initialize');
   // opens socket with client
   if (camera.IsCapturing) {

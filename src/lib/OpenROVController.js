@@ -34,9 +34,6 @@ var OpenROVController = function (eventLoop) {
   var reader = new StatusReader();
   var physics = new ArduinoPhysics();
   var hardware = new Hardware();
-  hardware.on('serial-open', function () {
-    controller.emit('serial-open'); 
-  });
   var controller = new EventEmitter();
   setInterval(function () {
     controller.emit('navdata', navdata);
