@@ -23,7 +23,7 @@ var DashboardEngine = function () {
           } else if (code === 1) {
             engine.emit('message', {
               key: statusKey,
-              value: 'Stoped'
+              value: 'Stopped'
             });
           } else {
             engine.emit('message', {
