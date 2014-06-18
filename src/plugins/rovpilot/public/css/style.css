@@ -1,5 +1,26 @@
-//css for the plugin
+/* css for the plugin */
 #example {
     display: block;
     float: right;
+}
+#rovPilot_depthHold {
+    color:white;
+    padding: 5px;
+    border: 1px solid green;
+    background-color: transparent;
+}
+
+#rovPilot_depthHold.enabled {
+    background-color: green;
+}
+
+#rovPilot_headingHold {
+    color:white;
+    padding: 5px;
+    border: 1px solid #005580;
+    background-color: transparent;
+}
+
+#rovPilot_headingHold.enabled {
+    background-color: #005580;
 }
