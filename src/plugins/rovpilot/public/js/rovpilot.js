@@ -32,8 +32,8 @@
     $('#keyboardInstructions').append('<p>press <i>m</i> to toggle heading hold (BETA)</p>');
     $('#keyboardInstructions').append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
     $('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
-    $('#navtoolbar').append('<li><div id="rovPilot_depthHold">Depth</div></li>');
-    $('#navtoolbar').append('<li><div id="rovPilot_headingHold">Heading</div></li>');
+    $('#navtoolbar').append('<li><a href="#" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
+    $('#navtoolbar').append('<li><a href="#" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
     var self = this;
     setInterval(function () {
       self.sendPilotingData();
