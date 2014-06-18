@@ -18,11 +18,16 @@ LED_STATE[14]="255,0,0,0"
 
 COUNTER=0
 
+LED[0]="/sys/class/leds/beaglebone:green:heartbeat/brightness"
+LED[1]="/sys/class/leds/beaglebone:green:mmc0/brightness"
+LED[2]="/sys/class/leds/beaglebone:green:usr2/brightness"
+LED[3]="/sys/class/leds/beaglebone:green:usr3/brightness"
+
 while true; do
   while IFS=',' read -ra ADDR; do
       LedCounter=0
       for i in "${ADDR[@]}"; do
-          echo $i > /sys/class/leds/beaglebone\:green\:usr$LedCounter/brightness
+          echo $i > ${LED[$LedCounter]} || true
           LedCounter=`expr $LedCounter + 1`
       done
   done <<< "${LED_STATE[$COUNTER]}"
