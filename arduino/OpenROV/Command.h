@@ -5,7 +5,7 @@
 
 #define MAX_ARGS 10
 #define MAX_COMMANDSIZE 40
-#define MAX_COMMANDS 10
+#define MAX_COMMANDS 5
 #define DATABUFFERSIZE      80
 
 class InternalCommand {
