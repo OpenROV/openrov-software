@@ -11,7 +11,7 @@
 *  have the address defined in this file.
 */
 
-//#include "BoardConfig.h"
+#include "BoardConfig.h"
 
 //Kit:
 // The boards are auto configure in the on beaglebone build process in the BoardConfig.h which gets
