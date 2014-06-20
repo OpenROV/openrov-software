@@ -62,7 +62,7 @@ void Pilot::device_loop(Command command){
         Serial.println(';');
       }
       Serial.print(F("targetHeading:"));
-      Serial.print(tgt_Hdg);
+      Serial.print(_headingHoldEnabled ? tgt_Hdg : DISABLED);
       Serial.println(';');
     }
 
@@ -71,7 +71,7 @@ void Pilot::device_loop(Command command){
       if (_depthHoldEnabled) {
         _depthHoldEnabled = false;
         raw_lift = 0;
-        target_depth = -500;  // -500 = system not in hdg hold
+        target_depth = 0;
 
         int argsToSend[] = {1,0}; //include number of parms as last parm
         command.pushCommand("lift",argsToSend);
@@ -90,7 +90,7 @@ void Pilot::device_loop(Command command){
         Serial.println(';');
       }
       Serial.print(F("targetDepth:"));
-      Serial.print(target_depth);
+      Serial.print(_depthHoldEnabled ? target_depth : DISABLED);
       Serial.println(';');
     }
 
