@@ -4,7 +4,17 @@
     height: 20px;
     line-height: 20px;
     padding: 5px;
+    padding-right: 2px;
+    padding-left: 2px;
     background-color: transparent;
+}
+
+#rovPilot_holdLabel {
+    font-weight: bold;
+    font-size: medium;
+    padding-right: 5px;
+    line-height: 52px;
+    height: 52px;
 }
 
 #rovPilot_depthHold {
