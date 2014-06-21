@@ -491,7 +491,7 @@
     //Only send if there is a change
     var controls = {};
     controls.throttle = positions.throttle * this.power;
-    controls.yaw = positions.yaw;
+    controls.yaw = positions.yaw * this.power * 1.5;
     controls.lift = positions.lift * this.power;
     for (var i in positions) {
       if (controls[i] != this.priorControls[i]) {
