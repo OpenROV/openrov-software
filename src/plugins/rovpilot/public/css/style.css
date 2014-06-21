@@ -1,5 +1,58 @@
-//css for the plugin
-#example {
-    display: block;
-    float: right;
+/* css for the plugin */
+.rovPilot_Indicator {
+    top: 5px;
+    height: 20px;
+    line-height: 20px;
+    padding: 5px;
+    padding-right: 2px;
+    padding-left: 2px;
+    background-color: transparent;
+}
+
+#rovPilot_holdLabel {
+    font-weight: bold;
+    font-size: medium;
+    padding-right: 5px;
+    line-height: 52px;
+    height: 52px;
+}
+
+#rovPilot_depthHold {
+    color: white;
+    border: 1px solid green;
+}
+
+#rovPilot_depthHold.enabled {
+    background-color: green;
+}
+
+#rovPilot_headingHold {
+    color: white;
+    border: 1px solid #005580;
+}
+
+#rovPilot_headingHold.enabled {
+    background-color: #005580;
+}
+
+#rovPilot_laser {
+    color: white;
+    border: 1px solid #cd0a0a;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+#rovPilot_laser.enabled {
+    background-color: #cd0a0a;
+}
+
+#rovPilot_laserIcon {
+    width: 40px;
+    height: 35px;
+    margin-top: -7px;
+    background-image: url("/plugin/rovpilot/img/laser_off.png");
+}
+
+#rovPilot_laser.enabled #rovPilot_laserIcon {
+    background-image: url("/plugin/rovpilot/img/laser_on.png");
 }
