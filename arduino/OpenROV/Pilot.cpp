@@ -62,7 +62,11 @@ void Pilot::device_loop(Command command){
         Serial.println(';');
       }
       Serial.print(F("targetHeading:"));
-      Serial.print(_headingHoldEnabled ? tgt_Hdg : DISABLED);
+      if (_headingHoldEnabled) {
+        Serial.print(tgt_Hdg);
+      } else {
+        Serial.print(DISAABLED);
+      }
       Serial.println(';');
     }
 
@@ -90,7 +94,11 @@ void Pilot::device_loop(Command command){
         Serial.println(';');
       }
       Serial.print(F("targetDepth:"));
-      Serial.print(_depthHoldEnabled ? target_depth : DISABLED);
+      if (_depthHoldEnabled) {
+        Serial.print(target_depth);
+      } else {
+        Serial.pitnt(DISABLED);
+      }
       Serial.println(';');
     }
 
