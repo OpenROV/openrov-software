@@ -37,3 +37,4 @@ Thumbs.db
 node_modules
 src/capture
 temp
+.idea

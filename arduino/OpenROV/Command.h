@@ -5,7 +5,7 @@
 
 #define MAX_ARGS 10
 #define MAX_COMMANDSIZE 40
-#define MAX_COMMANDS 10
+#define MAX_COMMANDS 3
 #define DATABUFFERSIZE      80
 
 class InternalCommand {
@@ -19,7 +19,7 @@ class Command {
 //    static int _array[MAX_ARGS];
     static char _commandText[DATABUFFERSIZE+1];
     void parse();
-    		
+
   public:
     static int args[MAX_ARGS];
     boolean get();
