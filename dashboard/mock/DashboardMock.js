@@ -16,7 +16,7 @@ io.sockets.on('connection', function (socket) {
         emitCockpitStatus();
       },
       stop: function () {
-        cockpit.status = 'Stoped';
+        cockpit.status = 'Stopped';
         emitCockpitStatus();
       }
     };
@@ -27,7 +27,7 @@ io.sockets.on('connection', function (socket) {
         emitCloud9Status();
       },
       stop: function () {
-        cloud9.status = 'Stoped';
+        cloud9.status = 'Stopped';
         emitCloud9Status();
       }
     };
@@ -38,7 +38,7 @@ io.sockets.on('connection', function (socket) {
         emitSambaStatus();
       },
       stop: function () {
-        samba.status = 'Stoped';
+        samba.status = 'Stopped';
         emitSambaStatus();
       }
     };
