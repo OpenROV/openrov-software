@@ -219,8 +219,8 @@ void MPU9150::device_loop(Command command){
     navdata::HDGD = MPU.m_fusedEulerPose[VEC3_Z] * RAD_TO_DEGREE;
     //To convert to-180/180 to 0/360
     if (navdata::HDGD < 0) navdata::HDGD+=360;
-    navdata::PITC = MPU.m_fusedEulerPose[VEC3_X] * RAD_TO_DEGREE;
-    navdata::ROLL = MPU.m_fusedEulerPose[VEC3_Y] * RAD_TO_DEGREE;
+    navdata::PITC = MPU.m_fusedEulerPose[VEC3_Y] * RAD_TO_DEGREE;
+    navdata::ROLL = MPU.m_fusedEulerPose[VEC3_X] * RAD_TO_DEGREE;
     navdata::YAW = MPU.m_fusedEulerPose[VEC3_Z] * RAD_TO_DEGREE;
 }
 #endif
