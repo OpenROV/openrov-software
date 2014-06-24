@@ -10,16 +10,22 @@ function Hardware() {
     hardware.emit('Arduino-settings-reported', settings);
   });
   hardware.connect = function () {
+
     hardware.serial = new serialPort.SerialPort(CONFIG.serial, {
       baudrate: CONFIG.serial_baud,
       parser: serialPort.parsers.readline('\r\n')
     });
-    serialConnected = true;
-    logger.log('!Serial port open');
+
+    hardware.serial.on("open", function () {
+      serialConnected = true;
+      logger.log('Serial port open');
+    });
+
     hardware.serial.on('close', function (data) {
       logger.log('!Serial port closed');
       serialConnected = false;
     });
+
     hardware.serial.on('data', function (data) {
       var status = reader.parseStatus(data);
       hardware.emit('status', status);
@@ -41,8 +47,16 @@ function Hardware() {
     emitRawSerialData = !emitRawSerialData;
   };
   hardware.close = function () {
-    hardware.serial.close();
     serialConnected = false;
+    //This code is a work around for a race condition in the serial port code https://github.com/voodootikigod/node-serialport/issues/241#issuecomment-43058353
+    var sp = hardware.serial;
+    hardware.serial.flush(function(err) {
+      setTimeout(function() {
+        sp.close(function(err) {
+        });
+      }, 10);
+  });
+
   };
   return hardware;
 }
