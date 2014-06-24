@@ -23,24 +23,24 @@ void Motors::goport(int p){
   if (p>MIDPOINT) modifier = motor_positive_modifer[port_motor];
   if (p<MIDPOINT) modifier = motor_negative_modifer[port_motor];
   int delta = p-MIDPOINT;
-  port.writeMicroseconds(MIDPOINT+delta*modifier);
+  port.writeMicroseconds(constrain(MIDPOINT+delta*modifier,1000,2000));
 
 }
 
 void Motors::govertical(int v){
-  int modifier = 1;  
+  int modifier = 1;
   if (v>MIDPOINT) modifier = motor_positive_modifer[vertical_motor];
   if (v<MIDPOINT) modifier = motor_negative_modifer[vertical_motor];
   int delta = v-MIDPOINT;
-  vertical.writeMicroseconds(MIDPOINT+delta*modifier); 
+  vertical.writeMicroseconds(constrain(MIDPOINT+delta*modifier,1000,2000));
 }
 
 void Motors::gostarbord(int s){
-  int modifier = 1;  
+  int modifier = 1;
   if (s>MIDPOINT) modifier = motor_positive_modifer[starbord_motor];
-  if (s<MIDPOINT) modifier = motor_negative_modifer[starbord_motor];  
+  if (s<MIDPOINT) modifier = motor_negative_modifer[starbord_motor];
   int delta = s-MIDPOINT;
-  starbord.writeMicroseconds(MIDPOINT+delta*modifier); 
+  starbord.writeMicroseconds(constrain(MIDPOINT+delta*modifier,1000,2000));
 }
 
 void Motors::stop(){
