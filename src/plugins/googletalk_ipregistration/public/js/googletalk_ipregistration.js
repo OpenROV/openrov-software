@@ -6,7 +6,7 @@
     // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
-    $('#settings H4:contains(\'Runtime Settings:\')').append('\t\t  <div class="control-group"> \t\t      <label class="control-label" for="google-talk-id">Google Talk ROV ID:</label> \t\t      <input type="text" id="googleTalkROVid" /> \t\t      <label class="control-label" for="google-talk-password">Google Talk ROV Password:</label> \t\t      <input type="text" id="googleTalkROVpassword" /> \t\t      <label class="control-label" for="google-talk-pilot-id">Google Talk Pilot ID:</label> \t\t      <input type="text" id="googleTalkPilotId" /> \t\t  </div>');
+    $('#settings #plugin-settings').append('\t\t<h4>Google talk registration:</h4><br>\t\t  <div class="control-group"> \t\t      <label class="control-label" for="google-talk-id">Google Talk ROV ID:</label> \t\t      <input type="text" id="googleTalkROVid" /> \t\t      <label class="control-label" for="google-talk-password">Google Talk ROV Password:</label> \t\t      <input type="text" id="googleTalkROVpassword" /> \t\t      <label class="control-label" for="google-talk-pilot-id">Google Talk Pilot ID:</label> \t\t      <input type="text" id="googleTalkPilotId" /> \t\t  </div>');
     // Register the various event handlers
     this.listen();
   };
