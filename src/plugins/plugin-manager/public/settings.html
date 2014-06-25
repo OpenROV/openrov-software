@@ -1,3 +1,11 @@
 <div id="pluginManager-settings">
-    <h4>Plugins to enable/disable:</h4>
+    <h4>Plugins to enable/disable:</h4><br>
+    <ul data-bind="foreach: controlablePlugins">
+        <li>
+            <div>
+                Plugin: <span data-bind="text: name"></span>
+            </div>
+        </li>
+    </ul>
+
 </div>
