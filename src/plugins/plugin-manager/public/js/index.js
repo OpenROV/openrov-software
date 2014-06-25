@@ -4,8 +4,9 @@
     PluginManager = function Example(cockpit) {
         console.log('Loading Plugin Manager plugin.');
         this.cockpit = cockpit;
-        $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
-        $('#cockpit').load('plugin/01_cockpit/plugin.html', function () {
+
+        $('#settings #plugin-settings').append('<div id="plugin-manager-settings"></div>');
+        $('#plugin-manager-settings').load('plugin/plugin-manager/settings.html', function () {});
     };
-    window.Cockpit.plugins.push(Example);
+    window.Cockpit.plugins.push(PluginManager);
 }(window, jQuery));
