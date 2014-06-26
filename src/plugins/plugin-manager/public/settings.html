@@ -3,7 +3,9 @@
     <ul data-bind="foreach: controlablePlugins">
         <li>
             <div>
-                Plugin: <span data-bind="text: name"></span>
+                <span data-bind="text: name">&nbsp;</span>
+                <button type="button" class="btn btn-default btn-xs disabled">Enable</button>
+                <button type="button" class="btn btn-primary btn-xs">Disable</button>
             </div>
         </li>
     </ul>

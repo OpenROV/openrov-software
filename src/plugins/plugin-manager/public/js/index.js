@@ -19,7 +19,7 @@
         cockpit.loadedPlugins.forEach(function (plugin) {
           if (plugin.canBeDisabled) { self.model.controlablePlugins.push(plugin); }
         });
-        ko.applyBindings(this.model);
+        ko.applyBindings(self.model, document.getElementById("pluginManager-settings"));
 
       });
   };
