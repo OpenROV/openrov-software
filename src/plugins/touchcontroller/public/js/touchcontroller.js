@@ -166,7 +166,13 @@
       return;
     // Instance variables
     this.cockpit = cockpit;
+    this.name = "Touch controller";
     $(document).trigger('resize');  // Add required UI elements
+
+    // for plugin management:
+    this.canBeDisabled = true;
+    this.enable = function() { $('#touchcontroller.real').show(); };
+    this.disable = function() { $('#touchcontroller.real').hide(); };
   };
   window.Cockpit.plugins.push(Touchcontroller);
 }(window, jQuery));

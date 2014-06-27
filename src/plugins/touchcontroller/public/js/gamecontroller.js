@@ -309,6 +309,8 @@
     createOverlayCanvas: function () {
       this.canvas = document.createElement('canvas');
       // Scale to same size as original canvas
+      this.canvas.id = "touchcontroller";
+      this.canvas.setAttribute('class', 'real');
       this.resize(true);
       document.getElementsByTagName('body')[0].appendChild(this.canvas);
       this.ctx = this.canvas.getContext('2d');

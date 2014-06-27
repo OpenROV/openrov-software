@@ -4,8 +4,8 @@
         <li>
             <div>
                 <span data-bind="text: name">&nbsp;</span>
-                <button type="button" class="btn btn-default btn-xs disabled">Enable</button>
-                <button type="button" class="btn btn-primary btn-xs">Disable</button>
+                <button type="button" class="btn btn-default btn-xs" data-bind="css: {disabled: isEnabled()}, click: $parent.enablePlugin, enabled: !isEnabled()">Enable</button>
+                <button type="button" class="btn btn-primary btn-xs" data-bind="css: {disabled: !isEnabled()}, click: $parent.disablePlugin, enabled: isEnabled()">Disable</button>
             </div>
         </li>
     </ul>
