@@ -43,7 +43,7 @@ void Pilot::device_loop(Command command){
         raw_Left = 0;
         raw_Right = 0;
         hdg_Error_Integral = 0;  // Reset error integrator
-        tgt_Hdg = -500;  // -500 = system not in hdg hold
+        tgt_Hdg = 0;  // 500 = system not in hdg hold
 
         int argsToSend[] = {1,00}; //include number of parms as last parm
         command.pushCommand("yaw",argsToSend);
