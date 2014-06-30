@@ -8,7 +8,6 @@
       default: return true;}
   };
 
-
   var PluginManagerModel = function PluginManagerModel() {
     var self = this;
     self.controlablePlugins = ko.observableArray();
@@ -21,43 +20,51 @@
       if (!plugin.isEnabled()) return;
       plugin.isEnabled(false);
     };
-  }
+  };
 
-  var PluginManager;
-  PluginManager = function PluginManager(cockpit) {
+  var Plugin = function Plugin(rawPlugin, configManager) {
+    var self = this;
+    self.rawPlugin = rawPlugin;
+    self.config = {};
+    self.isEnabled = ko.observable(true);
+    self.name = ko.computed(function() { return self.rawPlugin.name; });
+    self.viewName = ko.computed(function() { return self.rawPlugin.viewName; });
+
+    //Get data from server
+    configManager.get(self.name(), function(pluginConfig) {
+      if (pluginConfig != undefined && pluginConfig.isEnabled != undefined ) {
+        self.config = pluginConfig;
+        self.isEnabled(pluginConfig.isEnabled.toBool());
+      }
+    });
+
+    //Update data to server when changed
+    self.isEnabled.subscribe(function(newIsEnabled) {
+      if (newIsEnabled == true) { self.rawPlugin.enable(); }
+      else { self.rawPlugin.disable(); }
+
+      self.config.isEnabled = newIsEnabled.toString();
+      configManager.set(self.name(), self.config);
+    });
+  };
+
+  var PluginManager = function PluginManager(cockpit) {
     console.log('Loading Plugin Manager plugin.');
     this.cockpit = cockpit;
     this.model = new PluginManagerModel();
     var self = this;
-    var config = new PluginManagerConfig();
+    var configManager = new PluginManagerConfig();
 
     $('#plugin-settings').append('<div id="plugin-manager-settings"></div>');
     $('#plugin-manager-settings').load('plugin/plugin-manager/settings.html',
       function() {
         cockpit.loadedPlugins.forEach(function (plugin) {
-          // TODO: needs to be put into a  wrapping object for cleanliness
-          plugin.isEnabled = ko.observable(true);
-
-          plugin.isEnabled.subscribe(function(newIsEnabled) {
-            if (newIsEnabled == true) { plugin.enable(); }
-            else { plugin.disable(); }
-
-            plugin.config.isEnabled = newIsEnabled.toString();
-            config.set(plugin.name, plugin.config);
-          });
 
           if (plugin.canBeDisabled) {
-            self.model.controlablePlugins.push(plugin);
-            config.get(plugin.name, function(pluginConfig) {
-              if (pluginConfig != undefined && pluginConfig.isEnabled != undefined ) {
-                plugin.config = pluginConfig;
-                plugin.isEnabled(pluginConfig.isEnabled.toBool());
-              }
-            })
+            self.model.controlablePlugins.push(new Plugin(plugin, configManager));
           }
         });
         ko.applyBindings(self.model, document.getElementById("pluginManager-settings"));
-
       });
   };
   window.Cockpit.plugins.push(PluginManager);

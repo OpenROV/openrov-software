@@ -15,7 +15,6 @@ function pluginManager(name, deps) {
     '/plugin/plugin-manager/config/:pluginName',
     function(req, res) {
       res.send(preferences[req.params.pluginName]);
-      console.log(' ### GET PLUGIN MANAGER: ' + req.params.pluginName + " : isEnabled: " + preferences[req.params.pluginName].isEnabled);
     });
 
   deps.app.post(
@@ -25,18 +24,19 @@ function pluginManager(name, deps) {
       preferences[req.params.pluginName] = req.body;
       res.status(200);
       res.send(preferences[req.params.pluginName]);
-      console.log(' ### POST PLUGIN MANAGER: ' + req.params.pluginName + " : isEnabled: " + req.body.isEnabled);
-    }
-  )
+
+      deps.config.preferences.set(PREFERENCES, preferences);
+      deps.config.savePreferences();
+    });
 }
 
 function getPreferences(config) {
   var preferences =  config.preferences.get(PREFERENCES);
   if (preferences == undefined) {
-    config.preferences.set(PREFERENCES, {touchcontroller: {isEnabled: "false"}});
+    preferences = {};
+    config.preferences.set(PREFERENCES, preferences);
   }
-  preferences = config.preferences.get(PREFERENCES);
-  console.log('Plugin Manager preferences: ' + JSON.stringify(preferences));
+  console.log('Plugin Manager loaded preferences: ' + JSON.stringify(preferences));
   return preferences;
 }
 module.exports = pluginManager;

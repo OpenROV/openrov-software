@@ -97,13 +97,8 @@ io.sockets.on('connection', function (socket) {
     for (var property in value)
       if (value.hasOwnProperty(property))
         CONFIG.preferences.set(property, value[property]);
-    CONFIG.preferences.save(function (err) {
-      if (err) {
-        console.error(err.message);
-        return;
-      }
-      console.log('Configuration saved successfully.');
-    });
+
+    CONFIG.savePreferences();
     controller.updateSetting();
     setTimeout(function () {
       controller.requestSettings();
