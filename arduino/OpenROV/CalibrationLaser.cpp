@@ -16,7 +16,6 @@ void CalibrationLaser::device_loop(Command command){
     if( command.cmp("claser")){
       int value = command.args[1];
       claser.write(value);
-      claser.send(value);
     }       
 
 }
