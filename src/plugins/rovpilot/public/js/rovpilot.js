@@ -32,8 +32,6 @@
     $('#keyboardInstructions').append('<p>press <i>m</i> to toggle heading hold (BETA)</p>');
     $('#keyboardInstructions').append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
     $('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
-    $('#navtoolbar').append('<li><div id="rovPilot_depthHold">Depth</div></li>');
-    $('#navtoolbar').append('<li><div id="rovPilot_headingHold">Heading</div></li>');
     var self = this;
     setInterval(function () {
       self.sendPilotingData();
@@ -45,10 +43,6 @@
   //so that the reference to this instance is available for further processing
   ROVpilot.prototype.listen = function listen() {
     var rov = this;
-    this.cockpit.socket.on('status', function (data) {
-        rov.UpdateStatusIndicators(data);
-    });
-
     cockpitEventEmitter.on('gamepad.connected', function () {
       $('#gamepad').toggleClass('hidden', false);
     });
@@ -510,16 +504,6 @@
       }
       cockpitEventEmitter.emit('rovpilot.control_update', controls);
       this.priorControls = controls;
-    }
-  };
-  ROVpilot.prototype.UpdateStatusIndicators = function(status) {
-    if ('targetDepth' in status) {
-     var depthHoldEnabled = (status.targetDepth != -500);
-     $('#rovPilot_depthHold').toggleClass('enabled', depthHoldEnabled);
-    }
-    if ('targetHeading' in status) {
-      var headingHoldEnabled = (status.targetHeading != -500);
-      $('#rovPilot_headingHold').toggleClass('enabled', headingHoldEnabled);
     }
   };
   window.Cockpit.plugins.push(ROVpilot);
