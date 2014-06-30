@@ -1,6 +1,5 @@
 var EventEmitter = require('events').EventEmitter, StatusReader = require('./StatusReader'), CONFIG = require('./config');
 function Hardware() {
-  var DISABLED = "DISABLED";
   var hardware = new EventEmitter();
   var reader = new StatusReader();
   hardware.depthHoldEnabled = false;
@@ -52,8 +51,7 @@ function Hardware() {
             hardware.depthHoldEnabled = false
             console.log('HARDWARE-MOCK depth hold DISABLED');
         }
-        var status = 'targetDepth:' + (hardware.depthHoldEnabled ? targetDepth.toString() : DISABLED);
-        hardware.emit('status', reader.parseStatus(status));
+        hardware.emit('status', reader.parseStatus('targetDepth:' + targetDepth));
     }
 
     // Heading hold
@@ -69,8 +67,7 @@ function Hardware() {
             hardware.targetHoldEnabled = false
             console.log('HARDWARE-MOCK heading hold DISABLED');
         }
-        var status = 'targetHeading:' + (hardware.targetHoldEnabled ? targetHeading.toString() : DISABLED);
-        hardware.emit('status', reader.parseStatus(status));
+        hardware.emit('status', reader.parseStatus('targetHeading:' + targetHeading));
     }
   };
   hardware.close = function () {

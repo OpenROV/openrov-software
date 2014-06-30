@@ -1,4 +1,9 @@
 /* css for the plugin */
+#example {
+    display: block;
+    float: right;
+}
+
 .rovPilot_Indicator {
     top: 5px;
     height: 20px;
@@ -28,21 +33,8 @@
 #rovPilot_laser {
     color: white;
     border: 1px solid #cd0a0a;
-    padding-left: 2px;
-    padding-right: 2px;
 }
 
 #rovPilot_laser.enabled {
     background-color: #cd0a0a;
-}
-
-#rovPilot_laserIcon {
-    width: 40px;
-    height: 35px;
-    margin-top: -7px;
-    background-image: url("/plugin/rovpilot/img/laser_off.png");
-}
-
-#rovPilot_laser.enabled #rovPilot_laserIcon {
-    background-image: url("/plugin/rovpilot/img/laser_on.png");
 }
