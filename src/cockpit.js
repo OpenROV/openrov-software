@@ -9,6 +9,8 @@
 var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
 app.configure(function () {
   app.use(express.static(__dirname + '/static/'));
+  app.use(express.json());
+  app.use(express.urlencoded());
   app.use('/photos', express.directory(CONFIG.preferences.get('photoDirectory')));
   app.use('/photos', express.static(CONFIG.preferences.get('photoDirectory')));
   app.set('port', CONFIG.port);

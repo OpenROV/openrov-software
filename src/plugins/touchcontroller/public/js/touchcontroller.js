@@ -1,7 +1,7 @@
 (function (window, $, undefined) {
   'use strict';
   var Touchcontroller;
-  var is_touch_device = 'ontouchstart' in document.documentElement;
+  var is_touch_device = true;// 'ontouchstart' in document.documentElement;
   if (!is_touch_device)
     return;
   $(function () {
@@ -166,7 +166,8 @@
       return;
     // Instance variables
     this.cockpit = cockpit;
-    this.name = "Touch controller";
+    this.name = "touchcontroller"
+    this.viewName = "Touch controller";
     $(document).trigger('resize');  // Add required UI elements
 
     // for plugin management:
