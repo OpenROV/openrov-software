@@ -5,7 +5,7 @@
 #include "Device.h"
 #include "Pin.h"
 
-#define DISABLED F("DISABLED")
+#define DISABLED "DISABLED"
 
 class Pilot : public Device {
   public:
