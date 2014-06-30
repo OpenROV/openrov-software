@@ -65,7 +65,7 @@ void Pilot::device_loop(Command command){
       if (_headingHoldEnabled) {
         Serial.print(tgt_Hdg);
       } else {
-        Serial.print(DISABLED);
+        Serial.print(DISAABLED);
       }
       Serial.println(';');
     }
