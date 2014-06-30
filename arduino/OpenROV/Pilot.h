@@ -5,8 +5,6 @@
 #include "Device.h"
 #include "Pin.h"
 
-#define DISABLED "DISABLED"
-
 class Pilot : public Device {
   public:
     Pilot():Device(){};
