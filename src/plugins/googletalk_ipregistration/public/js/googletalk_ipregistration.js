@@ -6,7 +6,10 @@
     // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
-    $('#settings #plugin-settings').append('\t\t<h4>Google talk registration:</h4><br>\t\t  <div class="control-group"> \t\t      <label class="control-label" for="google-talk-id">Google Talk ROV ID:</label> \t\t      <input type="text" id="googleTalkROVid" /> \t\t      <label class="control-label" for="google-talk-password">Google Talk ROV Password:</label> \t\t      <input type="text" id="googleTalkROVpassword" /> \t\t      <label class="control-label" for="google-talk-pilot-id">Google Talk Pilot ID:</label> \t\t      <input type="text" id="googleTalkPilotId" /> \t\t  </div>');
+    $('#settings')
+      .find('#plugin-settings')
+      .append('<div id="gtalk-settings"></div>');
+    $('#gtalk-settings').load('plugin/googletalk_ipregistration/settings.html');
     // Register the various event handlers
     this.listen();
   };
@@ -14,7 +17,7 @@
   //so that the reference to this instance is available for further processing
   Googletalk_ipregistraion.prototype.listen = function listen() {
     var googletalk = this;
-    $('#settings .back-button').click(function () {
+    $('#settings').find('.back-button').click(function () {
       googletalk.SaveSettings();
     });
     this.cockpit.socket.on('settings', function (data) {

@@ -1,1 +1,3 @@
-//css for the plugin
+#firmware-modal {
+    z-index: 10010;
+}

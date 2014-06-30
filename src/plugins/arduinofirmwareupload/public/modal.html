@@ -1,0 +1,49 @@
+<div class="modal fade" id="firmware-upload-dialog">
+    <!-- Firmware upload -->
+    <div class="modal-header"><h3>Upload Arduino Firmware</h3></div>
+    <div class="modal-body">
+        <!-- <strong>Filename: </strong><span data-bind="text: selectedFileName"></span> <br>
+        <hr>-->
+        <div class="progress-step"><p>Overall progress:</p>
+
+            <div class="progress progress-striped progress-success">
+                <div class="bar" style="width: 0%;" data-bind="style: { width: overallPercentage() + '%' }"></div>
+            </div>
+        </div>
+        <div class="progress-step"><!--<p>File upload:</p>
+
+            <div class="progress progress-striped">
+                <div class="bar" style="width: 0%;" data-bind="style: { width: uploadPercentage() + '%' }"></div>
+            </div>-->
+            <ul class="unstyled">
+                <li data-bind="css: { muted: ! unpacking() }">Unpacking <i class="icon-fire"
+                                                                           data-bind="visible: unpacking() && ! unpacked() "></i><i
+                        class="icon-ok" data-bind="visible: unpacked"></i><i class="icon-warning-sign"
+                                                                                data-bind="visible: unpacking() && ! unpacked() && failed()"></i>
+                </li>
+                <li data-bind="css: { muted: ! compiling() }">Compiling <i class="icon-fire"
+                                                                           data-bind="visible: compiling() && ! compiled()"></i><i
+                        class="icon-ok" data-bind="visible: compiled"></i> <i class="icon-warning-sign"
+                                                                                  data-bind="visible: compiling() && ! compiled() && failed()"></i>
+                </li>
+                <li data-bind="css: { muted: ! arduinoUploading() }">Upload to Arduino <i class="icon-fire"
+                                                                                          data-bind="visible: arduinoUploading() && ! arduinoUploaded()"></i>
+                    <i class="icon-ok" data-bind="visible: arduinoUploaded"></i><i class="icon-warning-sign"
+                                                                                       data-bind="visible: arduinoUploading() && ! arduinoUploaded() && failed()"></i>
+                </li>
+            </ul>
+        </div>
+        <div class="progress-step"><a href="#" class="btn" id="arduinoFirmware-showdetails"
+                                      data-bind="css: { disabled: ! inProgress() }">Show details</a>
+
+            <div class="collapse" data-bind="css: { collapse: !detailsVisible() }"><textarea
+                    id="arduiniFirmware-details" readonly="readonly" data-bind="text: details"></textarea></div>
+        </div>
+    </div>
+    <div class="modal-footer"><a href="#" class="btn" data-toggle="modal" data-target="#firmware-upload-dialog"
+                                 data-bind="css: { disabled: inProgress() }, visible: ! arduinoUploaded()">Cancel</a> <a
+            href="#" class="btn btn-primary" id="arduinoFirmware-startupload" data-bind="visible: ! arduinoUploaded()">Apply
+        new firmware</a> <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal"
+                            data-target="#firmware-upload-dialog" data-bind="visible: arduinoUploaded() || failed()">Close</a>
+    </div>
+</div>
