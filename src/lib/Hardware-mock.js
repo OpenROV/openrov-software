@@ -4,7 +4,6 @@ function Hardware() {
   var reader = new StatusReader();
   hardware.depthHoldEnabled = false;
   hardware.targetHoldEnabled = false;
-  hardware.laserEnabled = false;
 
   reader.on('Arduino-settings-reported', function (settings) {
     hardware.emit('Arduino-settings-reported', settings);
@@ -26,16 +25,6 @@ function Hardware() {
     if (commandText === 'tilt') {
       hardware.emit('status', reader.parseStatus('servo:' + commandParts[1]));
       console.log('HARDWARE-MOCK return servo status');
-    }
-    if (commandText === 'claser') {
-        if (hardware.laserEnabled) {
-          hardware.laserEnabled = false;
-          hardware.emit('status', reader.parseStatus('claser:0'));
-        }
-        else {
-          hardware.laserEnabled = true;
-          hardware.emit('status', reader.parseStatus('claser:255'));
-        }
     }
 
     // Depth hold

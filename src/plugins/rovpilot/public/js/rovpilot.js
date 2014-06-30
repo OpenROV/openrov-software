@@ -34,7 +34,6 @@
     $('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
     $('#navtoolbar').append('<li><a href="#" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
     $('#navtoolbar').append('<li><a href="#" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
-    $('#navtoolbar').append('<li><a href="#" id="rovPilot_laser" class="rovPilot_Indicator">Laser</div></a>');
     var self = this;
     setInterval(function () {
       self.sendPilotingData();
@@ -521,10 +520,6 @@
     if ('targetHeading' in status) {
       var headingHoldEnabled = (status.targetHeading != -500);
       $('#rovPilot_headingHold').toggleClass('enabled', headingHoldEnabled);
-    }
-    if ('claser' in status) {
-      var laserEnabled = (status.claser == 255);
-      $('#rovPilot_laser').toggleClass('enabled', laserEnabled);
     }
   };
   window.Cockpit.plugins.push(ROVpilot);
