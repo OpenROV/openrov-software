@@ -31,7 +31,7 @@
     var self = this;
     var config = new PluginManagerConfig();
 
-    $('#settings #plugin-settings').append('<div id="plugin-manager-settings"></div>');
+    $('#plugin-settings').append('<div id="plugin-manager-settings"></div>');
     $('#plugin-manager-settings').load('plugin/plugin-manager/settings.html',
       function() {
         cockpit.loadedPlugins.forEach(function (plugin) {
@@ -39,12 +39,11 @@
           plugin.isEnabled = ko.observable(true);
 
           plugin.isEnabled.subscribe(function(newIsEnabled) {
-            if (!!newIsEnabled == true) { plugin.enable(); }
+            if (newIsEnabled == true) { plugin.enable(); }
             else { plugin.disable(); }
-            if (!!plugin.config.isEnabled != !!newIsEnabled) {
-              plugin.config.isEnabled = !!newIsEnabled;
-              config.set(plugin.name, plugin.config);
-            }
+
+            plugin.config.isEnabled = newIsEnabled.toString();
+            config.set(plugin.name, plugin.config);
           });
 
           if (plugin.canBeDisabled) {
