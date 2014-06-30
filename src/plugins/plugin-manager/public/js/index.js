@@ -1,6 +1,14 @@
 (function (window, $, undefined) {
   'use strict';
 
+  String.prototype.toBool = function() {
+    switch(this.toLowerCase()) {
+      case "false": case "no": case "0": case "":
+      return false;
+      default: return true;}
+  };
+
+
   var PluginManagerModel = function PluginManagerModel() {
     var self = this;
     self.controlablePlugins = ko.observableArray();
@@ -27,14 +35,14 @@
     $('#plugin-manager-settings').load('plugin/plugin-manager/settings.html',
       function() {
         cockpit.loadedPlugins.forEach(function (plugin) {
-          // TODO: needs to be put into a  wrapping object for cleanes
+          // TODO: needs to be put into a  wrapping object for cleanliness
           plugin.isEnabled = ko.observable(true);
 
           plugin.isEnabled.subscribe(function(newIsEnabled) {
-            if (newIsEnabled == true) { plugin.enable(); }
+            if (!!newIsEnabled == true) { plugin.enable(); }
             else { plugin.disable(); }
-            if (plugin.config.isEnabled != newIsEnabled) {
-              plugin.config.isEnabled = newIsEnabled;
+            if (!!plugin.config.isEnabled != !!newIsEnabled) {
+              plugin.config.isEnabled = !!newIsEnabled;
               config.set(plugin.name, plugin.config);
             }
           });
@@ -44,7 +52,7 @@
             config.get(plugin.name, function(pluginConfig) {
               if (pluginConfig != undefined && pluginConfig.isEnabled != undefined ) {
                 plugin.config = pluginConfig;
-                plugin.isEnabled(pluginConfig.isEnabled);
+                plugin.isEnabled(pluginConfig.isEnabled.toBool());
               }
             })
           }

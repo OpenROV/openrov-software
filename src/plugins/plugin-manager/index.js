@@ -21,9 +21,10 @@ function pluginManager(name, deps) {
   deps.app.post(
     '/plugin/plugin-manager/config/:pluginName',
     function(req, res) {
+      console.log(typeof req.body.isEnabled);
       preferences[req.params.pluginName] = req.body;
       res.status(200);
-      res.send();
+      res.send(preferences[req.params.pluginName]);
       console.log(' ### POST PLUGIN MANAGER: ' + req.params.pluginName + " : isEnabled: " + req.body.isEnabled);
     }
   )
@@ -32,7 +33,7 @@ function pluginManager(name, deps) {
 function getPreferences(config) {
   var preferences =  config.preferences.get(PREFERENCES);
   if (preferences == undefined) {
-    config.preferences.set(PREFERENCES, {touchcontroller: {isEnabled: false}});
+    config.preferences.set(PREFERENCES, {touchcontroller: {isEnabled: "false"}});
   }
   preferences = config.preferences.get(PREFERENCES);
   console.log('Plugin Manager preferences: ' + JSON.stringify(preferences));
