@@ -97,7 +97,7 @@ void Pilot::device_loop(Command command){
       if (_depthHoldEnabled) {
         Serial.print(target_depth);
       } else {
-        Serial.print(DISABLED);
+        Serial.pitnt(DISABLED);
       }
       Serial.println(';');
     }
