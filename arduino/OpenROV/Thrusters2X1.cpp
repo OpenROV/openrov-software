@@ -170,11 +170,7 @@ void Thrusters::device_loop(Command command){
   if (command.cmp("lift")){
     if (command.args[1]>=-100 && command.args[1]<=100) {
       trg_lift = command.args[1]/100.0;
-      if (trg_lift>=0){
-        v = 1500 + 500*trg_lift;
-      } else {
-        v = 1500 + 250*trg_lift;
-      }
+      v = 1500 + 500*trg_lift;
     }
   }
 
@@ -243,7 +239,3 @@ void Thrusters::device_loop(Command command){
   }
 }
 #endif
-
-
-
-

@@ -207,6 +207,8 @@ fs.readdir(dir, function (err, files) {
     }
   });
 });
+controller.start();
+
 // Start the web server
 server.listen(app.get('port'), function () {
   console.log('Started listening on port: ' + app.get('port'));
