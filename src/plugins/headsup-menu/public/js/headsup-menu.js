@@ -6,7 +6,11 @@
     this.cockpit = cockpit;
 
     // Add required UI elements
-    $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
+    $('#video-container').append('<div id="headsup-menu-base"></div>');
+
+    $('#headsup-menu-base').load(
+      'plugin/headsup-menu/headsup.html',
+      function() {});
 
     // for plugin management:
     this.name = "headsup-menu" // for the settings
