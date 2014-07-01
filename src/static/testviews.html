@@ -71,6 +71,7 @@ function autoResize(id){
             var styles = [];
             styles.push('../plugins/touchcontroller/public/css/style.css');
             styles.push('../plugins/visualisation3d/public/css/style.css');
+            styles.push('../plugins/rovpilot/public/css/style.css');
 
             frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:styles, scripts:scripts}));
             frameDoc.close();
