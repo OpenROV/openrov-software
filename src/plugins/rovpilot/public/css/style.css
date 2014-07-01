@@ -3,11 +3,18 @@
     display: block;
     float: right;
 }
-#rovPilot_depthHold {
-    color:white;
+
+.rovPilot_Indicator {
+    top: 5px;
+    height: 20px;
+    line-height: 20px;
     padding: 5px;
-    border: 1px solid green;
     background-color: transparent;
+}
+
+#rovPilot_depthHold {
+    color: white;
+    border: 1px solid green;
 }
 
 #rovPilot_depthHold.enabled {
@@ -15,10 +22,8 @@
 }
 
 #rovPilot_headingHold {
-    color:white;
-    padding: 5px;
+    color: white;
     border: 1px solid #005580;
-    background-color: transparent;
 }
 
 #rovPilot_headingHold.enabled {
