@@ -11,7 +11,7 @@
     // for plugin management:
     this.name = "example" // for the settings
     this.viewName = "Example plugin"; // for the UI
-    this.canBeDisabled = false; // SET THIS TO true to see it working!
+    this.canBeDisabled = true; // SET THIS TO true to see it working!
     this.enable = function() { alert('example enabled'); };
     this.disable = function() { alert('example disabled'); };
 

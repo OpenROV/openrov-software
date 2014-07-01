@@ -6,10 +6,16 @@
     // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
+
+    //this technique forces relative path to the js file instead of the excution directory
+    var jsFileLocation = $('script[src*=googletalk_ipregistration]').attr('src');
+    // the js file path
+    jsFileLocation = jsFileLocation.replace('googletalk_ipregistration.js', '');
+
     $('#settings')
       .find('#plugin-settings')
       .append('<div id="gtalk-settings"></div>');
-    $('#gtalk-settings').load('plugin/googletalk_ipregistration/settings.html');
+    $('#gtalk-settings').load(jsFileLocation + '../settings.html');
     // Register the various event handlers
     this.listen();
   };

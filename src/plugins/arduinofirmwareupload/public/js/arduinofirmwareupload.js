@@ -10,19 +10,26 @@
     var self = this;
     // Add required UI elements
 
+    //this technique forces relative path to the js file instead of the excution directory
+    var jsFileLocation = $('script[src*=arduinofirmwareupload]').attr('src');
+    // the js file path
+    jsFileLocation = jsFileLocation.replace('arduinofirmwareupload.js', '');
+
     $('#settings')
       .find('#plugin-settings')
       .append('<div id="firmware-settings"></div>');
     $('#firmware-settings')
       .load(
-        'plugin/arduinofirmwareupload/settings.html',
+        jsFileLocation +
+        '../settings.html',
         function() {
           ko.applyBindings(self.arduinoFirmwareVM, document.getElementById("firmware-settings"));
         });
     $('#settings').after('<div id="firmware-modal"></div>');
     $('#firmware-modal')
       .load(
-        'plugin/arduinofirmwareupload/modal.html',
+        jsFileLocation +
+        '../modal.html',
         function() {
           ko.applyBindings(self.arduinoFirmwareVM, document.getElementById("firmware-modal"));
 

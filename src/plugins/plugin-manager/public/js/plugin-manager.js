@@ -56,10 +56,16 @@
     var configManager = new PluginManagerConfig();
 
     $('#plugin-settings').append('<div id="plugin-manager-settings"></div>');
-    $('#plugin-manager-settings').load('plugin/plugin-manager/settings.html',
+
+    //this technique forces relative path to the js file instead of the excution directory
+    var jsFileLocation = $('script[src*=plugin-manager\\.js]').attr('src');
+    // the js file path
+    jsFileLocation = jsFileLocation.replace('plugin-manager.js', '');
+
+    $('#plugin-manager-settings').load(jsFileLocation + '../settings.html',
       function() {
         cockpit.loadedPlugins.forEach(function (plugin) {
-
+          console.log('evaluating plugin for pluginmanager');
           if (plugin.canBeDisabled) {
             self.model.controlablePlugins.push(new Plugin(plugin, configManager));
           }
