@@ -12,7 +12,13 @@
     if (window.Cockpit.headsUpMenu != undefined) {
       window.Cockpit.headsUpMenu.register('Example menu', function () {
         alert('example menu item from heads up menu');
-      })
+      });
+      window.Cockpit.headsUpMenu.register('Example menuCCCCCCCCCCCCCCCCCCCC', function () {
+        alert('example menu item from heads up menu 2');
+      });
+      window.Cockpit.headsUpMenu.register('Example menu AAAAA', function () {
+        alert('example menu item from heads up menu 3');
+      });
     }
   };
   window.Cockpit.plugins.push(Example);

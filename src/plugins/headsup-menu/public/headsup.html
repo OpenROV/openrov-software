@@ -1,10 +1,10 @@
 <div id="headsup-menu-container">
     <div class="heading">Heads-Up Menu</div>
     <div id="headsup-menu-items">
-        <ul data-bind="foreach: items">
+        <ul class="unstyled" data-bind="foreach: items">
             <li>
                 <div class="menuRow">
-                    <a href="#" data-bind="text: label, click: $parent.trigger"></a>
+                    <button class="btn btn-large btn-block" data-bind="text: label, click: $parent.trigger"></button>
                 </div>
             </li>
         </ul>

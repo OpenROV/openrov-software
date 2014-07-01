@@ -13,6 +13,11 @@
       function() {
 
         ko.applyBindings(window.Cockpit.headsUpMenu, document.getElementById("headsup-menu-base"));
+
+        $('.menuRow').find('.btn').hover(
+          function(){ $(this).addClass('btn-primary') },
+          function(){ $(this).removeClass('btn-primary') }
+        );
       });
 
     // for plugin management:
