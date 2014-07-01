@@ -32,14 +32,16 @@
     Cockpit.plugins.forEach(function (plugin) {
       var loadedPlugin = null;
       try {
-       loadedPlugin = new plugin(cockpit);
+        loadedPlugin = new plugin(cockpit);
       } catch (err) {
         console.log('error loading a plugin!!!' + err);
       }
       if (loadedPlugin != null) {
         if (loadedPlugin.canBeDisabled != undefined) {
-          if (loadedPlugin.name == undefined) { alert("Plugin " + loadedPlugin + "has to define a name property!"); }
-            cockpit.loadedPlugins.push(loadedPlugin);
+          if (loadedPlugin.name == undefined) {
+            alert('Plugin ' + loadedPlugin + 'has to define a name property!');
+          }
+          cockpit.loadedPlugins.push(loadedPlugin);
         }
       }
     });
