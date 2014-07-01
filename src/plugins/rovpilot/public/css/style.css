@@ -50,9 +50,9 @@
     width: 40px;
     height: 35px;
     margin-top: -7px;
-    background-image: url("/plugin/rovpilot/img/laser_off.png");
+    background-image: url("../img/laser_off.png");
 }
 
 #rovPilot_laser.enabled #rovPilot_laserIcon {
-    background-image: url("/plugin/rovpilot/img/laser_on.png");
+    background-image: url("../img/laser_on.png");
 }
