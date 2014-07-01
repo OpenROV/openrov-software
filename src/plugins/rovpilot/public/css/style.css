@@ -29,3 +29,12 @@
 #rovPilot_headingHold.enabled {
     background-color: #005580;
 }
+
+#rovPilot_laser {
+    color: white;
+    border: 1px solid #cd0a0a;
+}
+
+#rovPilot_laser.enabled {
+    background-color: #cd0a0a;
+}
