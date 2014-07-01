@@ -359,3 +359,8 @@ img.center {
   font-style: !important;
   
 }
+
+.accordion-toggle {
+    font-size: large;
+    font-weight: bold;
+}

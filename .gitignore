@@ -38,3 +38,4 @@ node_modules
 src/capture
 temp
 .idea
+etc/rovconfig.json

@@ -15,6 +15,9 @@
 var EventEmitter = require('events').EventEmitter, fs = require('fs'), path = require('path'), CONFIG = require('./config'), logger = require('./logger').create(CONFIG);
 var FirmwareInstaller = function () {
   var installer = new EventEmitter();
+  installer.installfromsource = function () {
+    installer.install('');
+  };
   installer.unpack = function (filename) {
     setTimeout(function () {
       installer.emit('firmwareinstaller-unpacked', 'some directory');
