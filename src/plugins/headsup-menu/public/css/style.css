@@ -29,6 +29,7 @@
     border:  1px solid green;
     margin: 5px;
     padding: 5px 10px;
+    z-index: 1000;
 }
 
 #headsup-menu-container .menuRow.active {

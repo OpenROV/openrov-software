@@ -1,8 +1,12 @@
 <div id="headsup-menu-container">
     <div class="heading">Heads-Up Menu</div>
     <div id="headsup-menu-items">
-        <div class="menuRow active">Heading Hold</div>
-        <div class="menuRow">Depth Hold</div>
-        <div class="menuRow">Laser</div>
+        <ul data-bind="foreach: items">
+            <li>
+                <div class="menuRow">
+                    <a href="#" data-bind="text: label, click: $parent.trigger"></a>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>

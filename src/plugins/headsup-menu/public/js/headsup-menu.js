@@ -10,7 +10,10 @@
 
     $('#headsup-menu-base').load(
       'plugin/headsup-menu/headsup.html',
-      function() {});
+      function() {
+
+        ko.applyBindings(window.Cockpit.headsUpMenu, document.getElementById("headsup-menu-base"));
+      });
 
     // for plugin management:
     this.name = "headsup-menu" // for the settings
@@ -19,5 +22,6 @@
     this.enable = function() { /* to be done */ };
     this.disable = function() { /* to be done */ };
   };
+
   window.Cockpit.plugins.push(HeadsUpMenu);
 }(window, jQuery));
