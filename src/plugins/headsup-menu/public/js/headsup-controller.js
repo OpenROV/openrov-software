@@ -12,5 +12,5 @@
       item.callback();
     }
   }
-  window.Cockpit.headsUpMenu = new HeadsUpMenuController();
+  window.HeadsUpMenuController = HeadsUpMenuController;
 }(window, jQuery));

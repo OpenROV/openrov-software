@@ -8,18 +8,20 @@
     // Add required UI elements
     $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
 
-    // heads up menu
-    if (window.Cockpit.headsUpMenu != undefined) {
-      window.Cockpit.headsUpMenu.register('Example menu', function () {
-        alert('example menu item from heads up menu');
+    cockpitEventEmitter.on('cockpit.pluginsLoaded', function() {
+      cockpitEventEmitter.emit('headsUpMenu.register', {
+        description: "Example menu",
+        callback: function () {
+          alert('example menu item from heads up menu');
+        }
       });
-      window.Cockpit.headsUpMenu.register('Example menuCCCCCCCCCCCCCCCCCCCC', function () {
-        alert('example menu item from heads up menu 2');
+      cockpitEventEmitter.emit('headsUpMenu.register', {
+        description: "Example menu 2",
+        callback: function () {
+          alert('example menu item from heads up menu 2');
+        }
       });
-      window.Cockpit.headsUpMenu.register('Example menu AAAAA', function () {
-        alert('example menu item from heads up menu 3');
-      });
-    }
+    });
   };
   window.Cockpit.plugins.push(Example);
 }(window, jQuery));
