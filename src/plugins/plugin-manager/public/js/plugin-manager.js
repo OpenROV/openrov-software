@@ -62,9 +62,7 @@
     var configManager = new PluginManagerConfig();
     $('#plugin-settings').append('<div id="plugin-manager-settings"></div>');
     //this technique forces relative path to the js file instead of the excution directory
-    var jsFileLocation = $('script[src*=plugin-manager\\.js]').attr('src');
-    // the js file path
-    jsFileLocation = jsFileLocation.replace('plugin-manager.js', '');
+    var jsFileLocation = urlOfJsFile('plugin-manager.js');
     $('#plugin-manager-settings').load(jsFileLocation + '../settings.html', function () {
       cockpit.loadedPlugins.forEach(function (plugin) {
         console.log('evaluating plugin for pluginmanager');
