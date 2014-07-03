@@ -3,8 +3,12 @@
     <div id="headsup-menu-items">
         <ul class="unstyled" data-bind="foreach: items">
             <li>
-                <div class="menuRow" data-bind="if: $data['type']==undefined || type=='button'">
+                <div class="menuRow" data-bind="if: type=='button'">
                     <button class="btn btn-large btn-block" data-bind="text: label, click: callback"></button>
+                </div>
+                <div class="menuRow" data-bind="if: type=='custom'">
+                    <script type="text/html" data-bind="attr: { id: 'custom' + $index }, html: content" />
+                    <div data-bind="template: { name: 'custom' + $index }" />
                 </div>
             </li>
         </ul>

@@ -11,6 +11,9 @@
     cockpitEventEmitter.on(
       'headsUpMenu.register',
       function (item) {
+        if (item['type'] == undefined) {
+          item.type = "button";
+        }
         self.items.push(item);
       });
 
