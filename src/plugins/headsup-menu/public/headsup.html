@@ -3,8 +3,8 @@
     <div id="headsup-menu-items">
         <ul class="unstyled" data-bind="foreach: items">
             <li>
-                <div class="menuRow">
-                    <button class="btn btn-large btn-block" data-bind="text: label, click: $parent.trigger"></button>
+                <div class="menuRow" data-bind="if: $data['type']==undefined || type=='button'">
+                    <button class="btn btn-large btn-block" data-bind="text: label, click: callback"></button>
                 </div>
             </li>
         </ul>

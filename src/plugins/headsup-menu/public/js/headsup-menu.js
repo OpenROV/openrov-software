@@ -5,22 +5,23 @@
     console.log('Loading HeadsUpMenu plugin in the browser.');
     var self = this;
 
-    this.cockpit = cockpit;
-    this.controller = new HeadsUpMenuController();
+    self.cockpit = cockpit;
+    self.items = ko.observableArray();
 
-    // Add required UI elements
-    $('#video-container').append('<div id="headsup-menu-base"></div>');
     cockpitEventEmitter.on(
       'headsUpMenu.register',
       function (item) {
-        self.controller.register(item.description, item.callback);
+        self.items.push(item);
       });
+
+    // Add required UI elements
+    $('#video-container').append('<div id="headsup-menu-base"></div>');
 
     $('#headsup-menu-base').load(
       'plugin/headsup-menu/headsup.html',
       function() {
 
-        ko.applyBindings(self.controller, document.getElementById("headsup-menu-base"));
+        ko.applyBindings(self, document.getElementById("headsup-menu-base"));
 
         $('.menuRow').find('.btn').hover(
           function(){ $(this).addClass('btn-primary') },

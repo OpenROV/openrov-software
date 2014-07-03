@@ -10,13 +10,15 @@
 
     cockpitEventEmitter.on('cockpit.pluginsLoaded', function() {
       cockpitEventEmitter.emit('headsUpMenu.register', {
-        description: "Example menu",
+        label: "Example menu",
+        // no type == explicit buttons
         callback: function () {
           alert('example menu item from heads up menu');
         }
       });
       cockpitEventEmitter.emit('headsUpMenu.register', {
-        description: "Example menu 2",
+        label: "Example menu 2",
+        type: "button",
         callback: function () {
           alert('example menu item from heads up menu 2');
         }
