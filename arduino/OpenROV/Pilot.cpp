@@ -43,11 +43,11 @@ void Pilot::device_loop(Command command){
         raw_Left = 0;
         raw_Right = 0;
         hdg_Error_Integral = 0;  // Reset error integrator
-        tgt_Hdg = 0;  // 500 = system not in hdg hold
+        tgt_Hdg = -500;  // -500 = system not in hdg hold
 
         int argsToSend[] = {1,00}; //include number of parms as last parm
         command.pushCommand("yaw",argsToSend);
-        Serial.println(F("log:hold_disabled;"));
+        Serial.println(F("log:heading_hold_disabled;"));
 
       } else {
         _headingHoldEnabled = true;
@@ -57,13 +57,17 @@ void Pilot::device_loop(Command command){
           _headingHoldTarget = command.args[1];
         }
         tgt_Hdg = _headingHoldTarget;
-        Serial.print(F("log:hold_enabled on="));
-        Serial.print(tgt_Hdg);
-        Serial.println(';');
-        Serial.print(F("thdg:"));
+        Serial.print(F("log:heading_hold_enabled on="));
         Serial.print(tgt_Hdg);
         Serial.println(';');
       }
+      Serial.print(F("targetHeading:"));
+      if (_headingHoldEnabled) {
+        Serial.print(tgt_Hdg);
+      } else {
+        Serial.print(DISABLED);
+      }
+      Serial.println(';');
     }
 
 
@@ -71,7 +75,7 @@ void Pilot::device_loop(Command command){
       if (_depthHoldEnabled) {
         _depthHoldEnabled = false;
         raw_lift = 0;
-        target_depth = 0;  // 500 = system not in hdg hold
+        target_depth = 0;
 
         int argsToSend[] = {1,0}; //include number of parms as last parm
         command.pushCommand("lift",argsToSend);
@@ -85,13 +89,17 @@ void Pilot::device_loop(Command command){
           _depthHoldTarget = command.args[1];
         }
         target_depth = _depthHoldTarget;
-        Serial.print(F("log:dhold_enabled on="));
-        Serial.print(target_depth);
-        Serial.println(';');
-        Serial.print(F("tdpt:"));
+        Serial.print(F("log:depth_hold_enabled on="));
         Serial.print(target_depth);
         Serial.println(';');
       }
+      Serial.print(F("targetDepth:"));
+      if (_depthHoldEnabled) {
+        Serial.print(target_depth);
+      } else {
+        Serial.print(DISABLED);
+      }
+      Serial.println(';');
     }
 
 
