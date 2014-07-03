@@ -38,6 +38,29 @@
     $('#navtoolbar').append('<li><a href="#" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
     $('#navtoolbar').append('<li><a href="#" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
 
+    cockpitEventEmitter.on('cockpit.pluginsLoaded', function() {
+      cockpitEventEmitter.emit('headsUpMenu.register', {
+        label: "Toggle Lasers",
+        callback: function () {
+          cockpitEventEmitter.emit('rovpilot.toggleLasers');
+        }
+      });
+
+      cockpitEventEmitter.emit('headsUpMenu.register', {
+        label: "Toggle Depth hold",
+        callback: function () {
+          cockpitEventEmitter.emit('rovpilot.toggleholdDepth');
+        }
+      });
+
+      cockpitEventEmitter.emit('headsUpMenu.register', {
+        label: "Toggle Heading hold",
+        callback: function () {
+          cockpitEventEmitter.emit('rovpilot.toggleholdHeading');
+        }
+      });
+    });
+
     var self = this;
     setInterval(function () {
       self.sendPilotingData();
