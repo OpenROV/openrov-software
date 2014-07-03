@@ -19,7 +19,7 @@ var getLibPath = function (lib) {
 };
 // Will essentially rewrite the file when a change to the defaults are made if there is a parsing error.
 try {
-  nconf.use('file', { file: '/usr/local/etc/rovconfig.json' });
+  nconf.use('file', { file: './etc/rovconfig.json' });
 } catch (err) {
   console.log('Unable to load the configuration file, resetting to defaults');
   console.log(err);
@@ -38,6 +38,17 @@ nconf.defaults({
   'thrust_modifier_nvertical': -2,
   'thrust_modifier_nstarbord': 2
 });
+
+function savePreferences() {
+  nconf.save(function (err) {
+    if (err) {
+      console.error(err.message);
+      return;
+    }
+    console.log('Configuration saved successfully.');
+  });
+}
+
 module.exports = {
   debug: process.env.NODE_DEBUG !== 'false',
   debug_commands: false,
@@ -52,6 +63,7 @@ module.exports = {
   serial: process.env.SERIAL || '/dev/ttyO1',
   serial_baud: process.env.SERIAL_BAUD || 115200,
   preferences: nconf,
+  savePreferences: savePreferences,
   OpenROVCamera: getLibPath(OpenROVCameraPath),
   OpenROVController: OpenROVControllerPath,
   FirmwareInstaller: getLibPath(FirmwareInstallerPath),

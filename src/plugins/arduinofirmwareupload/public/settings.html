@@ -1,0 +1,26 @@
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapseFirmware">Upload firmware</a>
+    </div>
+    <div id="collapseFirmware" class="accordion-body collapse">
+        <div class="accordion-inner">
+            <div class="control-group">
+                Arduino firmware:
+                <label>
+                    <!--input id="arduinoFirmware" type="file"-->
+                </label>
+                <div class="alert alert-error" id="arduinoFirmware-error" data-bind="css: { hide: selectedFileName() === '' || isValidFirmwareFile() }">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>Oh snap!</strong> Only <i>.zip</i>, <i>.tar.gz</i> and <i>.ino</i> files are supported!
+                </div>
+                <div class="alert alert-error" id="file-upload-notsupported" data-bind="css: { hide: ! browserDoesSupportFileApi() }">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>Oh snap!</strong> Your browser doesn't support the file upload API!
+                </div>
+                <button href="#firmware-upload-dialog" class="btn btn-small" type="button" id="arduinoFirmware-upload" data-bind="css: { 'btn-success': isValidFirmwareFile() == false,  'btn-success': isValidFirmwareFile() }" data-toggle="modal">
+                    <i class="icon-upload icon-white"></i>Upload firmware from SD card to Arduino
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

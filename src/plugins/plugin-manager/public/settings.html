@@ -1,0 +1,22 @@
+<div id="pluginManager-settings">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapsePluginManager">
+                Plugins to enable/disable
+            </a>
+        </div>
+        <div id="collapsePluginManager" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <ul data-bind="foreach: controlablePlugins">
+                    <li>
+                        <div>
+                            <span data-bind="text: viewName">&nbsp;</span>
+                            <button type="button" class="btn btn-xs btn-default" data-bind="css: {disabled: isEnabled(), 'btn-primary': !isEnabled()}, click: $parent.enablePlugin, enabled: !isEnabled()">Enable</button>
+                            <button type="button" class="btn btn-xs btn-default" data-bind="css: {disabled: !isEnabled(), 'btn-primary': isEnabled()}, click: $parent.disablePlugin, enabled: isEnabled()">Disable</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

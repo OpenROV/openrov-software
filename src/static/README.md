@@ -19,6 +19,6 @@ Then open `testview.html` in chrome.
 
 In the javascript console execute
 
-`simevents.status[0]({time: 134123111})`
+`window.frames[0].window.simevents.status.forEach(function(x){x({targetHeading: 120})})`
 
 Where 0 is the index of the listener you want to make go
