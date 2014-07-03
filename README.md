@@ -14,7 +14,7 @@ Getting started
 ---------------
 
 **If you just getting started and want to have working environment for the OpenROV Cockpit, we recommend that you start with using our last stable release from our [releases page](https://github.com/OpenROV/openrov-software/releases).  If you want to explore building your own image from scratch, refer to our  
-[OpenROV disk Image](https://github.com/OpenROV/openrov-image/blob/master/README.md) project.
+[OpenROV disk Image](https://github.com/OpenROV/openrov-image/blob/master/README.md) project.  The latest development image (from master) can be downloaded from http://54.187.8.25:8080/job/OpenROV-Image_BuildImage_master/.
 
 Introduction
 ------------

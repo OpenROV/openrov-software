@@ -9,6 +9,8 @@
 var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
 app.configure(function () {
   app.use(express.static(__dirname + '/static/'));
+  app.use(express.json());
+  app.use(express.urlencoded());
   app.use('/photos', express.directory(CONFIG.preferences.get('photoDirectory')));
   app.use('/photos', express.static(CONFIG.preferences.get('photoDirectory')));
   app.set('port', CONFIG.port);
@@ -95,13 +97,8 @@ io.sockets.on('connection', function (socket) {
     for (var property in value)
       if (value.hasOwnProperty(property))
         CONFIG.preferences.set(property, value[property]);
-    CONFIG.preferences.save(function (err) {
-      if (err) {
-        console.error(err.message);
-        return;
-      }
-      console.log('Configuration saved successfully.');
-    });
+
+    CONFIG.savePreferences();
     controller.updateSetting();
     setTimeout(function () {
       controller.requestSettings();
