@@ -9,20 +9,17 @@
     $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
 
     cockpitEventEmitter.on('cockpit.pluginsLoaded', function() {
-      cockpitEventEmitter.emit('headsUpMenu.register', {
-        label: "Example menu",
-        // no type == explicit buttons
-        callback: function () {
+
+      var item = {
+        label: ko.observable("Example menu")
+      };
+      item.callback = function () {
           alert('example menu item from heads up menu');
-        }
-      });
-      cockpitEventEmitter.emit('headsUpMenu.register', {
-        label: "Example menu button",
-        type: "button",
-        callback: function () {
-          alert('example menu item from heads up menu 2');
-        }
-      });
+          item.label( item.label() +" Foo Bar");
+      };
+
+      cockpitEventEmitter.emit('headsUpMenu.register', item);
+
       cockpitEventEmitter.emit('headsUpMenu.register', {
         type: "custom",
         content: '<button class="btn btn-large btn-info btn-block" data-bind="click: callback">Custom button</button>',
@@ -30,6 +27,8 @@
           alert('Message from custom Button');
         }
       });
+
+
 
     });
   };
