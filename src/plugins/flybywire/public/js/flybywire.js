@@ -29,7 +29,7 @@
       }
     };
     // g
-    cockpitEventEmitter.on('rovpilot.control_update', function (controls) {
+    rov.cockpit.on('rovpilot.control_update', function (controls) {
       if (rov.flybywireControlActive) {
         rov.processControlChanges(controls);
       }
@@ -60,14 +60,14 @@
   FlyByWire.prototype.toggleControl = function toggleControl() {
     var rov = this;
     if (!this.flybywireControlActive) {
-      cockpitEventEmitter.emit('rovpilot.disable');
+      rov.cockpit.emit('rovpilot.disable');
       rov.originalsettings.lsx = GAMEPAD.LEFT_STICK_X;
       rov.originalsettings.lsy = GAMEPAD.LEFT_STICK_Y;
       rov.originalsettings.rsx = GAMEPAD.RIGHT_STICK_X;
       rov.originalsettings.rsy = GAMEPAD.RIGHT_STICK_Y;
 
-      this.cockpit.socket.emit('holdHeading_toggle');
-      this.cockpit.socket.emit('holdDepth_toggle');
+      rov.cockpit.socket.emit('holdHeading_toggle');
+      rov.cockpit.socket.emit('holdDepth_toggle');
       rov.flybywireControlActive = true;
       console.log('FlyByWire Control Active');
     } else {
@@ -76,9 +76,9 @@
       GAMEPAD.RIGHT_STICK_X = rov.originalsettings.rsx;
       GAMEPAD.RIGHT_STICK_Y = rov.originalsettings.rsy;
       rov.flybywireControlActive = false;
-      cockpitEventEmitter.emit('rovpilot.enable');
-      this.cockpit.socket.emit('holdHeading_toggle');
-      this.cockpit.socket.emit('holdDepth_toggle');
+      rov.cockpit.emit('rovpilot.enable');
+      rov.cockpit.socket.emit('holdHeading_toggle');
+      rov.cockpit.socket.emit('holdDepth_toggle');
       console.log('FlyByWire Control Deactivated');
     }
   };
