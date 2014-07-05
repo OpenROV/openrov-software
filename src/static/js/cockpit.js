@@ -8,6 +8,8 @@
   const ORIENTATION_CAPABLE = 5;
   const DEAPTH_CAPABLE = 6;
   var hostname = document.location.hostname ? document.location.hostname : 'localhost';
+
+  //Cockpit is inheriting from EventEmitter2.
   var Cockpit = function Cockpit(csocket) {
     this.socket = csocket;
     this.sendUpdateEnabled = true;
@@ -18,6 +20,9 @@
     // Register the various event handlers
     this.listen();
   };
+  Cockpit.prototype = new EventEmitter2();
+  Cockpit.prototype.constructor = Cockpit;
+
   Cockpit.prototype.listen = function listen() {
     var cockpit = this;
     cockpit.socket.on('rovsys', function (data) {
@@ -27,6 +32,7 @@
       }
     });
   };
+
   Cockpit.prototype.loadPlugins = function loadPlugins() {
     var cockpit = this;
     Cockpit.plugins.forEach(function (plugin) {
