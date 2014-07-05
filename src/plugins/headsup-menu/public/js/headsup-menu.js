@@ -7,6 +7,7 @@
 
     self.cockpit = cockpit;
     self.items = ko.observableArray();
+    self.getTemplateName = function(item) { return "menuRow-" + item.type };
 
     cockpitEventEmitter.on(
       'headsUpMenu.register',

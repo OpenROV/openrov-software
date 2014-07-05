@@ -1,17 +1,25 @@
 <div id="headsup-menu-container">
-    <div id="headsup-menu-templates" />
     <div class="heading">Heads-Up Menu</div>
     <div id="headsup-menu-items">
-        <ul class="unstyled" data-bind="foreach: items">
+
+        <script type="text/html" id="menuRow-button">
             <li>
-                <div class="menuRow" data-bind="if: type=='button'">
+                <div class="menuRow">
                     <button class="btn btn-large btn-block" data-bind="text: label, click: callback"></button>
                 </div>
-                <div class="menuRow" data-bind="if: type=='custom'">
-                    <script type="text/html" data-bind="attr: { id: headsUpUniqueId }, html: content" />
-                    <div class="custom-block" data-bind="template: { name: headsUpUniqueId }" />
+            </li>
+        </script>
+        <script type="text/html" id="menuRow-custom">
+            <li>
+                <div class="menuRow" >
+                    <!-- create a template based on the custom content -->
+                    <script type="text/html" data-bind="attr: { id: $data.headsUpUniqueId }, html: content" />
+                    <!-- reference the created template -->
+                    <div class="custom-block" data-bind="template: { name: $data.headsUpUniqueId }" />
                 </div>
             </li>
-        </ul>
+        </script>
+
+        <ul class="unstyled" data-bind="template: { name: getTemplateName, foreach: items, as: 'item' }" />
     </div>
 </div>
