@@ -39,29 +39,6 @@
     $('#navtoolbar').append('<li><a href="#" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
     $('#navtoolbar').append('<li><a href="#" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
 
-    cockpitEventEmitter.on('cockpit.pluginsLoaded', function() {
-      cockpitEventEmitter.emit('headsUpMenu.register', {
-        label: "Toggle Lasers",
-        callback: function () {
-          cockpitEventEmitter.emit('rovpilot.toggleLasers');
-        }
-      });
-
-      cockpitEventEmitter.emit('headsUpMenu.register', {
-        label: "Toggle Depth hold",
-        callback: function () {
-          cockpitEventEmitter.emit('rovpilot.toggleholdDepth');
-        }
-      });
-
-      cockpitEventEmitter.emit('headsUpMenu.register', {
-        label: "Toggle Heading hold",
-        callback: function () {
-          cockpitEventEmitter.emit('rovpilot.toggleholdHeading');
-        }
-      });
-    });
-
     var rov = this;
     setInterval(function () {
       rov.sendPilotingData();
@@ -84,7 +61,28 @@
   //so that the reference to this instance is available for further processing
   ROVpilot.prototype.listen = function listen() {
     var rov = this;
-    this.cockpit.socket.on('status', function (data) {
+    rov.cockpit.emit('headsUpMenu.register', {
+      label: "Toggle Lasers",
+      callback: function () {
+        rov.cockpit.emit('rovpilot.toggleLasers');
+      }
+    });
+
+    rov.cockpit.emit('headsUpMenu.register', {
+      label: "Toggle Depth hold",
+      callback: function () {
+        rov.cockpit.emit('rovpilot.toggleholdDepth');
+      }
+    });
+
+    rov.cockpit.emit('headsUpMenu.register', {
+      label: "Toggle Heading hold",
+      callback: function () {
+        rov.cockpit.emit('rovpilot.toggleholdHeading');
+      }
+    });
+
+    rov.cockpit.socket.on('status', function (data) {
         rov.UpdateStatusIndicators(data);
     });
     rov.cockpit.on('gamepad.connected', function () {

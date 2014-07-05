@@ -9,7 +9,7 @@
     self.items = ko.observableArray();
     self.getTemplateName = function(item) { return "menuRow-" + item.type };
 
-    cockpitEventEmitter.on(
+    this.cockpit.on(
       'headsUpMenu.register',
       function (item) {
         if (item['type'] == undefined) {
@@ -35,6 +35,14 @@
           function(){ $(this).removeClass('btn-primary') }
         );
       });
+
+    //gamepad
+    GAMEPAD.LB = {
+      BUTTON_DOWN: function () {
+        alert("foo");
+      }
+    };
+
 
     // for plugin management:
     this.name = "headsup-menu" // for the settings

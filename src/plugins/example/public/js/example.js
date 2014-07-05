@@ -7,26 +7,8 @@
     this.cockpit = cockpit;
     // Add required UI elements
     $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
+    this.listen();
 
-    cockpitEventEmitter.on('cockpit.pluginsLoaded', function() {
-      var item = {
-        label: ko.observable("Example menu")
-      };
-      item.callback = function () {
-          alert('example menu item from heads up menu');
-          item.label( item.label() +" Foo Bar");
-      };
-
-      cockpitEventEmitter.emit('headsUpMenu.register', item);
-
-      cockpitEventEmitter.emit('headsUpMenu.register', {
-        type: "custom",
-        content: '<button class="btn btn-large btn-info btn-block" data-bind="click: callback">Custom button</button>',
-        callback: function () {
-          alert('Message from custom Button');
-        }
-      });
-    });
     // for plugin management:
     this.name = 'example';
     // for the settings
@@ -40,6 +22,27 @@
     this.disable = function () {
       alert('example disabled');
     };
+  };
+
+  Example.prototype.listen = function listen() {
+    var rov = this;
+    var item = {
+      label: ko.observable("Example menu"),
+      callback: function () {
+        alert('example menu item from heads up menu');
+        item.label(this.label() + " Foo Bar");
+      }
+    };
+    rov.cockpit.emit('headsUpMenu.register', item);
+
+    rov.cockpit.emit('headsUpMenu.register', {
+      type: "custom",
+      content: '<button class="btn btn-large btn-info btn-block" data-bind="click: callback">Custom button</button>',
+      callback: function () {
+        alert('Message from custom Button');
+      }
+    });
+
   };
   window.Cockpit.plugins.push(Example);
 }(window, jQuery));
