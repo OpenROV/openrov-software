@@ -1,7 +1,7 @@
 (function (window, $, undefined) {
   'use strict';
   var Touchcontroller;
-  var is_touch_device = true;// 'ontouchstart' in document.documentElement;
+  var is_touch_device = 'ontouchstart' in document.documentElement;
   if (!is_touch_device)
     return;
   function setupGameController(cockpit) {
