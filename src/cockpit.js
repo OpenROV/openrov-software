@@ -168,8 +168,8 @@ var deps = {
   };
 // Load the plugins
 function addPluginAssets(result) {
-  scripts = result.scripts;
-  styles = result.styles;
+  scripts = scripts.concat(result.scripts);
+  styles = styles.concat(result.styles);
   result.assets.forEach(
     function(asset) {
       app.use(asset.path, express.static(asset.assets));

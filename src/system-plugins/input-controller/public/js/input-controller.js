@@ -5,5 +5,5 @@
 
     return self;
   };
-  window.InputController = InputController;
+  window.Cockpit.plugins.push(InputController);
 }(window, document));
