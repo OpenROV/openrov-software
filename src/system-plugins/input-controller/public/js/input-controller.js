@@ -9,7 +9,6 @@
   };
   InputController.prototype.registerControl = function(control)
   {
-    alert(control.defaults.keyboard);
     if (control.down !== undefined && control.up == undefined) {
       Mousetrap.bind(control.defaults.keyboard, control.down)
     }

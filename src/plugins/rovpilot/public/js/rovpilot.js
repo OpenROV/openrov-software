@@ -45,12 +45,36 @@
     }, SAMPLE_PERIOD);
     this.listen();
 
+    // input settings
     rov.cockpit.emit('inputController.register',
       {
         name: "rovPilot.laserToggle",
         description: "Toggles the lasers on or off.",
         defaults: { keyboard: 'l' },
         down: function() { rov.cockpit.emit('rovpilot.toggleLasers'); }
+      });
+
+    rov.cockpit.emit('inputController.register',
+      {
+        name: "rovPilot.adjustLights_increment",
+        description: "Makes the ROV lights brighter.",
+        defaults: { keyboard: 'p' },
+        down: function() { rov.cockpit.emit('rovpilot.adjustLights', 0.1); }
+      });
+
+    rov.cockpit.emit('inputController.register',
+      {
+        name: "rovPilot.adjustLights_decrement",
+        description: "Makes the ROV lights dimmer.",
+        defaults: { keyboard: 'o' },
+        down: function() { rov.cockpit.emit('rovpilot.adjustLights', -0.1); }
+      });
+    rov.cockpit.emit('inputController.register',
+      {
+        name: "rovPilot.toggleLights",
+        description: "Toggles the ROV lights on/off.",
+        defaults: { keyboard: 'i' },
+        down: function() { rov.cockpit.emit('rovpilot.toggleLights'); }
       });
 
     $('#thrustfactor').text(2);
@@ -258,24 +282,7 @@
       }
     };
     //Z (tilt down)
-    KEYS[80] = {
-      keydown: function () {
-        rov.cockpit.emit('rovpilot.adjustLights', 0.1);
-      }
-    };
-    //p (brightness up)
-    KEYS[79] = {
-      keydown: function () {
-        rov.cockpit.emit('rovpilot.adjustLights', -0.1);
-      }
-    };
-    //o (brightness down)
-    //KEYS[73] = {keydown: function(){ rov.toggleLights();}}; //i (laser lights)
-    KEYS[73] = {
-      keydown: function () {
-        rov.cockpit.emit('rovpilot.toggleLights');
-      }
-    };
+
     //i (laser lights)
     KEYS[219] = {
       keydown: function () {
