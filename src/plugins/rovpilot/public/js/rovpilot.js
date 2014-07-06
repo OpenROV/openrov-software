@@ -45,6 +45,14 @@
     }, SAMPLE_PERIOD);
     this.listen();
 
+    rov.cockpit.emit('inputController.register',
+      {
+        name: "rovPilot.laserToggle",
+        description: "Toggles the lasers on or off.",
+        defaults: { keyboard: 'l' },
+        down: function() { rov.cockpit.emit('rovpilot.toggleLasers'); }
+      });
+
     $('#thrustfactor').text(2);
     $('#rovPilot_depthHold').click(function() {
         rov.cockpit.emit('rovpilot.toggleholdDepth');
@@ -262,12 +270,6 @@
       }
     };
     //o (brightness down)
-    KEYS[76] = {
-      keydown: function () {
-        rov.cockpit.emit('rovpilot.toggleLasers');
-      }
-    };
-    //l (laser toggle)
     //KEYS[73] = {keydown: function(){ rov.toggleLights();}}; //i (laser lights)
     KEYS[73] = {
       keydown: function () {
