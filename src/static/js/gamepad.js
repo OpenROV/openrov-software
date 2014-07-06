@@ -4,9 +4,10 @@
 //Requires the https://github.com/kallaspriit/HTML5-JavaScript-Gamepad-Controller-Library
 //library.
 var GAMEPAD = {};
-var GamePad = function () {
+var GamePad = function (cockpit) {
+
   var gamepad = new Gamepad();
-  var gp = {};
+  var gp = { cockpit: cockpit };
   var isSupported = function () {
   };
   var ignoreInputUntil = 0;
@@ -31,11 +32,11 @@ var GamePad = function () {
   gamepad.bind(Gamepad.Event.CONNECTED, function (device) {
     ignoreInputUntil = new Date().getTime() + 1000;
     console.log('Controller connected', device);
-    cockpitEventEmitter.emit('gamepad.connected');
+    gp.cockpit.emit('gamepad.connected');
   });
   gamepad.bind(Gamepad.Event.DISCONNECTED, function (device) {
     console.log('Controller disconnected', device);
-    cockpitEventEmitter.emit('gamepad.disconnected');
+    gp.cockpit.emit('gamepad.disconnected');
   });
   gamepad.bind(Gamepad.Event.UNSUPPORTED, function (device) {
     console.log('Unsupported controller connected', device);
@@ -51,9 +52,8 @@ var GamePad = function () {
   if (gp.isAvailable()) {
     //send an initial is connected if already plugged in.
     setTimeout(function () {
-      cockpitEventEmitter.emit('gamepad.connected');
+      gp.cockpit.emit('gamepad.connected');
     }, 1000);
   }
   return gp;
 };
-var gamepadHandler = new GamePad();
