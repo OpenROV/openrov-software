@@ -7,7 +7,10 @@ var GAMEPAD = {};
 var GamePad = function (cockpit) {
 
   var gamepad = new Gamepad();
-  var gp = { cockpit: cockpit };
+  var gp = {
+    cockpit: cockpit,
+    currentButton: undefined
+  };
   var isSupported = function () {
   };
   var ignoreInputUntil = 0;
@@ -16,10 +19,18 @@ var GamePad = function (cockpit) {
     return padStatus.position;
   };
   gamepad.bind(Gamepad.Event.BUTTON_DOWN, function (e) {
-    if (GAMEPAD[e.control] !== undefined)
-      GAMEPAD[e.control].BUTTON_DOWN();
+    var control = e.control;
+    if (gp.currentButton === undefined) {
+      gp.currentButton = e.control;
+    }
+    else {
+      control = gp.currentButton + '+' + e.control;
+    }
+    if (GAMEPAD[control] !== undefined)
+      GAMEPAD[control].BUTTON_DOWN();
   });
   gamepad.bind(Gamepad.Event.BUTTON_UP, function (e) {
+    if (gp.currentButton === e.control) { gp.currentButton = undefined; }
     if (GAMEPAD[e.control] !== undefined) {
       if (GAMEPAD[e.control].BUTTON_UP !== undefined) {
         GAMEPAD[e.control].BUTTON_UP();

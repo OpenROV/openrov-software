@@ -24,9 +24,19 @@
         }
         // register button down on gamepad
         if (control.defaults.gamepad !== undefined) {
-          GAMEPAD[control.defaults.gamepad] = {
+          var gpKey = control.defaults.gamepad;
+          GAMEPAD[gpKey ] = {
             BUTTON_DOWN: control.down,
             BUTTON_UP: control.up
+          };
+          if (control.secondary !== undefined) {
+            control.secondary.forEach(function(secondary) {
+              var subKey = gpKey  + '+' + secondary.defaults.gamepad;
+              GAMEPAD[subKey] = {
+                BUTTON_DOWN: secondary.down,
+                BUTTON_UP: secondary.up
+              };
+            });
           }
         }
       }
