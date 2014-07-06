@@ -38,7 +38,7 @@
       });
 
     //gamepad
-    var gp ={
+/*    var gp ={
       up: GAMEPAD.DPAD_UP,
       down: GAMEPAD.DPAD_DOWN,
       showMenu: false
@@ -69,7 +69,7 @@
         }
         else { gp.down.BUTTON_DOWN(); }
       }
-    };
+    };*/
 
     // for plugin management:
     this.name = "headsup-menu" // for the settings
