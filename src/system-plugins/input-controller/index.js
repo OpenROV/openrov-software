@@ -1,5 +1,5 @@
-var CONFIG = require('../lib/config');
-var logger = require('../lib/logger').create(CONFIG);
+var CONFIG = require('../../lib/config');
+var logger = require('../../lib/logger').create(CONFIG);
 
 var InputController = function() {
   'use strict'

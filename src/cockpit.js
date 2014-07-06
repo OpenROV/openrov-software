@@ -167,17 +167,18 @@ var deps = {
     globalEventLoop: globalEventLoop
   };
 // Load the plugins
+function addPluginAssets(result) {
+  scripts = result.scripts;
+  styles = result.styles;
+  result.assets.forEach(
+    function(asset) {
+      app.use(asset.path, express.static(asset.assets));
+    });
+}
+
 var loader = new PluginLoader();
-var dir = path.join(__dirname, 'plugins');
-loader.loadPlugins(dir, deps,
-  function(result) {
-    scripts = result.scripts;
-    styles = result.styles;
-    result.assets.forEach(
-      function(asset) {
-        app.use(asset.path, express.static(asset.assets));
-      });
-  });
+loader.loadPlugins(path.join(__dirname, 'plugins'), deps, addPluginAssets);
+loader.loadPlugins(path.join(__dirname, 'system-plugins'), deps, addPluginAssets);
 
 controller.start();
 
