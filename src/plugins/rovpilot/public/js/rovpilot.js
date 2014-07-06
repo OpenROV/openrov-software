@@ -91,6 +91,7 @@
     rov.cockpit.on('gamepad.disconnected', function () {
       $('#gamepad').toggleClass('hidden', true);
     });
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! debug!
     GAMEPAD.DPAD_UP = {
       BUTTON_DOWN: function () {
         rov.cockpit.emit('rovpilot.adjustLights', 0.1);
@@ -101,6 +102,7 @@
         rov.cockpit.emit('rovpilot.adjustLights', -0.1);
       }
     };
+*/
     GAMEPAD.Y = {
       BUTTON_DOWN: function () {
         rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1);

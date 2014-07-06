@@ -52,7 +52,7 @@
       }
     });
     Cockpit.plugins = [];  //flush them out for now. May move to a loaded array if we use in the future
-    cockpitEventEmitter.emit('cockpit.pluginsLoaded');
+    cockpit.emit('cockpit.pluginsLoaded');
   };
   Cockpit.prototype.addPlugin = function addPlugin(plugin) {
     var cockpit = this;

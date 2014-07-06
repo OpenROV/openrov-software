@@ -39,11 +39,11 @@
       photoc.cockpit.socket.emit('snapshot');
       console.log('send snapshot request to server');
     });
-    GAMEPAD.LB = {
+    /*GAMEPAD.LB = { !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       BUTTON_DOWN: function () {
         photoc.cockpit.socket.emit('snapshot');
       }
-    };
+    };*/
     KEYS[67] = {
       keydown: function () {
         photoc.cockpit.socket.emit('snapshot');
