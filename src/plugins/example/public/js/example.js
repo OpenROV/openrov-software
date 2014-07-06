@@ -14,7 +14,15 @@
         description: "Example for keymapping.",
         defaults: { keyboard: '0', gamepad: 'X' },
         down: function() { console.log('0 down'); },
-        up: function() { console.log('0 up'); }
+        up: function() { console.log('0 up'); },
+        secondary: [
+          {
+            name: "example.keyBoardMappingDepdent",
+            dependency: "example.keyBoardMapping",
+            defaults: { keyboard: '9', gamepad: 'RB' },
+            down: function() { console.log('####'); }
+          }
+        ]
       });
 
     // for plugin management:
