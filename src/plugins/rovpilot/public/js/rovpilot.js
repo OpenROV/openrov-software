@@ -58,7 +58,7 @@
       {
         name: "rovPilot.adjustLights_increment",
         description: "Makes the ROV lights brighter.",
-        defaults: { keyboard: 'p' },
+        defaults: { keyboard: 'p', gamepad: 'DPAD_UP' },
         down: function() { rov.cockpit.emit('rovpilot.adjustLights', 0.1); }
       });
 
@@ -66,9 +66,11 @@
       {
         name: "rovPilot.adjustLights_decrement",
         description: "Makes the ROV lights dimmer.",
-        defaults: { keyboard: 'o' },
+        defaults: { keyboard: 'o', gamepad: 'DPAD_DOWN' },
+
         down: function() { rov.cockpit.emit('rovpilot.adjustLights', -0.1); }
       });
+
     rov.cockpit.emit('inputController.register',
       {
         name: "rovPilot.toggleLights",
@@ -102,6 +104,7 @@
     rov.cockpit.on('gamepad.disconnected', function () {
       $('#gamepad').toggleClass('hidden', true);
     });
+/*
     GAMEPAD.DPAD_UP = {
       BUTTON_DOWN: function () {
         rov.cockpit.emit('rovpilot.adjustLights', 0.1);
@@ -112,6 +115,7 @@
         rov.cockpit.emit('rovpilot.adjustLights', -0.1);
       }
     };
+*/
     GAMEPAD.Y = {
       BUTTON_DOWN: function () {
         rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1);

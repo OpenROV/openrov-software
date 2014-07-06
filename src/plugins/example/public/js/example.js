@@ -7,6 +7,16 @@
     this.cockpit = cockpit;
     // Add required UI elements
     $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
+
+    this.cockpit.emit('inputController.register',
+      {
+        name: "example.keyBoardMapping",
+        description: "Example for keymapping.",
+        defaults: { keyboard: '0', gamepad: 'X' },
+        down: function() { console.log('0 down'); },
+        up: function() { console.log('0 up'); }
+      });
+
     // for plugin management:
     this.name = 'example';
     // for the settings
