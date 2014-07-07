@@ -12,11 +12,12 @@
     this.cockpit.on(
       'headsUpMenu.register',
       function (item) {
+        item.uniqueId = generateUUID();
         if (item['type'] == undefined) {
           item.type = "button";
         }
         if (item['type'] == 'custom') {
-          item.headsUpUniqueId = 'custom-' + generateUUID();
+          item.headsUpTemplateId = 'custom-' + item.uniqueId;
         }
         self.items.push(item);
       });
@@ -48,6 +49,14 @@
         defaults: { keyboard: 'e', gamepad: 'LB' },
         down: function() { $('#headsup-menu-base').show(); },
         up: function() {
+          var currentId = $(menuItems[currentSelected]).attr('id');
+          self.items()
+            .forEach(function(item) {
+              if (item.uniqueId == currentId) {
+                item.callback();
+                return;
+              }
+            });
           $('#headsup-menu-base').hide();
           menuItems.trigger('mouseout');
           currentSelected = -1;
@@ -68,40 +77,6 @@
           }
         ]
       });
-
-    //gamepad
-/*    var gp ={
-      up: GAMEPAD.DPAD_UP,
-      down: GAMEPAD.DPAD_DOWN,
-      showMenu: false
-    };
-
-    GAMEPAD.LB = {
-      BUTTON_DOWN: function () {
-        $('#headsup-menu-base').show();
-        gp.showMenu = true;
-      },
-      BUTTON_UP: function () {
-        $('#headsup-menu-base').hide();
-        gp.showMenu = false;
-      }
-    };
-    GAMEPAD.DPAD_UP = {
-      BUTTON_DOWN: function () {
-        if (gp.showMenu) {
-          alert("up");
-        }
-        else { gp.up.BUTTON_DOWN(); }
-      }
-    };
-    GAMEPAD.DPAD_DOWN = {
-      BUTTON_DOWN: function () {
-        if (gp.showMenu) {
-          alert("down");
-        }
-        else { gp.down.BUTTON_DOWN(); }
-      }
-    };*/
 
     // for plugin management:
     this.name = "headsup-menu" // for the settings
