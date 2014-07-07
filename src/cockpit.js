@@ -1,12 +1,6 @@
-/*
- *
- * Description:
- * This script is the Node.js server for OpenROV.  It creates a server and instantiates an OpenROV
- * and sets the interval to grab frames.  The interval is set with the DELAY variable which is in
- * milliseconds.
- *
- */
 var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
+var PluginLoader = require('./lib/PluginLoader');
+
 app.configure(function () {
   app.use(express.static(__dirname + '/static/'));
   app.use(express.json());
@@ -173,40 +167,20 @@ var deps = {
     globalEventLoop: globalEventLoop
   };
 // Load the plugins
-var dir = path.join(__dirname, 'plugins');
-function getFilter(ext) {
-  return function (filename) {
-    return filename.match(new RegExp('\\.' + ext + '$', 'i'));
-  };
+function addPluginAssets(result) {
+  scripts = scripts.concat(result.scripts);
+  styles = styles.concat(result.styles);
+  result.assets.forEach(
+    function(asset) {
+      app.use(asset.path, express.static(asset.assets));
+    });
 }
-fs.readdir(dir, function (err, files) {
-  if (err) {
-    throw err;
-  }
-  files.filter(function (file) {
-    return fs.statSync(path.join(dir, file)).isDirectory();
-  }).forEach(function (plugin) {
-    console.log('Loading ' + plugin + ' plugin.');
-    // Load the backend code
-    require(path.join(dir, plugin))(plugin, deps);
-    // Add the public assets to a static route
-    if (fs.existsSync(assets = path.join(dir, plugin, 'public'))) {
-      app.use('/plugin/' + plugin, express.static(assets));
-    }
-    // Add the js to the view
-    if (fs.existsSync(js = path.join(assets, 'js'))) {
-      fs.readdirSync(js).filter(getFilter('js')).forEach(function (script) {
-        scripts.push('/plugin/' + plugin + '/js/' + script);
-      });
-    }
-    // Add the css to the view
-    if (fs.existsSync(css = path.join(assets, 'css'))) {
-      fs.readdirSync(css).filter(getFilter('css')).forEach(function (style) {
-        styles.push('/plugin/' + plugin + '/css/' + style);
-      });
-    }
-  });
-});
+
+var loader = new PluginLoader();
+loader.loadPlugins(path.join(__dirname, 'system-plugins'), deps, addPluginAssets);
+loader.loadPlugins(path.join(__dirname, 'plugins'), deps, addPluginAssets);
+
+
 controller.start();
 
 // Start the web server

@@ -9,6 +9,23 @@
     $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
     this.listen();
 
+    this.cockpit.emit('inputController.register',
+      {
+        name: "example.keyBoardMapping",
+        description: "Example for keymapping.",
+        defaults: { keyboard: '0', gamepad: 'X' },
+        down: function() { console.log('0 down'); },
+        up: function() { console.log('0 up'); },
+        secondary: [
+          {
+            name: "example.keyBoardMappingDepdent",
+            dependency: "example.keyBoardMapping",
+            defaults: { keyboard: '9', gamepad: 'RB' },
+            down: function() { console.log('####'); }
+          }
+        ]
+      });
+
     // for plugin management:
     this.name = 'example';
     // for the settings
