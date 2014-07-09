@@ -18,11 +18,15 @@
   };
   TankControl.prototype.listen = function listen() {
     var rov = this;
-    KEYS[84] = {
-      keydown: function () {
-        rov.toggleControl();
-      }
-    };  // t
+
+    // Toggle tank control
+    rov.cockpit.emit('inputController.register',
+      {
+        name: "tankcontrol.toggleTankControl",
+        description: "Toggles the tank control mode on/off",
+        defaults: { keyboard: 't' },
+        down: function() { rov.toggleControl(); }
+      });
   };
   TankControl.prototype.toggleControl = function toggleControl() {
     var rov = this;

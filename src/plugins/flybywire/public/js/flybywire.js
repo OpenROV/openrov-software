@@ -23,12 +23,16 @@
   };
   FlyByWire.prototype.listen = function listen() {
     var rov = this;
-    KEYS[71] = {
-      keydown: function () {
-        rov.toggleControl();
-      }
-    };
-    // g
+
+    // Toggle fly-by-wire
+    this.cockpit.emit('inputController.register',
+      {
+        name: "flyByWire.toggle",
+        description: "Enables/disable fly-fly-by-wire.",
+        defaults: { keyboard: 'g' },
+        down: function() { rov.toggleControl();  }
+      });
+
     rov.cockpit.on('rovpilot.control_update', function (controls) {
       if (rov.flybywireControlActive) {
         rov.processControlChanges(controls);

@@ -10,14 +10,19 @@
     $('#rov_status_panel').append('<div id="serialmonitor" style="display: none;" class="controller well well-small" >\t\t    <textarea id="SerialMonitorList" style="width: 100%; height: 400px;">\t\t    </textarea>\t\t</div>');
     $('#keyboardInstructions').append('<p><i>u</i> to toggle raw serial-monitor</p>');
     var self = this;
-    KEYS[85] = {
-      keydown: function (data) {
-        //u
-        $('#serialmonitor').toggle();
-        self.cockpit.socket.emit('SerialMonitor_toggle_rawSerial');
-      }
-    };
-    //    setInterval(function(){self.displaySerialMonitor();}, 1000);	
+
+    // Toggle serial monitor
+    this.cockpit.emit('inputController.register',
+      {
+        name: "serialMonitor.toggleSerialMonitor",
+        description: "Shows/hides raw serial monitor.",
+        defaults: { keyboard: 'u' },
+        down: function() {
+          $('#serialmonitor').toggle();
+          self.cockpit.socket.emit('SerialMonitor_toggle_rawSerial');
+        }
+      });
+
     // Register the various event handlers
     this.listen();
   };
