@@ -12,7 +12,9 @@
         if (control.defaults.keyboard !== undefined) {
           var key = control.defaults.keyboard;
           Mousetrap.bind(key, control.down, 'keydown');
-          Mousetrap.bind(key, control.up, 'keyup');
+          if (control.up !== undefined) {
+            Mousetrap.bind(key, control.up, 'keyup');
+          }
           if (control.secondary !== undefined) {
             control.secondary.forEach(function(secondary) {
               Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.down, 'keydown');
