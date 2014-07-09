@@ -40,7 +40,6 @@
   <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
   <script type='text/javascript' src='js/libs/gamepad.js'></script>
   <script type='text/javascript' src='js/utilities.js'></script>
-  <script type='text/javascript' src="js/keypad.js"></script>
   <script type='text/javascript' src="js/gamepad.js"></script>
   <script type='text/javascript' src="js/frame.js"></script>
   <script type='text/javascript' src="js/cockpit.js"></script>
@@ -230,11 +229,15 @@
         $("[rel='popover']").popover();
 
 	$('#keyboardInstructions').append('<p><i>\\</i> to toggle heads up display</p>');
-	KEYS[220] = {keydown: function() {  //capslog
-   		 $('.hud').toggleClass('hidden');
-		 console.log("capslock");
-		}};
-
+        rov.cockpit.emit('inputController.register',
+          {
+            name: "main.toggleHeadsUpDisplay",
+            description: "Toggle the heads-up-display on/off",
+            defaults: { keyboard: ']' },
+            down: function() {
+              $('.hud').toggleClass('hidden');
+            }
+          });
 
 		// The next session draws the video img to a canvas which is then managed by the GPU
 		// and is much faster than the browser painting the img tag.
