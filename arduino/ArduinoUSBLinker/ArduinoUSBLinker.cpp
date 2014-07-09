@@ -1,3 +1,4 @@
+#line 1 "ArduinoUSBLinker.ino"
 /*
 Copyright (C) 2012-2013 Chris Osgood <chris at luadev.com>
 
@@ -42,7 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #endif
 
 // Default PD2/INT0
-#define AUL_DEFAULT_PIN 18
+#define AUL_DEFAULT_PIN 51 //18 was working, 15 is digital pin 6 (pwm)
 
 #define AUL_BUFSIZE 300
 
@@ -85,6 +86,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 // Globals
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "Arduino.h"
+static char* AUL_itoa(AUL_ASCII_INT_TYPE n, char *b);
+static AUL_ASCII_INT_TYPE AUL_atoi(const char* s);
+static void AUL_SerialInit(uint8_t port);
+static void AUL_SerialWriteBuf(const uint8_t* b, int16_t len);
+static void AUL_SerialWriteStr(const char* b);
+static void DisableAllTimers();
+static void SignalPinStatus(char* buf);
+static void SignalPinInit(int8_t pin);
+static void SendByte(uint8_t b);
+static int8_t ReadLeader();
+static void SetBitTime(uint16_t t);
+static uint32_t EERead32(int pos);
+static void EEWrite32(int pos, uint32_t value);
+void AUL_loop(uint8_t port);
+int main(int argc, char* argv[]);
+#line 89
 static uint8_t g_timerConfig;
 static uint16_t g_timerScale;
 
@@ -746,9 +764,13 @@ timeout:
 
 int main(int argc, char* argv[])
 {
+  pinMode(16, OUTPUT);  
+  digitalWrite(16, HIGH);   // turn the ESC Power on
   AUL_loop(0);
   return 0;
 }
 
 #endif // !MULTIWII
+
+
 
