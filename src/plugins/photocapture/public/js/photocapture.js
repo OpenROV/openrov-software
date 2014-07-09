@@ -12,9 +12,7 @@
     $('#buttonPanel').append('<button id="capture-photo" class="btn">Capture</button>');
     $('#keyboardInstructions').append('<p>press <i>c</i> to capture an image</p>');
     var self = this;
-    var jsFileLocation = $('script[src*=photocapture]').attr('src');
-    // the js file path
-    jsFileLocation = jsFileLocation.replace('photocapture.js', '');
+    var jsFileLocation = urlOfJsFile('photocapture.js');
     // the js folder path
     $('#photos').load(jsFileLocation + '../photospanel.html', function () {
       // Register the various event handlers
