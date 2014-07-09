@@ -10,3 +10,16 @@ function msToTime(s) {
   var hrs = (s - mins) / 60;
   return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs);  // + '.' + ms;
 }
+
+// used to dynamically load plugin assets
+function urlOfJsFile ( jsfile ) {
+  var scriptElements = document.getElementsByTagName('script');
+  var i, element, myfile;
+  for( i = 0; element = scriptElements[i]; i++ ) {
+    myfile = element.src;
+    if( myfile.indexOf( jsfile ) >= 0 ) {
+      var myurl = myfile.substring( 0, myfile.indexOf( jsfile ) );
+    }
+  }
+  return myurl;
+}

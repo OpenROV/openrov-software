@@ -7,10 +7,8 @@
     this.cockpit = cockpit;
     // Add required UI elements
 
-    //this technique forces relative path to the js file instead of the excution directory
-    var jsFileLocation = $('script[src*=googletalk_ipregistration]').attr('src');
-    // the js file path
-    jsFileLocation = jsFileLocation.replace('googletalk_ipregistration.js', '');
+    //this technique forces relative path to the js file instead of the execution directory
+    var jsFileLocation = urlOfJsFile('googletalk_ipregistration.js');
 
     $('#settings')
       .find('#plugin-settings')

@@ -24,6 +24,7 @@
     //ms
     var trimHeld = false;
     this.priorControls = {};
+
     // Add required UI elements
     $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
     $('#footercontent').prepend('<div class="span1 pull-left"> \t\t\t<h6>Thrust&nbsp;Factor</h6><div class="label badge" id="thrustfactor">&nbsp;</div> \t\t    </div>');
@@ -38,20 +39,22 @@
     $('#navtoolbar').append('<li><a href="#" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
     $('#navtoolbar').append('<li><a href="#" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
 
-    var self = this;
+    var rov = this;
     setInterval(function () {
-      self.sendPilotingData();
+      rov.sendPilotingData();
     }, SAMPLE_PERIOD);
     this.listen();
+
     $('#thrustfactor').text(2);
     $('#rovPilot_depthHold').click(function() {
-        cockpitEventEmitter.emit('rovpilot.toggleholdDepth');
+        rov.cockpit.emit('rovpilot.toggleholdDepth');
     });
     $('#rovPilot_headingHold').click(function() {
-        cockpitEventEmitter.emit('rovpilot.toggleholdHeading');
+        rov.cockpit.emit('rovpilot.toggleholdHeading');
     });
+
     $('#rovPilot_laser').click(function() {
-        cockpitEventEmitter.emit('rovpilot.toggleLasers');
+      rov.cockpit.emit('rovpilot.toggleLasers');
     });
   };
   //This pattern will hook events in the cockpit and pull them all back
@@ -61,300 +64,299 @@
     this.cockpit.socket.on('status', function (data) {
         rov.UpdateStatusIndicators(data);
     });
-
-    cockpitEventEmitter.on('gamepad.connected', function () {
+    rov.cockpit.on('gamepad.connected', function () {
       $('#gamepad').toggleClass('hidden', false);
     });
-    cockpitEventEmitter.on('gamepad.disconnected', function () {
+    rov.cockpit.on('gamepad.disconnected', function () {
       $('#gamepad').toggleClass('hidden', true);
     });
     GAMEPAD.DPAD_UP = {
       BUTTON_DOWN: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustLights', 0.1);
+        rov.cockpit.emit('rovpilot.adjustLights', 0.1);
       }
     };
     GAMEPAD.DPAD_DOWN = {
       BUTTON_DOWN: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustLights', -0.1);
+        rov.cockpit.emit('rovpilot.adjustLights', -0.1);
       }
     };
     GAMEPAD.Y = {
       BUTTON_DOWN: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustCameraTilt', 0.1);
+        rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1);
       }
     };
     GAMEPAD.B = {
       BUTTON_DOWN: function () {
-        cockpitEventEmitter.emit('rovpilot.setCameraTilt', 0);
+        rov.cockpit.emit('rovpilot.setCameraTilt', 0);
       }
     };
     GAMEPAD.A = {
       BUTTON_DOWN: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustCameraTilt', -0.1);
+        rov.cockpit.emit('rovpilot.adjustCameraTilt', -0.1);
       }
     };
     GAMEPAD.RB = {
       BUTTON_DOWN: function () {
-        cockpitEventEmitter.emit('rovpilot.toggleAllTrimHold');
+        rov.cockpit.emit('rovpilot.toggleAllTrimHold');
       }
     };
     GAMEPAD.START = {
       BUTTON_DOWN: function () {
-        cockpitEventEmitter.emit('rovpilot.incrimentPowerLevel');
+        rov.cockpit.emit('rovpilot.incrimentPowerLevel');
       }
     };
     GAMEPAD.LEFT_STICK_X = {
       AXIS_CHANGED: function (v) {
-        cockpitEventEmitter.emit('rovpilot.setYaw', v);
+        rov.cockpit.emit('rovpilot.setYaw', v);
       }
     };
     GAMEPAD.LEFT_STICK_Y = {
       AXIS_CHANGED: function (v) {
-        cockpitEventEmitter.emit('rovpilot.setThrottle', -1 * v);
+        rov.cockpit.emit('rovpilot.setThrottle', -1 * v);
       }
     };
     GAMEPAD.RIGHT_STICK_Y = {
       AXIS_CHANGED: function (v) {
-        cockpitEventEmitter.emit('rovpilot.setLift', -1 * v);
+        rov.cockpit.emit('rovpilot.setLift', -1 * v);
       }
     };
     KEYS[32] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.allStop');
+        rov.cockpit.emit('rovpilot.allStop');
       }
     };
     // space (all-stop)
     KEYS[38] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.setThrottle', 1);
+        rov.cockpit.emit('rovpilot.setThrottle', 1);
       },
       keyup: function () {
-        cockpitEventEmitter.emit('rovpilot.setThrottle', 0);
+        rov.cockpit.emit('rovpilot.setThrottle', 0);
       }
     };
     // up  (forward)
     KEYS[40] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.setThrottle', -1);
+        rov.cockpit.emit('rovpilot.setThrottle', -1);
       },
       keyup: function () {
-        cockpitEventEmitter.emit('rovpilot.setThrottle', 0);
+        rov.cockpit.emit('rovpilot.setThrottle', 0);
       }
     };
     // down (aft)
     KEYS[37] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.setYaw', -1);
+        rov.cockpit.emit('rovpilot.setYaw', -1);
       },
       keyup: function () {
-        cockpitEventEmitter.emit('rovpilot.setYaw', 0);
+        rov.cockpit.emit('rovpilot.setYaw', 0);
       }
     };
     // left (turn left)
     KEYS[39] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.setYaw', 1);
+        rov.cockpit.emit('rovpilot.setYaw', 1);
       },
       keyup: function () {
-        cockpitEventEmitter.emit('rovpilot.setYaw', 0);
+        rov.cockpit.emit('rovpilot.setYaw', 0);
       }
     };
     // right (turn right)
     KEYS[16] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.setLift', -1);
+        rov.cockpit.emit('rovpilot.setLift', -1);
       },
       keyup: function () {
-        cockpitEventEmitter.emit('rovpilot.setLift', 0);
+        rov.cockpit.emit('rovpilot.setLift', 0);
       }
     };
     KEYS[17] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.setLift', 1);
+        rov.cockpit.emit('rovpilot.setLift', 1);
       },
       keyup: function () {
-        cockpitEventEmitter.emit('rovpilot.setLift', 0);
+        rov.cockpit.emit('rovpilot.setLift', 0);
       }
     };
     KEYS[49] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.powerLevel', 1);
+        rov.cockpit.emit('rovpilot.powerLevel', 1);
       }
     };
     //1
     KEYS[50] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.powerLevel', 2);
+        rov.cockpit.emit('rovpilot.powerLevel', 2);
       }
     };
     //2
     KEYS[51] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.powerLevel', 3);
+        rov.cockpit.emit('rovpilot.powerLevel', 3);
       }
     };
     //3
     KEYS[52] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.powerLevel', 4);
+        rov.cockpit.emit('rovpilot.powerLevel', 4);
       }
     };
     //4
     KEYS[53] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.powerLevel', 5);
+        rov.cockpit.emit('rovpilot.powerLevel', 5);
       }
     };
     //5
     KEYS[55] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustVerticleTrim', 1);
+        rov.cockpit.emit('rovpilot.adjustVerticleTrim', 1);
       }
     };
     //7 (vtrim)
     KEYS[56] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustVerticleTrim', -1);
+        rov.cockpit.emit('rovpilot.adjustVerticleTrim', -1);
       }
     };
     //8 (vttrim)
     KEYS[57] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustThrottleTrim', -1);
+        rov.cockpit.emit('rovpilot.adjustThrottleTrim', -1);
       }
     };
     //9 (ttrim -)
     KEYS[48] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustThrottleTrim', 1);
+        rov.cockpit.emit('rovpilot.adjustThrottleTrim', 1);
       }
     };
     //0 (ttrim +)
     KEYS[81] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustCameraTilt', 0.1);
+        rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1);
       }
     };
     //Q (tilt up)
     KEYS[65] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.setCameraTilt', 0);
+        rov.cockpit.emit('rovpilot.setCameraTilt', 0);
       }
     };
     //A (tilt fwd)
     KEYS[90] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustCameraTilt', -0.1);
+        rov.cockpit.emit('rovpilot.adjustCameraTilt', -0.1);
       }
     };
     //Z (tilt down)
     KEYS[80] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustLights', 0.1);
+        rov.cockpit.emit('rovpilot.adjustLights', 0.1);
       }
     };
     //p (brightness up)
     KEYS[79] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.adjustLights', -0.1);
+        rov.cockpit.emit('rovpilot.adjustLights', -0.1);
       }
     };
     //o (brightness down)
     KEYS[76] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.toggleLasers');
+        rov.cockpit.emit('rovpilot.toggleLasers');
       }
     };
     //l (laser toggle)
     //KEYS[73] = {keydown: function(){ rov.toggleLights();}}; //i (laser lights)
     KEYS[73] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.toggleLights');
+        rov.cockpit.emit('rovpilot.toggleLights');
       }
     };
     //i (laser lights)
     KEYS[219] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.powerOnESCs');
+        rov.cockpit.emit('rovpilot.powerOnESCs');
       }
     };
     //[
     KEYS[221] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.powerOffESCs');
+        rov.cockpit.emit('rovpilot.powerOffESCs');
       }
     };
     //]
     KEYS[77] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.toggleholdHeading');
+        rov.cockpit.emit('rovpilot.toggleholdHeading');
       }
     };
     //m
     KEYS[78] = {
       keydown: function () {
-        cockpitEventEmitter.emit('rovpilot.toggleholdDepth');
+        rov.cockpit.emit('rovpilot.toggleholdDepth');
       }
     };
     //n
-    cockpitEventEmitter.on('rovpilot.allStop', function () {
+    rov.cockpit.on('rovpilot.allStop', function () {
       rov.allStop();
     });
-    cockpitEventEmitter.on('rovpilot.setThrottle', function (v) {
+    rov.cockpit.on('rovpilot.setThrottle', function (v) {
       rov.setThrottle(v);
     });
-    cockpitEventEmitter.on('rovpilot.setYaw', function (v) {
+    rov.cockpit.on('rovpilot.setYaw', function (v) {
       rov.setYaw(v);
     });
-    cockpitEventEmitter.on('rovpilot.setLift', function (v) {
+    rov.cockpit.on('rovpilot.setLift', function (v) {
       rov.setLift(v);
     });
-    cockpitEventEmitter.on('rovpilot.powerLevel', function (v) {
+    rov.cockpit.on('rovpilot.powerLevel', function (v) {
       rov.powerLevel(v);
     });
-    cockpitEventEmitter.on('rovpilot.adjustVerticleTrim', function (v) {
+    rov.cockpit.on('rovpilot.adjustVerticleTrim', function (v) {
       rov.adjustVerticleTrim(v);
     });
-    cockpitEventEmitter.on('rovpilot.adjustThrottleTrim', function (v) {
+    rov.cockpit.on('rovpilot.adjustThrottleTrim', function (v) {
       rov.adjustThrottleTrim(v);
     });
-    cockpitEventEmitter.on('rovpilot.adjustCameraTilt', function (v) {
+    rov.cockpit.on('rovpilot.adjustCameraTilt', function (v) {
       rov.adjustCameraTilt(v);
     });
-    cockpitEventEmitter.on('rovpilot.setCameraTilt', function (v) {
+    rov.cockpit.on('rovpilot.setCameraTilt', function (v) {
       rov.setCameraTilt(v);
     });
-    cockpitEventEmitter.on('rovpilot.adjustLights', function (v) {
+    rov.cockpit.on('rovpilot.adjustLights', function (v) {
       rov.adjustLights(v);
     });
-    cockpitEventEmitter.on('rovpilot.toggleLasers', function (v) {
+    rov.cockpit.on('rovpilot.toggleLasers', function (v) {
       rov.toggleLasers();
     });
-    cockpitEventEmitter.on('rovpilot.toggleLights', function (v) {
+    rov.cockpit.on('rovpilot.toggleLights', function (v) {
       rov.toggleLights();
     });
-    cockpitEventEmitter.on('rovpilot.incrimentPowerLevel', function () {
+    rov.cockpit.on('rovpilot.incrimentPowerLevel', function () {
       rov.incrimentPowerLevel();
     });
-    cockpitEventEmitter.on('rovpilot.powerOnESCs', function () {
+    rov.cockpit.on('rovpilot.powerOnESCs', function () {
       rov.powerOnESCs();
     });
-    cockpitEventEmitter.on('rovpilot.powerOffESCs', function () {
+    rov.cockpit.on('rovpilot.powerOffESCs', function () {
       rov.powerOffESCs();
     });
-    cockpitEventEmitter.on('rovpilot.toggleholdHeading', function () {
+    rov.cockpit.on('rovpilot.toggleholdHeading', function () {
       rov.toggleholdHeading();
     });
-    cockpitEventEmitter.on('rovpilot.toggleholdDepth', function () {
+    rov.cockpit.on('rovpilot.toggleholdDepth', function () {
       rov.toggleholdDepth();
     });
-    cockpitEventEmitter.on('rovpilot.manualMotorThrottle', function (p, v, s) {
+    rov.cockpit.on('rovpilot.manualMotorThrottle', function (p, v, s) {
       rov.manualMotorThrottle(p, v, s);
     });
-    cockpitEventEmitter.on('rovpilot.disable', function () {
+    rov.cockpit.on('rovpilot.disable', function () {
       rov.disablePilot();
     });
-    cockpitEventEmitter.on('rovpilot.enable', function () {
+    rov.cockpit.on('rovpilot.enable', function () {
       rov.enablePilot();
     });
   };
@@ -451,8 +453,8 @@
     this.positions.throttle = 1 / 1000 * this.ttrim;
   };
   ROVpilot.prototype.toggleAllTrimHold = function toggleAllTrimHold() {
-    trimHeld = !bool;
-    if (trimHeld) {
+    this.trimHeld = !bool;
+    if (this.trimHeld) {
       this.ttrim = positions.throttle;
       this.vtrim = positions.throttle;
     }
@@ -521,7 +523,7 @@
       if (this.sendToROVEnabled) {
         this.cockpit.socket.emit('control_update', controls);
       }
-      cockpitEventEmitter.emit('rovpilot.control_update', controls);
+      this.cockpit.emit('rovpilot.control_update', controls);
       this.priorControls = controls;
     }
   };

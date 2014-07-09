@@ -41,14 +41,14 @@
             direction = -1;
           }
           rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-          cockpitEventEmitter.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+          rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
         }
       };
       GAMEPAD.LEFT_STICK_Y = {
         AXIS_CHANGED: function (v) {
           var direction;
           rov.lefty = v;
-          cockpitEventEmitter.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+          rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
         }
       };
       GAMEPAD.RIGHT_STICK_X = {
@@ -61,7 +61,7 @@
             direction = -1;
           }
           rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-          cockpitEventEmitter.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+          rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
           console.log('rov.lift:' + rov.lift);
         }
       };
@@ -69,7 +69,7 @@
         AXIS_CHANGED: function (v) {
           var direction;
           rov.righty = v;
-          cockpitEventEmitter.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+          rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
         }
       };
       rov.tankControlActive = true;
