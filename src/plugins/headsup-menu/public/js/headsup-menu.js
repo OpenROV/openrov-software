@@ -24,12 +24,13 @@
 
     // Add required UI elements
     $('#video-container').append('<div id="headsup-menu-base"></div>');
-    $('#headsup-menu-base').hide();
+    var headsUpMenu = $('#headsup-menu-base');
+    headsUpMenu.hide();
 
     var menuItems = [];
     var currentSelected = -1;
 
-    $('#headsup-menu-base').load(
+    headsUpMenu.load(
       'plugin/headsup-menu/headsup.html',
       function() {
 
@@ -39,8 +40,39 @@
           function(){ $(this).find('.btn').addClass('btn-primary') },
           function(){ $(this).find('.btn').removeClass('btn-primary') }
         );
-        menuItems = $('#headsup-menu-base').find('.menuRow');
+        menuItems = headsUpMenu.find('.menuRow');
       });
+
+    var executeMenuItem = function() {
+      var currentId = $(menuItems[currentSelected]).attr('id');
+      self.items()
+        .forEach(function(item) {
+          if (item.uniqueId == currentId) {
+            item.callback();
+          }
+        });
+      headsUpMenu.hide();
+      menuItems.trigger('mouseout');
+      currentSelected = -1;
+    };
+
+    var moveSelectionNext = function() {
+      menuItems.trigger('mouseout');
+      var nextIndex = currentSelected + 1;
+      if (nextIndex >= menuItems.length) { nextIndex = -1; }
+      var item = menuItems[nextIndex];
+      $(item).trigger('mouseover');
+      currentSelected = nextIndex;
+    };
+
+    var moveSelectionPrev = function() {
+      menuItems.trigger('mouseout');
+      var nextIndex = currentSelected - 1;
+      if (nextIndex === -2 ) { nextIndex = menuItems.length -1; }
+      var item = menuItems[nextIndex];
+      $(item).trigger('mouseover');
+      currentSelected = nextIndex;
+    };
 
     this.cockpit.emit('inputController.register',
       {
@@ -48,32 +80,19 @@
         description: "Show the heads up menu.",
         defaults: { keyboard: 'e', gamepad: 'START' },
         down: function() { $('#headsup-menu-base').show(); },
-        up: function() {
-          var currentId = $(menuItems[currentSelected]).attr('id');
-          self.items()
-            .forEach(function(item) {
-              if (item.uniqueId == currentId) {
-                item.callback();
-                return;
-              }
-            });
-          $('#headsup-menu-base').hide();
-          menuItems.trigger('mouseout');
-          currentSelected = -1;
-        },
+        up: executeMenuItem,
         secondary: [
           {
             name: "headsupMenu.next",
             description: "select the next element of the heads up menu",
-            defaults: { keyboard: 'd', gamepad: 'DPAD_DOWN' },
-            down: function() {
-              menuItems.trigger('mouseout');
-              var nextIndex = currentSelected + 1;
-              if (nextIndex >= menuItems.length) { nextIndex = -1; }
-              var item = menuItems[nextIndex];
-              $(item).trigger('mouseover');
-              currentSelected = nextIndex;
-            }
+            defaults: { keyboard: 'c', gamepad: 'DPAD_DOWN' },
+            down: moveSelectionNext
+          },
+          {
+            name: "headsupMenu.prev",
+            description: "select the previous element of the heads up menu",
+            defaults: { keyboard: 'd', gamepad: 'DPAD_UP' },
+            down: moveSelectionPrev
           }
         ]
       });
