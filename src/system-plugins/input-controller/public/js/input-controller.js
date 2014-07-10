@@ -1,13 +1,15 @@
  (function (window, document) {
-  var InputController = function InputController(cockpit) {
+   var inputController = namespace('systemPlugin.inputController');
+
+   inputController.InputController = function (cockpit) {
     var self = this;
-    self.cockpit = cockpit
+    self.cockpit = cockpit;
 
     var registeredControls = {};
     var controllers = [];
     // add our known controllers
-    controllers.push(new KeyboardInputController(cockpit));
-    controllers.push(new GamepadInputController(cockpit));
+    controllers.push(new inputController.Keyboard(cockpit));
+    controllers.push(new inputController.Gamepad(cockpit));
 
     var registerControls = function(control) {
       if (control == undefined) return;
@@ -45,5 +47,5 @@
 
     return self;
   };
-  window.Cockpit.plugins.push(InputController);
+  window.Cockpit.plugins.push(inputController.InputController);
 }(window, document));

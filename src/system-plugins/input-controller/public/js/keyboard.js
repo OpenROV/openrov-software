@@ -1,4 +1,5 @@
-var KeyboardInputController = function KeyboardInputController(cockpit) {
+var inputController = namespace('systemPlugin.inputController');
+inputController.Keyboard = function(cockpit) {
   var self = this;
 
   self.register = function(control) {
