@@ -339,6 +339,15 @@
       }
     });
 
+    rov.cockpit.emit('headsUpMenu.register', {
+      label: "Increment power level",
+      callback: function () {
+        rov.cockpit.emit('rovpilot.incrimentPowerLevel');
+      }
+    });
+
+
+
     rov.cockpit.socket.on('status', function (data) {
         rov.UpdateStatusIndicators(data);
     });
