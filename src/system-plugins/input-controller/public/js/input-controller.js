@@ -35,13 +35,10 @@
       }
     }
 
-    self.registerControl = function(control)
-    {
-      // register keydown on keyboard
+    self.registerControl = function(control) {
       if (control.defaults.keyboard !== undefined) {
         registerKeyboard(control);
       }
-      // register button down on gamepad
       if (control.defaults.gamepad !== undefined) {
         registerGamepad(control);
       }
