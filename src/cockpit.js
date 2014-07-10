@@ -1,3 +1,11 @@
+/*
+ *
+ * Description:
+ * This script is the Node.js server for OpenROV.  It creates a server and instantiates an OpenROV
+ * and sets the interval to grab frames.  The interval is set with the DELAY variable which is in
+ * milliseconds.
+ *
+ */
 var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
 var PluginLoader = require('./lib/PluginLoader');
 
