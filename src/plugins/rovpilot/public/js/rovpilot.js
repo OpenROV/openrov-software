@@ -121,7 +121,7 @@
         {
           name: "rovPilot.allStop",
           description: "Stop all motor action",
-          defaults: { keyboard: 'space' /*space*/ },
+          defaults: { keyboard: 'space' },
           down: function() { rov.cockpit.emit('rovpilot.allStop'); }
         },
 
