@@ -4,8 +4,8 @@ inputController.Gamepad = function(cockpit) {
   self.gp = new inputController.GamepadAbstraction(cockpit);
 
   self.register = function(control) {
-    if (control.defaults.gamepad !== undefined) {
-      var gpKey = control.defaults.gamepad;
+    if (control.bindings.gamepad !== undefined) {
+      var gpKey = control.bindings.gamepad;
       self.gp.assignment[gpKey] = { };
       if (control.down !== undefined) self.gp.assignment[gpKey].BUTTON_DOWN = control.down;
       if (control.up !== undefined) self.gp.assignment[gpKey].BUTTON_UP = control.up;
@@ -13,7 +13,7 @@ inputController.Gamepad = function(cockpit) {
 
       if (control.secondary !== undefined) {
         control.secondary.forEach(function (secondary) {
-          var subKey = gpKey + '+' + secondary.defaults.gamepad;
+          var subKey = gpKey + '+' + secondary.bindings.gamepad;
           self.gp.assignment[subKey] = { };
           if (secondary.down != undefined) self.gp.assignment[subKey].BUTTON_DOWN = secondary.down;
           if (secondary.up != undefined) self.gp.assignment[subKey].BUTTON_UP = secondary.up;

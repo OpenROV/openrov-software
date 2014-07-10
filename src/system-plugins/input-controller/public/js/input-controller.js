@@ -5,7 +5,7 @@
     var self = this;
     self.cockpit = cockpit;
 
-    var registeredControls = {};
+    var registerdCommands = {};
     var controllers = [];
     // add our known controllers
     controllers.push(new inputController.Keyboard(cockpit));
@@ -16,10 +16,12 @@
       var controlsToRegister = [].concat(control); // control can be a single object or an array
       controlsToRegister.forEach(function(aControl){
         if (aControl == undefined) return;
-        registeredControls[aControl.name] = aControl;
-        console.log('InputController: Registering control ' + aControl.name );
+        var command = new inputController.Command(aControl);
+
+        registerdCommands[command.name] = command;
+        console.log('InputController: Registering control ' + command.name );
         controllers.forEach(function(controller) {
-          controller.register(aControl);
+          controller.register(command);
         });
       });
     };
@@ -30,16 +32,16 @@
       var controlsToRemove = [].concat(controlName); // controlName could be a single object or an array
 
       controlsToRemove.forEach(function(control){
-        delete registeredControls[control];
+        delete registerdCommands[control];
       });
       controllers.forEach(function(controller) { controller.reset(); });
 
-      var controlsToRegister = [];
-      for(var control in registeredControls) {
-        controlsToRegister.push(registeredControls[control]);
+      var commandsToRegister = [];
+      for(var command in registerdCommands) {
+        commandsToRegister.push(registerdCommands[command]);
       }
 
-      registerControls(controlsToRegister);
+      registerControls(commandsToRegister);
     };
 
     self.cockpit.on('inputController.register', registerControls);
