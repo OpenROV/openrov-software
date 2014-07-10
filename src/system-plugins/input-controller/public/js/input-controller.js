@@ -3,17 +3,37 @@
     var self = this;
     self.cockpit = cockpit
 
+    var registeredControls = {};
     var controllers = [];
+    // add our known controllers
     controllers.push(new KeyboardInputController(cockpit));
     controllers.push(new GamepadInputController(cockpit));
 
-    self.registerControl = function(control) {
+    var registerControl = function(control) {
+      registeredControls[control.name] = control;
+      console.log('InputController: Registering control ' + control.name );
       controllers.forEach(function(controller) {
         controller.register(control);
       });
     };
 
-    self.cockpit.on('inputController.register', self.registerControl);
+    var unregisterControl = function(controlName) {
+      // maybe it would be nicer to actually unregister the controls
+      // rather than resetting and reapplying
+      if (registeredControls[controlName] !== undefined){
+        delete registeredControls[controlName]
+        controllers.forEach(function(controller) { controller.reset(); });
+      }
+
+      for(var control in registeredControls) {
+        if (registeredControls[control] !== undefined) {
+          registerControl(registeredControls[control]);
+        }
+      }
+    };
+
+    self.cockpit.on('inputController.register', registerControl);
+    self.cockpit.on('inputController.unregister', unregisterControl);
 
     return self;
   };

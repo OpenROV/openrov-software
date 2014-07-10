@@ -15,5 +15,9 @@ var KeyboardInputController = function KeyboardInputController(cockpit) {
     }
   }
 
+  self.reset = function () {
+    Mousetrap.reset();
+  };
+
   return self;
 };

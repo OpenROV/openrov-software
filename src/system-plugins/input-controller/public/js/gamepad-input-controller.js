@@ -22,5 +22,11 @@ var GamepadInputController = function GamepadInputController(cockpit) {
     }
   };
 
+  self.reset = function () {
+    for (var control in GAMEPAD) {
+      GAMEPAD[control] = undefined;
+    }
+  };
+
   return self;
 };
