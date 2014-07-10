@@ -27,10 +27,11 @@
         // register button down on gamepad
         if (control.defaults.gamepad !== undefined) {
           var gpKey = control.defaults.gamepad;
-          GAMEPAD[gpKey ] = {
-            BUTTON_DOWN: control.down,
-            BUTTON_UP: control.up
-          };
+          GAMEPAD[gpKey] = { };
+          if (control.down !== undefined) GAMEPAD[gpKey].BUTTON_DOWN = control.down;
+          if (control.up !== undefined) GAMEPAD[gpKey].BUTTON_UP = control.up;
+          if (control.axis !== undefined) GAMEPAD[gpKey].AXIS_CHANGED = control.axis;
+
           if (control.secondary !== undefined) {
             control.secondary.forEach(function(secondary) {
               var subKey = gpKey  + '+' + secondary.defaults.gamepad;

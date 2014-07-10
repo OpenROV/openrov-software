@@ -143,6 +143,15 @@
         up: function() { rov.cockpit.emit('rovpilot.setThrottle', 0); }
       });
 
+    // Throttle axis
+    rov.cockpit.emit('inputController.register',
+      {
+        name: "rovPilot.moveThrottle",
+        description: "Set throttle via axis input.",
+        defaults: { gamepad: 'LEFT_STICK_Y' },
+        axis: function (v) { rov.cockpit.emit('rovpilot.setThrottle', -1 * v); }
+      });
+
     // Down / Backwards
     rov.cockpit.emit('inputController.register',
       {
@@ -151,6 +160,15 @@
         defaults: { keyboard: 'down' },
         down: function() { rov.cockpit.emit('rovpilot.setThrottle', -1); },
         up: function() { rov.cockpit.emit('rovpilot.setThrottle', 0); }
+      });
+
+    // yaw
+    rov.cockpit.emit('inputController.register',
+      {
+        name: "rovPilot.moveYaw",
+        description: "Turn the ROV via axis input.",
+        defaults: { gamepad: 'LEFT_STICK_X' },
+        axis: function (v) { rov.cockpit.emit('rovpilot.setYaw', v); }
       });
 
     // left
@@ -173,6 +191,14 @@
         up: function() { rov.cockpit.emit('rovpilot.setYaw', 0); }
       });
 
+    // lift axis
+    rov.cockpit.emit('inputController.register',
+      {
+        name: "rovPilot.moveLift",
+        description: "Bring the ROV shallower or deeper via axis input.",
+        defaults: { gamepad: 'RIGHT_STICK_Y' },
+        axis: function (v) { rov.cockpit.emit('rovpilot.setLift', -1 * v); }
+      });
     // Lift up
     rov.cockpit.emit('inputController.register',
       {
@@ -331,21 +357,6 @@
     rov.cockpit.on('gamepad.disconnected', function () {
       $('#gamepad').toggleClass('hidden', true);
     });
-    GAMEPAD.LEFT_STICK_X = {
-      AXIS_CHANGED: function (v) {
-        rov.cockpit.emit('rovpilot.setYaw', v);
-      }
-    };
-    GAMEPAD.LEFT_STICK_Y = {
-      AXIS_CHANGED: function (v) {
-        rov.cockpit.emit('rovpilot.setThrottle', -1 * v);
-      }
-    };
-    GAMEPAD.RIGHT_STICK_Y = {
-      AXIS_CHANGED: function (v) {
-        rov.cockpit.emit('rovpilot.setLift', -1 * v);
-      }
-    };
 
     rov.cockpit.on('rovpilot.allStop', function () {
       rov.allStop();
