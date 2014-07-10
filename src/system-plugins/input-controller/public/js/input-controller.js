@@ -7,40 +7,38 @@
 
     self.registerControl = function(control)
     {
-      if (control.down !== undefined) {
-        // register keydown on keyboard
-        if (control.defaults.keyboard !== undefined) {
-          var key = control.defaults.keyboard;
-          Mousetrap.bind(key, control.down, 'keydown');
-          if (control.up !== undefined) {
-            Mousetrap.bind(key, control.up, 'keyup');
-          }
-          if (control.secondary !== undefined) {
-            control.secondary.forEach(function(secondary) {
-              Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.down, 'keydown');
-              if (secondary.up !== undefined) {
-                Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.up, 'keyup');
-              }
-            });
-          }
+      // register keydown on keyboard
+      if (control.defaults.keyboard !== undefined) {
+        var key = control.defaults.keyboard;
+        Mousetrap.bind(key, control.down, 'keydown');
+        if (control.up !== undefined) {
+          Mousetrap.bind(key, control.up, 'keyup');
         }
-        // register button down on gamepad
-        if (control.defaults.gamepad !== undefined) {
-          var gpKey = control.defaults.gamepad;
-          GAMEPAD[gpKey] = { };
-          if (control.down !== undefined) GAMEPAD[gpKey].BUTTON_DOWN = control.down;
-          if (control.up !== undefined) GAMEPAD[gpKey].BUTTON_UP = control.up;
-          if (control.axis !== undefined) GAMEPAD[gpKey].AXIS_CHANGED = control.axis;
+        if (control.secondary !== undefined) {
+          control.secondary.forEach(function(secondary) {
+            Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.down, 'keydown');
+            if (secondary.up !== undefined) {
+              Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.up, 'keyup');
+            }
+          });
+        }
+      }
+      // register button down on gamepad
+      if (control.defaults.gamepad !== undefined) {
+        var gpKey = control.defaults.gamepad;
+        GAMEPAD[gpKey] = { };
+        if (control.down !== undefined) GAMEPAD[gpKey].BUTTON_DOWN = control.down;
+        if (control.up !== undefined) GAMEPAD[gpKey].BUTTON_UP = control.up;
+        if (control.axis !== undefined) GAMEPAD[gpKey].AXIS_CHANGED = control.axis;
 
-          if (control.secondary !== undefined) {
-            control.secondary.forEach(function(secondary) {
-              var subKey = gpKey  + '+' + secondary.defaults.gamepad;
-              GAMEPAD[subKey] = {
-                BUTTON_DOWN: secondary.down,
-                BUTTON_UP: secondary.up
-              };
-            });
-          }
+        if (control.secondary !== undefined) {
+          control.secondary.forEach(function(secondary) {
+            var subKey = gpKey  + '+' + secondary.defaults.gamepad;
+            GAMEPAD[subKey] = {
+              BUTTON_DOWN: secondary.down,
+              BUTTON_UP: secondary.up
+            };
+          });
         }
       }
     };
