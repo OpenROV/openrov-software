@@ -30,7 +30,7 @@
       {
         name: "telemetry.cycleTextColor",
         description: "Cycle the text color of telemetry.",
-        defaults: { keyboard: 'h', gamepad: 'LB' },
+        defaults: { keyboard: 'h' },
         down: function() { self.cycleTextColor(); }
       });
 
