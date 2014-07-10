@@ -46,7 +46,7 @@
       {
         name: "headsupMenu.show",
         description: "Show the heads up menu.",
-        defaults: { keyboard: 'e', gamepad: 'LB' },
+        defaults: { keyboard: 'e', gamepad: 'START' },
         down: function() { $('#headsup-menu-base').show(); },
         up: function() {
           var currentId = $(menuItems[currentSelected]).attr('id');

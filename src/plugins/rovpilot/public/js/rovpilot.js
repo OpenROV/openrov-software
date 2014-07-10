@@ -111,9 +111,9 @@
 
         // Increment power level
         {
-          name: "rovPilot.toogleIncrementPowerLevel",
+          name: "rovPilot.incrementPowerLevel",
           description: "Increment the thruster power level",
-          defaults: { gamepad: 'START' },
+          defaults: { },
           down: function() { rov.cockpit.emit('rovpilot.incrimentPowerLevel'); }
         },
 
