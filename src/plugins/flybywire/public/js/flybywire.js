@@ -28,7 +28,7 @@
     this.cockpit.emit('inputController.register',
       {
         name: "flyByWire.toggle",
-        description: "Enables/disable fly-fly-by-wire.",
+        description: "Enables/disable fly-by-wire.",
         defaults: { keyboard: 'g' },
         down: function() { rov.toggleControl();  }
       });
@@ -65,24 +65,18 @@
     var rov = this;
     if (!this.flybywireControlActive) {
       rov.cockpit.emit('rovpilot.disable');
-      rov.originalsettings.lsx = GAMEPAD.LEFT_STICK_X;
-      rov.originalsettings.lsy = GAMEPAD.LEFT_STICK_Y;
-      rov.originalsettings.rsx = GAMEPAD.RIGHT_STICK_X;
-      rov.originalsettings.rsy = GAMEPAD.RIGHT_STICK_Y;
 
-      rov.cockpit.socket.emit('holdHeading_toggle');
-      rov.cockpit.socket.emit('holdDepth_toggle');
+      rov.cockpit.emit('rovpilot.toggleholdHeading');
+      rov.cockpit.emit('rovpilot.toggleholdDepth');
+
       rov.flybywireControlActive = true;
       console.log('FlyByWire Control Active');
     } else {
-      GAMEPAD.LEFT_STICK_X = rov.originalsettings.lsx;
-      GAMEPAD.LEFT_STICK_Y = rov.originalsettings.lsy;
-      GAMEPAD.RIGHT_STICK_X = rov.originalsettings.rsx;
-      GAMEPAD.RIGHT_STICK_Y = rov.originalsettings.rsy;
+
       rov.flybywireControlActive = false;
       rov.cockpit.emit('rovpilot.enable');
-      rov.cockpit.socket.emit('holdHeading_toggle');
-      rov.cockpit.socket.emit('holdDepth_toggle');
+      rov.cockpit.emit('rovpilot.toggleholdHeading');
+      rov.cockpit.emit('rovpilot.toggleholdDepth');
       console.log('FlyByWire Control Deactivated');
     }
   };

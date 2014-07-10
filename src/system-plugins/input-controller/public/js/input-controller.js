@@ -25,7 +25,7 @@
     var unregisterControls = function(controlName) {
       // maybe it would be nicer to actually unregister the controls
       // rather than resetting and reapplying
-      var controlsToRemove = [].concat(controlName); // if controlName could be a single object or an array
+      var controlsToRemove = [].concat(controlName); // controlName could be a single object or an array
 
       controlsToRemove.forEach(function(control){
         delete registeredControls[control];
