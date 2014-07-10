@@ -37,16 +37,15 @@
       photoc.cockpit.socket.emit('snapshot');
       console.log('send snapshot request to server');
     });
-    /*GAMEPAD.LB = { !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      BUTTON_DOWN: function () {
-        photoc.cockpit.socket.emit('snapshot');
-      }
-    };*/
-    KEYS[67] = {
-      keydown: function () {
-        photoc.cockpit.socket.emit('snapshot');
-      }
-    };
+
+    photoc.cockpit.emit('inputController.register',
+      {
+        name: "photoCapture.takeSnapshot",
+        description: "Take a snapshot of the current video image.",
+        defaults: { keyboard: 'c', gamepad: 'LB' },
+        down: function() { photoc.cockpit.socket.emit('snapshot'); }
+      });
+
     $('#show-photos').click(function () {
       $('#photos').show('fold');
       photoc.cockpit.sendUpdateEnabled = false;

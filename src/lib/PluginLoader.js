@@ -12,10 +12,10 @@ var PluginLoader = function() {
 
   self.loadPlugins = function(dir, deps, callback) {
     var result = {
-      assets: new Array(),
-      scripts: new Array(),
-      styles: new Array(),
-      plugins: new Array()
+      assets: [],
+      scripts: [],
+      styles: [],
+      plugins: []
     };
     fs.readdir(dir, function (err, files) {
       if (err) {

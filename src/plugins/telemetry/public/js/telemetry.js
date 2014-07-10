@@ -7,6 +7,7 @@
     this.cockpit = cockpit;
     this.telemetry = {};
     this.importantTelemetry = {};
+    this.textcolor = 0;
     // Add required UI elements
     $('#rov_status_panel').append('<div id="telemetry" class="controller well well-small" >\t\t    <ul>\t\t       <li id="TelemetryList">\t\t       </li>\t\t    </ul>\t\t</div>');
     $('#keyboardInstructions').append('<p><i>h</i> to cycle text color of telemetry</p>');
@@ -24,20 +25,27 @@
     this.cockpit.socket.on('status', function (data) {
       self.logStatusData(data);
     });
-    var textcolor = 0;
-    KEYS[72] = {
-      keydown: function (data) {
-        //h
-        textcolor += 5;
-        if (textcolor > 255) {
-          textcolor = 0;
-        }
-        $('#TelemetryList')[0].style.color = 'rgb(' + textcolor + ',' + textcolor + ',255)';
-      }
-    };
+
+    self.cockpit.emit('inputController.register',
+      {
+        name: "telemetry.cycleTextColor",
+        description: "Cycle the text color of telemetry.",
+        defaults: { keyboard: 'h', gamepad: 'LB' },
+        down: function() { self.cycleTextColor(); }
+      });
+
     $('#TelemetryList')[0].addEventListener('click', function (e) {
       self.handleDescendantEvent(e);
     }, true);
+  };
+  Telemetry.prototype.cycleTextColor = function() {
+    var self = this;
+
+    self.textcolor += 5;
+    if (self.textcolor > 255) {
+      self.textcolor = 0;
+    }
+    $('#TelemetryList')[0].style.color = 'rgb(' + self.textcolor + ',' + self.textcolor + ',255)';
   };
   Telemetry.prototype.handleDescendantEvent = function handleDescendantEvent(e) {
     if (e.type == 'click' && e.eventPhase == Event.CAPTURING_PHASE) {

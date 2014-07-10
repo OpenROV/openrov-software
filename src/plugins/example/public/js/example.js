@@ -13,7 +13,7 @@
       {
         name: "example.keyBoardMapping",
         description: "Example for keymapping.",
-        defaults: { keyboard: '0', gamepad: 'X' },
+        defaults: { keyboard: 'alt+0', gamepad: 'X' },
         down: function() { console.log('0 down'); },
         up: function() { console.log('0 up'); },
         secondary: [
