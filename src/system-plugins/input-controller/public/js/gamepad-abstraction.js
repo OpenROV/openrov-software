@@ -38,13 +38,6 @@ inputController.GamepadAbstraction = function (cockpit) {
       }
     }
   });
-  gamepad.bind(Gamepad.Event.BUTTON_UP, function (e) {
-    if (GAMEPAD[e.control] !== undefined) {
-      if (GAMEPAD[e.control].BUTTON_UP !== undefined) {
-        GAMEPAD[e.control].BUTTON_UP();
-      }
-    }
-  });
   gamepad.bind(Gamepad.Event.AXIS_CHANGED, function (e) {
     if (new Date().getTime() < ignoreInputUntil)
       return;
