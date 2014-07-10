@@ -12,14 +12,17 @@
     this.cockpit.on(
       'headsUpMenu.register',
       function (item) {
-        item.uniqueId = generateUUID();
-        if (item['type'] == undefined) {
-          item.type = "button";
-        }
-        if (item['type'] == 'custom') {
-          item.headsUpTemplateId = 'custom-' + item.uniqueId;
-        }
-        self.items.push(item);
+        var items = [].concat(item); // item can be a single object or an array
+        items.forEach(function (anItem) {
+          anItem.uniqueId = generateUUID();
+          if (anItem['type'] == undefined) {
+            anItem.type = "button";
+          }
+          if (anItem['type'] == 'custom') {
+            anItem.headsUpTemplateId = 'custom-' + anItem.uniqueId;
+          }
+          self.items.push(anItem);
+        });
       });
 
     // Add required UI elements
