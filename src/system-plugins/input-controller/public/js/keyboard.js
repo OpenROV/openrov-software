@@ -5,7 +5,7 @@ inputController.Keyboard = function(cockpit) {
   self.register = function(control) {
     if (control.bindings.keyboard !== undefined) {
       var key = control.bindings.keyboard;
-      if (control.down != undefined) Mousetrap.bind(key, control.down, 'keydown');
+      if (control.down !== undefined) Mousetrap.bind(key, control.down, 'keydown');
       if (control.up !== undefined) Mousetrap.bind(key, control.up, 'keyup');
       if (control.secondary !== undefined) {
         control.secondary.forEach(function (secondary) {
@@ -14,7 +14,7 @@ inputController.Keyboard = function(cockpit) {
         });
       }
     }
-  }
+  };
 
   self.reset = function () {
     Mousetrap.reset();

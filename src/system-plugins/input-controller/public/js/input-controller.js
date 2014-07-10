@@ -12,10 +12,10 @@
     controllers.push(new inputController.Gamepad(cockpit));
 
     var registerControls = function(control) {
-      if (control == undefined) return;
+      if (control === undefined) return;
       var controlsToRegister = [].concat(control); // control can be a single object or an array
       controlsToRegister.forEach(function(aControl){
-        if (aControl == undefined) return;
+        if (aControl === undefined) return;
         var command = new inputController.Command(aControl);
 
         registerdCommands[command.name] = command;

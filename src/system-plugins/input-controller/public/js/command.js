@@ -5,7 +5,7 @@ inputController.Command = function(control) {
   var self = this;
   if (control.name === undefined ||
       control.name.constructor != String ||
-      control.name.trim().length == 0) {
+      control.name.trim().length === 0) {
     alert("The passed InputController command does not have a valid string as property 'name'!\n" +
           "Object: " + JSON.stringify(control));
   }
@@ -14,9 +14,9 @@ inputController.Command = function(control) {
   }
 
   self.description = control.description || self.name;
-  if (control.down != undefined) self.down = control.down;
-  if (control.up != undefined) self.up = control.up;
-  if (control.axis != undefined) self.axis = control.axis;
+  if (control.down !== undefined) self.down = control.down;
+  if (control.up !== undefined) self.up = control.up;
+  if (control.axis !== undefined) self.axis = control.axis;
 
   if (control.secondary !== undefined) {
     var secondaries = [];
