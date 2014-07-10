@@ -9,31 +9,39 @@
     controllers.push(new KeyboardInputController(cockpit));
     controllers.push(new GamepadInputController(cockpit));
 
-    var registerControl = function(control) {
-      registeredControls[control.name] = control;
-      console.log('InputController: Registering control ' + control.name );
-      controllers.forEach(function(controller) {
-        controller.register(control);
+    var registerControls = function(control) {
+      if (control == undefined) return;
+      var controlsToRegister = [].concat(control); // control can be a single object or an array
+      controlsToRegister.forEach(function(aControl){
+        if (aControl == undefined) return;
+        registeredControls[aControl.name] = aControl;
+        console.log('InputController: Registering control ' + aControl.name );
+        controllers.forEach(function(controller) {
+          controller.register(aControl);
+        });
       });
     };
 
-    var unregisterControl = function(controlName) {
+    var unregisterControls = function(controlName) {
       // maybe it would be nicer to actually unregister the controls
       // rather than resetting and reapplying
-      if (registeredControls[controlName] !== undefined){
-        delete registeredControls[controlName]
-        controllers.forEach(function(controller) { controller.reset(); });
+      var controlsToRemove = [].concat(controlName); // if controlName could be a single object or an array
+
+      controlsToRemove.forEach(function(control){
+        delete registeredControls[control];
+      });
+      controllers.forEach(function(controller) { controller.reset(); });
+
+      var controlsToRegister = [];
+      for(var control in registeredControls) {
+        controlsToRegister.push(registeredControls[control]);
       }
 
-      for(var control in registeredControls) {
-        if (registeredControls[control] !== undefined) {
-          registerControl(registeredControls[control]);
-        }
-      }
+      registerControls(controlsToRegister);
     };
 
-    self.cockpit.on('inputController.register', registerControl);
-    self.cockpit.on('inputController.unregister', unregisterControl);
+    self.cockpit.on('inputController.register', registerControls);
+    self.cockpit.on('inputController.unregister', unregisterControls);
 
     return self;
   };
