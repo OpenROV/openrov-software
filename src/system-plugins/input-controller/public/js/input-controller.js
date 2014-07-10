@@ -4,6 +4,7 @@
    inputController.InputController = function (cockpit) {
     var self = this;
     self.cockpit = cockpit;
+    self.model = { commands: ko.observableArray() };
 
     var registerdCommands = {};
     var controllers = [];
@@ -19,6 +20,7 @@
         var command = new inputController.Command(aControl);
 
         registerdCommands[command.name] = command;
+        self.model.commands.push(command);
         console.log('InputController: Registering control ' + command.name );
         controllers.forEach(function(controller) {
           controller.register(command);
@@ -41,11 +43,18 @@
         commandsToRegister.push(registerdCommands[command]);
       }
 
+      self.model.commands.length = 0;
       registerControls(commandsToRegister);
     };
 
     self.cockpit.on('inputController.register', registerControls);
     self.cockpit.on('inputController.unregister', unregisterControls);
+
+    $('#plugin-settings').append('<div id="inputcontroller-settings"></div>');
+    var jsFileLocation = urlOfJsFile('input-controller.js');
+    $('#inputcontroller-settings').load(jsFileLocation + '../settings.html', function () {
+      ko.applyBindings(self.model, document.getElementById('inputcontroller-settings'));
+    });
 
     return self;
   };

@@ -38,7 +38,7 @@ var OpenROVCamera = function (options) {
     logger.log('Snapshot function called. Not implemented in the mock');
     callback('SomeFileName' + Date.now() + '.jpg');
   };
-  
+
   return camera;
 };
 module.exports = OpenROVCamera;
