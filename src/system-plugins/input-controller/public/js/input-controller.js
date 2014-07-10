@@ -10,16 +10,12 @@
       // register keydown on keyboard
       if (control.defaults.keyboard !== undefined) {
         var key = control.defaults.keyboard;
-        Mousetrap.bind(key, control.down, 'keydown');
-        if (control.up !== undefined) {
-          Mousetrap.bind(key, control.up, 'keyup');
-        }
+        if (control.down != undefined) Mousetrap.bind(key, control.down, 'keydown');
+        if (control.up !== undefined) Mousetrap.bind(key, control.up, 'keyup');
         if (control.secondary !== undefined) {
           control.secondary.forEach(function(secondary) {
-            Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.down, 'keydown');
-            if (secondary.up !== undefined) {
-              Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.up, 'keyup');
-            }
+            if (secondary.down !== undefined) Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.down, 'keydown');
+            if (secondary.up !== undefined)  Mousetrap.bind(key + '+' + secondary.defaults.keyboard, secondary.up, 'keyup');
           });
         }
       }
@@ -34,10 +30,10 @@
         if (control.secondary !== undefined) {
           control.secondary.forEach(function(secondary) {
             var subKey = gpKey  + '+' + secondary.defaults.gamepad;
-            GAMEPAD[subKey] = {
-              BUTTON_DOWN: secondary.down,
-              BUTTON_UP: secondary.up
-            };
+            GAMEPAD[subKey] = { };
+            if (secondary.down != undefined) GAMEPAD[subKey].BUTTON_DOWN = secondary.down;
+            if (secondary.up != undefined) GAMEPAD[subKey].BUTTON_UP = secondary.up;
+            if (secondary.axis != undefined) GAMEPAD[subKey].AXIS_CHANGED = secondary.axis;
           });
         }
       }
