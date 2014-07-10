@@ -3,13 +3,13 @@
 //
 //Requires the https://github.com/kallaspriit/HTML5-JavaScript-Gamepad-Controller-Library
 //library.
-var GAMEPAD = {};
 var GamePad = function (cockpit) {
 
   var gamepad = new Gamepad();
   var gp = {
     cockpit: cockpit,
-    currentButton: undefined
+    currentButton: undefined,
+    assignment: {}
   };
   var isSupported = function () {
   };
@@ -26,14 +26,14 @@ var GamePad = function (cockpit) {
     else {
       control = gp.currentButton + '+' + e.control;
     }
-    if (GAMEPAD[control] !== undefined)
-      GAMEPAD[control].BUTTON_DOWN();
+    if (gp.assignment[control] !== undefined)
+      gp.assignment[control].BUTTON_DOWN();
   });
   gamepad.bind(Gamepad.Event.BUTTON_UP, function (e) {
     if (gp.currentButton === e.control) { gp.currentButton = undefined; }
-    if (GAMEPAD[e.control] !== undefined) {
-      if (GAMEPAD[e.control].BUTTON_UP !== undefined) {
-        GAMEPAD[e.control].BUTTON_UP();
+    if (gp.assignment[e.control] !== undefined) {
+      if (gp.assignment[e.control].BUTTON_UP !== undefined) {
+        gp.assignment[e.control].BUTTON_UP();
       }
     }
   });
@@ -41,8 +41,8 @@ var GamePad = function (cockpit) {
     if (new Date().getTime() < ignoreInputUntil)
       return;
     //avoids inacurrate readings when the gamepad has just been connected from affecting the ROV
-    if (GAMEPAD[e.axis] !== undefined)
-      GAMEPAD[e.axis].AXIS_CHANGED(e.value);
+    if (gp.assignment[e.axis] !== undefined)
+      gp.assignment[e.axis].AXIS_CHANGED(e.value);
   });
   var updateStatus = function () {
     window.requestAnimationFrame(updateStatus);
