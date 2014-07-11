@@ -4,7 +4,6 @@
   Capestatus = function Capestatus(cockpit) {
     var self = this;
     console.log('Loading Capestatus plugin in the browser.');
-    // Instance variables
     self.cockpit = cockpit;
     self.lastPing = null;
 
@@ -23,7 +22,7 @@
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('capestatus.js');
-    $('body').append('<div id="capestatus-templates"></div>')
+    $('body').append('<div id="capestatus-templates"></div>');
     $('#capestatus-templates').load(jsFileLocation + '../ui-templates.html', function () {
       $('#footercontent').prepend('<div id="capestatus_footercontent" data-bind="template: {name: \'template_capestatus_footercontent\'}"></div>');
       ko.applyBindings(self.bindingModel, document.getElementById('capestatus_footercontent'));
@@ -33,9 +32,7 @@
       $('#navtoolbar').append('<li id="brightnessIndicator" data-bind="attr: { class: $data.brightnessLevel }" ></li>');
       ko.applyBindings(self.bindingModel, document.getElementById('brightnessIndicator'));
       ko.applyBindings(self.bindingModel, document.getElementById('servoTilt'));
-
     });
-
 
     // Register the various event handlers
     self.listen();
