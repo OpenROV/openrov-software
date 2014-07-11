@@ -9,7 +9,10 @@
     self.lastPing = null;
 
     self.bindingModel = {
-      cockpit: self.cockpit
+      cockpit: self.cockpit,
+      theLocaltime: ko.observable("localtime"),
+      currentCpuUsage: ko.observable(''),
+      isConnected: ko.observable(false)
     };
 
     // Add required UI elements
@@ -24,13 +27,12 @@
     $('#navtoolbar').append('<li id="brightnessIndicator" class="level0"></li>');
 
     // Register the various event handlers
-    this.listen();
-    var capes = this;
+    self.listen();
     setInterval(function () {
-      capes.updateConnectionStatus();
+      self.updateConnectionStatus();
     }, 1000);
     setInterval(function () {
-      $('#localtime').text(new Date().toLocaleTimeString());
+      self.bindingModel.theLocaltime(new Date().toLocaleTimeString());
     }, 1000);
   };
   //This pattern will hook events in the cockpit and pull them all back
@@ -67,19 +69,21 @@
       var angle = 90 / 500 * data.servo * -1 - 90;
       $('#servoTiltImage').attr('style', '-webkit-transform: rotate(' + angle + 'deg); -moz-transform: rotate(' + angle + 'deg);transform: rotate(' + angle + 'deg)');
     }
+
     if ('cpuUsage' in data)
-      $('#currentCpuUsage').text((data.cpuUsage * 100).toFixed(0) + '%');
+      self.bindingModel.currentCpuUsage((data.cpuUsage * 100).toFixed(0) + '%');
+
     if ('LIGP' in data)
       $('#brightnessIndicator').attr('class', 'level' + Math.ceil(data.LIGP * 10));
     this.lastPing = new Date();
   };
   Capestatus.prototype.updateConnectionStatus = function () {
+    var self = this;
     var now = new Date();
     var delay = now - this.lastPing;
-    if (delay > 3000)
-      $('#connectionHealth').attr('class', 'false');
-    else
-      $('#connectionHealth').attr('class', 'true');
+
+    self.bindingModel.isConnected(delay <= 3000);
   };
   window.Cockpit.plugins.push(Capestatus);
+
 }(window, jQuery));
