@@ -34,28 +34,17 @@
     $('#keyboardInstructions').append('<p>press <i>]</i> to disable ESCs</p>');
     $('#keyboardInstructions').append('<p>press <i>m</i> to toggle heading hold (BETA)</p>');
     $('#keyboardInstructions').append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
-    $('#navtoolbar').append('<li><a href="#" id="rovPilot_laser" class="rovPilot_Indicator"><div id="rovPilot_laserIcon"></div></div></a>');
+    $('#navtoolbar').append('<li><a href="#" data-bind="click: toggleLasers" id="rovPilot_laser" class="rovPilot_Indicator"><div id="rovPilot_laserIcon"></div></div></a>');
     $('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
     $('#navtoolbar').append('<li id="rovPilot_holdLabel"><span>Hold:</span></li>');
-    $('#navtoolbar').append('<li><a href="#" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
-    $('#navtoolbar').append('<li><a href="#" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
+    $('#navtoolbar').append('<li><a href="#" data-bind="click: toggleholdDepth" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
+    $('#navtoolbar').append('<li><a href="#" data-bind="click: toggleholdHeading" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
 
     var rov = this;
     setInterval(function () {
       rov.sendPilotingData();
     }, SAMPLE_PERIOD);
     this.listen();
-
-    $('#rovPilot_depthHold').click(function() {
-        rov.cockpit.emit('rovpilot.toggleholdDepth');
-    });
-    $('#rovPilot_headingHold').click(function() {
-        rov.cockpit.emit('rovpilot.toggleholdHeading');
-    });
-
-    $('#rovPilot_laser').click(function() {
-      rov.cockpit.emit('rovpilot.toggleLasers');
-    });
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
@@ -359,6 +348,10 @@
     rov.cockpit.on('rovpilot.enable', function () {
       rov.enablePilot();
     });
+
+    ko.applyBindings(rov, document.getElementById('rovPilot_depthHold'));
+    ko.applyBindings(rov, document.getElementById('rovPilot_headingHold'));
+    ko.applyBindings(rov, document.getElementById('rovPilot_laser'));
     ko.applyBindings(rov, document.getElementById('footercontent'));
   };
   var lastSentManualThrottle = {};
