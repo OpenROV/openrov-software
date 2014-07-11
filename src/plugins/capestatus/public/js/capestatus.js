@@ -20,12 +20,36 @@
       batteryLevel: self.batteryLevel
     };
 
+    var Battery = function(name, description, maxVoltage, minVoltage) {
+      var self = this;
+      self.name = ko.observable(name !== undefined ? name : '');
+      self.description = ko.observable(description !== undefined ? description : '');
+      self.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0);
+      self.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0);
+
+      return self;
+    };
+
     self.settingsModel = {
-      batteryTypes: [
-        { description: 'TrustFire (Voltage: 8.0 - 13.0)', name: 'trustfire', maxVoltage: 13, minVoltage: 8 },
-        { description: 'Batteryscope (Voltage: 6.5 - 10)', name: 'batteryscpe', maxVoltage: 10, minVoltage: 6.4 }
-      ],
-      batteryTupe: ko.observable('trustfire')
+      batteryTypes: ko.observableArray([
+        new Battery('trustfire', 'Trustfire (min: 8.0v, max: 13v)', 8.0, 13.0),
+        new Battery('batteryscope', 'Batteryscope white (min: 6.3v, max: 10v)', 8.0, 13.0),
+      ]),
+      batteryType: ko.observable('trustfire'),
+      addNewBatteryVisible: ko.observable(false),
+      newBattery: ko.observable(new Battery()),
+      showAddNew: function() {
+        this.addNewBatteryVisible(true);
+        this.newBattery(new Battery());
+      },
+      addBattery: function() {
+        this.batteryTypes.push(this.newBattery());
+        this.addNewBatteryVisible(false);
+      },
+      cancelAdd: function() {
+        this.addNewBatteryVisible(false);
+      }
+
     };
 
     // Add required UI elements

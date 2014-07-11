@@ -14,6 +14,20 @@
               <div><input type="radio" name="batteryType" data-bind="value: $data.name, checked: $root.batteryType" /><span data-bind="text: $data.description"></span></div>
             </li>
           </ul>
+          <button data-bind="click: $data.showAddNew, visible: !$data.addNewBatteryVisible()">Add</button>
+          <div data-bind="visible: $data.addNewBatteryVisible">
+            <div>Battery name: </div>
+            <input type="text" data-bind="value: $data.newBattery().name, valueUpdate: 'keypress'">
+            <div>Description: </div>
+            <input type="text" data-bind="value: $data.newBattery().description, valueUpdate: 'keypress'">
+            <div>Max voltage: </div>
+            <input type="text" data-bind="value: $data.newBattery().maxVoltage">
+            <div>Min voltage: </div>
+            <input type="text" data-bind="value: $data.newBattery().minVoltage">
+            <button data-bind="click: $data.addBattery">Add</button>
+            <button data-bind="click: $data.cancelAdd">Cancel</button>
+
+          </div>
         </div>
       </div>
     </div>
