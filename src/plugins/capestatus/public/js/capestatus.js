@@ -23,8 +23,9 @@
     self.settingsModel = {
       batteryTypes: [
         { description: 'TrustFire (Voltage: 8.0 - 13.0)', name: 'trustfire', maxVoltage: 13, minVoltage: 8 },
-        { description: 'Batteryscope (Voltage: 6.5 - 10)', name: 'batteryscpe', maxVoltage: 10, minVoltage: 6.4 }],
-      batteryTupe: ko.observable('')
+        { description: 'Batteryscope (Voltage: 6.5 - 10)', name: 'batteryscpe', maxVoltage: 10, minVoltage: 6.4 }
+      ],
+      batteryTupe: ko.observable('trustfire')
     };
 
     // Add required UI elements

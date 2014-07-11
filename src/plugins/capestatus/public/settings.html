@@ -7,11 +7,11 @@
     </div>
     <div id="collapseCapestatus" class="accordion-body collapse">
       <div class="accordion-inner">
-        <div class="wall">
+        <div>
           <strong>Battery type:</strong><br>
           <ul data-bind="foreach: batteryTypes" class="unstyled">
             <li>
-              <div><input type="radio" name="batteryType" data-bind="value: $data.name, checked: $data.batteryType" /><span data-bind="text: $data.description"></span></div>
+              <div><input type="radio" name="batteryType" data-bind="value: $data.name, checked: $root.batteryType" /><span data-bind="text: $data.description"></span></div>
             </li>
           </ul>
         </div>
