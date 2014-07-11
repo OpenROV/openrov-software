@@ -2,16 +2,27 @@
   'use strict';
   var Capestatus;
   Capestatus = function Capestatus(cockpit) {
+    var self = this;
     console.log('Loading Capestatus plugin in the browser.');
     // Instance variables
-    this.cockpit = cockpit;
-    this.lastPing = null;
+    self.cockpit = cockpit;
+    self.lastPing = null;
+
+    self.bindingModel = {
+      cockpit: self.cockpit
+    };
+
     // Add required UI elements
-    $('#footercontent').append('   <div class="span1 pull-left"><h6>Connection</h6><div id="connectionHealth">&nbsp;</div></div>  <div class="span2 pull-right"><h2 id="formattedRunTime">time</h2><h4 id="localtime">&nbsp;</h4></div> \t\t<div class="span2 pull-right"><h2 id="currentCpuUsage">&nbsp;</h2></div>                 <div class="span2 pull-right"><h2 id="currentVoltage">&nbsp;</h2><div id="batteryIndicator">&nbsp;</div></div> \t\t<div class="span2 pull-right"><h2 id="currentCurrent">&nbsp;</h2><div>&nbsp;</div></div>            ');
+    var jsFileLocation = urlOfJsFile('capestatus.js');
+    $('body').append('<div id="capestatus-templates"></div>')
+    $('#capestatus-templates').load(jsFileLocation + '../ui-templates.html', function () {
+      $('#footercontent').prepend('<div id="capestatus_footercontent" data-bind="template: {name: \'template_capestatus_footercontent\'}"></div>');
+      ko.applyBindings(self.bindingModel, document.getElementById('capestatus_footercontent'));
+    });
+
     $('#servoTilt').append('<img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png">');
-    //attr style
-    //$("#lights").append('<p><div id="brightnessIndicator"></div></p>'); //attr class
     $('#navtoolbar').append('<li id="brightnessIndicator" class="level0"></li>');
+
     // Register the various event handlers
     this.listen();
     var capes = this;
