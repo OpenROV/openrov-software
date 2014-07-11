@@ -4,7 +4,7 @@
     <div id="connectionHealth" data-bind="css: { connected: isConnected}"></div>
   </div>
   <div class="span2 pull-right">
-    <h2 id="formattedRunTime">time</h2>
+    <h2 data-bind="text: $data.formattedRunTime">time</h2>
     <h4 data-bind="text: $data.theLocaltime"></h4>
   </div>
   <div class="span2 pull-right">
@@ -23,5 +23,8 @@
   <img
     id="servoTiltImage"
     src="themes/OpenROV/img/servo_tilt.png"
-    data-bind="attr: { style: $data.servoTiltStyle }">
+    data-bind="attr: { style:
+      '-webkit-transform: rotate(' + $data.servoAngle() + 'deg);' +
+      '-moz-transform: rotate(' + $data.servoAngle() + 'deg);' +
+      'transform: rotate(' + $data.servoAngle() + 'deg);' }">
 </script>

@@ -11,6 +11,7 @@
     self.bindingModel = {
       cockpit: self.cockpit,
       theLocaltime: ko.observable("localtime"),
+      formattedRunTime: ko.observable('runtime'),
       currentCpuUsage: ko.observable(''),
       currentVoltage: ko.observable(0),
       currentCurrent: ko.observable(''),
@@ -19,12 +20,6 @@
       servoAngle: ko.observable(0),
       batteryLevel: self.batteryLevel
     };
-    self.bindingModel.servoTiltStyle = ko.computed(function() {
-      var style = '-webkit-transform: rotate(' + self.bindingModel.servoAngle() +'deg);' +
-        '-moz-transform: rotate(' + self.bindingModel.servoAngle() + 'deg);' +
-        'transform: rotate(' + self.bindingModel.servoAngle() + 'deg)';
-      return style;
-    });
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('capestatus.js');
@@ -46,10 +41,9 @@
     self.listen();
     setInterval(function () {
       self.updateConnectionStatus();
-    }, 1000);
-    setInterval(function () {
       self.bindingModel.theLocaltime(new Date().toLocaleTimeString());
     }, 1000);
+
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
@@ -73,7 +67,7 @@
   Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
     if ('time' in data) {
-      $('#formattedRunTime').text(msToTime(data.time));
+      self.bindingModel.formattedRunTime(msToTime(data.time));
     }
 
     if ('vout' in data) {
