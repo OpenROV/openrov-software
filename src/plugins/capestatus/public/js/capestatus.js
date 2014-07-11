@@ -16,8 +16,15 @@
       currentCurrent: ko.observable(''),
       isConnected: ko.observable(false),
       brightnessLevel: ko.observable('level0'),
+      servoAngle: ko.observable(0),
       batteryLevel: self.batteryLevel
     };
+    self.bindingModel.servoTiltStyle = ko.computed(function() {
+      var style = '-webkit-transform: rotate(' + self.bindingModel.servoAngle() +'deg);' +
+        '-moz-transform: rotate(' + self.bindingModel.servoAngle() + 'deg);' +
+        'transform: rotate(' + self.bindingModel.servoAngle() + 'deg)';
+      return style;
+    });
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('capestatus.js');
@@ -27,9 +34,10 @@
       ko.applyBindings(self.bindingModel, document.getElementById('capestatus_footercontent'));
 
       // these don't belong here IMHO as the rovPilot controls them
-      $('#servoTilt').append('<img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png">');
+      $('#servoTilt').append('<img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png" data-bind="attr: { style: $data.servoTiltStyle }">');
       $('#navtoolbar').append('<li id="brightnessIndicator" data-bind="attr: { class: $data.brightnessLevel }" ></li>');
       ko.applyBindings(self.bindingModel, document.getElementById('brightnessIndicator'));
+      ko.applyBindings(self.bindingModel, document.getElementById('servoTilt'));
 
     });
 
@@ -77,7 +85,8 @@
 
     if ('servo' in data) {
       var angle = 90 / 500 * data.servo * -1 - 90;
-      $('#servoTiltImage').attr('style', '-webkit-transform: rotate(' + angle + 'deg); -moz-transform: rotate(' + angle + 'deg);transform: rotate(' + angle + 'deg)');
+      self.bindingModel.servoAngle(angle);
+      console.log('servo angle: ' + angle);
     }
 
     if ('cpuUsage' in data)
