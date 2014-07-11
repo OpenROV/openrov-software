@@ -6,7 +6,7 @@
     margin:5px 10px;
     width:30px;
     height: 30px;
-    background: url('../img/bbconnection.png') no-repeat 0 0;
+    background: url('../../../themes/OpenROV/img/bbconnection.png') no-repeat 0 0;
 }
 
 #connectionHealth.connected {

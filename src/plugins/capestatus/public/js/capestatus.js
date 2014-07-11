@@ -12,7 +12,10 @@
       cockpit: self.cockpit,
       theLocaltime: ko.observable("localtime"),
       currentCpuUsage: ko.observable(''),
-      isConnected: ko.observable(false)
+      currentVoltage: ko.observable(0),
+      currentCurrent: ko.observable(''),
+      isConnected: ko.observable(false),
+      batteryLevel: self.batteryLevel,
     };
 
     // Add required UI elements
@@ -60,11 +63,10 @@
       $('#formattedRunTime').text(msToTime(data.time));
     }
     if ('vout' in data) {
-      $('#currentVoltage').text(data.vout.toFixed(1) + 'v');
-      $('#batteryIndicator').attr('class', self.batteryLevel(data.vout));
+      self.bindingModel.currentVoltage(data.vout.toFixed(1));
     }
     if ('iout' in data)
-      $('#currentCurrent').text(data.iout.toFixed(3) + 'A');
+      self.bindingModel.currentCurrent(data.iout.toFixed(3) + 'A');
     if ('servo' in data) {
       var angle = 90 / 500 * data.servo * -1 - 90;
       $('#servoTiltImage').attr('style', '-webkit-transform: rotate(' + angle + 'deg); -moz-transform: rotate(' + angle + 'deg);transform: rotate(' + angle + 'deg)');

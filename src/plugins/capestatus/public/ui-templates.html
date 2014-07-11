@@ -11,10 +11,10 @@
     <h2 data-bind="text: $data.currentCpuUsage"></h2>
   </div>
   <div class="span2 pull-right">
-    <h2 id="currentVoltage">&nbsp;</h2>
-    <div id="batteryIndicator">&nbsp;</div>
+    <h2 data-bind="text: $data.currentVoltage() + 'v'"></h2>
+    <div id="batteryIndicator" data-bind="attr: { class: $data.batteryLevel($data.currentVoltage()) }"></div>
   </div>
-  <div class="span2 pull-right"><h2 id="currentCurrent">&nbsp;</h2>
-    <div>&nbsp;</div>
+  <div class="span2 pull-right">
+    <h2 data-bind="text: $data.currentCurrent"></h2>
   </div>
 </script>

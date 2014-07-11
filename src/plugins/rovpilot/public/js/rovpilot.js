@@ -485,6 +485,7 @@
     this.powerLevel(currentPowerLevel);
   };
   ROVpilot.prototype.powerLevel = function powerLevel(value) {
+
     switch (value) {
     case 1:
       this.power = 0.05;
@@ -502,7 +503,7 @@
       this.power = 1;
       break;
     }
-    this.thrustfactor(value);
+    this.bindingModel.thrustfactor(value);
   };
   ROVpilot.prototype.allStop = function allStop() {
     this.vtrim = 0;
