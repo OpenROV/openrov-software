@@ -32,6 +32,7 @@
       depthHoldEnabled: ko.observable(false),
       headingHoldEnabled: ko.observable(false),
       lasersEnabled: ko.observable(false),
+      gamepadDisconnected : ko.observable(true),
       toggleDepthHold : rov.toggleholdDepth,
       toggleHeadingHold : rov.toggleholdHeading,
       toggleLasers : rov.toggleLasers
@@ -68,10 +69,10 @@
         rov.UpdateStatusIndicators(data);
     });
     rov.cockpit.on('gamepad.connected', function () {
-      $('#gamepad').toggleClass('hidden', false);
+      rov.bindingModel.gamepadDisconnected(false);
     });
     rov.cockpit.on('gamepad.disconnected', function () {
-      $('#gamepad').toggleClass('hidden', true);
+      rov.bindingModel.gamepadDisconnected(true);
     });
     GAMEPAD.DPAD_UP = {
       BUTTON_DOWN: function () {
