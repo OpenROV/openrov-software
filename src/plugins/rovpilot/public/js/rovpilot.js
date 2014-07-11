@@ -24,10 +24,11 @@
     //ms
     var trimHeld = false;
     this.priorControls = {};
+    this.thrustfactor = ko.observable(2);
 
     // Add required UI elements
     $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
-    $('#footercontent').prepend('<div class="span1 pull-left"> \t\t\t<h6>Thrust&nbsp;Factor</h6><div class="label badge" id="thrustfactor">&nbsp;</div> \t\t    </div>');
+    $('#footercontent').prepend('<div class="span1 pull-left"> \t\t\t<h6>Thrust&nbsp;Factor</h6><div class="label badge" data-bind="text: thrustfactor">&nbsp;</div> \t\t    </div>');
     $('#keyboardInstructions').append('<p>press <i>i</i> to toggle lights</p>');
     $('#keyboardInstructions').append('<p>press <i>[</i> to enable ESCs</p>');
     $('#keyboardInstructions').append('<p>press <i>]</i> to disable ESCs</p>');
@@ -45,7 +46,6 @@
     }, SAMPLE_PERIOD);
     this.listen();
 
-    $('#thrustfactor').text(2);
     $('#rovPilot_depthHold').click(function() {
         rov.cockpit.emit('rovpilot.toggleholdDepth');
     });
@@ -359,6 +359,7 @@
     rov.cockpit.on('rovpilot.enable', function () {
       rov.enablePilot();
     });
+    ko.applyBindings(rov, document.getElementById('footercontent'));
   };
   var lastSentManualThrottle = {};
   lastSentManualThrottle.port = 0;
@@ -473,7 +474,7 @@
     this.positions.yaw = value;
   };
   ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel() {
-    var currentPowerLevel = $('#thrustfactor').text();
+    var currentPowerLevel = this.thrustfactor();
     currentPowerLevel++;
     if (currentPowerLevel > 5)
       currentPowerLevel = 1;
@@ -497,7 +498,7 @@
       this.power = 1;
       break;
     }
-    $('#thrustfactor').text(value);
+    this.thrustfactor(value);
   };
   ROVpilot.prototype.allStop = function allStop() {
     this.vtrim = 0;
