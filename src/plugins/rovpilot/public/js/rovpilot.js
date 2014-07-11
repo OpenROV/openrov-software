@@ -355,10 +355,11 @@
     ko.applyBindings(rov, document.getElementById('rovPilot_laser'));
     ko.applyBindings(rov, document.getElementById('footercontent'));
   };
-  var lastSentManualThrottle = {};
-  lastSentManualThrottle.port = 0;
-  lastSentManualThrottle.vertical = 0;
-  lastSentManualThrottle.starbord = 0;
+  var lastSentManualThrottle = {
+    port: 0,
+    vertical: 0,
+    starbord: 0
+  };
   ROVpilot.prototype.disablePilot = function disablePilot() {
     this.sendToROVEnabled = false;
     console.log('disabled rov pilot.');
