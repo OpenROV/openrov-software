@@ -34,7 +34,7 @@
       ko.applyBindings(self.bindingModel, document.getElementById('capestatus_footercontent'));
 
       // these don't belong here IMHO as the rovPilot controls them
-      $('#servoTilt').append('<img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png" data-bind="attr: { style: $data.servoTiltStyle }">');
+      $('#servoTilt').attr("data-bind", "template: { name: 'template_capestatus_servotilt' }");
       $('#navtoolbar').append('<li id="brightnessIndicator" data-bind="attr: { class: $data.brightnessLevel }" ></li>');
       ko.applyBindings(self.bindingModel, document.getElementById('brightnessIndicator'));
       ko.applyBindings(self.bindingModel, document.getElementById('servoTilt'));
