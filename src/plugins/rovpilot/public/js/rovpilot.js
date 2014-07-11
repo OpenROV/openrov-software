@@ -27,7 +27,6 @@
     this.thrustfactor = ko.observable(2);
 
     // Add required UI elements
-    $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
     $('#footercontent').prepend('<div class="span1 pull-left"> \t\t\t<h6>Thrust&nbsp;Factor</h6><div class="label badge" data-bind="text: thrustfactor">&nbsp;</div> \t\t    </div>');
     $('#keyboardInstructions').append('<p>press <i>i</i> to toggle lights</p>');
     $('#keyboardInstructions').append('<p>press <i>[</i> to enable ESCs</p>');
