@@ -20,6 +20,13 @@
       batteryLevel: self.batteryLevel
     };
 
+    self.settingsModel = {
+      batteryTypes: [
+        { description: 'TrustFire (Voltage: 8.0 - 13.0)', name: 'trustfire', maxVoltage: 13, minVoltage: 8 },
+        { description: 'Batteryscope (Voltage: 6.5 - 10)', name: 'batteryscpe', maxVoltage: 10, minVoltage: 6.4 }],
+      batteryTupe: ko.observable('')
+    };
+
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('capestatus.js');
     $('body').append('<div id="capestatus-templates"></div>');
@@ -33,6 +40,12 @@
       ko.applyBindings(self.bindingModel, document.getElementById('brightnessIndicator'));
       ko.applyBindings(self.bindingModel, document.getElementById('servoTilt'));
     });
+    $('#plugin-settings').append('<div id="capestatus-settings"></div>');
+    $('#capestatus-settings').load(jsFileLocation + '../settings.html', function () {
+
+      ko.applyBindings(self.settingsModel, document.getElementById('capestatus-settings'));
+    });
+
 
     // Register the various event handlers
     self.listen();
@@ -88,6 +101,7 @@
 
     this.lastPing = new Date();
   };
+
   Capestatus.prototype.updateConnectionStatus = function () {
     var self = this;
     var now = new Date();

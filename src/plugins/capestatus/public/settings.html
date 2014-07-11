@@ -1,0 +1,21 @@
+<div id="capeStatus-settings">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapseCapestatus">
+        Capestatus
+      </a>
+    </div>
+    <div id="collapseCapestatus" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <div class="wall">
+          <strong>Battery type:</strong><br>
+          <ul data-bind="foreach: batteryTypes" class="unstyled">
+            <li>
+              <div><input type="radio" name="batteryType" data-bind="value: $data.name, checked: $data.batteryType" /><span data-bind="text: $data.description"></span></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
