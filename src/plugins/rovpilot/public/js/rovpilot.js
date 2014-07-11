@@ -28,16 +28,18 @@
 
     // Add required UI elements
     $('#footercontent').prepend('<div class="span1 pull-left"> \t\t\t<h6>Thrust&nbsp;Factor</h6><div class="label badge" data-bind="text: thrustfactor">&nbsp;</div> \t\t    </div>');
-    $('#keyboardInstructions').append('<p>press <i>i</i> to toggle lights</p>');
-    $('#keyboardInstructions').append('<p>press <i>[</i> to enable ESCs</p>');
-    $('#keyboardInstructions').append('<p>press <i>]</i> to disable ESCs</p>');
-    $('#keyboardInstructions').append('<p>press <i>m</i> to toggle heading hold (BETA)</p>');
-    $('#keyboardInstructions').append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
-    $('#navtoolbar').append('<li><a href="#" data-bind="click: toggleLasers" id="rovPilot_laser" class="rovPilot_Indicator"><div id="rovPilot_laserIcon"></div></div></a>');
-    $('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
-    $('#navtoolbar').append('<li id="rovPilot_holdLabel"><span>Hold:</span></li>');
-    $('#navtoolbar').append('<li><a href="#" data-bind="click: toggleholdDepth" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
-    $('#navtoolbar').append('<li><a href="#" data-bind="click: toggleholdHeading" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
+    $('#keyboardInstructions')
+      .append('<p>press <i>i</i> to toggle lights</p>')
+      .append('<p>press <i>[</i> to enable ESCs</p>')
+      .append('<p>press <i>]</i> to disable ESCs</p>')
+      .append('<p>press <i>m</i> to toggle heading hold (BETA)</p>')
+      .append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
+    $('#navtoolbar')
+      .append('<li><a href="#" data-bind="click: toggleLasers" id="rovPilot_laser" class="rovPilot_Indicator"><div id="rovPilot_laserIcon"></div></div></a>')
+      .append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>')
+      .append('<li id="rovPilot_holdLabel"><span>Hold:</span></li>')
+      .append('<li><a href="#" data-bind="click: toggleholdDepth" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>')
+      .append('<li><a href="#" data-bind="click: toggleholdHeading" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
 
     var rov = this;
     setInterval(function () {
