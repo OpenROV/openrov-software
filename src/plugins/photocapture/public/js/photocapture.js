@@ -16,7 +16,6 @@
     // the js folder path
     $('#photos').load(jsFileLocation + '../photospanel.html', function () {
       // Register the various event handlers
-      self.listen();
       ko.applyBindings(self, $('#photos')[0]);
     });
   };

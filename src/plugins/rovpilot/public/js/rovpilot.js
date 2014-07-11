@@ -43,7 +43,6 @@
     setInterval(function () {
       rov.sendPilotingData();
     }, SAMPLE_PERIOD);
-    this.listen();
 
     // =============== input settings =============
     // Lasers

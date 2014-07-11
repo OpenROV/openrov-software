@@ -42,15 +42,21 @@
       } catch (err) {
         console.log('error loading a plugin!!!' + err);
       }
-      if (loadedPlugin != null) {
+      if (loadedPlugin != null && loadedPlugin !== undefined) {
         if (loadedPlugin.canBeDisabled != undefined) {
           if (loadedPlugin.name == undefined) {
             alert('Plugin ' + loadedPlugin + 'has to define a name property!');
           }
-          cockpit.loadedPlugins.push(loadedPlugin);
         }
+        cockpit.loadedPlugins.push(loadedPlugin);
       }
     });
+    cockpit.loadedPlugins.forEach(function(plugin){
+      if (plugin.listen !== undefined){
+        plugin.listen();
+      }
+    });
+
     Cockpit.plugins = [];  //flush them out for now. May move to a loaded array if we use in the future
     cockpit.emit('cockpit.pluginsLoaded');
   };

@@ -19,7 +19,6 @@
     this.maxDepthChange = 0.1;
     // Add required UI elements
     $('#keyboardInstructions').append('<p><i>g</i> to toggle flybywire</p>');
-    this.listen();
   };
   FlyByWire.prototype.listen = function listen() {
     var rov = this;

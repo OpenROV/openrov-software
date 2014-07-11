@@ -1,13 +1,20 @@
 (function (window, $, undefined) {
   'use strict';
+
+  // to prevent intererence, we disable this plugin.
+  // to see the things working, comment the following statement
+  return;
+
+
   var Example;
   Example = function Example(cockpit) {
+
     console.log('Loading example plugin in the browser.');
+
     // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
     $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
-    this.listen();
 
     this.cockpit.emit('inputController.register',
       {
@@ -27,12 +34,9 @@
       });
 
     // for plugin management:
-    this.name = 'example';
-    // for the settings
-    this.viewName = 'Example plugin';
-    // for the UI
-    this.canBeDisabled = true;
-    // SET THIS TO true to see it working!
+    this.name = 'example';   // for the settings
+    this.viewName = 'Example plugin'; // for the UI
+    this.canBeDisabled = true; //allow enable/disable
     this.enable = function () {
       alert('example enabled');
     };
@@ -51,14 +55,6 @@
       }
     };
     rov.cockpit.emit('headsUpMenu.register', item);
-
-    rov.cockpit.emit('headsUpMenu.register', {
-      type: "custom",
-      content: '<button class="btn btn-large btn-info btn-block" data-bind="click: callback">Custom button</button>',
-      callback: function () {
-        alert('Message from custom Button');
-      }
-    });
 
   };
   window.Cockpit.plugins.push(Example);

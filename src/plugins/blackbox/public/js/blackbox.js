@@ -95,8 +95,6 @@
         blackbox.logStatusData(data);
       }
     });
-    // Register the various event handlers
-    this.listen();
   };
   /*
          * Register keyboard event listener

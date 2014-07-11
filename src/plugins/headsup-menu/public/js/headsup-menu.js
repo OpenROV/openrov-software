@@ -77,35 +77,45 @@
       currentSelected = nextIndex;
     };
 
-    this.cockpit.emit('inputController.register',
-      {
-        name: "headsupMenu.show",
-        description: "Show the heads up menu.",
-        defaults: { keyboard: 'e', gamepad: 'START' },
-        down: function() { $('#headsup-menu-base').show(); },
-        up: executeMenuItem,
-        secondary: [
-          {
-            name: "headsupMenu.next",
-            description: "select the next element of the heads up menu",
-            defaults: { keyboard: 'c', gamepad: 'DPAD_DOWN' },
-            down: moveSelectionNext
+    var enablePlugin = function() {
+      self.cockpit.emit('inputController.register',
+        {
+          name: "headsupMenu.show",
+          description: "Show the heads up menu.",
+          defaults: { keyboard: 'e', gamepad: 'START' },
+          down: function () {
+            $('#headsup-menu-base').show();
           },
-          {
-            name: "headsupMenu.prev",
-            description: "select the previous element of the heads up menu",
-            defaults: { keyboard: 'd', gamepad: 'DPAD_UP' },
-            down: moveSelectionPrev
-          }
-        ]
-      });
+          up: executeMenuItem,
+          secondary: [
+            {
+              name: "headsupMenu.next",
+              description: "select the next element of the heads up menu",
+              defaults: { keyboard: 'c', gamepad: 'DPAD_DOWN' },
+              down: moveSelectionNext
+            },
+            {
+              name: "headsupMenu.prev",
+              description: "select the previous element of the heads up menu",
+              defaults: { keyboard: 'd', gamepad: 'DPAD_UP' },
+              down: moveSelectionPrev
+            }
+          ]
+        });
+    };
+
+    var disablePlugin = function() {
+      self.cockpit.emit('inputController.unregister', "headsupMenu.show");
+    };
 
     // for plugin management:
     this.name = "headsup-menu" // for the settings
     this.viewName = "Heads up menu"; // for the UI
     this.canBeDisabled = true;
-    this.enable = function() { /* to be done */ };
-    this.disable = function() { /* to be done */ };
+    this.enable = function() { enablePlugin(); };
+    this.disable = function() { disablePlugin(); };
+
+    enablePlugin();
   };
 
   function generateUUID(){

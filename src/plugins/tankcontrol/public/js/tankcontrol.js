@@ -23,7 +23,6 @@
 
     // Add required UI elements
     $('#keyboardInstructions').append('<p><i>t</i> to toggle tank control</p>');
-    this.listen();
   };
   TankControl.prototype.listen = function listen() {
     var rov = this;
