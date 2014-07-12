@@ -23,7 +23,7 @@
 
     self.settingsModel = {
       batteryTypes: ko.observableArray(),
-      batteryType: ko.observable('trustfire'),
+      batteryType: ko.observable(),
       addNewBatteryVisible: ko.observable(false),
       newBattery: ko.observable(),
       showAddNew: function() {
@@ -48,12 +48,10 @@
       }
     };
 
-    Battery = function(name, description, maxVoltage, minVoltage) {
+    Battery = function(name, minVoltage, maxVoltage) {
       var bat = this;
       bat.name = ko.observable(name !== undefined ? name : '')
         .extend({
-          minLength: 5,
-          maxLength: 10,
           required: true,
           isUnique: {
             params: {
@@ -65,13 +63,11 @@
             message: "The battery name must be unique!"
           }
         });
-      bat.description = ko.observable(description !== undefined ? description : '')
-        .extend({
-          required: true,
-          minLength: 10
-        });
       bat.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0);
       bat.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0);
+      bat.description = ko.computed(function() {
+        return bat.name() + " (min: " + bat.minVoltage() + "v - max:" + bat.maxVoltage() + "v)";
+      });
 
       bat.maxVoltage
         .extend({
@@ -103,8 +99,9 @@
       return bat;
     };
 
-    self.settingsModel.batteryTypes.push(new Battery('trustfire', 'Trustfire (min: 8.0v, max: 13v)', 8.0, 13.0));
-    self.settingsModel.batteryTypes.push(new Battery('batteryscope', 'Batteryscope white (min: 6.3v, max: 10v)', 8.0, 13.0));
+    self.settingsModel.batteryTypes.push(new Battery('TrustFire', 8.0, 13.0));
+    self.settingsModel.batteryTypes.push(new Battery('Batteryscope white', 8.0, 13.0));
+    self.settingsModel.batteryType('TrustFire');
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('capestatus.js');
