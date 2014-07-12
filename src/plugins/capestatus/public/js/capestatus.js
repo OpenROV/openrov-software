@@ -6,7 +6,7 @@
     console.log('Loading Capestatus plugin in the browser.');
     self.cockpit = cockpit;
     self.lastPing = null;
-    var Battery;
+    var Battery = function() {};
 
     self.bindingModel = {
       cockpit: self.cockpit,
@@ -59,8 +59,6 @@
             params: {
               array: self.settingsModel.batteryTypes(),
               predicate: function (opt, selectedVal) {
-                var foo = ko.utils.unwrapObservable(opt.name);
-                console.log(foo);
                 return ko.utils.unwrapObservable(opt.name) === selectedVal;
               }
             },
@@ -72,15 +70,33 @@
           required: true,
           minLength: 10
         });
-      bat.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0)
+      bat.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0);
+      bat.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0);
+
+      bat.maxVoltage
         .extend({
           required: true,
-          number: true
+          number: true,
+          validation: {
+            validator: function (val, someOtherVal) {
+              return parseFloat(val) > parseFloat(ko.utils.unwrapObservable(someOtherVal));
+            },
+            message: 'Max voltage must be bigger than Min voltage!',
+            params: bat.minVoltage
+          }
         });
-      bat.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0)
-        .extend({
+
+      bat.minVoltage.extend({
           required: true,
-          number: true
+          number: true,
+          validation: {
+            validator: function (val, someOtherVal) {
+              return parseFloat(val) < parseFloat(ko.utils.unwrapObservable(someOtherVal));
+            },
+            message: 'Min voltage must be smaller than Max voltage!',
+            params: bat.maxVoltage
+          }
+
         });
       bat.errors = ko.validation.group(this);
 
