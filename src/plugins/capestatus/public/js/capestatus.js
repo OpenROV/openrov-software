@@ -6,6 +6,7 @@
     console.log('Loading Capestatus plugin in the browser.');
     self.cockpit = cockpit;
     self.lastPing = null;
+    var Battery;
 
     self.bindingModel = {
       cockpit: self.cockpit,
@@ -20,37 +21,74 @@
       batteryLevel: self.batteryLevel
     };
 
-    var Battery = function(name, description, maxVoltage, minVoltage) {
-      var self = this;
-      self.name = ko.observable(name !== undefined ? name : '');
-      self.description = ko.observable(description !== undefined ? description : '');
-      self.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0);
-      self.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0);
-
-      return self;
-    };
-
     self.settingsModel = {
-      batteryTypes: ko.observableArray([
-        new Battery('trustfire', 'Trustfire (min: 8.0v, max: 13v)', 8.0, 13.0),
-        new Battery('batteryscope', 'Batteryscope white (min: 6.3v, max: 10v)', 8.0, 13.0),
-      ]),
+      batteryTypes: ko.observableArray(),
       batteryType: ko.observable('trustfire'),
       addNewBatteryVisible: ko.observable(false),
-      newBattery: ko.observable(new Battery()),
+      newBattery: ko.observable(),
       showAddNew: function() {
         this.addNewBatteryVisible(true);
         this.newBattery(new Battery());
       },
       addBattery: function() {
-        this.batteryTypes.push(this.newBattery());
-        this.addNewBatteryVisible(false);
+        var model = self.settingsModel;
+        var result = ko.validation.group(model.newBattery(), {deep: true});
+        if (!model.newBattery().isValid())
+        {
+          alert("Please fix all errors before preceding");
+          result.showAllMessages(true);
+
+          return false;
+        }
+        model.batteryTypes.push(model.newBattery());
+        model.addNewBatteryVisible(false);
       },
       cancelAdd: function() {
-        this.addNewBatteryVisible(false);
+        self.settingsModel.addNewBatteryVisible(false);
       }
-
     };
+
+    Battery = function(name, description, maxVoltage, minVoltage) {
+      var bat = this;
+      bat.name = ko.observable(name !== undefined ? name : '')
+        .extend({
+          minLength: 5,
+          maxLength: 10,
+          required: true,
+          isUnique: {
+            params: {
+              array: self.settingsModel.batteryTypes(),
+              predicate: function (opt, selectedVal) {
+                var foo = ko.utils.unwrapObservable(opt.name);
+                console.log(foo);
+                return ko.utils.unwrapObservable(opt.name) === selectedVal;
+              }
+            },
+            message: "The battery name must be unique!"
+          }
+        });
+      bat.description = ko.observable(description !== undefined ? description : '')
+        .extend({
+          required: true,
+          minLength: 10
+        });
+      bat.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0)
+        .extend({
+          required: true,
+          number: true
+        });
+      bat.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0)
+        .extend({
+          required: true,
+          number: true
+        });
+      bat.errors = ko.validation.group(this);
+
+      return bat;
+    };
+
+    self.settingsModel.batteryTypes.push(new Battery('trustfire', 'Trustfire (min: 8.0v, max: 13v)', 8.0, 13.0));
+    self.settingsModel.batteryTypes.push(new Battery('batteryscope', 'Batteryscope white (min: 6.3v, max: 10v)', 8.0, 13.0));
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('capestatus.js');
@@ -68,7 +106,17 @@
     $('#plugin-settings').append('<div id="capestatus-settings"></div>');
     $('#capestatus-settings').load(jsFileLocation + '../settings.html', function () {
 
-      ko.applyBindings(self.settingsModel, document.getElementById('capestatus-settings'));
+      ko.applyBindingsWithValidation(
+        self.settingsModel,
+        document.getElementById('capestatus-settings'),
+        {
+          insertMessages: true,
+          decorateElement: true,
+          errorElementClass: 'error',
+          errorMessageClass: 'help-inline',
+          errorClass: 'error'
+        }
+      );
     });
 
 

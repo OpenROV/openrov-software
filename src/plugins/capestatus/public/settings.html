@@ -16,17 +16,28 @@
           </ul>
           <button data-bind="click: $data.showAddNew, visible: !$data.addNewBatteryVisible()">Add</button>
           <div data-bind="visible: $data.addNewBatteryVisible">
-            <div>Battery name: </div>
-            <input type="text" data-bind="value: $data.newBattery().name, valueUpdate: 'keypress'">
-            <div>Description: </div>
-            <input type="text" data-bind="value: $data.newBattery().description, valueUpdate: 'keypress'">
-            <div>Max voltage: </div>
-            <input type="text" data-bind="value: $data.newBattery().maxVoltage">
-            <div>Min voltage: </div>
-            <input type="text" data-bind="value: $data.newBattery().minVoltage">
-            <button data-bind="click: $data.addBattery">Add</button>
-            <button data-bind="click: $data.cancelAdd">Cancel</button>
-
+            <fieldset data-bind="with: newBattery">
+              <label class="control-group control-label" data-bind="validationElement: name">
+                Battery name:
+                <input type="text" class="input-medium" data-bind="value: name">
+              </label>
+              <label class="control-group control-label" data-bind="validationElement: description">
+                Description:
+                <input type="text" class="input-medium" data-bind="value: description">
+              </label>
+              <label class="control-group control-label" data-bind="validationElement: maxVoltage">
+                Max voltage:
+                <input class="input-mini" type="text" data-bind="value: maxVoltage">
+              </label>
+              <label class="control-group control-label" data-bind="validationElement: minVoltage">
+                Min voltage:
+                <input class="input-mini" type="text" data-bind="value: minVoltage">
+              </label>
+              <div class=form-actions">
+                <button data-bind="click: $parent.addBattery">Add</button>
+                <button data-bind="click: $parent.cancelAdd">Cancel</button>
+              </div>
+            </fieldset>
           </div>
         </div>
       </div>
