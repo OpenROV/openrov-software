@@ -7,6 +7,8 @@
     self.cockpit = cockpit;
     self.lastPing = null;
     var Battery = function() {};
+    var batteryConfig = new BatteryConfig();
+
 
     self.bindingModel = {
       cockpit: self.cockpit,
@@ -41,12 +43,20 @@
           return false;
         }
         model.batteryTypes.push(model.newBattery());
+        batteryConfig.addBattery({
+          name: model.newBattery().name(),
+          minVoltage: model.newBattery().minVoltage(),
+          maxVoltage: model.newBattery().maxVoltage() });
+
         model.addNewBatteryVisible(false);
       },
       cancelAdd: function() {
         self.settingsModel.addNewBatteryVisible(false);
       }
     };
+    self.settingsModel.batteryType.subscribe(function(newValue) {
+      batteryConfig.setSelected(newValue);
+    })
 
     Battery = function(name, minVoltage, maxVoltage) {
       var bat = this;
@@ -99,9 +109,18 @@
       return bat;
     };
 
+/*
     self.settingsModel.batteryTypes.push(new Battery('TrustFire', 8.0, 13.0));
     self.settingsModel.batteryTypes.push(new Battery('Batteryscope white', 8.0, 13.0));
     self.settingsModel.batteryType('TrustFire');
+*/
+    batteryConfig.getConfig(function(batteryConfig) {
+      self.settingsModel.batteryTypes.removeAll();
+      batteryConfig.batteries.forEach(function(battery) {
+        self.settingsModel.batteryTypes.push(new Battery(battery.name, battery.minVoltage, battery.maxVoltage));
+      });
+      self.settingsModel.batteryType(batteryConfig.selectedBattery);
+    });
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('capestatus.js');

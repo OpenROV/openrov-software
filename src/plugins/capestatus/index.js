@@ -1,4 +1,102 @@
+const PREFERENCES = 'plugins:capestatus';
+
 function capestatus(name, deps) {
-  console.log('This is where capestatus code would execute in the node process.');
+  console.log('Capestatus plugin started.');
+  var preferences = getPreferences(deps.config);
+
+  // ## routes
+
+  // GET conif
+  deps.app.get('/plugin/capestatus', function (req, res) {
+    res.send(preferences);
+  });
+
+  // POST - add new battery
+  deps.app.post('/plugin/capestatus/batteries', function (req, res) {
+    var battery = req.body;
+
+    if (battery.name === undefined || battery.minVoltage === undefined || battery.maxVoltage === undefined) {
+      res.status(400);
+      res.send("Supplied battery object does not follow specification: "
+        + JSON.stringify(new Battery("", 0, 0)) + "\n"
+        + JSON.stringify(req.body));
+      return;
+    }
+
+    preferences.batteries.push(battery);
+    res.status(201);
+    res.send(preferences.batteries);
+
+    saveConfig(deps.config);
+  });
+
+  // POST - add new battery
+  deps.app.post('/plugin/capestatus/selectedBattery', function (req, res) {
+    preferences.selectedBattery = req.body.name;
+    res.status(200);
+    res.send();
+
+    saveConfig(deps.config);
+  });
+
+    // delete
+  deps.app.delete('/plugin/capestatus/batteries', function (req, res) {
+    var battery = req.body;
+
+    if (battery.name === undefined || battery.minVoltage === undefined || battery.maxVoltage === undefined) {
+      res.status(400);
+      var demo = new Battery("", 0, 0);
+      res.send("Supplied battery object does not follow specification: '" + demo + "'");
+      return;
+    }
+
+    var existing = preferences.batteries.filter(function(bat) {
+      return bat.name === battery.name &&
+        bat.minVoltage === battery.minVoltage &&
+        bat.maxVoltage === battery.maxVoltage
+    });
+
+    if (existing !== undefined && existing.length === 1) {
+      preferences.batteries.splice(preferences.batteries.indexOf(existing[0]), 1);
+      saveConfig(deps.config);
+
+      res.status(202)
+        .send(preferences.batteries);
+    }
+    else {
+      res.status(410);
+      res.send();
+    }
+  });
+
+  function Battery(name, minVoltage, maxVoltage) {
+    this.name = name;
+    this.minVoltage = minVoltage;
+    this.maxVoltage = maxVoltage;
+
+    return this;
+  }
+
+  function saveConfig(config) {
+    config.preferences.set(PREFERENCES, preferences);
+    config.savePreferences();
+  }
+
+  function getPreferences(config) {
+    var preferences = config.preferences.get(PREFERENCES);
+    if (preferences == undefined) {
+      preferences = {
+        batteries: [
+          new Battery('TrustFire', 8.0, 13.0),
+          new Battery('Batteryscope white', 6.3, 10)
+        ],
+        selectedBattery: 'TrustFire'
+      };
+      config.preferences.set(PREFERENCES, preferences);
+    }
+    console.log('Capestatus loaded preferences: ' + JSON.stringify(preferences));
+    return preferences;
+  }
+
 }
 module.exports = capestatus;
