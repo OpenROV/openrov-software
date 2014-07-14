@@ -18,8 +18,13 @@ BatteryConfig = function BatteryConfig() {
   };
 
   self.deleteBattery = function(battery) {
-    $.delete('/plugin/capestatus/batteries/', battery);
-  }
+    $.ajax({
+      url: '/plugin/capestatus/batteries/',
+      type: 'DELETE',
+      dataType: 'json',
+      data: battery
+    });
+  };
 
   self.setSelected = function(name) {
     $.post('/plugin/capestatus/selectedBattery', { name: name });

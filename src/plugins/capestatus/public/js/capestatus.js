@@ -45,13 +45,17 @@
         model.batteryTypes.push(model.newBattery());
         batteryConfig.addBattery({
           name: model.newBattery().name(),
-          minVoltage: model.newBattery().minVoltage(),
-          maxVoltage: model.newBattery().maxVoltage() });
+          minVoltage: parseFloat(model.newBattery().minVoltage()),
+          maxVoltage: parseFloat(model.newBattery().maxVoltage()) });
 
         model.addNewBatteryVisible(false);
       },
       cancelAdd: function() {
         self.settingsModel.addNewBatteryVisible(false);
+      },
+      removeBattery: function(battery) {
+        batteryConfig.deleteBattery({ name: battery.name(),  minVoltage: parseFloat(battery.minVoltage()), maxVoltage: parseFloat(battery.maxVoltage()) });
+        self.settingsModel.batteryTypes.remove(battery);
       }
     };
     self.settingsModel.batteryType.subscribe(function(newValue) {
@@ -76,7 +80,7 @@
       bat.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0);
       bat.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0);
       bat.description = ko.computed(function() {
-        return bat.name() + " (min: " + bat.minVoltage() + "v - max:" + bat.maxVoltage() + "v)";
+        return bat.name() + " (min: " + bat.minVoltage() + "v - max: " + bat.maxVoltage() + "v)";
       });
 
       bat.maxVoltage

@@ -52,8 +52,8 @@ function capestatus(name, deps) {
 
     var existing = preferences.batteries.filter(function(bat) {
       return bat.name === battery.name &&
-        bat.minVoltage === battery.minVoltage &&
-        bat.maxVoltage === battery.maxVoltage
+        parseFloat(bat.minVoltage) === parseFloat(battery.minVoltage) &&
+        parseFloat(bat.maxVoltage) === parseFloat(battery.maxVoltage)
     });
 
     if (existing !== undefined && existing.length === 1) {
