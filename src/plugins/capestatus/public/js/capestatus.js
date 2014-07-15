@@ -126,11 +126,6 @@
       return bat;
     };
 
-/*
-    self.settingsModel.batteryTypes.push(new Battery('TrustFire', 8.0, 13.0));
-    self.settingsModel.batteryTypes.push(new Battery('Batteryscope white', 8.0, 13.0));
-    self.settingsModel.batteryType('TrustFire');
-*/
     batteryConfig.getConfig(function(batteryConfig) {
       self.settingsModel.batteryTypes.removeAll();
       batteryConfig.batteries.forEach(function(battery) {
