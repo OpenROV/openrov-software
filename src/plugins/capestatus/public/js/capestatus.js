@@ -19,8 +19,7 @@
       currentCurrent: ko.observable(''),
       isConnected: ko.observable(false),
       brightnessLevel: ko.observable('level0'),
-      servoAngle: ko.observable(0),
-      batteryLevel: self.batteryLevel
+      servoAngle: ko.observable(0)
     };
 
     self.settingsModel = {
@@ -58,9 +57,23 @@
         self.settingsModel.batteryTypes.remove(battery);
       }
     };
+
+    //add computed
+    self.settingsModel.selectedBattery = ko.computed(function(){
+      var existing = self.settingsModel.batteryTypes().filter(function(bat) {
+        return bat.name() === self.settingsModel.batteryType();
+      });
+      if (existing.length > 0) { return existing[0]; }
+      return null;
+    });
+    self.bindingModel.batteryLevel = ko.computed(function() {
+      return self.batteryLevel(self.bindingModel.currentVoltage(), self.settingsModel.selectedBattery());
+    });
+
+    //add manual subscriptions
     self.settingsModel.batteryType.subscribe(function(newValue) {
       batteryConfig.setSelected(newValue);
-    })
+    });
 
     Battery = function(name, minVoltage, maxVoltage) {
       var bat = this;
@@ -172,14 +185,21 @@
       capes.UpdateStatusIndicators(data);
     });
   };
-  Capestatus.prototype.batteryLevel = function batteryLevel(voltage) {
-    if (voltage < 9)
+  Capestatus.prototype.batteryLevel = function batteryLevel(voltage, battery) {
+    if (battery == null) { return 'level1'; }
+
+    var minVoltage = parseFloat(battery.minVoltage());
+    var maxVoltage = parseFloat(battery.maxVoltage());
+    var difference = maxVoltage - minVoltage;
+    var steps = difference / 5;
+
+    if (voltage < (minVoltage + steps))
       return 'level1';
-    if (voltage < 10)
+    if (voltage < (minVoltage + (steps *2)))
       return 'level2';
-    if (voltage < 10.5)
+    if (voltage < (minVoltage + (steps *3)))
       return 'level3';
-    if (voltage < 11.5)
+    if (voltage < (minVoltage + (steps *4)))
       return 'level4';
     return 'level5';
   };

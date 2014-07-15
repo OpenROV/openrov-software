@@ -87,8 +87,7 @@ function capestatus(name, deps) {
     if (preferences == undefined) {
       preferences = {
         batteries: [
-          new Battery('TrustFire', 8.0, 13.0),
-          new Battery('Batteryscope white', 6.3, 10)
+          new Battery('TrustFire', 8.0, 13.0)
         ],
         selectedBattery: 'TrustFire'
       };

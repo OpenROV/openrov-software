@@ -12,7 +12,7 @@
   </div>
   <div class="span2 pull-right">
     <h2 data-bind="text: $data.currentVoltage() + 'v'"></h2>
-    <div id="batteryIndicator" data-bind="attr: { class: $data.batteryLevel($data.currentVoltage()) }"></div>
+    <div id="batteryIndicator" data-bind="attr: { class: $data.batteryLevel }"></div>
   </div>
   <div class="span2 pull-right">
     <h2 data-bind="text: $data.currentCurrent"></h2>
