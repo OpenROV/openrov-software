@@ -57,4 +57,4 @@ Both, activate and deactivate allow to use arrays too:
       rov.cockpit.emit('inputController.activate', ['example.keyBoardMapping', 'example.keyBoardMapping2' ]);
       rov.cockpit.emit('inputController.deactivate', ['example.keyBoardMapping', 'example.keyBoardMapping2' ]);
 
-See the Tankcontrol plugin for a working excample.
+See the Tankcontrol plugin for a working example.
