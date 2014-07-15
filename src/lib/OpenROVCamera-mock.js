@@ -34,6 +34,11 @@ var OpenROVCamera = function (options) {
     });
     camera.emit('started');
   };
+  camera.snapshot = function(callback) {
+    logger.log('Snapshot function called. Not implemented in the mock');
+    callback('SomeFileName' + Date.now() + '.jpg');
+  };
+
   return camera;
 };
 module.exports = OpenROVCamera;

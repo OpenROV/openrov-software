@@ -1,0 +1,20 @@
+<div id="inputController-settings">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapseInputController">
+        Input (keyboard/gamepad) configuration
+      </a>
+    </div>
+    <div id="collapseInputController" class="accordion-body collapse" style="overflow: scroll; max-height: 400px">
+      <div class="accordion-inner">
+        <ul data-bind="foreach: commands">
+          <li>
+            <b><span data-bind="text: name + ':'"></span></b>
+            Key: <span data-bind="text: bindings.keyboard">&nbsp;</span>
+            Game: <span data-bind="text: bindings.gamepad">&nbsp;</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
