@@ -33,8 +33,12 @@
     var menuItems = [];
     var currentSelected = -1;
 
+    //this technique forces relative path to the js file instead of the excution directory
+    var jsFileLocation = urlOfJsFile('headsup-menu.js');
+
+
     headsUpMenu.load(
-      'plugin/headsup-menu/headsup.html',
+      jsFileLocation + '../headsup.html',
       function() {
 
         ko.applyBindings(self, document.getElementById("headsup-menu-base"));
