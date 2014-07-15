@@ -1,3 +1,4 @@
+/*jshint esnext:true */
 const PREFERENCES = 'plugins:capestatus';
 
 function capestatus(name, deps) {
@@ -17,9 +18,8 @@ function capestatus(name, deps) {
 
     if (battery.name === undefined || battery.minVoltage === undefined || battery.maxVoltage === undefined) {
       res.status(400);
-      res.send("Supplied battery object does not follow specification: "
-        + JSON.stringify(new Battery("", 0, 0)) + "\n"
-        + JSON.stringify(req.body));
+      res.send("Supplied battery object does not follow specification: " +
+        JSON.stringify(new Battery("", 0, 0)));
       return;
     }
 
@@ -53,7 +53,7 @@ function capestatus(name, deps) {
     var existing = preferences.batteries.filter(function(bat) {
       return bat.name === battery.name &&
         parseFloat(bat.minVoltage) === parseFloat(battery.minVoltage) &&
-        parseFloat(bat.maxVoltage) === parseFloat(battery.maxVoltage)
+        parseFloat(bat.maxVoltage) === parseFloat(battery.maxVoltage);
     });
 
     if (existing !== undefined && existing.length === 1) {
@@ -84,7 +84,7 @@ function capestatus(name, deps) {
 
   function getPreferences(config) {
     var preferences = config.preferences.get(PREFERENCES);
-    if (preferences == undefined) {
+    if (preferences === undefined) {
       preferences = {
         batteries: [
           new Battery('TrustFire', 8.0, 13.0)

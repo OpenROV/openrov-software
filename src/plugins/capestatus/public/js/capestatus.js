@@ -1,4 +1,4 @@
-(function (window, $, undefined) {
+s(function (window, $, undefined) {
   'use strict';
   var Capestatus;
   Capestatus = function Capestatus(cockpit) {
@@ -8,7 +8,6 @@
     self.lastPing = null;
     var Battery = function() {};
     var batteryConfig = new BatteryConfig();
-
 
     self.bindingModel = {
       cockpit: self.cockpit,
@@ -163,9 +162,6 @@
       );
     });
 
-
-    // Register the various event handlers
-    self.listen();
     setInterval(function () {
       self.updateConnectionStatus();
       self.bindingModel.theLocaltime(new Date().toLocaleTimeString());
@@ -181,7 +177,7 @@
     });
   };
   Capestatus.prototype.batteryLevel = function batteryLevel(voltage, battery) {
-    if (battery == null) { return 'level1'; }
+    if (battery === null) { return 'level1'; }
 
     var minVoltage = parseFloat(battery.minVoltage());
     var maxVoltage = parseFloat(battery.maxVoltage());

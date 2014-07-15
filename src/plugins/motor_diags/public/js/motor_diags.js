@@ -43,10 +43,7 @@
     var self = this;
     var jsFileLocation = urlOfJsFile('motor_diags.js');
     // the js folder path
-    $('#diagpanel').load(jsFileLocation + '../diagpanel.html', function () {
-      // Register the various event handlers
-      self.listen();
-    });
+    $('#diagpanel').load(jsFileLocation + '../diagpanel.html', function () { });
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing

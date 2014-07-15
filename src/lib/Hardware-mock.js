@@ -72,6 +72,7 @@ function Hardware() {
         var status = 'targetHeading:' + (hardware.targetHoldEnabled ? targetHeading.toString() : DISABLED);
         hardware.emit('status', reader.parseStatus(status));
     }
+    hardware.emit('status', reader.parseStatus('cmd:' + command));
   };
   hardware.close = function () {
     console.log('!Serial port closed');

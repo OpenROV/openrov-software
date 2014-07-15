@@ -95,21 +95,22 @@
         blackbox.logStatusData(data);
       }
     });
-    // Register the various event handlers
-    this.listen();
   };
   /*
          * Register keyboard event listener
          */
   Blackbox.prototype.listen = function listen() {
     var self = this;
-    KEYS[82] = {
-      keydown: function (data) {
-        //r
-        self.keyDown();
-      }
+
+    self.cockpit.emit('inputController.register',
+      {
+        name: "blackbox.record",
+        description: "Start recording telemetry data.",
+        defaults: { keyboard: 'r' },
+        down: function() { self.keyDown();  }
+      });
     };
-  };
+
   var refreshintervalID;
   //	var server;
   //	var telemetry = [];

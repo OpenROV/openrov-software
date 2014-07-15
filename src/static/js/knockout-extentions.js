@@ -1,5 +1,4 @@
-
-ko.validation.rules['isUnique'] = {
+ko.validation.rules.isUnique = {
   validator: function (newVal, options, foo) {
     if (options.predicate && typeof options.predicate !== "function")
       throw new Error("Invalid option for isUnique validator. The 'predicate' option must be a function.");
