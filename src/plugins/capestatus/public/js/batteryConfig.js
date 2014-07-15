@@ -1,8 +1,8 @@
 /*jshint -W117 */ // for $ of jQuery
 (function () {
   'use strict';
-  var BatteryConfig;
-  BatteryConfig = function BatteryConfig() {
+  var capestatus = namespace('plugins.capestatus');
+  capestatus.BatteryConfig = function BatteryConfig() {
     var self = this;
     self.getConfig = function (callback) {
       $.get('/plugin/capestatus/', function (config) {

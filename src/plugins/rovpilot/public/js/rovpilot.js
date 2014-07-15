@@ -388,18 +388,6 @@
           }
         }
       ]);
-
-    $('#thrustfactor').text(2);
-    $('#rovPilot_depthHold').click(function () {
-      rov.cockpit.emit('rovpilot.toggleholdDepth');
-    });
-    $('#rovPilot_headingHold').click(function () {
-      rov.cockpit.emit('rovpilot.toggleholdHeading');
-    });
-
-    $('#rovPilot_laser').click(function () {
-      rov.cockpit.emit('rovpilot.toggleLasers');
-    });
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
@@ -617,7 +605,7 @@
     this.positions.yaw = value;
   };
   ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel() {
-    var currentPowerLevel = this.thrustfactor();
+    var currentPowerLevel = this.bindingModel.thrustfactor();
     currentPowerLevel++;
     if (currentPowerLevel > 5)
       currentPowerLevel = 1;

@@ -1,13 +1,13 @@
-s(function (window, $, undefined) {
+(function (window, $, undefined) {
   'use strict';
-  var Capestatus;
-  Capestatus = function Capestatus(cockpit) {
+  var capestatus = namespace('plugins.capestatus');
+  capestatus.Capestatus = function Capestatus(cockpit) {
     var self = this;
     console.log('Loading Capestatus plugin in the browser.');
     self.cockpit = cockpit;
     self.lastPing = null;
     var Battery = function() {};
-    var batteryConfig = new BatteryConfig();
+    var batteryConfig = new capestatus.BatteryConfig();
 
     self.bindingModel = {
       cockpit: self.cockpit,
@@ -170,13 +170,13 @@ s(function (window, $, undefined) {
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
-  Capestatus.prototype.listen = function listen() {
+  capestatus.Capestatus.prototype.listen = function listen() {
     var capes = this;
     this.cockpit.socket.on('status', function (data) {
       capes.UpdateStatusIndicators(data);
     });
   };
-  Capestatus.prototype.batteryLevel = function batteryLevel(voltage, battery) {
+  capestatus.Capestatus.prototype.batteryLevel = function batteryLevel(voltage, battery) {
     if (battery === null) { return 'level1'; }
 
     var minVoltage = parseFloat(battery.minVoltage());
@@ -194,7 +194,7 @@ s(function (window, $, undefined) {
       return 'level4';
     return 'level5';
   };
-  Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
+  capestatus.Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
     if ('time' in data) {
       self.bindingModel.formattedRunTime(msToTime(data.time));
@@ -222,13 +222,13 @@ s(function (window, $, undefined) {
     this.lastPing = new Date();
   };
 
-  Capestatus.prototype.updateConnectionStatus = function () {
+  capestatus.Capestatus.prototype.updateConnectionStatus = function () {
     var self = this;
     var now = new Date();
     var delay = now - this.lastPing;
 
     self.bindingModel.isConnected(delay <= 3000);
   };
-  window.Cockpit.plugins.push(Capestatus);
+  window.Cockpit.plugins.push(capestatus.Capestatus);
 
 }(window, jQuery));
