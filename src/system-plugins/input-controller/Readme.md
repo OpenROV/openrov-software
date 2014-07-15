@@ -39,7 +39,7 @@ All you need to do is to activate it via a message later.
         name: "example.keyBoardMapping",
         description: "Example for keymapping.",
         defaults: { keyboard: 'alt+0', gamepad: 'X' },
-        active: false // <-- DEACTIVATED
+        active: false, // <-- DEACTIVATED
         down: function() { console.log('0 down'); },
         up: function() { console.log('0 up'); }
       });
