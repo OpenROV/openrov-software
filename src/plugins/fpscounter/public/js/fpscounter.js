@@ -64,7 +64,6 @@
                 }, 8080, 300)
             },500);
             */
-      self.listen();
       var _self = self;
       var mysocket = _socket;
       setInterval(function () {

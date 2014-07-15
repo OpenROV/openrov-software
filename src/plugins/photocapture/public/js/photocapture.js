@@ -16,7 +16,6 @@
     // the js folder path
     $('#photos').load(jsFileLocation + '../photospanel.html', function () {
       // Register the various event handlers
-      self.listen();
       ko.applyBindings(self, $('#photos')[0]);
     });
   };
@@ -38,7 +37,6 @@
       console.log('send snapshot request to server');
     });
 
-    // Toggle fly-by-wire
     photoc.cockpit.emit('inputController.register',
       {
         name: "photoCapture.takeSnapshot",

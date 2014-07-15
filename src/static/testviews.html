@@ -58,6 +58,7 @@ function autoResize(id){
         //  disabling FPS counter by default as the brower files need to be loaded
         //    scripts.push('../plugins/fpscounter/public/js/fpscounter.js');
             scripts.push('../plugins/googletalk_ipregistration/public/js/googletalk_ipregistration.js');
+            scripts.push('../plugins/headsup-menu/public/js/headsup-menu.js');
             scripts.push('../plugins/horizon/public/js/horizon.js');
             scripts.push('../plugins/motor_diags/public/js/motor_diags.js');
             scripts.push('../plugins/photocapture/public/js/photocapture.js');
@@ -81,6 +82,7 @@ function autoResize(id){
             styles.push('../plugins/touchcontroller/public/css/style.css');
             styles.push('../plugins/visualisation3d/public/css/style.css');
             styles.push('../plugins/rovpilot/public/css/style.css');
+            styles.push('../plugins/headsup-menu/public/css/style.css');
 
             frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:styles, scripts:scripts}));
             frameDoc.close();

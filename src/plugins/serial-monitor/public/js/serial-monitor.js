@@ -23,8 +23,6 @@
         }
       });
 
-    // Register the various event handlers
-    this.listen();
   };
   SerialMonitor.prototype.countNewlines = function countNewlines(haystack) {
     return this.count('\n', haystack);

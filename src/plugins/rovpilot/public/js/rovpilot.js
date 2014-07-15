@@ -43,7 +43,6 @@
     setInterval(function () {
       rov.sendPilotingData();
     }, SAMPLE_PERIOD);
-    this.listen();
 
     // =============== input settings =============
     // Lasers
@@ -53,7 +52,9 @@
           name: "rovPilot.laserToggle",
           description: "Toggles the lasers on or off.",
           defaults: { keyboard: 'l' },
-          down: function() { rov.cockpit.emit('rovpilot.toggleLasers'); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.toggleLasers');
+          }
         },
 
         // lights increment
@@ -61,7 +62,9 @@
           name: "rovPilot.adjustLights_increment",
           description: "Makes the ROV lights brighter.",
           defaults: { keyboard: 'p', gamepad: 'DPAD_UP' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustLights', 0.1); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.adjustLights', 0.1);
+          }
         },
 
         // lights decrement
@@ -70,7 +73,9 @@
           description: "Makes the ROV lights dimmer.",
           defaults: { keyboard: 'o', gamepad: 'DPAD_DOWN' },
 
-          down: function() { rov.cockpit.emit('rovpilot.adjustLights', -0.1); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.adjustLights', -0.1);
+          }
         },
 
         // lights toggle
@@ -78,7 +83,9 @@
           name: "rovPilot.toggleLights",
           description: "Toggles the ROV lights on/off.",
           defaults: { keyboard: 'i' },
-          down: function() { rov.cockpit.emit('rovpilot.toggleLights'); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.toggleLights');
+          }
         },
 
         // camera up/centre/down
@@ -86,19 +93,25 @@
           name: "rovPilot.adjustCameraTilt_down",
           description: "Point the camera further down.",
           defaults: { keyboard: 'z', gamepad: 'Y' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1);
+          }
         },
         {
           name: "rovPilot.adjustCameraTilt_centre",
           description: "Point the camera straight ahead.",
           defaults: { keyboard: 'a', gamepad: 'B' },
-          down: function() { rov.cockpit.emit('rovpilot.setCameraTilt', 0); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.setCameraTilt', 0);
+          }
         },
         {
           name: "rovPilot.adjustCameraTilt_up",
           description: "Point the camera further up.",
           defaults: { keyboard: 'q', gamepad: 'A' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustCameraTilt', -0.1); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.adjustCameraTilt', -0.1);
+          }
         },
 
         // All Trim hold toggle
@@ -106,23 +119,29 @@
           name: "rovPilot.toogleAllTrimHold",
           description: "Toogle all trim hold functions on/off",
           defaults: { gamepad: 'RB' },
-          down: function() { rov.cockpit.emit('rovpilot.toggleAllTrimHold'); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.toggleAllTrimHold');
+          }
         },
 
         // Increment power level
         {
-          name: "rovPilot.toogleIncrementPowerLevel",
+          name: "rovPilot.incrementPowerLevel",
           description: "Increment the thruster power level",
-          defaults: { gamepad: 'START' },
-          down: function() { rov.cockpit.emit('rovpilot.incrimentPowerLevel'); }
+          defaults: { },
+          down: function () {
+            rov.cockpit.emit('rovpilot.incrimentPowerLevel');
+          }
         },
 
         // All Stop
         {
           name: "rovPilot.allStop",
           description: "Stop all motor action",
-          defaults: { keyboard: 'space' /*space*/ },
-          down: function() { rov.cockpit.emit('rovpilot.allStop'); }
+          defaults: { keyboard: 'space' },
+          down: function () {
+            rov.cockpit.emit('rovpilot.allStop');
+          }
         },
 
         // Up / Forward
@@ -130,8 +149,12 @@
           name: "rovPilot.moveForward",
           description: "Set throttle forward.",
           defaults: { keyboard: 'up' },
-          down: function() { rov.cockpit.emit('rovpilot.setThrottle', 1);},
-          up: function() { rov.cockpit.emit('rovpilot.setThrottle', 0); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.setThrottle', 1);
+          },
+          up: function () {
+            rov.cockpit.emit('rovpilot.setThrottle', 0);
+          }
         },
 
         // Throttle axis
@@ -139,16 +162,22 @@
           name: "rovPilot.moveThrottle",
           description: "Set throttle via axis input.",
           defaults: { gamepad: 'LEFT_STICK_Y' },
-          axis: function (v) { rov.cockpit.emit('rovpilot.setThrottle', -1 * v); }
+          axis: function (v) {
+            rov.cockpit.emit('rovpilot.setThrottle', -1 * v);
+          }
         },
 
-      // Down / Backwards
+        // Down / Backwards
         {
           name: "rovPilot.moveBackwards",
           description: "Set throttle backwards (aft).",
           defaults: { keyboard: 'down' },
-          down: function() { rov.cockpit.emit('rovpilot.setThrottle', -1); },
-          up: function() { rov.cockpit.emit('rovpilot.setThrottle', 0); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.setThrottle', -1);
+          },
+          up: function () {
+            rov.cockpit.emit('rovpilot.setThrottle', 0);
+          }
         },
 
         // yaw
@@ -156,7 +185,9 @@
           name: "rovPilot.moveYaw",
           description: "Turn the ROV via axis input.",
           defaults: { gamepad: 'LEFT_STICK_X' },
-          axis: function (v) { rov.cockpit.emit('rovpilot.setYaw', v); }
+          axis: function (v) {
+            rov.cockpit.emit('rovpilot.setYaw', v);
+          }
         },
 
         // left
@@ -164,8 +195,12 @@
           name: "rovPilot.moveLeft",
           description: "Turn the ROV to the port side (left).",
           defaults: { keyboard: 'left' },
-          down: function() { rov.cockpit.emit('rovpilot.setYaw', -1); },
-          up: function() { rov.cockpit.emit('rovpilot.setYaw', 0); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.setYaw', -1);
+          },
+          up: function () {
+            rov.cockpit.emit('rovpilot.setYaw', 0);
+          }
         },
 
         // right
@@ -173,8 +208,12 @@
           name: "rovPilot.moveRight",
           description: "Turn the ROV to the starboard side (right).",
           defaults: { keyboard: 'right' },
-          down: function() { rov.cockpit.emit('rovpilot.setYaw', 1); },
-          up: function() { rov.cockpit.emit('rovpilot.setYaw', 0); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.setYaw', 1);
+          },
+          up: function () {
+            rov.cockpit.emit('rovpilot.setYaw', 0);
+          }
         },
 
         // lift axis
@@ -182,23 +221,33 @@
           name: "rovPilot.moveLift",
           description: "Bring the ROV shallower or deeper via axis input.",
           defaults: { gamepad: 'RIGHT_STICK_Y' },
-          axis: function (v) { rov.cockpit.emit('rovpilot.setLift', -1 * v); }
+          axis: function (v) {
+            rov.cockpit.emit('rovpilot.setLift', -1 * v);
+          }
         },
         // Lift up
         {
           name: "rovPilot.moveUp",
           description: "Bring the ROV shallower (up).",
           defaults: { keyboard: 'shift' },
-          down: function() { rov.cockpit.emit('rovpilot.setLift', -1); },
-          up: function() { rov.cockpit.emit('rovpilot.setLift', 0); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.setLift', -1);
+          },
+          up: function () {
+            rov.cockpit.emit('rovpilot.setLift', 0);
+          }
         },
         // Push down
         {
           name: "rovPilot.moveDown",
           description: "Bring the ROV deeper (down).",
           defaults: { keyboard: 'ctrl' },
-          down: function() { rov.cockpit.emit('rovpilot.setLift', 1); },
-          up: function() { rov.cockpit.emit('rovpilot.setLift', 0); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.setLift', 1);
+          },
+          up: function () {
+            rov.cockpit.emit('rovpilot.setLift', 0);
+          }
         },
 
         // power level 1
@@ -206,35 +255,45 @@
           name: "rovPilot.powerLevel1",
           description: "Set the power level of the ROV to level 1.",
           defaults: { keyboard: '1' },
-          down: function() { rov.cockpit.emit('rovpilot.powerLevel', 1); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.powerLevel', 1);
+          }
         },
         // power level 2
         {
           name: "rovPilot.powerLevel2",
           description: "Set the power level of the ROV to level 2.",
           defaults: { keyboard: '2' },
-          down: function() { rov.cockpit.emit('rovpilot.powerLevel', 2); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.powerLevel', 2);
+          }
         },
         // power level 3
         {
           name: "rovPilot.powerLevel3",
           description: "Set the power level of the ROV to level 3.",
           defaults: { keyboard: '3' },
-          down: function() { rov.cockpit.emit('rovpilot.powerLevel', 3); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.powerLevel', 3);
+          }
         },
         // power level 4
         {
           name: "rovPilot.powerLevel4",
           description: "Set the power level of the ROV to level 4.",
           defaults: { keyboard: '4' },
-          down: function() { rov.cockpit.emit('rovpilot.powerLevel', 4); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.powerLevel', 4);
+          }
         },
         // power level 5
         {
           name: "rovPilot.powerLevel5",
           description: "Set the power level of the ROV to level 5.",
           defaults: { keyboard: '5' },
-          down: function() { rov.cockpit.emit('rovpilot.powerLevel', 5); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.powerLevel', 5);
+          }
         },
 
         // vtrim +
@@ -242,7 +301,9 @@
           name: "rovPilot.adjustVerticleTrim_increase",
           description: "Increase the vertical trim",
           defaults: { keyboard: '7' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustVerticleTrim', 1); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.adjustVerticleTrim', 1);
+          }
         },
 
         // vtrim -
@@ -250,7 +311,9 @@
           name: "rovPilot.adjustVerticleTrim_decrease",
           description: "Decrease the vertical trim",
           defaults: { keyboard: '8' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustVerticleTrim', -1); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.adjustVerticleTrim', -1);
+          }
         },
 
         // ttrim +
@@ -274,7 +337,9 @@
           name: "rovPilot.powerOnESC",
           description: "Switches the ESCs on",
           defaults: { keyboard: '[' },
-          down: function() { rov.cockpit.emit('rovpilot.powerOnESCs'); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.powerOnESCs');
+          }
         },
 
         // Power off ESC
@@ -282,7 +347,9 @@
           name: "rovPilot.powerOffESC",
           description: "Switches the ESCs off",
           defaults: { keyboard: ']' },
-          down: function() { rov.cockpit.emit('rovpilot.powerOffESCs'); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.powerOffESCs');
+          }
         },
 
         // Toggle heading hold
@@ -290,7 +357,9 @@
           name: "rovPilot.toggleHeadingHold",
           description: "Toggles the heading hold on/off",
           defaults: { keyboard: 'm' },
-          down: function() { rov.cockpit.emit('rovpilot.toggleholdHeading'); }
+          down: function () {
+            rov.cockpit.emit('rovpilot.toggleholdHeading');
+          }
         },
 
         // Toggle depth hold
@@ -298,19 +367,21 @@
           name: "rovPilot.toggleDepthHold",
           description: "Toggles the depth hold on/off",
           defaults: { keyboard: 'n' },
-          down: function() { rov.cockpit.emit('rovpilot.toggleholdDepth');  }
+          down: function () {
+            rov.cockpit.emit('rovpilot.toggleholdDepth');
+          }
         }
       ]);
 
     $('#thrustfactor').text(2);
-    $('#rovPilot_depthHold').click(function() {
-        rov.cockpit.emit('rovpilot.toggleholdDepth');
+    $('#rovPilot_depthHold').click(function () {
+      rov.cockpit.emit('rovpilot.toggleholdDepth');
     });
-    $('#rovPilot_headingHold').click(function() {
-        rov.cockpit.emit('rovpilot.toggleholdHeading');
+    $('#rovPilot_headingHold').click(function () {
+      rov.cockpit.emit('rovpilot.toggleholdHeading');
     });
 
-    $('#rovPilot_laser').click(function() {
+    $('#rovPilot_laser').click(function () {
       rov.cockpit.emit('rovpilot.toggleLasers');
     });
   };
@@ -318,8 +389,35 @@
   //so that the reference to this instance is available for further processing
   ROVpilot.prototype.listen = function listen() {
     var rov = this;
-    this.cockpit.socket.on('status', function (data) {
-        rov.UpdateStatusIndicators(data);
+    rov.cockpit.emit('headsUpMenu.register', [
+      {
+        label: "Toggle Lasers",
+        callback: function () {
+          rov.cockpit.emit('rovpilot.toggleLasers');
+        }
+      },
+      {
+        label: "Toggle Depth hold",
+        callback: function () {
+          rov.cockpit.emit('rovpilot.toggleholdDepth');
+        }
+      },
+      {
+        label: "Toggle Heading hold",
+        callback: function () {
+          rov.cockpit.emit('rovpilot.toggleholdHeading');
+        }
+      },
+      {
+        label: "Increment power level",
+        callback: function () {
+          rov.cockpit.emit('rovpilot.incrimentPowerLevel');
+        }
+      }
+    ]);
+
+    rov.cockpit.socket.on('status', function (data) {
+      rov.UpdateStatusIndicators(data);
     });
     rov.cockpit.on('gamepad.connected', function () {
       $('#gamepad').toggleClass('hidden', false);
@@ -510,21 +608,21 @@
   };
   ROVpilot.prototype.powerLevel = function powerLevel(value) {
     switch (value) {
-    case 1:
-      this.power = 0.05;
-      break;
-    case 2:
-      this.power = 0.1;
-      break;
-    case 3:
-      this.power = 0.2;
-      break;
-    case 4:
-      this.power = 0.5;
-      break;
-    case 5:
-      this.power = 1;
-      break;
+      case 1:
+        this.power = 0.05;
+        break;
+      case 2:
+        this.power = 0.1;
+        break;
+      case 3:
+        this.power = 0.2;
+        break;
+      case 4:
+        this.power = 0.5;
+        break;
+      case 5:
+        this.power = 1;
+        break;
     }
     $('#thrustfactor').text(value);
   };
@@ -556,10 +654,10 @@
       this.priorControls = controls;
     }
   };
-  ROVpilot.prototype.UpdateStatusIndicators = function(status) {
+  ROVpilot.prototype.UpdateStatusIndicators = function (status) {
     if ('targetDepth' in status) {
-     var depthHoldEnabled = (status.targetDepth != DISABLED);
-     $('#rovPilot_depthHold').toggleClass('enabled', depthHoldEnabled);
+      var depthHoldEnabled = (status.targetDepth != DISABLED);
+      $('#rovPilot_depthHold').toggleClass('enabled', depthHoldEnabled);
     }
     if ('targetHeading' in status) {
       var headingHoldEnabled = (status.targetHeading != DISABLED);

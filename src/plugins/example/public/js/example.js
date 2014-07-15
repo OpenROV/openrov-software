@@ -1,8 +1,16 @@
 (function (window, $, undefined) {
   'use strict';
+
+  // to prevent intererence, we disable this plugin.
+  // to see the things working, comment the following statement
+  return;
+
+
   var Example;
   Example = function Example(cockpit) {
+
     console.log('Loading example plugin in the browser.');
+
     // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
@@ -26,18 +34,28 @@
       });
 
     // for plugin management:
-    this.name = 'example';
-    // for the settings
-    this.viewName = 'Example plugin';
-    // for the UI
-    this.canBeDisabled = true;
-    // SET THIS TO true to see it working!
+    this.name = 'example';   // for the settings
+    this.viewName = 'Example plugin'; // for the UI
+    this.canBeDisabled = true; //allow enable/disable
     this.enable = function () {
       alert('example enabled');
     };
     this.disable = function () {
       alert('example disabled');
     };
+  };
+
+  Example.prototype.listen = function listen() {
+    var rov = this;
+    var item = {
+      label: ko.observable("Example menu"),
+      callback: function () {
+        alert('example menu item from heads up menu');
+        item.label(this.label() + " Foo Bar");
+      }
+    };
+    rov.cockpit.emit('headsUpMenu.register', item);
+
   };
   window.Cockpit.plugins.push(Example);
 }(window, jQuery));
