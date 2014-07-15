@@ -257,16 +257,16 @@
         {
           name: "rovPilot.adjustThrottleTrim_increase",
           description: "Increase the throttle trim",
-          defaults: { keyboard: '-' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustThrottleTrim', -1); }
+          defaults: { keyboard: '0' },
+          down: function() { rov.cockpit.emit('rovpilot.adjustThrottleTrim', 1); }
         },
 
         // ttrim -
         {
           name: "rovPilot.adjustThrottleTrim_decrease",
           description: "Decrease the Throttle trim",
-          defaults: { keyboard: '0' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustThrottleTrim', 1); }
+          defaults: { keyboard: '9' },
+          down: function() { rov.cockpit.emit('rovpilot.adjustThrottleTrim', -1); }
         },
 
         // Power on ESC

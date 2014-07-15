@@ -40,6 +40,14 @@ function autoResize(id){
             frameDoc.open();
             var scripts = [];
        //     scripts.push('../lib/config.js');
+             // System Plugins are loaded first
+            scripts.push('../system-plugins/input-controller/public/js/command.js');
+            scripts.push('../system-plugins/input-controller/public/js/gamepad-abstraction.js');
+            scripts.push('../system-plugins/input-controller/public/js/gamepad.js');
+            scripts.push('../system-plugins/input-controller/public/js/input-controller.js');
+            scripts.push('../system-plugins/input-controller/public/js/keyboard.js');
+
+            // Then the rest of the plugins
             scripts.push('../plugins/arduinofirmwareupload/public/js/arduinofirmwareupload.js');
             scripts.push('../plugins/blackbox/public/js/blackbox.js');
             scripts.push('../plugins/capestatus/public/js/capestatus.js');
@@ -63,6 +71,7 @@ function autoResize(id){
             scripts.push('../plugins/touchcontroller/public/js/touchcontroller.js');
             scripts.push('../plugins/visualisation3d/public/js/Babylon.js');
             scripts.push('../plugins/visualisation3d/public/js/visualisation3d.js');
+
 
 
             // Add you plugin here !!!
