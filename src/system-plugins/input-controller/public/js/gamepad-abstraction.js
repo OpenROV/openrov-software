@@ -3,11 +3,15 @@
 //
 //Requires the https://github.com/kallaspriit/HTML5-JavaScript-Gamepad-Controller-Library
 //library.
-var GAMEPAD = {};
-var GamePad = function (cockpit) {
+var inputController = namespace('systemPlugin.inputController');
+inputController.GamepadAbstraction = function (cockpit) {
 
   var gamepad = new Gamepad();
-  var gp = { cockpit: cockpit };
+  var gp = {
+    cockpit: cockpit,
+    currentButton: undefined,
+    assignment: {}
+  };
   var isSupported = function () {
   };
   var ignoreInputUntil = 0;
@@ -16,15 +20,30 @@ var GamePad = function (cockpit) {
     return padStatus.position;
   };
   gamepad.bind(Gamepad.Event.BUTTON_DOWN, function (e) {
-    if (GAMEPAD[e.control] !== undefined)
-      GAMEPAD[e.control].BUTTON_DOWN();
+    var control = e.control;
+    if (gp.currentButton === undefined) {
+      gp.currentButton = e.control;
+    }
+    else {
+      control = gp.currentButton + '+' + e.control;
+    }
+    if (gp.assignment[control] !== undefined)
+      gp.assignment[control].BUTTON_DOWN();
+  });
+  gamepad.bind(Gamepad.Event.BUTTON_UP, function (e) {
+    if (gp.currentButton === e.control) { gp.currentButton = undefined; }
+    if (gp.assignment[e.control] !== undefined) {
+      if (gp.assignment[e.control].BUTTON_UP !== undefined) {
+        gp.assignment[e.control].BUTTON_UP();
+      }
+    }
   });
   gamepad.bind(Gamepad.Event.AXIS_CHANGED, function (e) {
     if (new Date().getTime() < ignoreInputUntil)
       return;
     //avoids inacurrate readings when the gamepad has just been connected from affecting the ROV
-    if (GAMEPAD[e.axis] !== undefined)
-      GAMEPAD[e.axis].AXIS_CHANGED(e.value);
+    if (gp.assignment[e.axis] !== undefined)
+      gp.assignment[e.axis].AXIS_CHANGED(e.value);
   });
   var updateStatus = function () {
     window.requestAnimationFrame(updateStatus);
