@@ -29,6 +29,7 @@ inputController.Command = function(control) {
   self.defaults = control.defaults;
   self.bindings = control.defaults; // entry point to load binding values from configuration
 
+  self.active = control.active !== undefined ? control.active : true;
   return this;
 };
 
