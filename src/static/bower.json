@@ -2,6 +2,10 @@
   "name": "static openrov",
   "dependencies": {
     "fpsmeter": "~0.3.1",
+<<<<<<< HEAD
     "knockout.validation": "~1.0.2"
+=======
+    "knockout.validation" : "~1.0.2"
+>>>>>>> 0afb13a... Adding knockout.validation to bower components
   }
 }
