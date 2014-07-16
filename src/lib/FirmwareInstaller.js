@@ -1,29 +1,4 @@
-$('#arduinoFirmware-startupload').click(function () {
-  fileReader.onload = function (evnt) {
-    console.log('Upload event: ' + selectedFile.name);
-    self.cockpit.socket.emit('arduinofirmware-upload', {
-      'filename': selectedFile.name,
-      data: evnt.target.result
-    });
-  };
-  if (!selectedFile) {
-    selectedFile = {};
-    selectedFile.name = 'fromSource';
-    self.cockpit.socket.emit('arduinofirmware-uploadfromsource');
-  }
-  console.log('Starting upload: ' + selectedFile.name);
-  self.cockpit.socket.emit('arduinofirmware-startupload', {
-    'filename': selectedFile.name,
-    'size': selectedFile.size
-  });
-  selectedFile = null;
-});
-$('#arduinoFirmware-closeupload').click(function () {
-  self.arduinoFirmwareVM.reset();  //$('#firmware-upload-dialog').modal('hide');
-});
-$('#arduinoFirmware-showdetails').click(function () {
-  self.arduinoFirmwareVM.toggleDetails();
-});/*
+/*
  * Created for OpenROV:  www.openrov.com
  * Author:  Dominik
  * Date: 06/03/12
