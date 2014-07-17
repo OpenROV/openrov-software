@@ -3,7 +3,7 @@
 
   // to prevent intererence, we disable this plugin.
   // to see the things working, comment the following statement
-  return;
+//  return;
 
 
   var Example;
@@ -48,10 +48,19 @@
   Example.prototype.listen = function listen() {
     var rov = this;
     var item = {
-      label: ko.observable("Example menu"),
+      counter: 0,
+      labelText: "Example menu",
+      label: ko.observable(this.labelText),
       callback: function () {
         alert('example menu item from heads up menu');
-        item.label(this.label() + " Foo Bar");
+      },
+      left: function() {
+        item.counter = item.counter -1;
+        item.label(this.labelText + ' ' + item.counter.toString());
+      },
+      right: function() {
+        item.counter = item.counter +1;
+        item.label(this.labelText + ' ' + item.counter.toString());
       }
     };
     rov.cockpit.emit('headsUpMenu.register', item);

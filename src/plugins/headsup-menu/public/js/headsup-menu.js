@@ -81,6 +81,30 @@
       currentSelected = nextIndex;
     };
 
+    var leftHook = function() {
+      var currentId = $(menuItems[currentSelected]).attr('id');
+      self.items()
+        .forEach(function(item) {
+          if (item.uniqueId == currentId) {
+            if (item.left !== undefined) {
+              item.left();
+            }
+          }
+        });
+    };
+
+    var rightHook = function() {
+      var currentId = $(menuItems[currentSelected]).attr('id');
+      self.items()
+        .forEach(function(item) {
+          if (item.uniqueId == currentId) {
+            if (item.right !== undefined) {
+              item.right();
+            }
+          }
+        });
+    };
+
     var enablePlugin = function() {
       self.cockpit.emit('inputController.register',
         {
@@ -103,6 +127,18 @@
               description: "select the previous element of the heads up menu",
               defaults: { keyboard: 'd', gamepad: 'DPAD_UP' },
               down: moveSelectionPrev
+            },
+            {
+              name: "headsupMenu.left",
+              description: "Hook for additional functions for a menu entry.",
+              defaults: { keyboard: 'r', gamepad: 'DPAD_LEFT' },
+              down: leftHook
+            },
+            {
+              name: "headsupMenu.right",
+              description: "Hook for additional functions for a menu entry.",
+              defaults: { keyboard: 't', gamepad: 'DPAD_RIGHT' },
+              down: rightHook
             }
           ]
         });
