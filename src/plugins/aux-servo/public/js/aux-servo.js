@@ -20,7 +20,8 @@
     };
   };
 
-  Example.prototype.listen = function listen() {
+/*
+  AuxServo.prototype.listen = function listen() {
     var rov = this;
     var item = {
       counter: 0,
@@ -40,7 +41,7 @@
     };
     item.label(item.labelText);
     rov.cockpit.emit('headsUpMenu.register', item);
-
   };
-  window.Cockpit.plugins.push(Example);
+ */
+  window.Cockpit.plugins.push(AuxServo);
 }(window, jQuery));

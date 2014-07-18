@@ -9,6 +9,12 @@
     self.items = ko.observableArray();
     self.getTemplateName = function(item) { return "menuRow-" + item.type };
 
+    // Add required UI elements
+    $('#video-container').append('<div id="headsup-menu-base"></div>');
+    var headsUpMenu = $('#headsup-menu-base');
+    headsUpMenu.hide();
+
+
     this.cockpit.on(
       'headsUpMenu.register',
       function (item) {
@@ -20,15 +26,11 @@
           }
           if (anItem['type'] == 'custom') {
             anItem.headsUpTemplateId = 'custom-' + anItem.uniqueId;
+            $('body').append('<script type="text/html" id="' + anItem.headsUpTemplateId + '">' + anItem.content + '</script>');
           }
           self.items.push(anItem);
         });
       });
-
-    // Add required UI elements
-    $('#video-container').append('<div id="headsup-menu-base"></div>');
-    var headsUpMenu = $('#headsup-menu-base');
-    headsUpMenu.hide();
 
     var menuItems = [];
     var currentSelected = -1;

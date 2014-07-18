@@ -12,10 +12,8 @@
         <script type="text/html" id="menuRow-custom">
             <li>
                 <div class="menuRow"  data-bind="attr: { id: $data.uniqueId }">
-                    <!-- create a template based on the custom content -->
-                    <script type="text/html" data-bind="attr: { id: $data.headsUpTemplateId }, html: content" />
                     <!-- reference the created template -->
-                    <div class="custom-block" data-bind="template: { name: $data.headsUpTemplateId }" />
+                    <div class="custom-block" data-bind="template: { name: $data.headsUpTemplateId }"></div>
                 </div>
             </li>
         </script>
