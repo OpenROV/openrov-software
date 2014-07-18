@@ -178,8 +178,8 @@
 
     var brighnessHeadsUp = {
       type: 'custom',
-      label: 'foo',
-      content: "<button class='btn btn-large btn-block'>AAAA</button>",
+      brightnessLevel: ko.computed(function() {capes.bindingModel.brightnessLevel(); }),
+      content: "<button class='btn btn-large btn-block'>Brightness: <li id='brightnessIndicator' data-bind='attr: { class: $data.brightnessLevel }' ></li></button>",
       callback: function () {
         capes.cockpit.emit('rovpilot.toggleLights');
       },
