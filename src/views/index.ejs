@@ -47,6 +47,9 @@
   <script type='text/javascript' src="/config.js"></script>
   <script type='text/javascript' src="/socket.io/socket.io.js"></script>
 
+  <script type='text/javascript' src="bower_components/knockout.validation/Dist/knockout.validation.js"></script>
+  <script type='text/javascript' src='js/knockout-extentions.js'></script>
+
   <% for(var i=0; i<scripts.length; i++) {%>
   <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
 
@@ -251,7 +254,6 @@
             var proportionalHeight = width * srcImg.height / srcImg.width
             ctx.drawImage(srcImg,0,(canvas.height-proportionalHeight)/2,width, proportionalHeight);
         },64); //only need to redraw at the framerate of source video
-
         </script>
 
     </body>

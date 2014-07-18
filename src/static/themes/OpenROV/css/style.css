@@ -292,15 +292,6 @@ img.center {
     background-position:0px -96px;
 }
 
-#connectionHealth{
-    margin:5px 10px;
-    width:30px;
-    height: 30px;
-    background-image: url('../img/bbconnection.png');
-    background-repeat:no-repeat;
-    background-position:0px 0px;
-}
-
 #blackboxstatus{
     margin:5px 10px;
     width:30px;
@@ -315,15 +306,6 @@ img.center {
 }
 
 #blackboxstatus.true {
-    background-position: -29px 0px;
-}
-
-
-#connectionHealth.false {
-    background-position:0px 0px;
-}
-
-#connectionHealth.true {
     background-position: -29px 0px;
 }
 

@@ -1,0 +1,43 @@
+<div id="capeStatus-settings">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapseCapestatus">
+        Battery configuration
+      </a>
+    </div>
+    <div id="collapseCapestatus" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <div>
+          <ul data-bind="foreach: batteryTypes" class="unstyled">
+            <li>
+              <div><input type="radio" name="batteryType" data-bind="value: $data.name, checked: $root.batteryType" /><span data-bind="text: $data.description"></span>
+                <i class="icon-remove" data-bind="visible: $root.batteryType() !== $data.name(), click: $parent.removeBattery"></i>
+              </div>
+            </li>
+          </ul>
+          <button data-bind="click: $data.showAddNew, visible: !$data.addNewBatteryVisible()">Add</button>
+          <div data-bind="visible: $data.addNewBatteryVisible">
+            <fieldset data-bind="with: newBattery">
+              <label class="control-group control-label" data-bind="validationElement: name">
+                Battery name:
+                <input type="text" class="input-medium" data-bind="value: name">
+              </label>
+              <label class="control-group control-label" data-bind="validationElement: maxVoltage">
+                Max voltage:
+                <input class="input-mini" type="text" data-bind="value: maxVoltage">
+              </label>
+              <label class="control-group control-label" data-bind="validationElement: minVoltage">
+                Min voltage:
+                <input class="input-mini" type="text" data-bind="value: minVoltage">
+              </label>
+              <div class=form-actions">
+                <button data-bind="click: $parent.addBattery">Add</button>
+                <button data-bind="click: $parent.cancelAdd">Cancel</button>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
