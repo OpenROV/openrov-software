@@ -110,7 +110,7 @@
         {
           name: "headsupMenu.show",
           description: "Show the heads up menu.",
-          defaults: { keyboard: 'e', gamepad: 'START' },
+          defaults: { keyboard: 'alt', gamepad: 'START' },
           down: function () {
             $('#headsup-menu-base').show();
           },
