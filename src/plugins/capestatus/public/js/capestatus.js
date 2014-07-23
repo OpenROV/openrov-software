@@ -176,16 +176,24 @@
       capes.UpdateStatusIndicators(data);
     });
 
+    var shouldToggleBrightness = true;
     var brighnessHeadsUp = {
       type: 'custom',
-      brightnessLevel: ko.computed(function() {capes.bindingModel.brightnessLevel(); }),
+      brightnessLevel: ko.computed(function() { return capes.bindingModel.brightnessLevel(); }),
       content: "<button class='btn btn-large btn-block'>Brightness: <li id='brightnessIndicator' data-bind='attr: { class: $data.brightnessLevel }' ></li></button>",
       callback: function () {
-        capes.cockpit.emit('rovpilot.toggleLights');
+        if (shouldToggleBrightness) {
+          capes.cockpit.emit('rovpilot.toggleLights');
+        }
+        shouldToggleBrightness = true;
       },
       left: function() {
+        capes.cockpit.emit('rovpilot.adjustLights', -0.1);
+        shouldToggleBrightness = false;
       },
       right: function() {
+        capes.cockpit.emit('rovpilot.adjustLights', 0.1);
+        shouldToggleBrightness = false;
       }
     };
     capes.cockpit.emit('headsUpMenu.register', brighnessHeadsUp);

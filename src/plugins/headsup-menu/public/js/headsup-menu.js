@@ -85,6 +85,7 @@
 
     var leftHook = function() {
       var currentId = $(menuItems[currentSelected]).attr('id');
+      console.log("####left hook");
       self.items()
         .forEach(function(item) {
           if (item.uniqueId == currentId) {
@@ -97,6 +98,7 @@
 
     var rightHook = function() {
       var currentId = $(menuItems[currentSelected]).attr('id');
+      console.log("####right hook");
       self.items()
         .forEach(function(item) {
           if (item.uniqueId == currentId) {
