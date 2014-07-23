@@ -20,9 +20,16 @@
     };
 
     self.settingsModel = {
-      servo1: { enabled: ko.observable(true) },
-      servo2: { enabled: ko.observable(false) }
+      servo1: {
+        name:  "1",
+        enabled: ko.observable(true)
+      },
+      servo2: {
+        name: "2",
+        enabled: ko.observable(false)
+      }
     };
+    self.settingsModel.servos = [self.settingsModel.servo1, self.settingsModel.servo2];
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('aux-servo.js');

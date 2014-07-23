@@ -1,4 +1,16 @@
 <div id="auxServo-settings">
+  <!-- Template -->
+  <script type="text/html" id="aux-servo-template">
+    <div>
+      <h4>Aux servo <span data-bind="text: $data.name"></span>:</h4>
+      <fieldset>
+        <label class="checkbox">
+          <input type="checkbox" data-bind="checked: $data.enabled">Enabled
+        </label>
+      </fieldset>
+    </div>
+  </script>
+
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapseAuxServo">
@@ -8,21 +20,7 @@
     <div id="collapseAuxServo" class="accordion-body collapse">
       <div class="accordion-inner">
         <div>
-          <div>
-            <h4>Aux servo 1:</h4>
-            <fieldset data-bind="with: servo1">
-              <label class="checkbox">
-                <input type="checkbox" data-bind="checked: enabled">Enabled
-              </label>
-            </fieldset>
-          </div>
-          <div>
-            <h4>Aux servo 2:</h4>
-            <fieldset data-bind="with: servo2">
-              <label class="checkbox">
-                <input type="checkbox" data-bind="checked: enabled">Enabled
-              </label>
-            </fieldset>
+          <div data-bind="template: { name: 'aux-servo-template', foreach: servos }">
           </div>
         </div>
       </div>
