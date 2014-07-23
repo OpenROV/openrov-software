@@ -19,15 +19,59 @@
     this.disable = function () {
     };
 
+    var Servo = function(name, pin, enabled) {
+      var self = this;
+      self.name = ko.observable(name);
+      self.pin = ko.observable(pin);
+      self.enabled = ko.observable(enabled);
+      self.min = ko.observable(0);
+      self.max = ko.observable(180);
+      self.midPoint = ko.observable(90);
+      self.stepWidth = ko.observable(1);
+      self.isChanged = ko.observable(false);
+      self.showTest = ko.observable(false);
+      self.testValue = ko.observable(90);
+      self.liveTest = ko.observable(false);
+
+      var isChanged = function() {
+        self.isChanged(true);
+      };
+
+      self.min.subscribe(isChanged);
+      self.max.subscribe(isChanged);
+      self.midPoint.subscribe(isChanged);
+      self.stepWidth.subscribe(isChanged);
+      self.testValue.subscribe(function() { if (self.liveTest()) { self.executeTest(); } });
+
+      self.toggleTestVisible = function() {
+        self.showTest(! self.showTest() );
+      };
+
+      self.apply = function() {
+        console.log('Applying new Aux servo settings');
+        cockpit.emit('auxservo-config', {
+          pin: self.pin(),
+          min: self.min(),
+          max: self.max(),
+          midPoint: self.midPoint(),
+          stepWidth: self.stepWidth()
+        });
+      };
+
+      self.executeTest = function() {
+        console.log("Executing test on aux servo " + self.name() + "with value: " + self.testValue());
+        cockpit.emit('auxservo-execute', {
+          pin: self.pin(),
+          value: self.testValue()
+        });
+      };
+
+      return self;
+    };
+
     self.settingsModel = {
-      servo1: {
-        name:  "1",
-        enabled: ko.observable(true)
-      },
-      servo2: {
-        name: "2",
-        enabled: ko.observable(false)
-      }
+      servo1: new Servo('1', 13, true),
+      servo2: new Servo('2', 14, false)
     };
     self.settingsModel.servos = [self.settingsModel.servo1, self.settingsModel.servo2];
 
@@ -39,9 +83,20 @@
     });
 };
 
-/*
+
   AuxServo.prototype.listen = function listen() {
     var rov = this;
+
+    rov.cockpit.on('auxservo-config', function(config) {
+      rov.cockpit.socket.emit('auxservo-config', config);
+    });
+
+    rov.cockpit.on('auxservo-execute', function(command) {
+      console.log('#######FOOOOOOOOOOO');
+
+      rov.cockpit.socket.emit('auxservo-execute', command);
+    });
+/*
     var item = {
       counter: 0,
       labelText: "Example menu",
@@ -60,7 +115,9 @@
     };
     item.label(item.labelText);
     rov.cockpit.emit('headsUpMenu.register', item);
-  };
  */
+
+  };
+
   window.Cockpit.plugins.push(AuxServo);
 }(window, jQuery));

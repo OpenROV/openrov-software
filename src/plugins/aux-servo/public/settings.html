@@ -7,10 +7,38 @@
         <label class="checkbox">
           <input type="checkbox" data-bind="checked: $data.enabled">Enabled
         </label>
+        <div data-bind="visible: $data.enabled">
+          <label class="textbox">
+            Min degrees: <input type="number" class="input-small"  data-bind="value: $data.min">
+          </label>
+
+          <label class="textbox">
+            Mid point degrees: <input type="number" class="input-small" data-bind="value: $data.midPoint">
+          </label>
+
+          <label class="textbox">
+            Max degrees: <input type="number" class="input-small" data-bind="value: $data.max">
+          </label>
+
+          <a class="btn" data-bind="css: { disabled: ! $data.isChanged() }, click: $data.apply">Apply</a>
+          <a class="btn btn-link" data-bind="click: $data.toggleTestVisible">Test</a>
+          <div class='well' data-bind="visible: $data.showTest">
+            <label class="inline">
+              Value in degrees:
+              <div class="input-append"><input type="number" class="input-small" data-bind="value: $data.testValue">
+                <button class="btn" type="button" data-bind="click: $data.executeTest">Test</button>
+              </div>
+            </label>
+            <label class="checkbox inline" title="Automatically apply test value">
+              <input type="checkbox" data-bind="checked: $data.liveTest">Live test
+            </label>
+          </div>
+        </div>
       </fieldset>
     </div>
   </script>
 
+  <!-- Settings -->
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapseAuxServo">
