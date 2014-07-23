@@ -176,6 +176,8 @@
       capes.UpdateStatusIndicators(data);
     });
 
+    // if the user incremented/decremented the brightness, we don't wan't to switch it on/off when he let's go
+    // the button, so we only toggle the light if there was no left/right before
     var shouldToggleBrightness = true;
     var brighnessHeadsUp = {
       type: 'custom',
