@@ -18,7 +18,19 @@
     };
     this.disable = function () {
     };
-  };
+
+    self.settingsModel = {
+      servo1: { enabled: ko.observable(true) },
+      servo2: { enabled: ko.observable(false) }
+    };
+
+    // Add required UI elements
+    var jsFileLocation = urlOfJsFile('aux-servo.js');
+    $('#plugin-settings').append('<div id="auxServo-settings"></div>');
+    $('#auxServo-settings').load(jsFileLocation + '../settings.html', function () {
+      ko.applyBindings(self.settingsModel, $('#auxServo-settings')[0]);
+    });
+};
 
 /*
   AuxServo.prototype.listen = function listen() {

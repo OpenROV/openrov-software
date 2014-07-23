@@ -1,0 +1,31 @@
+<div id="auxServo-settings">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapseAuxServo">
+        Auxiliary servos
+      </a>
+    </div>
+    <div id="collapseAuxServo" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <div>
+          <div>
+            <h4>Aux servo 1:</h4>
+            <fieldset data-bind="with: servo1">
+              <label class="checkbox">
+                <input type="checkbox" data-bind="checked: enabled">Enabled
+              </label>
+            </fieldset>
+          </div>
+          <div>
+            <h4>Aux servo 2:</h4>
+            <fieldset data-bind="with: servo2">
+              <label class="checkbox">
+                <input type="checkbox" data-bind="checked: enabled">Enabled
+              </label>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
