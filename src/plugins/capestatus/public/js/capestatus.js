@@ -179,7 +179,7 @@
     // if the user incremented/decremented the brightness, we don't wan't to switch it on/off when he let's go
     // the button, so we only toggle the light if there was no left/right before
     var shouldToggleBrightness = true;
-    var brighnessHeadsUp = {
+    var brightnessHeadsUp = {
       type: 'custom',
       brightnessLevel: ko.computed(function() { return capes.bindingModel.brightnessLevel(); }),
       content: "<button class='btn btn-large btn-block'>Brightness: <li id='brightnessIndicator' data-bind='attr: { class: $data.brightnessLevel }' ></li></button>",
@@ -198,7 +198,7 @@
         shouldToggleBrightness = false;
       }
     };
-    capes.cockpit.emit('headsUpMenu.register', brighnessHeadsUp);
+    capes.cockpit.emit('headsUpMenu.register', brightnessHeadsUp);
 
   };
   capestatus.Capestatus.prototype.batteryLevel = function batteryLevel(voltage, battery) {
