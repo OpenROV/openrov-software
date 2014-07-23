@@ -7,22 +7,33 @@
         <label class="checkbox">
           <input type="checkbox" data-bind="checked: $data.enabled">Enabled
         </label>
-        <div data-bind="visible: $data.enabled">
-          <label class="textbox">
-            Min degrees: <input type="number" class="input-small"  data-bind="value: $data.min">
-          </label>
+        <div class="row" data-bind="visible: $data.enabled">
+          <div class="span5">
+            <label class="textbox">
+              Min degrees: <input type="number" class="input-small"  data-bind="value: $data.min">
+            </label>
 
-          <label class="textbox">
-            Mid point degrees: <input type="number" class="input-small" data-bind="value: $data.midPoint">
-          </label>
+            <label class="textbox">
+              Mid point degrees: <input type="number" class="input-small" data-bind="value: $data.midPoint">
+            </label>
 
-          <label class="textbox">
-            Max degrees: <input type="number" class="input-small" data-bind="value: $data.max">
-          </label>
+            <label class="textbox">
+              Max degrees: <input type="number" class="input-small" data-bind="value: $data.max">
+            </label>
+          </div>
 
-          <a class="btn" data-bind="css: { disabled: ! $data.isChanged() }, click: $data.apply">Apply</a>
-          <a class="btn btn-link" data-bind="click: $data.toggleTestVisible">Test</a>
-          <div class='well' data-bind="visible: $data.showTest">
+          <div class="span1">
+            <a class="btn" data-bind="css: { disabled: ! $data.isChanged() }, click: $data.apply">Apply</a>
+          </div>
+          <span data-bind="css: { hide: $data.showApllied() === false }"><i class="icon-ok" title="Applied!"></i> Applied!
+
+        </div>
+        <div class="row">
+          <div class="span1">
+            <a class="btn btn-link" data-bind="click: $data.toggleTestVisible">Test</a>
+          </div>
+
+          <div class='span4 well' data-bind="visible: $data.showTest">
             <label class="inline">
               Value in degrees:
               <div class="input-append"><input type="number" class="input-small" data-bind="value: $data.testValue">

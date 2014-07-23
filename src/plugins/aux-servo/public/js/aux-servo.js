@@ -32,6 +32,7 @@
       self.showTest = ko.observable(false);
       self.testValue = ko.observable(90);
       self.liveTest = ko.observable(false);
+      self.showApllied = ko.observable(false);
 
       var isChanged = function() {
         self.isChanged(true);
@@ -42,6 +43,12 @@
       self.midPoint.subscribe(isChanged);
       self.stepWidth.subscribe(isChanged);
       self.testValue.subscribe(function() { if (self.liveTest()) { self.executeTest(); } });
+      self.isChanged.subscribe(function(newValue) {
+        if (newValue === false) {
+          self.showApllied(true);
+          setTimeout(function () {self.showApllied(false); }, 2000);
+        }
+      });
 
       self.toggleTestVisible = function() {
         self.showTest(! self.showTest() );
@@ -56,6 +63,7 @@
           midPoint: self.midPoint(),
           stepWidth: self.stepWidth()
         });
+        self.isChanged(false);
       };
 
       self.executeTest = function() {
