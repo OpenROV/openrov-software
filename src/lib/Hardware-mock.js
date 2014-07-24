@@ -72,6 +72,12 @@ function Hardware() {
         var status = 'targetHeading:' + (hardware.targetHoldEnabled ? targetHeading.toString() : DISABLED);
         hardware.emit('status', reader.parseStatus(status));
     }
+
+    //aux servo
+    if (commandText === 'xsrv.exe') {
+      hardware.emit('status', reader.parseStatus('xsrv.ext:' + commandParts[1]));
+    }
+
     hardware.emit('status', reader.parseStatus('cmd:' + command));
   };
   hardware.close = function () {

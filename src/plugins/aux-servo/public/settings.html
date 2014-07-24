@@ -25,7 +25,7 @@
           <div class="span1">
             <a class="btn" data-bind="css: { disabled: ! $data.isChanged() }, click: $data.apply">Apply</a>
           </div>
-          <span data-bind="css: { hide: $data.showApllied() === false }"><i class="icon-ok" title="Applied!"></i> Applied!
+          <span data-bind="css: { hide: $data.showApllied() === false }"><i class="icon-ok" title="Applied!"></i> Applied!</span>
 
         </div>
         <div class="row">
@@ -38,6 +38,7 @@
               Value in degrees:
               <div class="input-append"><input type="number" class="input-small" data-bind="value: $data.testValue">
                 <button class="btn" type="button" data-bind="click: $data.executeTest">Test</button>
+                <span data-bind="css: { hide: $data.isExecuted() === false }"><i class="icon-ok" title="Executed!"></i> Executed!</span>
               </div>
             </label>
             <label class="checkbox inline" title="Automatically apply test value">

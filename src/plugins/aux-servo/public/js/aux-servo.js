@@ -3,7 +3,7 @@
 
   var AuxServo;
   AuxServo = function AuxServo(cockpit) {
-
+    var auxs = this;
     console.log('Loading the auxiliary servo plugin.');
 
     // Instance variables
@@ -33,6 +33,8 @@
       self.testValue = ko.observable(90);
       self.liveTest = ko.observable(false);
       self.showApllied = ko.observable(false);
+      self.isExecuted = ko.observable(false);
+      self.currentValue = ko.observable(0);
 
       var isChanged = function() {
         self.isChanged(true);
@@ -68,42 +70,61 @@
 
       self.executeTest = function() {
         console.log("Executing test on aux servo " + self.name() + "with value: " + self.testValue());
+        self.isExecuted(false);
         cockpit.emit('auxservo-execute', {
           pin: self.pin(),
           value: self.testValue()
         });
       };
 
+      self.executed = function(newValue) {
+        self.isExecuted(true);
+        setTimeout(function() { self.isExecuted(false); }, 2000);
+        self.currentValue(newValue);
+      };
+
       return self;
     };
 
-    self.settingsModel = {
+    auxs.settingsModel = {
       servo1: new Servo('1', 13, true),
       servo2: new Servo('2', 14, false)
     };
-    self.settingsModel.servos = [self.settingsModel.servo1, self.settingsModel.servo2];
+    auxs.settingsModel.servos = [auxs.settingsModel.servo1, auxs.settingsModel.servo2];
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('aux-servo.js');
     $('#plugin-settings').append('<div id="auxServo-settings"></div>');
     $('#auxServo-settings').load(jsFileLocation + '../settings.html', function () {
-      ko.applyBindings(self.settingsModel, $('#auxServo-settings')[0]);
+      ko.applyBindings(auxs.settingsModel, $('#auxServo-settings')[0]);
     });
-};
+
+    return auxs;
+  };
 
 
   AuxServo.prototype.listen = function listen() {
-    var rov = this;
+    var self = this;
 
-    rov.cockpit.on('auxservo-config', function(config) {
-      rov.cockpit.socket.emit('auxservo-config', config);
+    self.cockpit.on('auxservo-config', function(config) {
+      self.cockpit.socket.emit('auxservo-config', config);
     });
 
-    rov.cockpit.on('auxservo-execute', function(command) {
-      console.log('#######FOOOOOOOOOOO');
-
-      rov.cockpit.socket.emit('auxservo-execute', command);
+    self.cockpit.on('auxservo-execute', function(command) {
+      self.cockpit.socket.emit('auxservo-execute', command);
     });
+
+    self.cockpit.socket.on('auxservo-executed', function(result) {
+      var subParts = result.split(',');
+      self.settingsModel.servos.forEach(function(servo) {
+        console.log("AUX SERVO " + servo.pin() + " " + subParts[0]);
+        if (servo.pin() == parseInt(subParts[0])) {
+          servo.executed(subParts[1]);
+        }
+      });
+    });
+
+
 /*
     var item = {
       counter: 0,

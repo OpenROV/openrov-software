@@ -9,6 +9,13 @@ function auxServo(name, deps) {
     deps.rov.send('xsrv.exe(' + command.pin + ',' + command.value + ')');
   };
 
+  deps.rov.on('status', function(status){
+    if ('xsrv.ext' in status) {
+      deps.io.sockets.emit('auxservo-executed', status['xsrv.ext']);
+      delete status['xsrv.ext'];
+    }
+  });
+
   deps.io.sockets.on('connection', function (socket) {
 
     socket.on('auxservo-config', function (config) {
