@@ -18,7 +18,7 @@ reset() {
 }
 
 #setup required environment variables if not already set
-. /opt/openrov/linux/openrov_config.sh
+. /opt/openrov/cockpit/linux/openrov_config.sh
 
 echo Initiating arduino reset on pin $LINUX_RESET_GPIO 1>&2
 reset &

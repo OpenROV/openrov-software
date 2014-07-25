@@ -33,7 +33,7 @@ sed 's/CUSTOM_BUILD/'"$HASH"'/g' $1/src/Device.cpp.template > $1/src/Device.cpp
 rm $1/src/Device.cpp.template
 
 #setup required environment variables if not already set
-. /opt/openrov/linux/openrov_config.sh
+. /opt/openrov/cockpit/linux/openrov_config.sh
 
 if test "$ROV_BOARD" = "board25"
 then
