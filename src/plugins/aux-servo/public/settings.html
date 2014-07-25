@@ -7,43 +7,45 @@
         <label class="checkbox">
           <input type="checkbox" data-bind="checked: $data.enabled">Enabled
         </label>
-        <div class="row" data-bind="visible: $data.enabled">
-          <div class="span5">
-            <label class="textbox">
-              Min degrees: <input type="number" class="input-small"  data-bind="value: $data.min">
-            </label>
+        <div data-bind="visible: $data.enabled">
+          <div class="row" data-bind="visible: $data.enabled">
+            <div class="span5">
+              <label class="textbox">
+                Min degrees: <input type="number" class="input-small"  data-bind="value: $data.min">
+              </label>
 
-            <label class="textbox">
-              Mid point degrees: <input type="number" class="input-small" data-bind="value: $data.midPoint">
-            </label>
+              <label class="textbox">
+                Mid point degrees: <input type="number" class="input-small" data-bind="value: $data.midPoint">
+              </label>
 
-            <label class="textbox">
-              Max degrees: <input type="number" class="input-small" data-bind="value: $data.max">
-            </label>
+              <label class="textbox">
+                Max degrees: <input type="number" class="input-small" data-bind="value: $data.max">
+              </label>
+            </div>
+
+            <div class="span1">
+              <a class="btn" data-bind="css: { disabled: ! $data.isChanged() }, click: $data.apply">Apply</a>
+            </div>
+            <span data-bind="fadeVisible: $data.showApllied"><i class="icon-ok" title="Applied!"></i> Applied!</span>
           </div>
-
-          <div class="span1">
-            <a class="btn" data-bind="css: { disabled: ! $data.isChanged() }, click: $data.apply">Apply</a>
+          <div class="row-fluid">
+            <div class="span1">
+              <a class="btn btn-link" data-bind="click: $data.toggleTestVisible">Test</a>
+            </div>
           </div>
-          <span data-bind="fadeVisible: $data.showApllied"><i class="icon-ok" title="Applied!"></i> Applied!</span>
-
         </div>
-        <div class="row">
-          <div class="span1">
-            <a class="btn btn-link" data-bind="click: $data.toggleTestVisible">Test</a>
-          </div>
-
-          <div class='span4 well' data-bind="visible: $data.showTest">
+        <div class="row-fluid">
+          <div class='span12 well' data-bind="visible: $data.showTest">
             <div class="row-fluid">
-              <label class="span6">
-                Value in degrees:
-                <div class="input-append"><input type="number" class="input-small" data-bind="value: $data.testValue">
+              <label class="span12">
+                <span class="span12">Value in degrees:</span>
+                <div class="input-append span6"><input type="number" class="input-small" data-bind="value: $data.testValue">
                   <button class="btn" type="button" data-bind="click: $data.executeTest">Test</button>
                 </div>
+                <span class="span4" data-bind="fadeVisible: { value: $data.isExecuted, fadeIn: false} "><i class="icon-ok" title="Executed!"></i> Executed!</span>
               </label>
-              <span class="span6" data-bind="fadeVisible: $data.isExecuted"><i class="icon-ok" title="Executed!"></i> Executed!</span>
             </div>
-            <label class="span12 checkbox" title="Automatically apply test value">
+            <label class="checkbox" title="Automatically apply test value">
               <input type="checkbox" data-bind="checked: $data.liveTest">Live test
             </label>
           </div>
