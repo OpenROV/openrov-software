@@ -1,0 +1,7 @@
+tools:
+    js_hint:
+        use_native_config: false
+        config:
+            laxcomma: true
+filter:
+    excluded_paths: [src/static/bower_components/*,src/static/js/libs/*, dashboard/src/static/js/libs/*, dashboard/src/plugins/99_software/public/js/*.min.js, dashboard/src/plugins/99_software/public/js/jquery.ui.widget.js, dashboard/src/plugins/99_software/public/upload/js/vendor/jquery.ui.widget.js, src/plugins/touchcontroller/public/js/gamecontroller.js]
