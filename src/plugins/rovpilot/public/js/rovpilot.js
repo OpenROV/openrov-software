@@ -17,7 +17,9 @@
     this.positions = {
       throttle: 0,
       yaw: 0,
-      lift: 0
+      lift: 0,
+      pitch: 0,
+      roll: 0
     };
     this.sendUpdateEnabled = true;
     var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq;
@@ -438,6 +440,24 @@
     rov.cockpit.on('rovpilot.setLift', function (v) {
       rov.setLift(v);
     });
+    rov.cockpit.on('rovpilot.setPitch', function (v) {
+      rov.setPitch(v);
+    });
+    rov.cockpit.on('rovpilot.setPitchControl', function (v) {
+      rov.setPitchControl(v);
+    });
+    rov.cockpit.on('rovpilot.setRoll', function (v) {
+      rov.setRoll(v);
+    });
+    rov.cockpit.on('rovpilot.setRollControl', function (v) {
+      rov.setRollControl(v);
+    });
+    rov.cockpit.on('rovpilot.setPortElevonControl', function (v) {
+      rov.setPortElevonControl(v);
+    });
+    rov.cockpit.on('rovpilot.setStartboardElevonControl', function (v) {
+      rov.setStartboardElevonControl(v);
+    });
     rov.cockpit.on('rovpilot.powerLevel', function (v) {
       rov.powerLevel(v);
     });
@@ -599,6 +619,13 @@
   ROVpilot.prototype.setYaw = function setYaw(value) {
     this.positions.yaw = value;
   };
+  ROVpilot.prototype.setPitchControl = function setPitchControl(value) {
+    this.positions.pitch = value;
+  };
+  ROVpilot.prototype.setRollControl = function setRollControl(value) {
+    this.positions.roll = value;
+  };
+
   ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel() {
     var currentPowerLevel = $('#thrustfactor').text();
     currentPowerLevel++;
@@ -632,6 +659,8 @@
     this.positions.throttle = 0;
     this.positions.yaw = 0;
     this.positions.lift = 0;
+    this.positions.pitch = 0;
+    this.positions.roll = 0;
   };
   ROVpilot.prototype.sendPilotingData = function sendPilotingData() {
     var positions = this.positions;
@@ -641,6 +670,8 @@
     controls.throttle = positions.throttle * this.power;
     controls.yaw = positions.yaw * this.power * 1.5;
     controls.lift = positions.lift * this.power;
+    controls.pitch = positions.pitch;
+    controls.roll = positions.roll;
     for (var i in positions) {
       if (controls[i] != this.priorControls[i]) {
         updateRequired = true;
