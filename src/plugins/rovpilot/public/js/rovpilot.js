@@ -679,7 +679,12 @@
     }
     if (this.sendUpdateEnabled && updateRequired || this.sendToROVEnabled === false) {
       if (this.sendToROVEnabled) {
-        this.cockpit.socket.emit('control_update', controls);
+//        this.cockpit.socket.emit('control_update', controls);
+        for(var control in controls){
+          if(controls[control] != this.priorControls[control]){
+            this.cockpit.socket.emit(control, controls[control]);
+          }
+        }
       }
       this.cockpit.emit('rovpilot.control_update', controls);
       this.priorControls = controls;
