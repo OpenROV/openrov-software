@@ -30,6 +30,10 @@ function rovpilot(name, deps) {
       deps.rov.send('thro(' + x * 100 + ')');
       console.log('thro(' + x * 100+ ')');
     });
+    socket.on('throttle', function (x) {
+      deps.rov.send('thro(' + x * 100 + ')');
+      console.log('thro(' + x * 100+ ')');
+    });
     socket.on('yaw', function (x) {
       deps.rov.send('yaw(' + x * 100+ ')');
       console.log('yaw(' + x * 100+ ')');

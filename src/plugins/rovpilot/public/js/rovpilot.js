@@ -623,7 +623,7 @@
     this.positions.pitch = value;
   };
   ROVpilot.prototype.setRollControl = function setRollControl(value) {
-    this.positions.roll = value;
+    this.positions.roll = value;  
   };
 
   ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel() {
