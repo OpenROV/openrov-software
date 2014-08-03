@@ -21,7 +21,6 @@
     "lazy" : ">= 1.0.11",
     "sync" : "",
     "os-utils" : "",
-    "bower" : "",
     "jquery-file-upload-middleware" : ""
   },
   "bundleDependencies": [
