@@ -29,7 +29,7 @@ inputController.Gamepad = function(cockpit) {
 
   self.unregister = function(control) {
     var gpKey = control.bindings.gamepad;
-    if (gpKey !== undefiend) {
+    if (gpKey !== undefined) {
       self.gp.assignment[gpKey] = undefined;
 
       if (control.secondary !== undefined) {
