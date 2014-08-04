@@ -185,8 +185,8 @@ function addPluginAssets(result) {
 }
 
 var loader = new PluginLoader();
-loader.loadPlugins(path.join(__dirname, 'system-plugins'), deps, addPluginAssets);
-loader.loadPlugins(path.join(__dirname, 'plugins'), deps, addPluginAssets);
+loader.loadPlugins(path.join(__dirname, 'system-plugins'), '/system-plugin', deps, addPluginAssets);
+loader.loadPlugins(path.join(__dirname, 'plugins'), '/plugin', deps, addPluginAssets);
 
 
 controller.start();
