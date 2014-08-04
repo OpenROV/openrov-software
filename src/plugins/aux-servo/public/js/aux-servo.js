@@ -51,6 +51,7 @@
           setTimeout(function () {self.showApllied(false); }, 2000);
         }
       });
+      self.enabled.subscribe(function() { self.showTest(false); });
 
       self.toggleTestVisible = function() {
         self.showTest(! self.showTest() );
