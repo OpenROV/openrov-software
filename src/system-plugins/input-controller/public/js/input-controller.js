@@ -13,11 +13,13 @@
       var commandBindings = [];
       var duplicateInformation = [];
       for (var command in registerdCommands) {
-        for (var binding in registerdCommands[command].bindings) {
-          commandBindings.push({
-            value: binding + ':' + registerdCommands[command].bindings[binding],
-            name: registerdCommands[command].name
-          });
+        if (registerdCommands[command].active) {
+          for (var binding in registerdCommands[command].bindings) {
+            commandBindings.push({
+              value: binding + ':' + registerdCommands[command].bindings[binding],
+              name: registerdCommands[command].name
+            });
+          }
         }
       }
       commandBindings.forEach(function (binding) {
@@ -46,14 +48,14 @@
         self.model.commands.push(command);
         console.log('InputController: Registering control ' + command.name);
         controllers.forEach(function (controller) {
-          controller.register(command);
+          if (command.active) {
+            controller.register(command);
+          }
         });
       });
       checkDuplicates();
     };
     var unregisterControls = function (controlName) {
-      // maybe it would be nicer to actually unregister the controls
-      // rather than resetting and reapplying
       var controlsToRemove = [].concat(controlName);
       // controlName could be a single object or an array
       controlsToRemove.forEach(function (control) {
@@ -69,8 +71,34 @@
       self.model.commands.length = 0;
       registerControls(commandsToRegister);
     };
+    var activateControls = function(controlName) {
+      var controlsToActivate = [].concat(controlName);
+      controlsToActivate.forEach(function(commandName) {
+        var command = registerdCommands[commandName];
+        command.active = true;
+        controllers.forEach(function (controller) {
+          controller.register(command);
+        });
+        console.log("activated command " + command.name);
+      });
+    };
+    var deactivateControls = function(controlName) {
+      var controlsToDeactivate = [].concat(controlName);
+      controlsToDeactivate.forEach(function(commandName) {
+        var command = registerdCommands[commandName];
+        command.active = false;
+        controllers.forEach(function (controller) {
+          controller.unregister(command);
+        });
+        console.log("Deactivated command " + command.name);
+      });
+    };
+
     self.cockpit.on('inputController.register', registerControls);
     self.cockpit.on('inputController.unregister', unregisterControls);
+    self.cockpit.on('inputController.activate', activateControls);
+    self.cockpit.on('inputController.deactivate', deactivateControls);
+
     $('#plugin-settings').append('<div id="inputcontroller-settings"></div>');
     var jsFileLocation = urlOfJsFile('input-controller.js');
     $('#inputcontroller-settings').load(jsFileLocation + '../settings.html', function () {
