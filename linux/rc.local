@@ -13,7 +13,7 @@
 if [ -f /var/.RESIZE_ROOT_PARTITION ]; then
   rm /var/.RESIZE_ROOT_PARTITION
   touch /var/.RESIZE_ROOT
-  /opt/openrov/linux/expand_root_partition.sh
+  /opt/openrov/cockpit/linux/expand_root_partition.sh
   # the expand script initiates a reboot
   exit 0
 fi
@@ -30,7 +30,7 @@ if [ -f /var/.RESIZE_ROOT ]; then
 fi
 
 if [ ! -f /var/swapfile ]; then
-  bash /opt/openrov/linux/addswapfile.sh
+  bash /opt/openrov/cockpit/linux/addswapfile.sh
 fi
 
 # load the device tree overlay for pin 25 (RESET) and SPI
@@ -39,7 +39,7 @@ echo OPENROV-RESET > $CAPEMGR/slots
 echo BB-SPI0DEV > $CAPEMGR/slots
 
 #auto detect configuration and update environment settings
-. /opt/openrov/linux/system-detect.sh || /bin/true
+. /opt/openrov/cockpit/linux/system-detect.sh || /bin/true
 
 exit 0
 
