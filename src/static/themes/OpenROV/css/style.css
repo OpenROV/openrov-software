@@ -41,6 +41,10 @@ body {
   height: 100%;
 }
 
+#settings {
+    overflow-y: scroll;
+}
+
 .drop-in-right {
   position: fixed;
   display: none;
