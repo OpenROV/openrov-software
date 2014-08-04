@@ -210,7 +210,6 @@
     if ('servo' in data) {
       var angle = 90 / 500 * data.servo * -1 - 90;
       self.bindingModel.servoAngle(angle);
-      console.log('servo angle: ' + angle);
     }
 
     if ('cpuUsage' in data)
