@@ -2,13 +2,13 @@ var PREFERENCES = 'plugins:plugin-manager';
 function pluginManager(name, deps) {
   console.log('Pugin Manager plugin started.');
   var preferences = getPreferences(deps.config);
-  deps.app.get('/plugin/plugin-manager/config', function (req, res) {
+  deps.app.get('/system-plugin/plugin-manager/config', function (req, res) {
     res.send(preferences);
   });
-  deps.app.get('/plugin/plugin-manager/config/:pluginName', function (req, res) {
+  deps.app.get('/system-plugin/plugin-manager/config/:pluginName', function (req, res) {
     res.send(preferences[req.params.pluginName]);
   });
-  deps.app.post('/plugin/plugin-manager/config/:pluginName', function (req, res) {
+  deps.app.post('/system-plugin/plugin-manager/config/:pluginName', function (req, res) {
     console.log(typeof req.body.isEnabled);
     preferences[req.params.pluginName] = req.body;
     res.status(200);
