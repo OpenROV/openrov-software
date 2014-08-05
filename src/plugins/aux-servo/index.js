@@ -1,5 +1,9 @@
+var Settings = require('./settings');
+
 function auxServo(name, deps) {
   console.log('Auxiliary servo plugin.');
+  var settings = new Settings(deps);
+  settings.register();
 
   var configureServo = function(servo){
     deps.rov.send('xsrv.cfg(' + servo.pin + ',' + servo.min + ',' + servo.midPoint + ',' + servo.max + ',' + servo.stepWidth + ')');
