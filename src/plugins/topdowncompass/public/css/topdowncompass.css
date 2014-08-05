@@ -1,0 +1,24 @@
+.topdowncompass{
+    display:block;
+    width:61px;
+    height:76px;
+    position: relative;
+    top:0px;
+    left:400px;
+
+}
+
+.compassNeedle{
+    position:absolute;
+    top:0px;
+    left:0px;
+    background-image: url('compassneedle.png');
+    width:61px;
+    height:76px;
+    background-size:61px 76px;
+    background-repeat:no-repeat;
+    -webkit-transition: 100ms ease-in-out;
+    -moz-transition: 100ms ease-in-out;
+    -o-transition: 100ms ease-in-out;
+    transition: 100ms ease-in-out;
+}

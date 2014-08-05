@@ -35,74 +35,81 @@
         defaults: { keyboard: 't' },
         down: function() { rov.toggleControl(); }
       });
+
+    // regirster controls
+    rov.cockpit.emit('inputController.register',
+      [
+        {
+          name: rov.controlNames.leftLift,
+          description: "Tankcontrol: Lift control control for the left hand gamepad.",
+          defaults: { gamepad: 'LEFT_STICK_X' },
+          active: false,
+          axis: function (v) {
+            var direction;
+            rov.leftx = -v;
+            if (rov.leftx + rov.rightx >= 0) {
+              direction = 1;
+            } else {
+              direction = -1;
+            }
+            rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
+            rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+          }
+        },
+        {
+          name: rov.controlNames.portThrottle,
+          description: "Tankcontrol: Throttle control for the port prop.",
+          defaults: { gamepad: 'LEFT_STICK_Y' },
+          active: false,
+          axis: function (v) {
+            rov.lefty = v;
+            rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+          }
+        },
+        {
+          name: rov.controlNames.rightLift,
+          description: "Tankcontrol: Lift control control for the right hand gamepad.",
+          defaults: { gamepad: 'RIGHT_STICK_X' },
+          active: false,
+          axis: function (v) {
+            var direction;
+            rov.rightx = v;
+            if (rov.leftx + rov.rightx >= 0) {
+              direction = 1;
+            } else {
+              direction = -1;
+            }
+            rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
+            rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            console.log('rov.lift:' + rov.lift);
+          }
+        },
+        {
+          name: rov.controlNames.starboardThrottle,
+          description: "Tankcontrol: Throttle control for the starboard prop.",
+          defaults: { gamepad: 'RIGHT_STICK_Y' },
+          active: false,
+          axis: function (v) {
+            rov.righty = v;
+            rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+          }
+        }
+      ]);
   };
   TankControl.prototype.toggleControl = function toggleControl() {
     var rov = this;
-    if (!this.tankControlActive) {
-      rov.cockpit.emit('inputController.register',
-        [
-          {
-            name: rov.controlNames.leftLift,
-            description: "Tankcontrol: Lift control control for the left hand gamepad.",
-            defaults: { gamepad: 'LEFT_STICK_X' },
-            axis: function (v) {
-              var direction;
-              rov.leftx = -v;
-              if (rov.leftx + rov.rightx >= 0) {
-                direction = 1;
-              } else {
-                direction = -1;
-              }
-              rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-              rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-            }
-          },
-          {
-            name: rov.controlNames.portThrottle,
-            description: "Tankcontrol: Throttle control for the port prop.",
-            defaults: { gamepad: 'LEFT_STICK_Y' },
-            axis: function (v) {
-              rov.lefty = v;
-              rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-            }
-          },
-          {
-            name: rov.controlNames.rightLift,
-            description: "Tankcontrol: Lift control control for the right hand gamepad.",
-            defaults: { gamepad: 'RIGHT_STICK_X' },
-            axis: function (v) {
-              var direction;
-              rov.rightx = v;
-              if (rov.leftx + rov.rightx >= 0) {
-                direction = 1;
-              } else {
-                direction = -1;
-              }
-              rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-              rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-              console.log('rov.lift:' + rov.lift);
-            }
-          },
-          {
-            name: rov.controlNames.starboardThrottle,
-            description: "Tankcontrol: Throttle control for the starboard prop.",
-            defaults: { gamepad: 'RIGHT_STICK_Y' },
-            axis: function (v) {
-              rov.righty = v;
-              rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-            }
-          }
-        ]);
+    var controls = [];
+    for (var name in rov.controlNames) {
+      controls.push('tankControl.' + name);
+    }
 
+    if (!this.tankControlActive) {
+      rov.cockpit.emit('inputController.activate', controls);
       rov.tankControlActive = true;
       console.log('Tank Control Active');
     }
     else {
-      var controlsToRemove = [];
-      for (var name in rov.controlNames) {
-        controlsToRemove.push('tankControl.' + name);
-      }
-      rov.cockpit.emit('inputController.unregister', controlsToRemove);
+      rov.cockpit.emit('inputController.deactivate', controls);
       rov.tankControlActive = false;
       console.log('Tank Control Deactivated');
     }
