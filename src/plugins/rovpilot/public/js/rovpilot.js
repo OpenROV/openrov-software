@@ -4,42 +4,58 @@
   var DISABLED = "DISABLED";
   ROVpilot = function ROVpilot(cockpit) {
     console.log('Loading ROVpilot plugin in the browser.');
+    var rov = this;
     // Instance variables
-    this.cockpit = cockpit;
-    this.power = 0.1;
+    rov.cockpit = cockpit;
+    rov.power = 0.1;
     //default to mid power
-    this.vtrim = 0;
+    rov.vtrim = 0;
     //default to no trim
-    this.ttrim = 0;
-    this.tilt = 0;
-    this.light = 0;
-    this.sendToROVEnabled = true;
-    this.positions = {
+    rov.ttrim = 0;
+    rov.tilt = 0;
+    rov.light = 0;
+    rov.sendToROVEnabled = true;
+    rov.positions = {
       throttle: 0,
       yaw: 0,
       lift: 0
     };
-    this.sendUpdateEnabled = true;
+    rov.sendUpdateEnabled = true;
     var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq;
     //ms
     var trimHeld = false;
-    this.priorControls = {};
+    rov.priorControls = {};
+
+    rov.bindingModel = {
+      cockpit: rov.cockpit,
+      thrustfactor: ko.observable(2),
+      depthHoldEnabled: ko.observable(false),
+      headingHoldEnabled: ko.observable(false),
+      lasersEnabled: ko.observable(false),
+      gamepadDisconnected : ko.observable(true),
+      toggleDepthHold : rov.toggleholdDepth,
+      toggleHeadingHold : rov.toggleholdHeading,
+      toggleLasers : rov.toggleLasers
+    };
 
     // Add required UI elements
-    $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
-    $('#footercontent').prepend('<div class="span1 pull-left"> \t\t\t<h6>Thrust&nbsp;Factor</h6><div class="label badge" id="thrustfactor">&nbsp;</div> \t\t    </div>');
-    $('#keyboardInstructions').append('<p>press <i>i</i> to toggle lights</p>');
-    $('#keyboardInstructions').append('<p>press <i>[</i> to enable ESCs</p>');
-    $('#keyboardInstructions').append('<p>press <i>]</i> to disable ESCs</p>');
-    $('#keyboardInstructions').append('<p>press <i>m</i> to toggle heading hold (BETA)</p>');
-    $('#keyboardInstructions').append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
-    $('#navtoolbar').append('<li><a href="#" id="rovPilot_laser" class="rovPilot_Indicator"><div id="rovPilot_laserIcon"></div></div></a>');
-    $('#navtoolbar').append('<li><a href="#" id="gamepad" class="hidden"><img id="gamepadPopover" src="themes/OpenROV/img/gamepad.png" rel="popover"></a></li>');
-    $('#navtoolbar').append('<li id="rovPilot_holdLabel"><span>Hold:</span></li>');
-    $('#navtoolbar').append('<li><a href="#" id="rovPilot_depthHold" class="rovPilot_Indicator">Depth</div></a>');
-    $('#navtoolbar').append('<li><a href="#" id="rovPilot_headingHold" class="rovPilot_Indicator">Heading</div></a>');
+    var jsFileLocation = urlOfJsFile('rovpilot.js');
+    $('body').append('<div id="rovPilot-templates"></div>');
+    $('#rovPilot-templates').load(jsFileLocation + '../ui-templates.html', function () {
+      $('#footercontent').prepend('<div id="rovPilot_thrustFactor" data-bind="template: {name: \'template_rovPilot_thrustFactor\'}"></div>');
+      ko.applyBindings(rov.bindingModel, document.getElementById('rovPilot_thrustFactor'));
 
-    var rov = this;
+      $('#navtoolbar').append('<div id="rovPilot_navtoolbar" class="nav" data-bind="template: {name: \'template_rovPilot_navToolbar\'}"></div>');
+      ko.applyBindings(rov.bindingModel, document.getElementById('rovPilot_navtoolbar'));
+    });
+
+    $('#keyboardInstructions')
+      .append('<p>press <i>i</i> to toggle lights</p>')
+      .append('<p>press <i>[</i> to enable ESCs</p>')
+      .append('<p>press <i>]</i> to disable ESCs</p>')
+      .append('<p>press <i>m</i> to toggle heading hold (BETA)</p>')
+      .append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
+
     setInterval(function () {
       rov.sendPilotingData();
     }, SAMPLE_PERIOD);
@@ -372,18 +388,6 @@
           }
         }
       ]);
-
-    $('#thrustfactor').text(2);
-    $('#rovPilot_depthHold').click(function () {
-      rov.cockpit.emit('rovpilot.toggleholdDepth');
-    });
-    $('#rovPilot_headingHold').click(function () {
-      rov.cockpit.emit('rovpilot.toggleholdHeading');
-    });
-
-    $('#rovPilot_laser').click(function () {
-      rov.cockpit.emit('rovpilot.toggleLasers');
-    });
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
@@ -420,10 +424,10 @@
       rov.UpdateStatusIndicators(data);
     });
     rov.cockpit.on('gamepad.connected', function () {
-      $('#gamepad').toggleClass('hidden', false);
+      rov.bindingModel.gamepadDisconnected(false);
     });
     rov.cockpit.on('gamepad.disconnected', function () {
-      $('#gamepad').toggleClass('hidden', true);
+      rov.bindingModel.gamepadDisconnected(true);
     });
 
     rov.cockpit.on('rovpilot.allStop', function () {
@@ -487,10 +491,11 @@
       rov.enablePilot();
     });
   };
-  var lastSentManualThrottle = {};
-  lastSentManualThrottle.port = 0;
-  lastSentManualThrottle.vertical = 0;
-  lastSentManualThrottle.starbord = 0;
+  var lastSentManualThrottle = {
+    port: 0,
+    vertical: 0,
+    starbord: 0
+  };
   ROVpilot.prototype.disablePilot = function disablePilot() {
     this.sendToROVEnabled = false;
     console.log('disabled rov pilot.');
@@ -600,13 +605,14 @@
     this.positions.yaw = value;
   };
   ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel() {
-    var currentPowerLevel = $('#thrustfactor').text();
+    var currentPowerLevel = this.bindingModel.thrustfactor();
     currentPowerLevel++;
     if (currentPowerLevel > 5)
       currentPowerLevel = 1;
     this.powerLevel(currentPowerLevel);
   };
   ROVpilot.prototype.powerLevel = function powerLevel(value) {
+
     switch (value) {
       case 1:
         this.power = 0.05;
@@ -624,7 +630,7 @@
         this.power = 1;
         break;
     }
-    $('#thrustfactor').text(value);
+    this.bindingModel.thrustfactor(value);
   };
   ROVpilot.prototype.allStop = function allStop() {
     this.vtrim = 0;
@@ -654,18 +660,16 @@
       this.priorControls = controls;
     }
   };
-  ROVpilot.prototype.UpdateStatusIndicators = function (status) {
+  ROVpilot.prototype.UpdateStatusIndicators = function(status) {
+    var rov = this;
     if ('targetDepth' in status) {
-      var depthHoldEnabled = (status.targetDepth != DISABLED);
-      $('#rovPilot_depthHold').toggleClass('enabled', depthHoldEnabled);
+      rov.bindingModel.depthHoldEnabled(status.targetDepth != DISABLED);
     }
     if ('targetHeading' in status) {
-      var headingHoldEnabled = (status.targetHeading != DISABLED);
-      $('#rovPilot_headingHold').toggleClass('enabled', headingHoldEnabled);
+      rov.bindingModel.headingHoldEnabled(status.targetHeading != DISABLED);
     }
     if ('claser' in status) {
-      var laserEnabled = (status.claser == 255);
-      $('#rovPilot_laser').toggleClass('enabled', laserEnabled);
+      rov.bindingModel.lasersEnabled(status.claser == 255);
     }
   };
   window.Cockpit.plugins.push(ROVpilot);

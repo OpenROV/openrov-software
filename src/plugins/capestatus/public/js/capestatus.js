@@ -1,72 +1,233 @@
 (function (window, $, undefined) {
   'use strict';
-  var Capestatus;
-  Capestatus = function Capestatus(cockpit) {
+  var capestatus = namespace('plugins.capestatus');
+  capestatus.Capestatus = function Capestatus(cockpit) {
+    var self = this;
     console.log('Loading Capestatus plugin in the browser.');
-    // Instance variables
-    this.cockpit = cockpit;
-    this.lastPing = null;
+    self.cockpit = cockpit;
+    self.lastPing = null;
+    var Battery = function() {};
+    var batteryConfig = new capestatus.BatteryConfig();
+
+    self.bindingModel = {
+      cockpit: self.cockpit,
+      theLocaltime: ko.observable("localtime"),
+      formattedRunTime: ko.observable('runtime'),
+      currentCpuUsage: ko.observable(''),
+      currentVoltage: ko.observable(0),
+      currentCurrent: ko.observable(''),
+      isConnected: ko.observable(false),
+      brightnessLevel: ko.observable('level0'),
+      servoAngle: ko.observable(0)
+    };
+
+    self.settingsModel = {
+      batteryTypes: ko.observableArray(),
+      batteryType: ko.observable(),
+      addNewBatteryVisible: ko.observable(false),
+      newBattery: ko.observable(),
+      showAddNew: function() {
+        this.addNewBatteryVisible(true);
+        this.newBattery(new Battery());
+      },
+      addBattery: function() {
+        var model = self.settingsModel;
+        var result = ko.validation.group(model.newBattery(), {deep: true});
+        if (!model.newBattery().isValid())
+        {
+          alert("Please fix all errors before preceding");
+          result.showAllMessages(true);
+
+          return false;
+        }
+        model.batteryTypes.push(model.newBattery());
+        batteryConfig.addBattery({
+          name: model.newBattery().name(),
+          minVoltage: parseFloat(model.newBattery().minVoltage()),
+          maxVoltage: parseFloat(model.newBattery().maxVoltage()) });
+
+        model.addNewBatteryVisible(false);
+      },
+      cancelAdd: function() {
+        self.settingsModel.addNewBatteryVisible(false);
+      },
+      removeBattery: function(battery) {
+        batteryConfig.deleteBattery({ name: battery.name(),  minVoltage: parseFloat(battery.minVoltage()), maxVoltage: parseFloat(battery.maxVoltage()) });
+        self.settingsModel.batteryTypes.remove(battery);
+      }
+    };
+
+    //add computed
+    self.settingsModel.selectedBattery = ko.computed(function(){
+      var existing = self.settingsModel.batteryTypes().filter(function(bat) {
+        return bat.name() === self.settingsModel.batteryType();
+      });
+      if (existing.length > 0) { return existing[0]; }
+      return null;
+    });
+    self.bindingModel.batteryLevel = ko.computed(function() {
+      return self.batteryLevel(self.bindingModel.currentVoltage(), self.settingsModel.selectedBattery());
+    });
+
+    //add manual subscriptions
+    self.settingsModel.batteryType.subscribe(function(newValue) {
+      batteryConfig.setSelected(newValue);
+    });
+
+    Battery = function(name, minVoltage, maxVoltage) {
+      var bat = this;
+      bat.name = ko.observable(name !== undefined ? name : '')
+        .extend({
+          required: true,
+          isUnique: {
+            params: {
+              array: self.settingsModel.batteryTypes(),
+              predicate: function (opt, selectedVal) {
+                return ko.utils.unwrapObservable(opt.name) === selectedVal;
+              }
+            },
+            message: "The battery name must be unique!"
+          }
+        });
+      bat.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0);
+      bat.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0);
+      bat.description = ko.computed(function() {
+        return bat.name() + " (min: " + bat.minVoltage() + "v - max: " + bat.maxVoltage() + "v)";
+      });
+
+      bat.maxVoltage
+        .extend({
+          required: true,
+          number: true,
+          validation: {
+            validator: function (val, someOtherVal) {
+              return parseFloat(val) > parseFloat(ko.utils.unwrapObservable(someOtherVal));
+            },
+            message: 'Max voltage must be bigger than Min voltage!',
+            params: bat.minVoltage
+          }
+        });
+
+      bat.minVoltage.extend({
+          required: true,
+          number: true,
+          validation: {
+            validator: function (val, someOtherVal) {
+              return parseFloat(val) < parseFloat(ko.utils.unwrapObservable(someOtherVal));
+            },
+            message: 'Min voltage must be smaller than Max voltage!',
+            params: bat.maxVoltage
+          }
+
+        });
+      bat.errors = ko.validation.group(this);
+
+      return bat;
+    };
+
+    batteryConfig.getConfig(function(batteryConfig) {
+      self.settingsModel.batteryTypes.removeAll();
+      batteryConfig.batteries.forEach(function(battery) {
+        self.settingsModel.batteryTypes.push(new Battery(battery.name, battery.minVoltage, battery.maxVoltage));
+      });
+      self.settingsModel.batteryType(batteryConfig.selectedBattery);
+    });
+
     // Add required UI elements
-    $('#footercontent').append('   <div class="span1 pull-left"><h6>Connection</h6><div id="connectionHealth">&nbsp;</div></div>  <div class="span2 pull-right"><h2 id="formattedRunTime">time</h2><h4 id="localtime">&nbsp;</h4></div> \t\t<div class="span2 pull-right"><h2 id="currentCpuUsage">&nbsp;</h2></div>                 <div class="span2 pull-right"><h2 id="currentVoltage">&nbsp;</h2><div id="batteryIndicator">&nbsp;</div></div> \t\t<div class="span2 pull-right"><h2 id="currentCurrent">&nbsp;</h2><div>&nbsp;</div></div>            ');
-    $('#servoTilt').append('<img id="servoTiltImage" src="themes/OpenROV/img/servo_tilt.png">');
-    //attr style
-    //$("#lights").append('<p><div id="brightnessIndicator"></div></p>'); //attr class
-    $('#navtoolbar').append('<li id="brightnessIndicator" class="level0"></li>');
-    var capes = this;
+    var jsFileLocation = urlOfJsFile('capestatus.js');
+    $('body').append('<div id="capestatus-templates"></div>');
+    $('#capestatus-templates').load(jsFileLocation + '../ui-templates.html', function () {
+      $('#footercontent').prepend('<div id="capestatus_footercontent" data-bind="template: {name: \'template_capestatus_footercontent\'}"></div>');
+      ko.applyBindings(self.bindingModel, document.getElementById('capestatus_footercontent'));
+
+      // these don't belong here IMHO as the rovPilot controls them
+      $('#servoTilt').attr("data-bind", "template: { name: 'template_capestatus_servotilt' }");
+      $('#navtoolbar').append('<li id="brightnessIndicator" data-bind="attr: { class: $data.brightnessLevel }" ></li>');
+      ko.applyBindings(self.bindingModel, document.getElementById('brightnessIndicator'));
+      ko.applyBindings(self.bindingModel, document.getElementById('servoTilt'));
+    });
+    $('#plugin-settings').append('<div id="capestatus-settings"></div>');
+    $('#capestatus-settings').load(jsFileLocation + '../settings.html', function () {
+
+      ko.applyBindingsWithValidation(
+        self.settingsModel,
+        document.getElementById('capestatus-settings'),
+        {
+          insertMessages: true,
+          decorateElement: true,
+          errorElementClass: 'error',
+          errorMessageClass: 'help-inline',
+          errorClass: 'error'
+        }
+      );
+    });
+
     setInterval(function () {
-      capes.updateConnectionStatus();
+      self.updateConnectionStatus();
+      self.bindingModel.theLocaltime(new Date().toLocaleTimeString());
     }, 1000);
-    setInterval(function () {
-      $('#localtime').text(new Date().toLocaleTimeString());
-    }, 1000);
+
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
-  Capestatus.prototype.listen = function listen() {
+  capestatus.Capestatus.prototype.listen = function listen() {
     var capes = this;
     this.cockpit.socket.on('status', function (data) {
       capes.UpdateStatusIndicators(data);
     });
   };
-  Capestatus.prototype.batteryLevel = function batteryLevel(voltage) {
-    if (voltage < 9)
+  capestatus.Capestatus.prototype.batteryLevel = function batteryLevel(voltage, battery) {
+    if (battery === null) { return 'level1'; }
+
+    var minVoltage = parseFloat(battery.minVoltage());
+    var maxVoltage = parseFloat(battery.maxVoltage());
+    var difference = maxVoltage - minVoltage;
+    var steps = difference / 5;
+
+    if (voltage < (minVoltage + steps))
       return 'level1';
-    if (voltage < 10)
+    if (voltage < (minVoltage + (steps *2)))
       return 'level2';
-    if (voltage < 10.5)
+    if (voltage < (minVoltage + (steps *3)))
       return 'level3';
-    if (voltage < 11.5)
+    if (voltage < (minVoltage + (steps *4)))
       return 'level4';
     return 'level5';
   };
-  Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
+  capestatus.Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
     if ('time' in data) {
-      $('#formattedRunTime').text(msToTime(data.time));
+      self.bindingModel.formattedRunTime(msToTime(data.time));
     }
+
     if ('vout' in data) {
-      $('#currentVoltage').text(data.vout.toFixed(1) + 'v');
-      $('#batteryIndicator').attr('class', self.batteryLevel(data.vout));
+      self.bindingModel.currentVoltage(data.vout.toFixed(1));
     }
+
     if ('iout' in data)
-      $('#currentCurrent').text(data.iout.toFixed(3) + 'A');
+      self.bindingModel.currentCurrent(data.iout.toFixed(3) + 'A');
+
     if ('servo' in data) {
       var angle = 90 / 500 * data.servo * -1 - 90;
-      $('#servoTiltImage').attr('style', '-webkit-transform: rotate(' + angle + 'deg); -moz-transform: rotate(' + angle + 'deg);transform: rotate(' + angle + 'deg)');
+      self.bindingModel.servoAngle(angle);
     }
+
     if ('cpuUsage' in data)
-      $('#currentCpuUsage').text((data.cpuUsage * 100).toFixed(0) + '%');
+      self.bindingModel.currentCpuUsage((data.cpuUsage * 100).toFixed(0) + '%');
+
     if ('LIGP' in data)
-      $('#brightnessIndicator').attr('class', 'level' + Math.ceil(data.LIGP * 10));
+      self.bindingModel.brightnessLevel('level' + Math.ceil(data.LIGP * 10));
+
     this.lastPing = new Date();
   };
-  Capestatus.prototype.updateConnectionStatus = function () {
+
+  capestatus.Capestatus.prototype.updateConnectionStatus = function () {
+    var self = this;
     var now = new Date();
     var delay = now - this.lastPing;
-    if (delay > 3000)
-      $('#connectionHealth').attr('class', 'false');
-    else
-      $('#connectionHealth').attr('class', 'true');
+
+    self.bindingModel.isConnected(delay <= 3000);
   };
-  window.Cockpit.plugins.push(Capestatus);
+  window.Cockpit.plugins.push(capestatus.Capestatus);
+
 }(window, jQuery));

@@ -21,13 +21,13 @@ echo Setting up uploader 1>&2
 
 COUNTER=0
 #setup required environment variables if not already set
-. /opt/openrov/linux/openrov_config.sh
+. /opt/openrov/cockpit/linux/openrov_config.sh
 
 while [ $COUNTER -lt 9 ]; do
         echo $COUNTER
         if [ $UPLOAD_REQUIRES_RESET ]
 	then
-        	(sleep 0.0$COUNTER && /opt/openrov/linux/reset.sh 1>&2)
+        	(sleep 0.0$COUNTER && /opt/openrov/cockpit/linux/reset.sh 1>&2)
 	fi
     EXITCODE=`$UPLOAD_TO_ATMEGA_COMMAND 1>&2`
 	if [ $? -eq 0 ] 

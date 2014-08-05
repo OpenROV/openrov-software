@@ -10,7 +10,7 @@ var PluginLoader = function() {
     };
   }
 
-  self.loadPlugins = function(dir, deps, callback) {
+  self.loadPlugins = function(dir, shareDir, deps, callback) {
     var result = {
       assets: [],
       scripts: [],
@@ -31,19 +31,18 @@ var PluginLoader = function() {
 
         // Add the public assets to a static route
         if (fs.existsSync(assets = path.join(dir, plugin, 'public'))) {
-          result.assets.push({ path: '/plugin/' + plugin, assets: assets});
-          //app.use('/plugin/' + plugin, express.static(assets));
+          result.assets.push({ path: shareDir + '/' + plugin, assets: assets});
         }
         // Add the js to the view
         if (fs.existsSync(js = path.join(assets, 'js'))) {
           fs.readdirSync(js).filter(getFilter('js')).forEach(function (script) {
-            result.scripts.push('/plugin/' + plugin + '/js/' + script);
+            result.scripts.push(shareDir + '/' + plugin + '/js/' + script);
           });
         }
         // Add the css to the view
         if (fs.existsSync(css = path.join(assets, 'css'))) {
           fs.readdirSync(css).filter(getFilter('css')).forEach(function (style) {
-            result.styles.push('/plugin/' + plugin + '/css/' + style);
+            result.styles.push(shareDir + '/' + plugin + '/css/' + style);
           });
         }
       });
