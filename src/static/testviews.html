@@ -2,32 +2,18 @@
 
 <html>
 <head>
-    <title>Page Title</title>
+    <title>Test Page</title>
     <script type="text/javascript" src="js/libs/ejs_0.9_alpha_1_production.js"></script>
-
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
   <ul id="filelist"></ul>
-<script type='text/javascript' id='lt_ws' src='http://localhost:49767/socket.io/lighttable/ws.js'></script>
 <script language="JavaScript">
-<!--
-function autoResize(id){
-    var newheight;
-    var newwidth;
-
-
-    newheight=id.contentWindow.document.body.scrollHeight;
-    newwidth=id.contentWindow.document.body.scrollWidth;
-
-
-    id.height= (newheight) + "px";
-    id.width= (newwidth) + "px";
-}
-//-->
-</script>
-
-
-    <script>
         // load the template file, then render it with data
         var iframe = document.createElement("iframe");
 
@@ -50,7 +36,7 @@ function autoResize(id){
             // Then the rest of the plugins
             scripts.push('../plugins/arduinofirmwareupload/public/js/arduinofirmwareupload.js');
             scripts.push('../plugins/blackbox/public/js/blackbox.js');
-            scripts.push('../plugins/capestatus/public/js/batteryConfig.js');            
+            scripts.push('../plugins/capestatus/public/js/batteryConfig.js');
             scripts.push('../plugins/capestatus/public/js/capestatus.js');
             scripts.push('../plugins/compass/public/js/compass.js');
             scripts.push('../plugins/diveprofile/public/js/diveprofile.js');
@@ -87,7 +73,6 @@ function autoResize(id){
 
             frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:styles, scripts:scripts}));
             frameDoc.close();
-            //autoResize(iframe);
 
            iframe.height= "720px"; //360px";
            iframe.width= "1280px";//"567px"; //
