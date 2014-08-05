@@ -55,6 +55,8 @@
             scripts.push('../plugins/serial-monitor/public/js/serial-monitor.js');
             scripts.push('../plugins/tankcontrol/public/js/tankcontrol.js');
             scripts.push('../plugins/telemetry/public/js/telemetry.js');
+            scripts.push('../plugins/topdowncompass/public/js/topdowncompass.js');
+
         //    scripts.push('../plugins/touchcontroller/public/js/gamecontroller.js');
             scripts.push('../plugins/touchcontroller/public/js/touchcontroller.js');
             scripts.push('../plugins/visualisation3d/public/js/Babylon.js');
@@ -70,6 +72,7 @@
             styles.push('../plugins/visualisation3d/public/css/style.css');
             styles.push('../plugins/rovpilot/public/css/style.css');
             styles.push('../plugins/headsup-menu/public/css/style.css');
+            styles.push('../plugins/topdowncompass/public/css/topdowncompass.css');
 
             frameDoc.writeln(new EJS({url: '../views/index.ejs'}).render({title: "testing", styles:styles, scripts:scripts}));
             frameDoc.close();
