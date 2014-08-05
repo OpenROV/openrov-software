@@ -19,7 +19,7 @@ Getting started
 Introduction
 ------------
 
-We designed the onboard video platform using several key technologies: 
+We designed the onboard video platform using several key technologies:
 
 - [MJPEG_Streamer](https://code.google.com/p/mjpg-streamer/)
 - [Node.js](http://nodejs.org/)
@@ -77,17 +77,18 @@ Since there are multiple versions of the ROV with multiple possible configuratio
 
 a) from the ssh session: sudo pico /opt/openrov/arduino/OpenROV/Aconfig.h
 
-b) put a 1 for the options you have, a 0 if you don't have the option and save. For most folks you don't need to do anything because the type of board will be automatically detected. In case you could 
+b) put a 1 for the options you have, a 0 if you don't have the option and save. For most folks you don't need to do anything because the type of board will be automatically detected. In case you could
 
 c) Login to the web session for the rov, choose settings, and select the upload firmware to arduino option.
 
 Updating
 ------------
+NOTE: This is changing and may not be working properly.  
 The easiest way to upgrade your installation is to ssh on to
 
 1) ssh on to your rov
 
-2) cd /opt/openrov
+2) cd /opt/openrov/cockpit
 
 3) sudo ./update.sh
 
@@ -124,4 +125,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
