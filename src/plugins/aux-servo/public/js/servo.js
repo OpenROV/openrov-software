@@ -12,7 +12,7 @@ auxServoNs.Servo = function(eventEmitter, name, pin, enabled) {
   self.max = ko.observable(180);
   self.midPoint = ko.observable(90);
   self.stepWidth = ko.observable(1);
-  self.value = ko.observable(self.midPoint());
+
   //ui values
   self.isChanged = ko.observable(false);
   self.showTest = ko.observable(false);
@@ -20,7 +20,8 @@ auxServoNs.Servo = function(eventEmitter, name, pin, enabled) {
   self.liveTest = ko.observable(false);
   self.showApllied = ko.observable(false);
   self.isExecuted = ko.observable(false);
-  self.currentValue = ko.observable(0);
+  self.currentValue = ko.observable(self.midPoint());
+  self.executing = ko.observable(false);
 
   var isChanged = function() {
     self.isChanged(true);
@@ -47,13 +48,19 @@ auxServoNs.Servo = function(eventEmitter, name, pin, enabled) {
   };
 
   self.apply = function() {
-    console.log('Applying new Aux servo settings');
     self.eventEmitter.emit('auxservo-config', self.toJs());
     self.isChanged(false);
   };
 
+  self.setValue = function(newValue) {
+    self.executing(true);
+    self.eventEmitter.emit('auxservo-execute', {
+      pin: self.pin(),
+      value: newValue
+    });
+  };
+
   self.executeTest = function() {
-    console.log("Executing test on aux servo " + self.name() + "with value: " + self.testValue());
     self.isExecuted(false);
     self.eventEmitter.emit('auxservo-execute', {
       pin: self.pin(),
@@ -63,6 +70,7 @@ auxServoNs.Servo = function(eventEmitter, name, pin, enabled) {
 
   self.executed = function(newValue) {
     self.isExecuted(true);
+    self.executing(false);
     setTimeout(function() { self.isExecuted(false); }, 2000);
     self.currentValue(newValue);
   };

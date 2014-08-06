@@ -9,8 +9,6 @@
     this.cockpit = cockpit;
     this.settings = new auxServoNs.Settings();
 
-    // Add required UI elements
-
     // for plugin management:
     this.name = 'auxServo';   // for the settings
     this.viewName = 'Auxiliary servo'; // for the UI
@@ -30,34 +28,34 @@
         type: 'custom',
         servo: servo,
         percentage: ko.computed(function() {
-          var value = ((servo.max() - servo.min()) / (servo.max() - servo.value()));
+          var value = ((servo.max() - servo.min()) / (servo.max() - parseInt(servo.currentValue())));
           var percentage = 100;
           if (value > 0) { percentage = 100 - (100/value); }
           return percentage.toString() + "%";
         }),
-        content: "<button class='btn btn-large btn-block'>Aux Servo <span data-bind='text: $data.servo.name'></span>:<div class='progress'><div class='bar' data-bind='style: { width: $data.percentage() }'></div></div></button>",
+        content: "<button class='btn btn-large btn-block'>Aux Servo <span data-bind='text: $data.servo.name'></span>:<div class='progress active' data-bind=\"css: { 'progress-striped': $data.servo.executing() }\"><div class='bar' data-bind='style: { width: $data.percentage() }'></div></div></button>",
         callback: function () {
           if (shouldTrigger) {
-            servo.value(servo.midPoint());
+            servo.setValue(servo.midPoint());
           }
           shouldTrigger = true;
         },
         left: function () {
           shouldTrigger = false;
-          var newValue = servo.value() - servo.stepWidth();
+          var newValue = servo.currentValue() - servo.stepWidth();
           if (newValue < servo.min()) {
             newValue = servo.min();
           }
-          servo.value(newValue);
+          servo.setValue(newValue);
         },
         right: function () {
           shouldTrigger = false;
-          var newValue = parseInt(servo.value()) + parseInt(servo.stepWidth());
+          var newValue = parseInt(servo.currentValue()) + parseInt(servo.stepWidth());
           console.log(newValue);
           if (newValue > servo.max()) {
             newValue = servo.max();
           }
-          servo.value(newValue);
+          servo.setValue(newValue);
         }
       };
       auxs.cockpit.emit('headsUpMenu.register', item);
@@ -65,7 +63,7 @@
 
     var loadServo = function(servoConfig) {
       var servo = auxServoNs.Servo.fromJs(auxs.cockpit, servoConfig);
-      auxs.settings.set(servo.name(), servo.toJs());
+      auxs.settings.set(servo.name(), servo.toJs()); // writeback to make sure we have all values
       auxs.settingsModel.servos.push(servo);
 
       servo.enabled.subscribe(function(isEnabled) {
@@ -74,6 +72,9 @@
         else { auxs.cockpit.emit('headsUpMenu.disable', headsUpName) }
       });
       registerHeadsUpMenuItem(servo);
+      if (servo.enabled()) {
+        servo.setValue(servo.midPoint());
+      }
     };
 
     auxs.settings.get('1', loadServo);
@@ -102,10 +103,9 @@
 
     self.cockpit.socket.on('auxservo-executed', function(result) {
       var subParts = result.split(',');
-      if (self.settingsModel.servos.length > 0) {
-        self.settingsModel.servos.forEach(function (servo) {
-          console.log("AUX SERVO " + servo.pin() + " " + subParts[0]);
-          if (servo.pin() == parseInt(subParts[0])) {
+      if (self.settingsModel.servos().length > 0) {
+        self.settingsModel.servos().forEach(function (servo) {
+          if (servo.pin() == subParts[0]) {
             servo.executed(subParts[1]);
           }
         });
