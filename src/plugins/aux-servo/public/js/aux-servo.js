@@ -28,13 +28,30 @@
         enabled: servo.enabled, // pass the enabled observable over to the headsup menu
         type: 'custom',
         servo: servo,
-        content: "<button class='btn btn-large btn-block'>Aux Servo <span data-bind='text: $data.servo.name'></span>: <div class='progress'><div class='bar' style='width: 60%;'></div></div></button>",
+        percentage: ko.computed(function() {
+          var value = ((servo.max() - servo.min()) / servo.value());
+          var percentage = 100;
+          if (value > 0) { percentage = 100/value; }
+          return percentage.toString() + "%";
+        }),
+        content: "<button class='btn btn-large btn-block'>Aux Servo <span data-bind='text: $data.servo.name'></span>:<div class='progress'><div class='bar' data-bind='style: { width: $data.percentage() }'></div></div></button>",
         callback: function () {
-          alert('example menu item from heads up menu');
+          servo.value(servo.midPoint());
         },
         left: function () {
+          var newValue = servo.value() - servo.stepWidth();
+          if (newValue < servo.min()) {
+            newValue = servo.min();
+          }
+          servo.value(newValue);
         },
         right: function () {
+          var newValue = parseInt(servo.value()) + parseInt(servo.stepWidth());
+          console.log(newValue);
+          if (newValue > servo.max()) {
+            newValue = servo.max();
+          }
+          servo.value(newValue);
         }
       };
       auxs.cockpit.emit('headsUpMenu.register', item);

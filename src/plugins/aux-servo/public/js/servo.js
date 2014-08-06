@@ -12,6 +12,7 @@ auxServoNs.Servo = function(eventEmitter, name, pin, enabled) {
   self.max = ko.observable(180);
   self.midPoint = ko.observable(90);
   self.stepWidth = ko.observable(1);
+  self.value = ko.observable(self.midPoint());
   //ui values
   self.isChanged = ko.observable(false);
   self.showTest = ko.observable(false);
