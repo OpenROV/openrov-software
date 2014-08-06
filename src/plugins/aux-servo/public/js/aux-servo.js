@@ -1,13 +1,14 @@
 (function (window, $, undefined) {
   'use strict';
-
-  var AuxServo;
-  AuxServo = function AuxServo(cockpit) {
+  var auxServoNs = namespace('pluginlugin.auxServo');
+  auxServoNs.AuxServo = function (cockpit) {
     var auxs = this;
     console.log('Loading the auxiliary servo plugin.');
 
     // Instance variables
     this.cockpit = cockpit;
+    this.settings = new auxServoNs.Settings();
+
     // Add required UI elements
 
     // for plugin management:
@@ -21,6 +22,7 @@
 
     var Servo = function(name, pin, enabled) {
       var self = this;
+      //object values
       self.name = ko.observable(name);
       self.pin = ko.observable(pin);
       self.enabled = ko.observable(enabled);
@@ -28,6 +30,7 @@
       self.max = ko.observable(180);
       self.midPoint = ko.observable(90);
       self.stepWidth = ko.observable(1);
+      //ui values
       self.isChanged = ko.observable(false);
       self.showTest = ko.observable(false);
       self.testValue = ko.observable(90);
@@ -51,7 +54,10 @@
           setTimeout(function () {self.showApllied(false); }, 2000);
         }
       });
-      self.enabled.subscribe(function() { self.showTest(false); });
+      self.enabled.subscribe(function() {
+        self.showTest(false);
+        self.apply();
+      });
 
       self.toggleTestVisible = function() {
         self.showTest(! self.showTest() );
@@ -59,13 +65,7 @@
 
       self.apply = function() {
         console.log('Applying new Aux servo settings');
-        cockpit.emit('auxservo-config', {
-          pin: self.pin(),
-          min: self.min(),
-          max: self.max(),
-          midPoint: self.midPoint(),
-          stepWidth: self.stepWidth()
-        });
+        cockpit.emit('auxservo-config', self.toJs());
         self.isChanged(false);
       };
 
@@ -86,12 +86,38 @@
 
       return self;
     };
-
-    auxs.settingsModel = {
-      servo1: new Servo('1', 13, true),
-      servo2: new Servo('2', 14, false)
+    Servo.fromJs = function(jsObject) {
+      var servo = new Servo(jsObject.name, jsObject.pin, jsObject.enabled);
+      if (jsObject.min !== undefined) servo.min(jsObject.min);
+      if (jsObject.max !== undefined) servo.max(jsObject.max);
+      if (jsObject.midPoint !== undefined) servo.midPoint(jsObject.midPoint);
+      if (jsObject.stepWidth !== undefined) servo.stepWidth(jsObject.stepWidth);
+      servo.apply();
+      return servo;
     };
-    auxs.settingsModel.servos = [auxs.settingsModel.servo1, auxs.settingsModel.servo2];
+    Servo.prototype.toJs = function() {
+      var servo = this;
+      return {
+        name: servo.name(),
+        pin: servo.pin(),
+        enabled: servo.enabled(),
+        min: servo.min(),
+        max: servo.max(),
+        midPoint: servo.midPoint(),
+        stepWidth: servo.stepWidth()
+      };
+    };
+
+    auxs.settingsModel = { servos: ko.observableArray([])};
+
+    var loadServo = function(servoConfig) {
+      var servo = Servo.fromJs(servoConfig);
+      auxs.settings.set(servo.name(), servo.toJs());
+      auxs.settingsModel.servos.push(servo);
+    };
+
+    auxs.settings.get('1', loadServo);
+    auxs.settings.get('2', loadServo);
 
     // Add required UI elements
     var jsFileLocation = urlOfJsFile('aux-servo.js');
@@ -104,7 +130,7 @@
   };
 
 
-  AuxServo.prototype.listen = function listen() {
+  auxServoNs.AuxServo.prototype.listen = function listen() {
     var self = this;
 
     self.cockpit.on('auxservo-config', function(config) {
@@ -117,12 +143,14 @@
 
     self.cockpit.socket.on('auxservo-executed', function(result) {
       var subParts = result.split(',');
-      self.settingsModel.servos.forEach(function(servo) {
-        console.log("AUX SERVO " + servo.pin() + " " + subParts[0]);
-        if (servo.pin() == parseInt(subParts[0])) {
-          servo.executed(subParts[1]);
-        }
-      });
+      if (self.settingsModel.servos.length > 0) {
+        self.settingsModel.servos.forEach(function (servo) {
+          console.log("AUX SERVO " + servo.pin() + " " + subParts[0]);
+          if (servo.pin() == parseInt(subParts[0])) {
+            servo.executed(subParts[1]);
+          }
+        });
+      }
     });
 
 
@@ -149,5 +177,5 @@
 
   };
 
-  window.Cockpit.plugins.push(AuxServo);
+  window.Cockpit.plugins.push(auxServoNs.AuxServo);
 }(window, jQuery));
