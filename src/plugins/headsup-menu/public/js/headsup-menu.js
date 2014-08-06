@@ -7,6 +7,10 @@
 
     self.cockpit = cockpit;
     self.items = ko.observableArray();
+    self.enabledItems = ko.computed(function() {
+      return self.items().filter(function(item) {
+        return item.enabled === undefined || ko.utils.unwrapObservable(item.enabled); } );
+    });
     self.getTemplateName = function(item) { return "menuRow-" + item.type };
 
     // Add required UI elements
@@ -31,6 +35,33 @@
           self.items.push(anItem);
         });
       });
+    var filterItmesByName = function(name) {
+      return self.items().filter(
+        function(item) {
+          if (item.name !== undefined && ko.utils.unwrapObservable(item.name) === name) {
+            return item;
+          }
+        });
+    };
+
+    this.cockpit.on(
+      'headsUpMenu.enable',
+      function(name) {
+        filterItmesByName(name).forEach(function(item) {
+          if (ko.isObservable(item.enabled)) { item.enabled(true); }
+          else { item.enabled = true; }
+        });
+      }
+    );
+    this.cockpit.on(
+      'headsUpMenu.disable',
+      function(name) {
+        filterItmesByName(name).forEach(function(item) {
+          if (ko.isObservable(item.enabled)) { item.enabled(false); }
+          else { item.enabled = false; }
+        });
+      }
+    );
 
     var menuItems = [];
     var currentSelected = -1;
@@ -151,7 +182,7 @@
     };
 
     // for plugin management:
-    this.name = "headsup-menu" // for the settings
+    this.name = "headsup-menu"; // for the settings
     this.viewName = "Heads up menu"; // for the UI
     this.canBeDisabled = true;
     this.enable = function() { enablePlugin(); };

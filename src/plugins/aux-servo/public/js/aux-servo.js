@@ -20,13 +20,35 @@
     this.disable = function () {
     };
 
-
     auxs.settingsModel = { servos: ko.observableArray([])};
+
+    var registerHeadsUpMenuItem = function(servo) {
+      var item = {
+        name: 'aux-servo.' + servo.name(),
+        enabled: servo.enabled, // pass the enabled over to the headsup menu
+        label: ko.observable('Aux servo ' + servo.name()),
+        callback: function () {
+          alert('example menu item from heads up menu');
+        },
+        left: function () {
+        },
+        right: function () {
+        }
+      };
+      auxs.cockpit.emit('headsUpMenu.register', item);
+    };
 
     var loadServo = function(servoConfig) {
       var servo = auxServoNs.Servo.fromJs(auxs.cockpit, servoConfig);
       auxs.settings.set(servo.name(), servo.toJs());
       auxs.settingsModel.servos.push(servo);
+
+      servo.enabled.subscribe(function(isEnabled) {
+        var headsUpName = 'aux-servo.' + servo.name();
+        if ( isEnabled) { auxs.cockpit.emit('headsUpMenu.enable', headsUpName)}
+        else { auxs.cockpit.emit('headsUpMenu.disable', headsUpName) }
+      });
+      registerHeadsUpMenuItem(servo);
     };
 
     auxs.settings.get('1', loadServo);
@@ -41,7 +63,6 @@
 
     return auxs;
   };
-
 
   auxServoNs.AuxServo.prototype.listen = function listen() {
     var self = this;
@@ -66,27 +87,26 @@
       }
     });
 
-
-/*
-    var item = {
-      counter: 0,
-      labelText: "Example menu",
-      label: ko.observable(),
-      callback: function () {
-        alert('example menu item from heads up menu');
-      },
-      left: function() {
-        item.counter = item.counter -1;
-        item.label(item.labelText + ' ' + item.counter.toString());
-      },
-      right: function() {
-        item.counter = item.counter +1;
-        item.label(item.labelText + ' ' + item.counter.toString());
-      }
-    };
-    item.label(item.labelText);
-    rov.cockpit.emit('headsUpMenu.register', item);
- */
+    /*
+        var item = {
+          counter: 0,
+          labelText: "Example menu",
+          label: ko.observable(),
+          callback: function () {
+            alert('example menu item from heads up menu');
+          },
+          left: function() {
+            item.counter = item.counter -1;
+            item.label(item.labelText + ' ' + item.counter.toString());
+          },
+          right: function() {
+            item.counter = item.counter +1;
+            item.label(item.labelText + ' ' + item.counter.toString());
+          }
+        };
+        item.label(item.labelText);
+        rov.cockpit.emit('headsUpMenu.register', item);
+     */
 
   };
 
