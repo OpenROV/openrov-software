@@ -26,7 +26,9 @@
       var item = {
         name: 'aux-servo.' + servo.name(),
         enabled: servo.enabled, // pass the enabled observable over to the headsup menu
-        label: ko.observable('Aux servo ' + servo.name()),
+        type: 'custom',
+        servo: servo,
+        content: "<button class='btn btn-large btn-block'>Aux Servo <span data-bind='text: $data.servo.name'></span>: <div class='progress'><div class='bar' style='width: 60%;'></div></div></button>",
         callback: function () {
           alert('example menu item from heads up menu');
         },
