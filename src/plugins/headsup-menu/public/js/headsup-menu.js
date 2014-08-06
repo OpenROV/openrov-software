@@ -9,6 +9,7 @@
     self.items = ko.observableArray();
     self.enabledItems = ko.computed(function() {
       return self.items().filter(function(item) {
+        item._enableObservableDummy(); //to update on enable/disable
         return item.enabled === undefined || ko.utils.unwrapObservable(item.enabled); } );
     });
     self.getTemplateName = function(item) { return "menuRow-" + item.type };
@@ -18,13 +19,13 @@
     var headsUpMenu = $('#headsup-menu-base');
     headsUpMenu.hide();
 
-
     this.cockpit.on(
       'headsUpMenu.register',
       function (item) {
         var items = [].concat(item); // item can be a single object or an array
         items.forEach(function (anItem) {
           anItem.uniqueId = generateUUID();
+          anItem._enableObservableDummy = ko.observable(); // if the enabled property is not observable we can force the enabledItems updated via this
           if (anItem['type'] == undefined) {
             anItem.type = "button";
           }
@@ -49,7 +50,10 @@
       function(name) {
         filterItmesByName(name).forEach(function(item) {
           if (ko.isObservable(item.enabled)) { item.enabled(true); }
-          else { item.enabled = true; }
+          else {
+            item.enabled = true;
+            item._enableObservableDummy(Date.now());
+          }
         });
       }
     );
@@ -58,7 +62,10 @@
       function(name) {
         filterItmesByName(name).forEach(function(item) {
           if (ko.isObservable(item.enabled)) { item.enabled(false); }
-          else { item.enabled = false; }
+          else {
+            item.enabled = false;
+            item._enableObservableDummy(Date.now());
+          }
         });
       }
     );
