@@ -6,7 +6,7 @@ function auxServo(name, deps) {
   settings.register();
 
   var configureServo = function(servo){
-    deps.rov.send('xsrv.cfg(' + servo.pin + ',' + servo.min + ',' + servo.midPoint + ',' + servo.max + ',' + servo.stepWidth + ')');
+    deps.rov.send('xsrv.cfg(' + servo.pin + ',' + servo.min + ',' + servo.max + ')');
     settings.saveServoConfig(servo);
   };
 

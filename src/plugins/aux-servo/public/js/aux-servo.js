@@ -13,12 +13,23 @@
     this.name = 'auxServo';   // for the settings
     this.viewName = 'Auxiliary servo'; // for the UI
     this.canBeDisabled = true; //allow enable/disable
+    auxs.settingsModel = { servos: ko.observableArray([])};
     this.enable = function () {
+      auxs.settingsModel.servos().forEach(function(servo) {
+        if (servo.enabled()) {
+          var headsUpName = 'aux-servo.' + servo.name();
+          auxs.cockpit.emit('headsUpMenu.enable', headsUpName);
+        }
+      });
+      $('#auxServo-settings').show();
     };
     this.disable = function () {
+      auxs.settingsModel.servos().forEach(function(servo) {
+        var headsUpName = 'aux-servo.' + servo.name();
+        auxs.cockpit.emit('headsUpMenu.disable', headsUpName);
+      });
+      $('#auxServo-settings').hide();
     };
-
-    auxs.settingsModel = { servos: ko.observableArray([])};
 
     var registerHeadsUpMenuItem = function(servo) {
       var shouldTrigger = true;
