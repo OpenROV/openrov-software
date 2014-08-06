@@ -23,22 +23,27 @@
     auxs.settingsModel = { servos: ko.observableArray([])};
 
     var registerHeadsUpMenuItem = function(servo) {
+      var shouldTrigger = true;
       var item = {
         name: 'aux-servo.' + servo.name(),
         enabled: servo.enabled, // pass the enabled observable over to the headsup menu
         type: 'custom',
         servo: servo,
         percentage: ko.computed(function() {
-          var value = ((servo.max() - servo.min()) / servo.value());
+          var value = ((servo.max() - servo.min()) / (servo.max() - servo.value()));
           var percentage = 100;
-          if (value > 0) { percentage = 100/value; }
+          if (value > 0) { percentage = 100 - (100/value); }
           return percentage.toString() + "%";
         }),
         content: "<button class='btn btn-large btn-block'>Aux Servo <span data-bind='text: $data.servo.name'></span>:<div class='progress'><div class='bar' data-bind='style: { width: $data.percentage() }'></div></div></button>",
         callback: function () {
-          servo.value(servo.midPoint());
+          if (shouldTrigger) {
+            servo.value(servo.midPoint());
+          }
+          shouldTrigger = true;
         },
         left: function () {
+          shouldTrigger = false;
           var newValue = servo.value() - servo.stepWidth();
           if (newValue < servo.min()) {
             newValue = servo.min();
@@ -46,6 +51,7 @@
           servo.value(newValue);
         },
         right: function () {
+          shouldTrigger = false;
           var newValue = parseInt(servo.value()) + parseInt(servo.stepWidth());
           console.log(newValue);
           if (newValue > servo.max()) {
