@@ -17,7 +17,6 @@ function settings(deps) {
     self.preferences[config.name] = config;
     deps.config.preferences.set(PREFERENCES, self.preferences);
     deps.config.savePreferences();
-    console.log("######## " + JSON.stringify(config));
   };
 
   self.register = function() {
