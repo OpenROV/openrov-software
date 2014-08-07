@@ -13,7 +13,7 @@ body {
     z-index: 3;
     top: 0px;
     left: 0px;
-    position: absolute;  
+    position: absolute;
 }
 
 * {
@@ -76,6 +76,7 @@ body {
   cursor: pointer;
   background-image: url('../img/back.png');
   float: left;
+  z-index: 100;
 }
 
 .back-button:hover {
@@ -100,22 +101,22 @@ body {
 }
 
 .navbar-fixed-bottom .navbar-inner {
-  /* IE10 Consumer Preview */ 
+  /* IE10 Consumer Preview */
   background-image: -ms-linear-gradient(top, #424242 0%, #141414 100%);
 
-  /* Mozilla Firefox */ 
+  /* Mozilla Firefox */
   background-image: -moz-linear-gradient(top, #424242 0%, #141414 100%);
 
-  /* Opera */ 
+  /* Opera */
   background-image: -o-linear-gradient(top, #424242 0%, #141414 100%);
 
-  /* Webkit (Safari/Chrome 10) */ 
+  /* Webkit (Safari/Chrome 10) */
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #424242), color-stop(1, #141414));
 
-  /* Webkit (Chrome 11+) */ 
+  /* Webkit (Chrome 11+) */
   background-image: -webkit-linear-gradient(top, #424242 0%, #141414 100%);
 
-  /* W3C Markup, IE10 Release Preview */ 
+  /* W3C Markup, IE10 Release Preview */
   background-image: linear-gradient(to bottom, #424242 0%, #141414 100%);
 }
 
@@ -137,7 +138,7 @@ body {
   width: 40px;
   height: 90px;
   background-color: white;
-  
+
 }
 
 .invisible-field input[type="text"]{
@@ -180,7 +181,7 @@ img.center {
     height: 32px;
 }
 
-#video { 
+#video {
   border: 2px solid black;
   background-color: black;
   max-width: 100%;
@@ -339,7 +340,7 @@ img.center {
 .important {
   font-size: 30px;
   font-style: !important;
-  
+
 }
 
 .accordion-toggle {
