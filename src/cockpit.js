@@ -187,6 +187,14 @@ function addPluginAssets(result) {
 var loader = new PluginLoader();
 loader.loadPlugins(path.join(__dirname, 'system-plugins'), '/system-plugin', deps, addPluginAssets);
 loader.loadPlugins(path.join(__dirname, 'plugins'), '/plugin', deps, addPluginAssets);
+/*
+Create a file .bowerrc in the project root (/usr/share/cockpit) with the content:
+
+{
+  "directory" : "plugins"
+}
+*/
+loader.loadPlugins(path.join('/usr/share/cockpit/plugins/'), '/plugin', deps, addPluginAssets);
 
 
 controller.start();
