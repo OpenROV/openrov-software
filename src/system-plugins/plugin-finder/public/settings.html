@@ -8,14 +8,14 @@
         <div id="collapsePluginFinder" class="accordion-body collapse">
             <div class="accordion-inner">
                 <input placeholder="Filter…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
-                <div class="pre-scrollable">
+                <div class="pre-scrollable" data-bind="loadingWhen: isLoading">
                 <table class="table table-striped">
                   <tbody data-bind="foreach: availablePlugins">
                     <tr>
                         <td>
                             <span data-bind="text: name">&nbsp;</span>
-                            <button type="button" class="btn btn-xs btn-default pull-right" data-bind="click: $parent.enablePlugin">Install</button>
-                            <button type="button" class="btn btn-xs btn-default pull-right" data-bind="click: $parent.disablePlugin">Learn More</button>
+                            <button type="button" class="btn btn-xs btn-default pull-right" data-bind="click: $parent.installPlugin">Install</button>
+                            <button type="button" class="btn btn-xs btn-default pull-right" data-bind="click: $parent.launchPluginDetail">Learn More</button>
                         </td>
                     </tr>
                 </tbody>

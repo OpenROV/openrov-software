@@ -6,6 +6,9 @@
     self.cachedAvailablePlugins = [];
     self.availablePlugins = ko.observableArray();
     self.query = ko.observable('');
+    self.isLoading = ko.observable(false);
+    self.install = ko.observable('');
+    self.requestedPluginDetail = ko.observable('');
 
     self.query.subscribe(function(value) {
         // remove all the current beers, which removes them from the view
@@ -18,8 +21,60 @@
         }
       }
     );
+
+    self.installPlugin = function (plugin) {
+      self.install(plugin);
+    };
+
+    self.launchPluginDetail = function (plugin) {
+      self.requestedPluginDetail(plugin);
+    };
+
   };
 
+
+  //
+  // Custom Binding
+  //
+  ko.bindingHandlers.loadingWhen = {
+      init: function (element) {
+          var
+              $element = $(element),
+              currentPosition = $element.css("position"),
+              $loader = $("<div>").addClass("loader").hide();
+
+          //add the loader
+          $element.append($loader);
+
+          //make sure that we can absolutely position the loader against the original element
+          if (currentPosition == "auto" || currentPosition == "static")
+              $element.css("position", "relative");
+
+          //center the loader
+          $loader.css({
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              "margin-left": -($loader.width() / 2) + "px",
+              "margin-top": -($loader.height() / 2) + "px"
+          });
+      },
+      update: function (element, valueAccessor) {
+          var isLoading = ko.utils.unwrapObservable(valueAccessor()),
+              $element = $(element),
+              $childrenToHide = $element.children(":not(div.loader)"),
+              $loader = $element.find("div.loader");
+
+          if (isLoading) {
+              $childrenToHide.css("visibility", "hidden").attr("disabled", "disabled");
+              $loader.show();
+          }
+          else {
+              $loader.fadeOut("fast");
+              $childrenToHide.css("visibility", "visible").removeAttr("disabled").show();
+          }
+      }
+  };
 
   var Plugin = function Plugin(rawPlugin, configManager) {
     var self = this;
@@ -65,17 +120,35 @@
     $('#plugin-finder-settings').load(jsFileLocation + '../settings.html', function () {
       //Get plugins from somewhere and bind them somewhere
       ko.applyBindings(self.model, document.getElementById('pluginFinder-settings'));
+
+      $('#collapsePluginFinder').on('show', function (e) {
+        if (self.model.cachedAvailablePlugins.length==0){
+          self.model.isLoading(true);
+          self.cockpit.socket.emit('plugin-finder.search','');
+        }
+       });
+    });
+
+    this.model.install.subscribe(function(plugin){
+      self.cockpit.socket.emit('plugin-finder.install',plugin.name());
+    });
+
+    this.model.requestedPluginDetail.subscribe(function(plugin){
+      window.open("http://bower.io/search/?q="+plugin.name(),"bowerInfo");
     });
 
     self.cockpit.socket.on('pluginfindersearchresults', function(results){
+
       console.log('evaluating plugin for pluginmanager');
       results.forEach(function (plugin) {
         var plg = new Plugin(plugin, configManager);
         self.model.availablePlugins.push(plg);
         self.model.cachedAvailablePlugins.push(plg)
       });
-
+      self.model.isLoading(false);
     });
+
+
   };
   window.Cockpit.plugins.push(PluginFinder);
 }(window, jQuery));
