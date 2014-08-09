@@ -4,6 +4,6 @@
     "bower": "^1.3.3"
   },
   "scripts": {
-    "bower": "bower install"
+    "bower": "./node_modules/bower/bin/bower --config.interactive=false --allow-root install"
   }
 }
