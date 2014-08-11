@@ -23,7 +23,7 @@ function pluginFinder(name, deps) {
     socket.on('plugin-finder.search', function (name) {
       console.log('performing search for plugins');
       bower.commands
-      .search('plugin',{})//.search('openrov-plugin-'+ name, {})
+      .search('openrov-plugin-'+ name, {})
       .on('end', function (results) {
           console.log('sending plugins list to browser');
           client.emit('pluginfindersearchresults',results);
@@ -31,9 +31,6 @@ function pluginFinder(name, deps) {
     });
 
     socket.on('plugin-finder.install', function (name) {
-      var originaldir = process.cwd();
-      process.chdir('/usr/share/cockpit');
-      console.log('New directory: ' + process.cwd());
       bower.commands
       .install([name], { save: false}, { cwd: '/usr/share/cockpit' })
       .on('error', function(err){
@@ -45,8 +42,6 @@ function pluginFinder(name, deps) {
       .on('end', function(installed){
         console.log('done processing plugin install');
         client.emit('pluginfinderinstallresults',installed);
-        process.chdir(originaldir);
-        console.log(installed);
       });
 
     });
