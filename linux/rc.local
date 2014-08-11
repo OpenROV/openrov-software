@@ -19,27 +19,28 @@ if [ -f /var/.RESIZE_ROOT_PARTITION ]; then
   rm /var/.RESIZE_ROOT_PARTITION
   touch /var/.RESIZE_ROOT
 
-  echo 255 > /sys/class/leds/beaglebone\:green\:heartbeat/trigger || true
-  echo 255 > /sys/class/leds/beaglebone\:green\:mmc0/trigger || true
+  echo 255 > /sys/class/leds/beaglebone\:green\:heartbeat/brightness || true
+  echo 255 > /sys/class/leds/beaglebone\:green\:mmc0/brightness || true
   /opt/openrov/cockpit/linux/expand_root_partition.sh
   # the expand script initiates a reboot
   exit 0
 fi
 
 if [ -f /var/.RESIZE_ROOT ]; then
-  echo 255 > /sys/class/leds/beaglebone\:green\:heartbeat/trigger || true
-  echo 0 > /sys/class/leds/beaglebone\:green\:mmc0/trigger || true
+  echo 255 > /sys/class/leds/beaglebone\:green\:heartbeat/brightness || true
+  echo 0 > /sys/class/leds/beaglebone\:green\:mmc0/brightness || true
   echo 255 > /sys/class/leds/beaglebone\:green\:usr2/brightness || true
   echo 0 > /sys/class/leds/beaglebone\:green\:usr3/brightness || true
   resize2fs /dev/mmcblk0p2
   rm /var/.RESIZE_ROOT
+  # done, we can start normaly
 fi
 
 if [ ! -f /var/swapfile ]; then
   bash /opt/openrov/cockpit/linux/addswapfile.sh
 fi
 
-/opt/openrov/linux/knight-rider.sh & 
+/opt/openrov/cockpit/linux/knight-rider.sh & 
  
 # load the device tree overlay for pin 25 (RESET) and SPI
 CAPEMGR=$( find /sys/devices/ -name bone_capemgr* | head -n 1 )
