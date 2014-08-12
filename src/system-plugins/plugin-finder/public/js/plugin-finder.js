@@ -7,6 +7,7 @@
     self.availablePlugins = ko.observableArray();
     self.query = ko.observable('');
     self.isLoading = ko.observable(false);
+    self.isInstalling = ko.observable(false);
     self.install = ko.observable('');
     self.requestedPluginDetail = ko.observable('');
 
@@ -87,6 +88,9 @@
     self.url = ko.computed(function () {
       return self.rawPlugin.url;
     });
+    self.homepage = ko.observable('');
+    self.description = ko.observable('');
+    self.raiting = ko.observable('');
     //Get data from server
     /*configManager.get(self.name(), function (pluginConfig) {
       if (pluginConfig != undefined && pluginConfig.isEnabled != undefined) {
@@ -103,6 +107,13 @@
       }
       self.config.isEnabled = newIsEnabled.toString();
       configManager.set(self.name(), self.config);
+    });
+
+    var giturl = self.rawPlugin.url.replace('.git','').replace('git://github.com/','https://api.github.com/repos/')
+    $.getJSON( giturl, function( data ) {
+      self.description(data.description);
+      self.raiting(data.stargazers_count);
+      self.homepage(data.homepage != null ? data.homepage : data.html_url);
     });
   };
 
@@ -130,6 +141,7 @@
     });
 
     this.model.install.subscribe(function(plugin){
+      self.model.isInstalling(true);
       self.cockpit.socket.emit('plugin-finder.install',plugin.name());
     });
 
@@ -143,9 +155,22 @@
       results.forEach(function (plugin) {
         var plg = new Plugin(plugin, configManager);
         self.model.availablePlugins.push(plg);
-        self.model.cachedAvailablePlugins.push(plg)
+        self.model.cachedAvailablePlugins.push(plg);
       });
       self.model.isLoading(false);
+    });
+
+    self.cockpit.socket.on('pluginfinderinstallresults', function(result){
+      console.log(result);
+      self.model.isInstalling(false);
+    });
+
+    self.cockpit.socket.on('pluginfinderinstallstatus', function(status){
+      console.log(status);
+    });
+
+    self.cockpit.socket.on('pluginfinderrestartRequired', function(){
+      alert('Plugin Installed, you will need to refresh the browser to load the plugin.');
     });
 
 

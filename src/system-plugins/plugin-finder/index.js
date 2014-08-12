@@ -38,10 +38,18 @@ function pluginFinder(name, deps) {
       })
       .on('log', function(info){
           console.log(info);
+          client.emit('pluginfinderinstallstatus',info);
       })
       .on('end', function(installed){
         console.log('done processing plugin install');
         client.emit('pluginfinderinstallresults',installed);
+        client.emit('pluginfinderrestartRequired');
+        //There is a bug with bower, possibly around re-installing
+        //that causes the CPU to max out forever. This restart
+        //is as much a work-around as it is needed to load the
+        //server-side aspects of the plugin.
+        console.log("intentional restart");
+      	setTimeout(process.exit(17),5000);
       });
 
     });
