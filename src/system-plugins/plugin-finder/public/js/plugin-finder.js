@@ -83,7 +83,7 @@
     self.config = {};
     self.isEnabled = ko.observable(true);
     self.name = ko.computed(function () {
-      return self.rawPlugin.name;
+      return self.rawPlugin.name.replace('openrov-plugin-','');
     });
     self.url = ko.computed(function () {
       return self.rawPlugin.url;
@@ -170,7 +170,7 @@
     });
 
     self.cockpit.socket.on('pluginfinderrestartRequired', function(){
-      alert('Plugin Installed, you will need to refresh the browser to load the plugin.');
+      alert('Plugin Installed, you will need to refresh the browser to load the plugin. ');
     });
 
 
