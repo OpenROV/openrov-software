@@ -27,6 +27,12 @@ We designed the onboard video platform using several key technologies:
 
 Combining these great technologies provides a lot of power and room for future growth.  But is also provides well documented means to extend OpenROV.  With Node.js and Socket.io, not only are we able to stream video to a web browser by updating an image, but we are also able to control the ROV and view valuable sensor information.  This is just the beginning.  
 
+Key Related Projects
+----------------
+
+* The firmware for the arduino can be found in [openrov/openrov-software-arduino](https://github.com/OpenROV/openrov-software-arduino) in the /OpenROV project.
+* The dashboard project can be found in [openrov/openrov-dashboard](https://github.com/OpenROV/openrov-dashboard)
+
 Note on Repository Branches
 ---------------------------
 
@@ -93,6 +99,11 @@ The easiest way to upgrade your installation is to ssh on to
 3) sudo ./update.sh
 
 This will go to the github repository and pull the latest code. You may need to reboot after the update.  There is a known issue where the serial.io project sometimes fails to compile.  You can ignore that, but you may have to try again if it aborts the update.
+
+Plugins
+------------
+You can create your own plugins and share them with the community. Take a look at our [openrov-grunt-init-plugin](https://github.com/openrov/openrov-grunt-init-plugin) project.  
+
 
 How to Contribute
 ------------
