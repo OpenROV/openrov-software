@@ -9,6 +9,7 @@
     self.isLoading = ko.observable(false);
     self.isInstalling = ko.observable(false);
     self.install = ko.observable('');
+    self.uninstall = ko.observable('');
     self.requestedPluginDetail = ko.observable('');
 
     self.query.subscribe(function(value) {
@@ -25,6 +26,10 @@
 
     self.installPlugin = function (plugin) {
       self.install(plugin);
+    };
+
+    self.uninstallPlugin = function (plugin) {
+      self.uninstall(plugin);
     };
 
     self.launchPluginDetail = function (plugin) {
@@ -91,6 +96,9 @@
     self.homepage = ko.observable('');
     self.description = ko.observable('');
     self.raiting = ko.observable('');
+    self.installed = ko.computed(function () {
+      return self.rawPlugin.InstalledOnROV === true ? true : false;
+    });
     //Get data from server
     /*configManager.get(self.name(), function (pluginConfig) {
       if (pluginConfig != undefined && pluginConfig.isEnabled != undefined) {
@@ -142,7 +150,12 @@
 
     this.model.install.subscribe(function(plugin){
       self.model.isInstalling(true);
-      self.cockpit.socket.emit('plugin-finder.install',plugin.name());
+      self.cockpit.socket.emit('plugin-finder.install',plugin.rawPlugin.name);
+    });
+
+    this.model.uninstall.subscribe(function(plugin){
+      self.model.isInstalling(true);
+      self.cockpit.socket.emit('plugin-finder.uninstall',plugin.rawPlugin.name);
     });
 
     this.model.requestedPluginDetail.subscribe(function(plugin){
@@ -161,6 +174,11 @@
     });
 
     self.cockpit.socket.on('pluginfinderinstallresults', function(result){
+      console.log(result);
+      self.model.isInstalling(false);
+    });
+
+    self.cockpit.socket.on('pluginfinderuninstallresults', function(result){
       console.log(result);
       self.model.isInstalling(false);
     });

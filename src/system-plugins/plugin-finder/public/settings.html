@@ -18,7 +18,9 @@
                               <span class="badge" ><span  data-bind="text: raiting"></span> stars</span>
                         </td>
                         <td>
-                          <button type="button" class="btn btn-xs btn-default pull-right" data-bind="click: $parent.installPlugin">Install</button>
+                          <button type="button" class="btn btn-xs btn-default pull-right hide" data-bind="click: $parent.installPlugin, style: { display: installed() === false ? 'inherit' : ''}">Install</button>
+                          <button type="button" class="btn btn-xs btn-default pull-right hide" data-bind="click: $parent.uninstallPlugin, style: { display: installed() === true ? 'inherit' : ''}">Uninstall</button>
+
                         </td>
                     </tr>
                 </tbody>
