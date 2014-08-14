@@ -22,6 +22,7 @@ app.configure(function () {
   app.use(express.logger('dev'));
   app.use(app.router);
   app.use('/components', express.static(path.join(__dirname, 'bower_components')));
+  app.use('/plugin_components', express.static('/usr/share/cockpit/bower_components'));  
 });
 // Keep track of plugins js and css to load them in the view
 var scripts = [], styles = [];
@@ -188,7 +189,7 @@ var loader = new PluginLoader();
 loader.loadPlugins(path.join(__dirname, 'system-plugins'), '/system-plugin', deps, addPluginAssets);
 loader.loadPlugins(path.join(__dirname, 'plugins'), '/plugin', deps, addPluginAssets);
 mkdirp('/usr/share/cockpit/bower_components');
-loader.loadPlugins('/usr/share/cockpit/bower_components', '/community-plugin', deps, addPluginAssets);
+loader.loadPlugins('/usr/share/cockpit/bower_components', '/community-plugin', deps, addPluginAssets, function(file){return file.substring(0, 15) === "openrov-plugin-"});
 
 
 controller.start();
