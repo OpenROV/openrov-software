@@ -1,4 +1,4 @@
-function example(name, deps) {
-  console.log('This is where plugin code would execute in the node process.');
+function serialnumber(name, deps) {
+  console.log('Serialnumber plugin loaded.');
 }
-module.exports = example;
+module.exports = serialnumber;
