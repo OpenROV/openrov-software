@@ -1,9 +1,10 @@
 (function (window, $, undefined) {
   'use strict';
+  var serialnumberNs = namespace('pluginlugin.serialnumber');
 
-  var Serialnumber;
-  Serialnumber = function Serialnumber(cockpit) {
+  serialnumberNs.Serialnumber = function (cockpit) {
     var self = this;
+    self.config = new serialnumberNs.Config();
 
     console.log('Loading Serialnumber plugin.');
 
@@ -32,11 +33,22 @@
         self.model.originalTitle() :
         self.model.originalTitle() + " | #" + self.model.rovSerial()
     });
+    var serialsLoaded = false;
+    self.config.getSerials(function(serials) {
+      self.model.boardSerial(serials.board);
+      self.model.rovSerial(serials.rov);
+      serialsLoaded = true;
+    });
     self.model.rovSerial.subscribe(
       function(newValue) {
-        // save to server
-        self.model.isSaved(true);
-        setTimeout(function() { self.model.isSaved(false); }, 1500);
+        if (serialsLoaded) {
+          self.config.setRovSerial(newValue, function () {
+            self.model.isSaved(true);
+            setTimeout(function () {
+              self.model.isSaved(false);
+            }, 1500);
+          });
+        }
       });
 
     $('#plugin-settings').append('<div id="serialnumber-settings"></div>');
@@ -54,5 +66,5 @@
     ko.applyBindings(self.model, document.getElementById('serialnumber-titel'));
   };
 
-  window.Cockpit.plugins.push(Serialnumber);
+  window.Cockpit.plugins.push(serialnumberNs.Serialnumber);
 }(window, jQuery));

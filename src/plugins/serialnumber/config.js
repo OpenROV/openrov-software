@@ -1,7 +1,7 @@
 var spawn = require('child_process').spawn;
 
 var PREFERENCES = 'plugins:serialnumber';
-function api(deps) {
+function config(deps) {
   var self = this;
   self.preferences = {};
 
@@ -18,13 +18,13 @@ function api(deps) {
   self.register = function() {
     self.preferences = getPreferences(deps.config);
 
-    deps.app.get('/plugin/serialnumber', function (req, res) {
+    deps.app.get('/plugin/serialnumber/config/', function (req, res) {
       res.send( self.preferences );
     });
-    deps.app.get('/plugin/serialnumber/:property', function (req, res) {
+    deps.app.get('/plugin/serialnumber/config/:property', function (req, res) {
       res.send(self.preferences[req.params.property]);
     });
-    deps.app.post('/plugin/serialnumber/rov/:serial', function (req, res) {
+    deps.app.post('/plugin/serialnumber/config/rov/:serial', function (req, res) {
       self.preferences.rov = req.params.serial;
       deps.config.preferences.set(PREFERENCES, { rov: self.preferences.rov } );
       deps.config.savePreferences();
@@ -52,4 +52,4 @@ function api(deps) {
     });
   };
 }
-module.exports = api;
+module.exports = config;

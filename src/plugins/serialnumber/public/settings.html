@@ -1,3 +1,4 @@
+
 <div id="serialnumber-settings-content">
   <div class="accordion-group">
     <div class="accordion-heading">
@@ -9,8 +10,8 @@
       <div class="accordion-inner">
         <div>
           <strong>ROV board serial number: </strong><span data-bind="text: boardSerial"></span><br>
-          <strong>ROV body serial number: </strong><input type="text" class="input-medium" data-bind="value: rovSerial">
-          <span class="span4" data-bind="fadeVisible: { value: $data.isSaved, fadeIn: false} "><i class="icon-ok" title="Saved!"></i> Saved!</span>
+          <strong>ROV body serial number: </strong><input type="text" class="input-mini" data-bind="value: rovSerial">
+          <span data-bind="fadeVisible: { value: $data.isSaved, fadeIn: false} "><i class="icon-ok" title="Saved!"></i> Saved!</span>
         </div>
       </div>
     </div>

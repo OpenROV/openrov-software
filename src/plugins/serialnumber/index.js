@@ -1,8 +1,8 @@
-var API = require('./api');
+var Config = require('./config');
 function serialnumber(name, deps) {
   console.log('Serialnumber plugin loaded.');
-  var api = new API(deps);
-  api.register();
-  api.loadBoardSerial();
+  var config = new Config(deps);
+  config.register();
+  config.loadBoardSerial();
 }
 module.exports = serialnumber;
