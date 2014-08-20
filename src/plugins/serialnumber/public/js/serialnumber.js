@@ -27,7 +27,9 @@
       originalTitle: ko.observable()
     };
     this.model.title = ko.computed(function() {
-      return self.model.rovSerial() === "" ? self.model.originalTitle() : self.model.originalTitle() + " | #" + self.model.rovSerial()
+      return self.model.rovSerial() === "" ?
+        self.model.originalTitle() :
+        self.model.originalTitle() + " | #" + self.model.rovSerial()
     });
 
     $('#plugin-settings').append('<div id="serialnumber-settings"></div>');
@@ -38,7 +40,6 @@
 
     var title = $('head title');
     self.model.originalTitle(title.text());
-
     title.attr({
       id: "serialnumber-titel",
       'data-bind': 'text: title'
