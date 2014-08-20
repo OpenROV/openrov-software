@@ -21,16 +21,23 @@
     this.disable = function () {
     };
 
-    this.model = {
+    self.model = {
       boardSerial: ko.observable("N/A"),
       rovSerial: ko.observable(""),
-      originalTitle: ko.observable()
+      originalTitle: ko.observable(),
+      isSaved: ko.observable(false)
     };
-    this.model.title = ko.computed(function() {
+    self.model.title = ko.computed(function() {
       return self.model.rovSerial() === "" ?
         self.model.originalTitle() :
         self.model.originalTitle() + " | #" + self.model.rovSerial()
     });
+    self.model.rovSerial.subscribe(
+      function(newValue) {
+        // save to server
+        self.model.isSaved(true);
+        setTimeout(function() { self.model.isSaved(false); }, 1500);
+      });
 
     $('#plugin-settings').append('<div id="serialnumber-settings"></div>');
     var jsFileLocation = urlOfJsFile('serialnumber.js');
