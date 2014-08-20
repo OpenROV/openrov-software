@@ -19,6 +19,12 @@
     };
     this.disable = function () {
     };
+
+    $('#plugin-settings').append('<div id="serialnumber-settings"></div>');
+    var jsFileLocation = urlOfJsFile('serialnumber.js');
+    $('#serialnumber-settings').load(jsFileLocation + '../settings.html', function () {
+      ko.applyBindings(self.model, document.getElementById('serialnumber-settings'));
+    });
   };
 
   window.Cockpit.plugins.push(Serialnumber);
