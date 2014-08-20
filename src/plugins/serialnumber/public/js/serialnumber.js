@@ -3,6 +3,7 @@
 
   var Serialnumber;
   Serialnumber = function Serialnumber(cockpit) {
+    var self = this;
 
     console.log('Loading Serialnumber plugin.');
 
@@ -20,11 +21,29 @@
     this.disable = function () {
     };
 
+    this.model = {
+      boardSerial: ko.observable("N/A"),
+      rovSerial: ko.observable(""),
+      originalTitle: ko.observable()
+    };
+    this.model.title = ko.computed(function() {
+      return self.model.rovSerial() === "" ? self.model.originalTitle() : self.model.originalTitle() + " | #" + self.model.rovSerial()
+    });
+
     $('#plugin-settings').append('<div id="serialnumber-settings"></div>');
     var jsFileLocation = urlOfJsFile('serialnumber.js');
     $('#serialnumber-settings').load(jsFileLocation + '../settings.html', function () {
       ko.applyBindings(self.model, document.getElementById('serialnumber-settings'));
     });
+
+    var title = $('head title');
+    self.model.originalTitle(title.text());
+
+    title.attr({
+      id: "serialnumber-titel",
+      'data-bind': 'text: title'
+    });
+    ko.applyBindings(self.model, document.getElementById('serialnumber-titel'));
   };
 
   window.Cockpit.plugins.push(Serialnumber);
