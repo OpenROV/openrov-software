@@ -8,8 +8,8 @@ function api(deps) {
   function getPreferences(config) {
     var preferences = config.preferences.get(PREFERENCES);
     if (preferences == undefined) {
-      preferences = { rovserial: '123' };
-      config.preferences.set(PREFERENCES, preferences);
+      preferences = { rov: '123', board: 'N/A' };
+      config.preferences.set(PREFERENCES, { rov: preferences.rov } );
     }
     console.log('Serialnumber settings loaded preferences: ' + JSON.stringify(preferences));
     return preferences;
@@ -19,14 +19,14 @@ function api(deps) {
     self.preferences = getPreferences(deps.config);
 
     deps.app.get('/plugin/serialnumber', function (req, res) {
-      res.send(self.preferences);
+      res.send( self.preferences );
     });
     deps.app.get('/plugin/serialnumber/:property', function (req, res) {
       res.send(self.preferences[req.params.property]);
     });
-    deps.app.post('/plugin/serialnumber/rovserial/:serial', function (req, res) {
-      self.preferences.rovserial = req.params.serial;
-      deps.config.preferences.set(PREFERENCES, self.preferences);
+    deps.app.post('/plugin/serialnumber/rov/:serial', function (req, res) {
+      self.preferences.rov = req.params.serial;
+      deps.config.preferences.set(PREFERENCES, { rov: self.preferences.rov } );
       deps.config.savePreferences();
 
       res.status(200);
@@ -35,29 +35,21 @@ function api(deps) {
   };
 
   self.loadBoardSerial = function() {
-/*    status = spawn('sudo', [ '.sh']);
-    status.stderr.on('data', function (data) {
+    var status = spawn('sh', [ __dirname + '/tests/mock-bb-show-serial.sh']);
+    status.stdout.on('data', function (data) {
       console.log('stderr: ' + data);
+      var serial = data.toString();
+      var parts = serial.split(':');
+      if (parts.length > 0) {
+        serial = parts[parts.length -1].trim();
+      }
+      self.preferences.board = serial;
     });
     status.on('close', function (code) {
-      if (code === 0) {
-        engine.emit('message', {
-          key: statusKey,
-          value: 'Running'
-        });
-      } else if (code === 1) {
-        engine.emit('message', {
-          key: statusKey,
-          value: 'Stopped'
-        });
-      } else {
-        engine.emit('message', {
-          key: statusKey,
-          value: 'Unknow'
-        });
+      if (code !== 0) {
+        self.preferences.board = "ERROR";
       }
     });
-*/
   };
 }
 module.exports = api;
