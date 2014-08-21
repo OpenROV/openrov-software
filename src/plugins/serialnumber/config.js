@@ -4,6 +4,7 @@ var PREFERENCES = 'plugins:serialnumber';
 function config(deps) {
   var self = this;
   self.preferences = {};
+  self.showSerialScript = __dirname + '/scripts/' + process.env.USE_MOCK === 'true' ? 'mock-' : 'showserial.sh';
 
   function getPreferences(config) {
     var preferences = config.preferences.get(PREFERENCES);
@@ -35,7 +36,7 @@ function config(deps) {
   };
 
   self.loadBoardSerial = function() {
-    var status = spawn('sh', [ __dirname + '/tests/mock-bb-show-serial.sh']);
+    var status = spawn('sh', [ self.showSerialScript ]);
     status.stdout.on('data', function (data) {
       console.log('stderr: ' + data);
       var serial = data.toString();
