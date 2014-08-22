@@ -12,10 +12,11 @@ child.on('exit', function () {
 });
 child.on('exit:code', function(err){
     console.log('detected error');
-      if (err==17){  //Graceful restarts of the app need to process.exit(17)
-    console.log('detected intentional restart');
-    child.times+=-1;
-}
+    if (err==17){  //Graceful restarts of the app need to process.exit(17)
+        console.log('detected intentional restart');
+        child.times+=-1;
+    }
+});
 if (process.platform === 'linux') {
   process.on('SIGTERM', function () {
     console.error('got SIGTERM, shutting down...');
