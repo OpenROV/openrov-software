@@ -1,8 +1,4 @@
 <script type="text/html" id="template_capestatus_footercontent">
-  <div class="span1 pull-left">
-    <h6>Connection</h6>
-    <div id="connectionHealth" data-bind="css: { connected: isConnected}"></div>
-  </div>
   <div class="span2 pull-right">
     <h2 data-bind="text: $data.formattedRunTime">time</h2>
     <h4 data-bind="text: $data.theLocaltime"></h4>
@@ -16,6 +12,13 @@
   </div>
   <div class="span2 pull-right">
     <h2 data-bind="text: $data.currentCurrent"></h2>
+  </div>
+</script>
+
+<script type="text/html" id="template_capestatus_connectionHealth">
+  <div class="span1 pull-left">
+    <h6>Connection</h6>
+    <div id="connectionHealth" data-bind="css: { connected: isConnected}"></div>
   </div>
 </script>
 
