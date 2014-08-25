@@ -5,18 +5,15 @@
  *
  */
 var nconf = require('nconf');
+
+//Add your Mock objects here using this same naming convention of library-mock for the mock version.
+//be sure to add it to the expoft at the bottom of this file as well.
 var OpenROVCameraPath = './lib/OpenROVCamera';
 var OpenROVControllerPath = './lib/OpenROVController';
 var FirmwareInstallerPath = './lib/FirmwareInstaller';
 var HardwarePath = './lib/Hardware';
 var argv = require('optimist').argv;
-var getLibPath = function (lib) {
-  var result = lib;
-  if (process.env.USE_MOCK === 'true' || argv.mock !== undefined) {
-    result += '-mock';
-  }
-  return result;
-};
+
 // Will essentially rewrite the file when a change to the defaults are made if there is a parsing error.
 try {
   nconf.use('file', { file: './etc/rovconfig.json' });
@@ -24,7 +21,11 @@ try {
   console.log('Unable to load the configuration file, resetting to defaults');
   console.log(err);
 }
-//just odd enough to recognize as defaults
+
+nconf.env(); //Also look for overrides in environment settings
+
+// Do not change these values in this file for an individual ROV, use the ./etc/rovconfig.json instead
+
 nconf.defaults({
   'deadzone_pos': 0.1,
   'deadzone_neg': -0.1,
@@ -36,7 +37,20 @@ nconf.defaults({
   'thrust_modifier_starbord': 1,
   'thrust_modifier_nport': 2,
   'thrust_modifier_nvertical': -2,
-  'thrust_modifier_nstarbord': 2
+  'thrust_modifier_nstarbord': 2,
+  'debug' : false,
+  'debug_commands' : false,
+  'production' : true,
+  'sample_freq': 20,
+  'dead_zone':  10,
+  'video_frame_rate': 10,
+  'video_resolution': 'SXGA',
+  'video_device': '/dev/video0',
+  'video_port': 8090,
+  'port': 8080,
+  'serial': '/dev/ttyO1',
+  'serial_baud': 115200,
+  'USE_MOCK' : false
 });
 
 function savePreferences() {
@@ -49,19 +63,28 @@ function savePreferences() {
   });
 }
 
+var getLibPath = function (lib) {
+  var result = lib;
+  if (nconf.get('USE_MOCK') === 'true') {
+    result += '-mock';
+  }
+  return result;
+};
+
+
 module.exports = {
-  debug: process.env.NODE_DEBUG !== 'false',
-  debug_commands: false,
-  production: process.env.NODE_ENV || true,
-  sample_freq: process.env.SAMPLE_FREQ && parseInt(process.env.SAMPLE_FREQ) || 20,
-  dead_zone: process.env.DEAD_ZONE && parseInt(process.env.DEAD_ZONE) || 10,
-  video_frame_rate: process.env.VIDEO_FRAME_RATE && parseInt(process.env.VIDEO_FRAME_RATE) || 10,
-  video_resolution: process.env.VIDEO_RESOLUTION || 'SXGA',
-  video_device: process.env.VIDEO_DEVICE || '/dev/video0',
-  video_port: process.env.VIDEO_PORT || 8090,
-  port: process.env.PORT || argv.port || 8080,
-  serial: process.env.SERIAL || '/dev/ttyO1',
-  serial_baud: process.env.SERIAL_BAUD || 115200,
+  debug: nconf.get('debug'),
+  debug_commands: nconf.get('debug_commands'),
+  production: nconf.get('production'),
+  sample_freq: nconf.get('sample_freq'),
+  dead_zone: nconf.get('dead_zone'),
+  video_frame_rate: nconf.get('video_frame_rate'),
+  video_resolution: nconf.get('video_resolution'),
+  video_device: nconf.get('video_device'),
+  video_port: nconf.get('video_port'),
+  port: nconf.get('port'),
+  serial: nconf.get('serial'),
+  serial_baud: nconf.get('serial_baud'),
   preferences: nconf,
   savePreferences: savePreferences,
   OpenROVCamera: getLibPath(OpenROVCameraPath),
