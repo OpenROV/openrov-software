@@ -75,7 +75,9 @@
         <div id="main-row" class="container-fluid full-height">
           <div class="row-fluid full-height">
             <div class="span9 border full-height" id="outter-videocontainer">
-              <mjpeg-video id="video" src='http://192.168.1.138:8090/?action=stream' class='full-height center pagination-centered' border='1'></mjpeg-video>
+              <div id="video-container">
+                <mjpeg-video id="video" src='http://192.168.1.138:8090/?action=stream' class='full-height center pagination-centered' border='1'></mjpeg-video>
+              </div>
             </div>
             <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
               <div id="buttonPanel" class="controller well well-small"></div>
