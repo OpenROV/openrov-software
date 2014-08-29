@@ -67,6 +67,11 @@ $(function () {
     socket.emit('compass_callibrate');
   });
 
+
+  var address = 'http://' + socket.socket.options.host + ':' + CONFIG.video_port + '/?action=stream';
+  $('#video').attr('src', address);
+  console.log('video enabled');
+
   var cockpit = new Cockpit(socket);
   $('#keyboardInstructions').append('<p><i>\\</i> to toggle heads up display</p>');
   cockpit.emit('inputController.register', {
@@ -84,7 +89,3 @@ $('#keyboardpopover').hover(function () {
   $('#keyboardpopover').attr('data-content', $('#keyboardInstructions').html());
 });
 $('[rel=\'popover\']').popover();
-
-var address = 'http://' + socket.socket.options.host + ':' + CONFIG.video_port + '/?action=stream';
-$('#video').attr('src', address);
-console.log('video enabled');
