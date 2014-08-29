@@ -66,8 +66,7 @@ $(function () {
   $('#callibrate_compass').click(function () {
     socket.emit('compass_callibrate');
   });
-  //plugin hooks
-  setupFrameHandling(socket);
+
   var cockpit = new Cockpit(socket);
   $('#keyboardInstructions').append('<p><i>\\</i> to toggle heads up display</p>');
   cockpit.emit('inputController.register', {
