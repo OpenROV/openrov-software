@@ -4,6 +4,6 @@
     "fpsmeter": "~0.3.1",
     "knockout.validation": "~1.0.2",
     "mjpeg-video-webcomponents": "~1.0.2",
-    "core-component-page": "~4.0.0
+    "Polymer": "~0.4.0"
   }
 }
