@@ -66,11 +66,6 @@ io.sockets.on('connection', function (socket) {
     camera.capture();
     socket.emit('videoStarted');
   }
-  controller.updateSetting();
-  setTimeout(function () {
-    controller.requestSettings();
-  }, 1000);
-  controller.requestCapabilities();
   socket.emit('settings', CONFIG.preferences.get());
   socket.on('ping', function (id) {
     socket.emit('pong', id);

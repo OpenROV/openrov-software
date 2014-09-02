@@ -137,15 +137,15 @@ var OpenROVController = function (eventLoop) {
     hardware.write(command);
   };
   controller.notSafeToControl = function () {
-    //Arduino is OK to accept commands
-    if (this.ArduinoFirmwareVersion >= 0.20130314034859)
-      return false;
+    //Arduino is OK to accept commands. After the Capabilities was added, all future updates require
+    //being backward safe compatible (meaning you cannot send a command that does something unexpected but
+    //instead it should do nothing).
     if (this.Capabilities !== 0)
       return false;
     //This feature added after the swap to ms on the Arduino
-    console.log('Audrino is at an incompatible version of firmware. Upgrade required before controls will respond');
-    console.log(this.ArduinoFirmwareVersion);
-    console.log(this.Capabilities);
+    console.log('Waiting for the capability response from Arduino before sending command.');
+    console.log('Arduno Version: ' + this.ArduinoFirmwareVersion);
+    console.log('Capability bitmap: ' + this.Capabilities);
     return true;
   };
   controller.send = function (cmd) {
@@ -221,6 +221,17 @@ var OpenROVController = function (eventLoop) {
     controller.updateSetting();
     logger.log('Opened serial connection after firmware upload');
   });
+
+  controller.updateSetting();
+  //Every few seconds we check to see if capabilities or settings changes on the arduino.
+  //This handles the cases where we have garbled communication or a firmware update of the arduino.
+  controller.requestSettings();
+  controller.requestCapabilities();
+  setInterval(function () {
+    controller.requestSettings();
+    controller.requestCapabilities();
+  }, 30000);
+
   return controller;
 };
 module.exports = OpenROVController;
