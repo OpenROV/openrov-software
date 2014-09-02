@@ -225,10 +225,12 @@ var OpenROVController = function (eventLoop) {
   controller.updateSetting();
   //Every few seconds we check to see if capabilities or settings changes on the arduino.
   //This handles the cases where we have garbled communication or a firmware update of the arduino.
+  controller.requestSettings();
+  controller.requestCapabilities();
   setInterval(function () {
     controller.requestSettings();
     controller.requestCapabilities();
-  }, 3000);
+  }, 30000);
 
   return controller;
 };
