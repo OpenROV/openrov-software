@@ -32,7 +32,7 @@
         history: 20
       });
       self.meter.hide();
-      $('#footercontent').append('<span id=\'fpsmeter2\'></span>');
+      $('#footercontent').append('<span class=\'pull-left\' id=\'fpsmeter2\'></span>');
       self.beagletoBrowserMeter = new FPSMeter($('#fpsmeter2')[0], {
         interval: 1000,
         smoothing: 20,

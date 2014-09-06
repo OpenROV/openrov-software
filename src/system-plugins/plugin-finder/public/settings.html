@@ -1,0 +1,32 @@
+<div id="pluginFinder-settings">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapsePluginFinder">
+                Add new plugins
+            </a>
+        </div>
+        <div id="collapsePluginFinder" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <input placeholder="Filter…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+                <div class="pre-scrollable" data-bind="loadingWhen: isLoading() || isInstalling()">
+                <table class="table table-striped">
+                  <tbody data-bind="foreach: availablePlugins">
+                    <tr>
+                        <td>
+                              <strong><div data-bind="text: name">&nbsp;</div></strong>
+                              <div><span data-bind="text: description">&nbsp;</span> <a target="_blank" data-bind="attr: { href: homepage }">more...</a></div>
+                              <span class="badge" ><span  data-bind="text: raiting"></span> stars</span>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-xs btn-default pull-right hide" data-bind="click: $parent.installPlugin, style: { display: installed() === false ? 'inherit' : ''}">Install</button>
+                          <button type="button" class="btn btn-xs btn-default pull-right hide" data-bind="click: $parent.uninstallPlugin, style: { display: installed() === true ? 'inherit' : ''}">Uninstall</button>
+
+                        </td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

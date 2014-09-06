@@ -139,7 +139,8 @@
     $('#capestatus-templates').load(jsFileLocation + '../ui-templates.html', function () {
       $('#footercontent').prepend('<div id="capestatus_footercontent" data-bind="template: {name: \'template_capestatus_footercontent\'}"></div>');
       ko.applyBindings(self.bindingModel, document.getElementById('capestatus_footercontent'));
-
+      $('#footercontent').prepend('<div id="capestatus_connectionHealth" data-bind="template: {name: \'template_capestatus_connectionHealth\'}"></div>');
+      ko.applyBindings(self.bindingModel, document.getElementById('capestatus_connectionHealth'));
       // these don't belong here IMHO as the rovPilot controls them
       $('#servoTilt').attr("data-bind", "template: { name: 'template_capestatus_servotilt' }");
       $('#navtoolbar').append('<li id="brightnessIndicator" data-bind="attr: { class: $data.brightnessLevel }" ></li>');

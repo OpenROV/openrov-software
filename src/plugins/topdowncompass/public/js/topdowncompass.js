@@ -11,7 +11,7 @@
         this.cockpit = cockpit;
 
         this.compassPanel = $("<div></div>").addClass('topdowncompasspanel');
-        this.compass = $("<div></div>").addClass("topdowncompass");
+        this.compass = $("<div></div>").addClass("topdowncompass").addClass('pull-left');
         this.compass.append($("<div></div>").addClass("compassNeedle"));
 
         this.compassPanel.append(this.compass);
