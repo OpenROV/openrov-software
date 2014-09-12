@@ -227,7 +227,9 @@ var OpenROVController = function (eventLoop) {
   //This handles the cases where we have garbled communication or a firmware update of the arduino.
   controller.requestSettings();
   controller.requestCapabilities();
+
   setInterval(function () {
+    if (!controller.notSafeToControl()) return;
     controller.requestSettings();
     controller.requestCapabilities();
   }, 30000);
