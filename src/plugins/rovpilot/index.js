@@ -27,6 +27,11 @@ function rovpilot(name, deps) {
       console.log('holdDepth_toggle(' + dpt * 100 + ')');
     });
     socket.on('thro', function (x) {
+      //depricated
+      deps.rov.send('thro(' + x * 100 + ')');
+      console.log('thro(' + x * 100+ ')');
+    });
+    socket.on('throttle', function (x) {
       deps.rov.send('thro(' + x * 100 + ')');
       console.log('thro(' + x * 100+ ')');
     });
@@ -37,6 +42,21 @@ function rovpilot(name, deps) {
     socket.on('lift', function (x) {
       deps.rov.send('lift(' + x * 100+ ')');
       console.log('lift(' + x * 100+ ')');
+    });
+    socket.on('pitch', function (x) {
+      deps.rov.send('pitch(' + x * 100+ ')');
+      console.log('pitch(' + x * 100+ ')');
+    });
+    socket.on('roll', function (x) {
+      deps.rov.send('roll(' + x * 100+ ')');
+      console.log('roll(' + x * 100+ ')');
+    });
+
+    socket.on('motor_test', function (controls) {
+      controller.sendMotorTest(controls.port, controls.starbord, controls.vertical);
+    });
+    socket.on('control_update', function (controls) {
+      controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
     });
   });
 }

@@ -25,12 +25,12 @@ COUNTER=0
 
 while [ $COUNTER -lt 9 ]; do
         echo $COUNTER
-        if [ $UPLOAD_REQUIRES_RESET ]
+        if [ "$UPLOAD_REQUIRES_RESET" = "true" ]
 	then
         	(sleep 0.0$COUNTER && /opt/openrov/cockpit/linux/reset.sh 1>&2)
 	fi
     EXITCODE=`$UPLOAD_TO_ATMEGA_COMMAND 1>&2`
-	if [ $? -eq 0 ] 
+	if [ $? -eq 0 ]
 		then
 			echo upload successfull! 1>&2
 			exit 0
