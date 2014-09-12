@@ -70,12 +70,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('ping', function (id) {
     socket.emit('pong', id);
   });
-  socket.on('motor_test', function (controls) {
-    controller.sendMotorTest(controls.port, controls.starbord, controls.vertical);
-  });
-  socket.on('control_update', function (controls) {
-    controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
-  });
+
   socket.on('tilt_update', function (value) {
     controller.sendTilt(value);
   });
