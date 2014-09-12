@@ -69,6 +69,7 @@
       setInterval(function () {
         _self.meter.tick();
       }, 32);
+      //This is now also used for the deadman switch.
       setInterval(function () {
         var _starttime = new Date();
         _self.beagletoBrowserMeter.tickStart();
