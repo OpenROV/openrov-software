@@ -29,7 +29,7 @@
     var self = this;
     self.rawPlugin = rawPlugin;
     self.config = {};
-    self.isEnabled = ko.observable(true);
+    self.isEnabled = ko.observable(typeof  self.rawPlugin.defaultEnabled !== "undefined" ? self.rawPlugin.defaultEnabled : 1);
     self.name = ko.computed(function () {
       return self.rawPlugin.name;
     });
