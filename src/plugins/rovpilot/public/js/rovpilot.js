@@ -7,7 +7,7 @@
     var rov = this;
     // Instance variables
     rov.cockpit = cockpit;
-    rov.power = 0.1;
+    rov.power = 0.25;
     //default to mid power
     rov.vtrim = 0;
     //default to no trim
@@ -628,7 +628,7 @@
     this.positions.pitch = value;
   };
   ROVpilot.prototype.setRollControl = function setRollControl(value) {
-    this.positions.roll = value;  
+    this.positions.roll = value;
   };
 
   ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel() {
@@ -642,16 +642,16 @@
 
     switch (value) {
       case 1:
-        this.power = 0.05;
+        this.power = 0.12;
         break;
       case 2:
-        this.power = 0.1;
+        this.power = 0.25;
         break;
       case 3:
-        this.power = 0.2;
+        this.power = 0.40;
         break;
       case 4:
-        this.power = 0.5;
+        this.power = 0.70;
         break;
       case 5:
         this.power = 1;
