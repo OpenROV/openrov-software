@@ -22,14 +22,18 @@
     var self = this;
 
     this.dashboardSocket = window.io("http://"+window.location.hostname + ':8081/IPC');
-    this.dashboardSocket .on('connect', function () {
+    this.dashboardSocket.on('connect', function () {
       alert('connect');
       self.dashboardSocket.emit('Software.Cockpit.message', 'hello');
     });
     this.dashboardSocket.on('Software.Cockpit.answer', function(message) {
       alert(message);
     });
-    this.model = new SoftwareUpdateModel(this.dashboardSocket);
+    this.dashboardSocket.on('disconnect', function () {
+      console.log('disconnect');
+    });
+
+      this.model = new SoftwareUpdateModel(this.dashboardSocket);
 
     console.log('Loading Software update plugin.');
     this.cockpit = cockpit;
