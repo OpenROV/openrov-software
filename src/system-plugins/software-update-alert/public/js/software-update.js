@@ -33,7 +33,6 @@
     };
 
     configManager.getShowAlerts(function(showAlerts){
-      alert(showAlerts);
       self.showAlerts(showAlerts)
     });
 
@@ -82,16 +81,20 @@
       ko.applyBindings(self.model, document.getElementById('software-update-settings'));
     });
 
-    checker.checkForUpdates(function(updates) {
-      if (updates && updates.length > 0) {
-        $('body')
-          .prepend(
-            '<div id="softwareUpdateAlert" class="alert alert-success pull-right" >' +
-            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-            '<strong>Software updates!</strong> ' +
-              '<a href="' + dashboardUrl + '/#/software" target="_blank" onclick="$(\'#softwareUpdateAlert\').alert(\'close\')">' +
-              'There is new software available</a>' +
-            '</div>');
+    this.model.showAlerts.subscribe(function(newValue) {
+      if (newValue) {
+        checker.checkForUpdates(function (updates) {
+          if (updates && updates.length > 0) {
+            $('body')
+              .prepend(
+                '<div id="softwareUpdateAlert" class="alert alert-success pull-right" >' +
+                '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                '<strong>Software updates!</strong> ' +
+                '<a href="' + configManager.dashboardUrl + '/#/software" target="_blank" onclick="$(\'#softwareUpdateAlert\').alert(\'close\')">' +
+                'There is new software available</a>' +
+                '</div>');
+          }
+        });
       }
     });
   };

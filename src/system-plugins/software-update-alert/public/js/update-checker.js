@@ -10,7 +10,8 @@
 
     self.checkForUpdates = function(callback){
       config.getSelectedBranches(function(selectedBranches){
-        $.post(config.dashboardUrl + "/plugin/software/updates", { branches: selectedBranches },
+        alert(JSON.stringify(selectedBranches));
+        $.post(config.dashboardUrl + "/plugin/software/updates", selectedBranches,
         function(updates) {
           callback(updates);
         });
