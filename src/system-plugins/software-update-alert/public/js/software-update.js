@@ -11,22 +11,33 @@
       return true;
     }
   };
-  var SoftwareUpdateModel = function SoftwareUpdateModel(socket) {
+  var SoftwareUpdateModel = function SoftwareUpdateModel(socket, updateChecker) {
     var self = this;
+
     self.socket = socket;
     self.showAlerts = ko.observable();
     self.branches = ko.observableArray();
-    self.send = function() { self.socket.emit('Software.Cockpit.message', 'hello');}
+
+    updateChecker.getBranches(function(branches) {
+      self.branches.removeAll();
+      branches.forEach(function (branch) {
+        self.branches.push({ name: branch, selected: false});
+      });
+    })
   };
+
   var SoftwareUpdater = function SoftwareUpdater(cockpit) {
     var self = this;
+
 
     this.dashboardSocket = window.io("http://"+window.location.hostname + ':8081/IPC');
     this.dashboardSocket.on('Software.Cockpit.answer', function(message) {
       alert(message);
     });
 
-    this.model = new SoftwareUpdateModel(this.dashboardSocket);
+    var dashboardUrl= 'http://localhost:8081';
+    var checker = new SoftwareUpdateChecker({dashboardUrl: dashboardUrl });
+    this.model = new SoftwareUpdateModel(this.dashboardSocket, checker);
 
     console.log('Loading Software update plugin.');
     this.cockpit = cockpit;
@@ -39,8 +50,6 @@
       ko.applyBindings(self.model, document.getElementById('software-update-settings'));
     });
 
-    var dashboardUrl= 'http://localhost:8081';
-    var checker = new SoftwareUpdateChecker({dashboardUrl: dashboardUrl });
     checker.checkForUpdates(function(updates) {
       if (updates && updates.length > 0) {
         $('body')

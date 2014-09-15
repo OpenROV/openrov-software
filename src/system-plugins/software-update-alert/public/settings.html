@@ -11,12 +11,13 @@
                 <label>
                   <input type="checkbox">Show alerts on new updates
                 </label>
-                <button data-bind="click: send">Send</button>
               </div>
               <div>
-                <strong>Branches:</strong>
-                <ul>
-                </ul>
+                <strong>Show updates for these branches:</strong>
+                <label data-bind="foreach: branches">
+                  <input type="checkbox"> <span data-bind="text: name, checked: selected"></span>
+                </label>
+
               </div>
             </div>
         </div>

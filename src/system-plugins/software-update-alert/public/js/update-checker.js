@@ -3,9 +3,13 @@
 
   function SoftwareUpdateChecker(config) {
     var self = this;
-    self.checkForUpdates = function(callback){
 
-      $.get( config.dashboardUrl + "/plugin/software/branches", function(branches ) {
+    self.getBranches = function(callback) {
+      $.get(config.dashboardUrl + "/plugin/software/branches", callback );
+    };
+
+    self.checkForUpdates = function(callback){
+      self.getBranches(function(branches) {
         $.post(config.dashboardUrl + "/plugin/software/updates", { branches: branches }, function(updates) {
           callback(updates);
         });
