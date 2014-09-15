@@ -6,17 +6,18 @@ function softwareUpdate(name, deps) {
   deps.app.get('/system-plugin/software-update/config', function (req, res) {
     res.send(preferences);
   });
-//  deps.app.get('/system-plugin/plugin-manager/config/:pluginName', function (req, res) {
-//    res.send(preferences[req.params.pluginName]);
-//  });
-//  deps.app.post('/system-plugin/software-update/config/:pluginName', function (req, res) {
-//    console.log(typeof req.body.isEnabled);
-//    preferences[req.params.pluginName] = req.body;
-//    res.status(200);
-//    res.send(preferences[req.params.pluginName]);
-//    deps.config.preferences.set(PREFERENCES, preferences);
-//    deps.config.savePreferences();
-//  });
+
+  deps.app.get('/system-plugin/software-update/config/selectedBranches', function (req, res) {
+    res.send(preferences['selectedBranches']);
+  });
+  deps.app.post('/system-plugin/software-update/config/selectedBranches', function (req, res) {
+    preferences['selectedBranches'] = req.body;
+    res.status(200);
+    res.send(preferences['selectedBranches']);
+    deps.config.preferences.set(PREFERENCES, preferences);
+    deps.config.savePreferences();
+  });
+
 }
 function getPreferences(config) {
   var preferences = config.preferences.get(PREFERENCES);
