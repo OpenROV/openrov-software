@@ -1,0 +1,5 @@
+#softwareUpdateAlert {
+    position: absolute;
+    top: 55px;
+    z-index: 110;
+}

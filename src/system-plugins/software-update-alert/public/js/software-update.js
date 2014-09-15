@@ -39,8 +39,20 @@
       ko.applyBindings(self.model, document.getElementById('software-update-settings'));
     });
 
-    var checker = new SoftwareUpdateChecker({dashboardUrl: 'http://localhost:8081'});
-    checker.checkForUpdates(function(updates) {alert(updates)});
+    var dashboardUrl= 'http://localhost:8081';
+    var checker = new SoftwareUpdateChecker({dashboardUrl: dashboardUrl });
+    checker.checkForUpdates(function(updates) {
+      if (updates && updates.length > 0) {
+        $('body')
+          .prepend(
+            '<div id="softwareUpdateAlert" class="alert alert-success pull-right" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<strong>Software updates!</strong> ' +
+              '<a href="' + dashboardUrl + '/#/software" target="_blank" onclick="$(\'#softwareUpdateAlert\').alert(\'close\')">' +
+              'There is new software available</a>' +
+            '</div>');
+      }
+    });
   };
   window.Cockpit.plugins.push(SoftwareUpdater);
 }(window, jQuery));
