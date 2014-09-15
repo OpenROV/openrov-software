@@ -9,16 +9,17 @@
             <div class="accordion-inner">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox">Show alerts on new updates
+                  <input type="checkbox" data-bind="checked: showAlerts">Show alerts on new updates
                 </label>
               </div>
               <div>
                 <strong>Show updates for these branches:</strong>
-                <label data-bind="foreach: branches">
-                  <input type="checkbox" data-bind="value: name, checked: selected, click: $root.changed">
-                  <span data-bind="text: name, click: $root.changed"></span>
-                </label>
-                <br>
+                <div data-bind="foreach: branches">
+                  <label>
+                    <input type="checkbox" data-bind="value: name, checked: selected, click: $root.changed">
+                    <span data-bind="text: name, click: $root.changed"></span>
+                  </label>
+                </div>
                 <span data-bind="fadeVisible: { value: $data.isSaved, fadeIn: false} "><i class="icon-ok" title="Saved!"></i> Saved!</span>
               </div>
             </div>

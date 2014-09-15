@@ -9,12 +9,12 @@
     };
 
     self.checkForUpdates = function(callback){
-      self.getBranches(function(branches) {
-        $.post(config.dashboardUrl + "/plugin/software/updates", { branches: branches }, function(updates) {
+      config.getSelectedBranches(function(selectedBranches){
+        $.post(config.dashboardUrl + "/plugin/software/updates", { branches: selectedBranches },
+        function(updates) {
           callback(updates);
         });
       });
-
       return { updates: false }
     };
 

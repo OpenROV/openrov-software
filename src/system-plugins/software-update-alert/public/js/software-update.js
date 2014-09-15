@@ -11,11 +11,11 @@
       return true;
     }
   };
-  var SoftwareUpdateModel = function SoftwareUpdateModel(socket, updateChecker, configManger) {
+  var SoftwareUpdateModel = function SoftwareUpdateModel(socket, updateChecker, configManager) {
     var self = this;
 
     self.socket = socket;
-    self.showAlerts = ko.observable();
+    self.showAlerts = ko.observable(false);
     self.branches = ko.observableArray();
     self.isSaved = ko.observable(false);
 
@@ -26,23 +26,38 @@
           selected.push(branch.name);
         }
       });
-      configManger.setSelectedBranches( { branches: selected });
+      configManager.setSelectedBranches( { branches: selected });
       self.isSaved(true);
       setTimeout(function() {self.isSaved(false)}, 2000);
       return true;
     };
 
-    self.branches.removeAll();
-    updateChecker.getBranches(function(branches) {
-      configManger.getSelectedBranches(function(selectedBranches) {
-        branches.forEach(function (branch) {
-          var selected = selectedBranches.branches ? selectedBranches.branches : [];
-          var branchConfig = selected.filter(function(b) { return b == branch; });
-          self.branches.push({ name: branch, selected: ko.observable(branchConfig.length > 0)});
-        });
+    configManager.getShowAlerts(function(showAlerts){
+      alert(showAlerts);
+      self.showAlerts(showAlerts)
+    });
 
-      });
-    })
+    self.showAlerts.subscribe(function(newValue){
+      if (self.showAlerts()) {
+        updateChecker.getBranches(function (branches) {
+          configManager.getSelectedBranches(function (selectedBranches) {
+            self.branches.removeAll();
+            branches.forEach(function (branch) {
+              var selected = selectedBranches.branches ? selectedBranches.branches : [];
+              var branchConfig = selected.filter(function (b) {
+                return b == branch;
+              });
+              self.branches.push({ name: branch, selected: ko.observable(branchConfig.length > 0)});
+            });
+          });
+        })
+      }
+      configManager.setShowAlerts(self.showAlerts());
+      self.isSaved(true);
+      setTimeout(function() {self.isSaved(false)}, 2000);
+      return true;
+    });
+
   };
 
   var SoftwareUpdater = function SoftwareUpdater(cockpit) {
@@ -54,8 +69,7 @@
       alert(message);
     });
 
-    var dashboardUrl= 'http://localhost:8081';
-    var checker = new SoftwareUpdateChecker({dashboardUrl: dashboardUrl });
+    var checker = new SoftwareUpdateChecker(configManager);
     this.model = new SoftwareUpdateModel(this.dashboardSocket, checker, configManager);
 
     console.log('Loading Software update plugin.');

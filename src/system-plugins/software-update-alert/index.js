@@ -10,6 +10,16 @@ function softwareUpdate(name, deps) {
   deps.app.get('/system-plugin/software-update/config/selectedBranches', function (req, res) {
     res.send(preferences['selectedBranches']);
   });
+
+  deps.app.get('/system-plugin/software-update/config/showAlerts', function (req, res) {
+    var showAlerts = preferences['showAlerts'];
+    res.send(showAlerts ? showAlerts : true);
+  });
+
+  deps.app.post('/system-plugin/software-update/config/showAlerts', function(req, res){
+    preferences['showAlerts'] = req.body;
+  });
+
   deps.app.post('/system-plugin/software-update/config/selectedBranches', function (req, res) {
     preferences['selectedBranches'] = req.body;
     res.status(200);

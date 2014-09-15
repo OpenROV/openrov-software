@@ -2,6 +2,9 @@
 var SoftwareUpdaterConfig;
 SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   var self = this;
+
+  self.dashboardUrl= 'http://localhost:8081';
+
   self.getSelectedBranches = function (callback) {
     $.get('/system-plugin/software-update/config/selectedBranches', function (config) {
       if (callback != undefined)
@@ -11,4 +14,15 @@ SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   self.setSelectedBranches = function (branches) {
     $.post('/system-plugin/software-update/config/selectedBranches', branches);
   };
+
+  self.getShowAlerts = function (callback) {
+    $.get('/system-plugin/software-update/config/showAlerts', function (settings) {
+      if (callback != undefined)
+        callback(settings.showAlerts === "true");
+    });
+  };
+  self.setShowAlerts = function (value) {
+    $.post('/system-plugin/software-update/config/showAlerts', { showAlerts: value });
+  };
+
 };
