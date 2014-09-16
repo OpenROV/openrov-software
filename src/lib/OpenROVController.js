@@ -230,9 +230,10 @@ var OpenROVController = function (eventLoop) {
 
   setInterval(function () {
     if (!controller.notSafeToControl()) return;
-    controller.requestSettings();
-    controller.requestCapabilities();
-  }, 30000);
+      controller.updateSetting();
+      controller.requestSettings();
+      controller.requestCapabilities();
+  }, 10000);
 
   return controller;
 };
