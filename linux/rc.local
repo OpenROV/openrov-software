@@ -40,7 +40,7 @@ if [ ! -f /var/swapfile ]; then
   bash /opt/openrov/cockpit/linux/addswapfile.sh
 fi
 
-/opt/openrov/cockpit/linux/knight-rider.sh & 
+/opt/openrov/cockpit/linux/knight-rider.js & 
  
 # load the device tree overlay for pin 25 (RESET) and SPI
 CAPEMGR=$( find /sys/devices/ -name bone_capemgr* | head -n 1 )

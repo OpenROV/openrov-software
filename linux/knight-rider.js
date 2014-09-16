@@ -31,7 +31,6 @@ setInterval(
 	function() {
 		var pattern = ledState[patternIndex].split(',');
 		for (var i = 0; i < 4; i++) {
-			//console.log('led: ' + leds[i] + ' ' + pattern[i]);
 			fs.writeFile(leds[i], pattern[i], function(err) {});
 		}
 
