@@ -69,6 +69,7 @@ io.sockets.on('connection', function (socket) {
   socket.emit('settings', CONFIG.preferences.get());
   socket.on('ping', function (id) {
     socket.emit('pong', id);
+    controller.send('ping(' + id + ')');
   });
 
   socket.on('tilt_update', function (value) {
