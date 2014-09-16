@@ -53,10 +53,10 @@ function rovpilot(name, deps) {
     });
 
     socket.on('motor_test', function (controls) {
-      controller.sendMotorTest(controls.port, controls.starbord, controls.vertical);
+      deps.rov.sendMotorTest(controls.port, controls.starbord, controls.vertical);
     });
     socket.on('control_update', function (controls) {
-      controller.sendCommand(controls.throttle, controls.yaw, controls.lift);
+      deps.rov.sendCommand(controls.throttle, controls.yaw, controls.lift);
     });
   });
 }
