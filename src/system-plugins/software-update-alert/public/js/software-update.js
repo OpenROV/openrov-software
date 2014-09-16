@@ -91,7 +91,6 @@
             var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
             var container = $('#software-update-alert-container');
             ko.applyBindings(model, container[0]);
-            alert(JSON.stringify(model));
             container.removeClass('hide');
           }
         });
