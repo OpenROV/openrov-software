@@ -75,24 +75,24 @@
     this.cockpit = cockpit;
 
     $('#plugin-settings').append('<div id="software-update-settings"></div>');
+    $('body').prepend('<div id="software-update-alert-container" class="alert alert-success hide"></div>');
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('software-update.js');
     $('#software-update-settings').load(jsFileLocation + '../settings.html', function () {
       ko.applyBindings(self.model, document.getElementById('software-update-settings'));
+    });
+    $('#software-update-alert-container').load(jsFileLocation + '../ui-templates.html', function () {
     });
 
     this.model.showAlerts.subscribe(function(newValue) {
       if (newValue) {
         checker.checkForUpdates(function (updates) {
           if (updates && updates.length > 0) {
-            $('body')
-              .prepend(
-                '<div id="softwareUpdateAlert" class="alert alert-success pull-right" >' +
-                '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                '<strong>Software updates!</strong> ' +
-                '<a href="' + configManager.dashboardUrl + '/#/software" target="_blank" onclick="$(\'#softwareUpdateAlert\').alert(\'close\')">' +
-                'There is new software available</a>' +
-                '</div>');
+            var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
+            var container = $('#software-update-alert-container');
+            ko.applyBindings(model, container[0]);
+            alert(JSON.stringify(model));
+            container.removeClass('hide');
           }
         });
       }
