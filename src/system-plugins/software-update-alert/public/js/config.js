@@ -3,7 +3,8 @@ var SoftwareUpdaterConfig;
 SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   var self = this;
 
-  self.dashboardUrl= 'http://localhost:8081';
+  self.dashboardUrl = ko.observable();
+  getDashboardUrl();
 
   self.getSelectedBranches = function (callback) {
     $.get('/system-plugin/software-update/config/selectedBranches', function (config) {
@@ -25,4 +26,9 @@ SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
     $.post('/system-plugin/software-update/config/showAlerts', { showAlerts: value });
   };
 
+  function getDashboardUrl() {
+    $.get('/system-plugin/software-update/config/dashboardUrl', function(config) {
+      self.dashboardUrl = config.url;
+    });
+  }
 };

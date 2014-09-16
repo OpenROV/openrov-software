@@ -50,6 +50,7 @@ nconf.defaults({
   'port': 8080,
   'serial': '/dev/ttyO1',
   'serial_baud': 115200,
+  'dashboardURL': 'http://localhost',
   'USE_MOCK' : false
 });
 
@@ -85,6 +86,7 @@ module.exports = {
   port: nconf.get('port'),
   serial: nconf.get('serial'),
   serial_baud: nconf.get('serial_baud'),
+  dashboardURL: nconf.get('dashboardURL'),
   preferences: nconf,
   savePreferences: savePreferences,
   OpenROVCamera: getLibPath(OpenROVCameraPath),

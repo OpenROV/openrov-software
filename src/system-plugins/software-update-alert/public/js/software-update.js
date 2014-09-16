@@ -11,10 +11,9 @@
       return true;
     }
   };
-  var SoftwareUpdateModel = function SoftwareUpdateModel(socket, updateChecker, configManager) {
+  var SoftwareUpdateModel = function SoftwareUpdateModel(updateChecker, configManager) {
     var self = this;
 
-    self.socket = socket;
     self.showAlerts = ko.observable(false);
     self.branches = ko.observableArray();
     self.isSaved = ko.observable(false);
@@ -63,13 +62,9 @@
     var self = this;
 
     var configManager = new SoftwareUpdaterConfig();
-    this.dashboardSocket = window.io("http://"+window.location.hostname + ':8081/IPC');
-    this.dashboardSocket.on('Software.Cockpit.answer', function(message) {
-      alert(message);
-    });
 
     var checker = new SoftwareUpdateChecker(configManager);
-    this.model = new SoftwareUpdateModel(this.dashboardSocket, checker, configManager);
+    this.model = new SoftwareUpdateModel(checker, configManager);
 
     console.log('Loading Software update plugin.');
     this.cockpit = cockpit;
@@ -83,6 +78,8 @@
     });
     $('#software-update-alert-container').load(jsFileLocation + '../ui-templates.html', function () {
     });
+    $('body').append('<div id="proxy-container"  class="span12"><iframe  class="span12" style="height: 300px" src="http://localhost:3000"></iframe></div>');
+    $('#proxy-container').hide();
 
     this.model.showAlerts.subscribe(function(newValue) {
       if (newValue) {

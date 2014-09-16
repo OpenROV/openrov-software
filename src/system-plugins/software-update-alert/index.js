@@ -4,9 +4,12 @@ function softwareUpdate(name, deps) {
   var preferences = getPreferences(deps.config);
   showSerialScript = __dirname + '/scripts/' + (process.env.USE_MOCK === 'true' ? 'mock-' : '') + 'showserial.sh';
 
-
   deps.app.get('/system-plugin/software-update/config', function (req, res) {
     res.send(preferences);
+  });
+
+  deps.app.get('/system-plugin/software-update/config/dashboardUrl', function (req, res) {
+    res.send({url: deps.config.dashboardURL});
   });
 
   deps.app.get('/system-plugin/software-update/config/selectedBranches', function (req, res) {
@@ -30,24 +33,6 @@ function softwareUpdate(name, deps) {
     deps.config.savePreferences();
   });
 }
-function loadBoardSerial(script, callback) {
-  var status = spawn('sh', [ script ]);
-  status.stdout.on('data', function (data) {
-    console.log('stderr: ' + data);
-    var serial = data.toString();
-    var parts = serial.split(':');
-    if (parts.length > 0) {
-      serial = parts[parts.length -1].trim();
-    }
-    callback(serial);
-  });
-  status.on('close', function (code) {
-    if (code !== 0) {
-      callback("ERROR");
-    }
-  });
-};
-
 
 function getPreferences(config) {
   var preferences = config.preferences.get(PREFERENCES);
