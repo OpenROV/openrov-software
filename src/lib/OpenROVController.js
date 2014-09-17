@@ -91,6 +91,12 @@ var OpenROVController = function (eventLoop) {
     if ('fthr' in status) {
       navdata.thrust = status.fthr;
     }
+    if ('boot' in status){
+      this.Capabilities = 0;
+      controller.updateSetting();
+      controller.requestSettings();
+      controller.requestCapabilities();
+    }
   });
   setup_serial();
   hardware.connect();
