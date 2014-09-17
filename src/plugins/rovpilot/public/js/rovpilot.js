@@ -676,6 +676,7 @@
     controls.throttle = positions.throttle * this.power;
     controls.yaw = positions.yaw * this.power * 1.5;
     controls.yaw = Math.min(Math.max(controls.yaw, -1), 1);
+    if (controls.throttle < 0) controls.yaw = controls.yaw * -1;
     controls.lift = positions.lift * this.power;
     controls.pitch = positions.pitch;
     controls.roll = positions.roll;
