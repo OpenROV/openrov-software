@@ -1,0 +1,6 @@
+#software-update-alert-container {
+    position: absolute;
+    top: 55px;
+    left: 5px;
+    z-index: 110;
+}

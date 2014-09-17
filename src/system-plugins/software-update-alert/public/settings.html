@@ -1,0 +1,28 @@
+<div id="softwareUpdate-settings">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#software-settings" href="#collapsesoftwareUpdate">
+                Software updates
+            </a>
+        </div>
+        <div id="collapsesoftwareUpdate" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" data-bind="checked: showAlerts">Show alerts on new updates
+                </label>
+              </div>
+              <div>
+                <strong>Show updates for these branches:</strong>
+                <div data-bind="foreach: branches">
+                  <label>
+                    <input type="checkbox" data-bind="value: name, checked: selected, click: $root.changed">
+                    <span data-bind="text: name, click: $root.changed"></span>
+                  </label>
+                </div>
+                <span data-bind="fadeVisible: { value: $data.isSaved, fadeIn: false} "><i class="icon-ok" title="Saved!"></i> Saved!</span>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
