@@ -1,0 +1,34 @@
+#newui-container {
+    width: 100%;
+    color: white;
+}
+
+#UI .navbar-fixed-top .navbar-inner {
+    height: 30px;
+}
+
+#UI .logo {
+    width: 140px;
+    vertical-align: middle;
+}
+
+#UI a .navbar-titel {
+    font-size: 20px;
+    line-height: 22px;
+}
+
+#UI .navbar .brand {
+    padding-top: 5px;
+}
+
+#UI .navbar .brand * {
+    vertical-align: middle;
+}
+
+#UI #newui-controlpad {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    width: 200px;
+    height: 400px;
+}
