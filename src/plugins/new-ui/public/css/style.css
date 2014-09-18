@@ -32,3 +32,22 @@
     width: 200px;
     height: 400px;
 }
+
+#UI .newui-item {
+    border: 1px solid grey;
+    margin: 15px;
+}
+
+#UI .compassNeedle {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    left: 45px;
+}
+
+#UI .newui-item h4 {
+    text-align: center;
+    color: white;
+
+}

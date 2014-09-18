@@ -32,6 +32,10 @@
         $('#newui-video').height($(window).innerHeight() - $('#newui-topbar').innerHeight() );
         $('#newui-video').width($(window).innerWidth() - $('#newui-controlpad').innerWidth() );
         $('#compass').hide();
+
+        $('.topdowncompass').appendTo('#newui-compass');
+        $('.topdowncompass').removeClass('pull-left');
+
       });
     }
   };
