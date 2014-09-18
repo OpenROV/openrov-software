@@ -12,19 +12,6 @@ var ArduinoPhysics = function () {
     val = Math.round(val);
     return val;
   };
-  //This maps around deadzone
-  physics.mapMotor = function (val) {
-    val = limit(val, -1, 1);
-    var result;
-    if (val < 0)
-      result = mapA(val, -1, 0, 1000, physics.mapRawMotor(CONFIG.preferences.get('deadzone_neg')));
-    if (val > 0)
-      result = mapA(val, 0, 1, physics.mapRawMotor(CONFIG.preferences.get('deadzone_pos')), 2000);
-    if (val === 0)
-      result = 1500;
-    result = Math.round(result);
-    return result;
-  };
   physics.unmapMotor = function (val) {
     val = mapA(val, 1000, 2000, -1, 1);
   };
