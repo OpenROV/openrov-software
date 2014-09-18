@@ -132,16 +132,6 @@
           }
         },
 
-        // All Trim hold toggle
-        {
-          name: "rovPilot.toogleAllTrimHold",
-          description: "Toogle all trim hold functions on/off",
-          defaults: { gamepad: 'RB' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.toggleAllTrimHold');
-          }
-        },
-
         // Increment power level
         {
           name: "rovPilot.incrementPowerLevel",
@@ -149,16 +139,6 @@
           defaults: { },
           down: function () {
             rov.cockpit.emit('rovpilot.incrimentPowerLevel');
-          }
-        },
-
-        // All Stop
-        {
-          name: "rovPilot.allStop",
-          description: "Stop all motor action",
-          defaults: { keyboard: 'space' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.allStop');
           }
         },
 
@@ -314,42 +294,6 @@
           }
         },
 
-        // vtrim +
-        {
-          name: "rovPilot.adjustVerticleTrim_increase",
-          description: "Increase the vertical trim",
-          defaults: { keyboard: '7' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.adjustVerticleTrim', 1);
-          }
-        },
-
-        // vtrim -
-        {
-          name: "rovPilot.adjustVerticleTrim_decrease",
-          description: "Decrease the vertical trim",
-          defaults: { keyboard: '8' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.adjustVerticleTrim', -1);
-          }
-        },
-
-        // ttrim +
-        {
-          name: "rovPilot.adjustThrottleTrim_increase",
-          description: "Increase the throttle trim",
-          defaults: { keyboard: '0' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustThrottleTrim', 1); }
-        },
-
-        // ttrim -
-        {
-          name: "rovPilot.adjustThrottleTrim_decrease",
-          description: "Decrease the Throttle trim",
-          defaults: { keyboard: '9' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustThrottleTrim', -1); }
-        },
-
         // Power on ESC
         {
           name: "rovPilot.powerOnESC",
@@ -431,10 +375,6 @@
     rov.cockpit.on('gamepad.disconnected', function () {
       rov.bindingModel.gamepadDisconnected(true);
     });
-
-    rov.cockpit.on('rovpilot.allStop', function () {
-      rov.allStop();
-    });
     rov.cockpit.on('rovpilot.setThrottle', function (v) {
       rov.setThrottle(v);
     });
@@ -464,12 +404,6 @@
     });
     rov.cockpit.on('rovpilot.powerLevel', function (v) {
       rov.powerLevel(v);
-    });
-    rov.cockpit.on('rovpilot.adjustVerticleTrim', function (v) {
-      rov.adjustVerticleTrim(v);
-    });
-    rov.cockpit.on('rovpilot.adjustThrottleTrim', function (v) {
-      rov.adjustThrottleTrim(v);
     });
     rov.cockpit.on('rovpilot.adjustCameraTilt', function (v) {
       rov.adjustCameraTilt(v);
@@ -596,21 +530,6 @@
   ROVpilot.prototype.powerOffESCs = function powerOffESCs() {
     this.cockpit.socket.emit('escs_poweroff');
   };
-  ROVpilot.prototype.adjustVerticleTrim = function adjustVerticleTrim(value) {
-    this.vtrim += value;
-    this.positions.lift = 1 / 1000 * this.vtrim;
-  };
-  ROVpilot.prototype.adjustThrottleTrim = function adjustThrottleTrim(value) {
-    this.ttrim += value;
-    this.positions.throttle = 1 / 1000 * this.ttrim;
-  };
-  ROVpilot.prototype.toggleAllTrimHold = function toggleAllTrimHold() {
-    this.trimHeld = !bool;
-    if (this.trimHeld) {
-      this.ttrim = positions.throttle;
-      this.vtrim = positions.throttle;
-    }
-  };
   ROVpilot.prototype.setThrottle = function setThrottle(value) {
     this.positions.throttle = value;
     if (value === 0)
@@ -658,15 +577,6 @@
         break;
     }
     this.bindingModel.thrustfactor(value);
-  };
-  ROVpilot.prototype.allStop = function allStop() {
-    this.vtrim = 0;
-    this.ttrim = 0;
-    this.positions.throttle = 0;
-    this.positions.yaw = 0;
-    this.positions.lift = 0;
-    this.positions.pitch = 0;
-    this.positions.roll = 0;
   };
   ROVpilot.prototype.sendPilotingData = function sendPilotingData() {
     var positions = this.positions;
