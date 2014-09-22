@@ -67,8 +67,10 @@ var OpenROVController = function (eventLoop) {
       controller.emit('rovsys', s);
     }
     if ('cmd' in status) {
-      console.log('cmd: ' + status.cmd);
-      controller.emit('command', status.cmd);
+      if (status.com != 'ping(0)'){
+        console.log('cmd: ' + status.cmd);
+        controller.emit('command', status.cmd);
+      }
     }
     if ('log' in status) {
       console.log('log: ' + status.log);
