@@ -289,6 +289,13 @@ copy_rootfs () {
 		echo default-on > /sys/class/leds/beaglebone\:green\:usr3/trigger
 	fi
 
+	if [ -e /sys/class/leds/beaglebone\:green\:hearbeat/trigger ] ; then
+		echo default-on > /sys/class/leds/beaglebone\:green\:heartbeat/trigger
+		echo default-on > /sys/class/leds/beaglebone\:green\:mmc0/trigger
+		echo default-on > /sys/class/leds/beaglebone\:green\:usr2/trigger
+		echo default-on > /sys/class/leds/beaglebone\:green\:usr3/trigger
+	fi
+
 	echo ""
 	echo "This script has now completed it's task"
 	echo "-----------------------------"
