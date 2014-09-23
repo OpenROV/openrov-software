@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ ! -d "/opt/openrov/afro_firmware" ]; then
+if [ ! -d "afro_firmware" ]; then
   echo "Cannot find the afro_esc firmware project. Make sure it has been installed."
   exit -1
 fi

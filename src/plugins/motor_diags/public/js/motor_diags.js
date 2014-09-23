@@ -169,10 +169,6 @@
     this[propertyName](value);
   };
   Motor_diags.prototype.LoadSettings = function LoadSettings(settings) {
-    if ('deadzone_pos' in settings)
-      $('#deadzone_pos').val(settings.deadzone_pos);
-    if ('deadzone_neg' in settings)
-      $('#deadzone_neg').val(settings.deadzone_neg);
     if ('reverse_port_thruster' in settings)
       this.reversePortThruster(settings.reverse_port_thruster);
     if ('reverse_starbord_thruster' in settings)
@@ -183,8 +179,6 @@
       $('#smoothingIncriment').val(settings.smoothingIncriment);
   };
   Motor_diags.prototype.SaveSettings = function SaveSettings() {
-    this.cockpit.socket.emit('update_settings', { deadzone_pos: $('#deadzone_pos').val() });
-    this.cockpit.socket.emit('update_settings', { deadzone_neg: $('#deadzone_neg').val() });
     this.cockpit.socket.emit('update_settings', { reverse_port_thruster: this.reversePortThruster() });
     this.cockpit.socket.emit('update_settings', { reverse_starbord_thruster: this.reverseStarbordThruster() });
     this.cockpit.socket.emit('update_settings', { reverse_lift_thruster: this.reverseLiftThruster() });

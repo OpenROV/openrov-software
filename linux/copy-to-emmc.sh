@@ -26,6 +26,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+exec 2> /var/log/copy-to-emmc.log  # send stderr  to a log file
+exec 1>&2                      # send stdout to the same log file
+set -x                         # tell sh to display commands before execution
+
 if ! id | grep -q root; then
 	echo "must be run as root"
 	exit
@@ -75,8 +79,8 @@ check_host_pkgs () {
 	unset deb_pkgs
 	pkg="dosfstools"
 	check_dpkg
-	pkg="initramfs-tools"
-	check_dpkg
+#	pkg="initramfs-tools"
+#	check_dpkg
 	pkg="rsync"
 	check_dpkg
 	pkg="u-boot-tools"

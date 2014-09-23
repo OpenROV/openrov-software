@@ -73,9 +73,13 @@ io.sockets.on('connection', function (socket) {
     socket.emit('videoStarted');
   }
   socket.emit('settings', CONFIG.preferences.get());
+  var lastping = 0;
   socket.on('ping', function (id) {
     socket.emit('pong', id);
-    controller.send('ping(' + id + ')');
+    if ((new Date().getTime() - lastping) > 1000){
+      controller.send('ping(0)');
+      lastping = new Date().getTime();
+    }
   });
 
   socket.on('tilt_update', function (value) {

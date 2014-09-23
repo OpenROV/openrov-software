@@ -27,8 +27,8 @@ nconf.env(); //Also look for overrides in environment settings
 // Do not change these values in this file for an individual ROV, use the ./etc/rovconfig.json instead
 
 nconf.defaults({
-  'deadzone_pos': 0.1,
-  'deadzone_neg': -0.1,
+  'deadzone_pos': 50,
+  'deadzone_neg': 50,
   'smoothingIncriment': 40,
   'photoDirectory': '/var/www/openrov/photos',
   'water_type': 0,
