@@ -1,4 +1,4 @@
-(function (window, $, undefined) {
+$( document ).ready(function() {
   'use strict';
 
   window.examplePlugin = this;
@@ -59,4 +59,4 @@
 
   };
   window.Cockpit.plugins.push(Example);
-}(window, jQuery));
+});
