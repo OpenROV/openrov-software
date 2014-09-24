@@ -17,27 +17,30 @@ function softwareUpdate(name, deps) {
   });
 
   deps.app.get('/system-plugin/software-update/config/showAlerts', function (req, res) {
-    var showAlerts = preferences['showAlerts'];
-    res.send(showAlerts ? showAlerts : true);
+    res.send(preferences['showAlerts']);
   });
 
   deps.app.post('/system-plugin/software-update/config/showAlerts', function (req, res) {
     preferences['showAlerts'] = req.body;
+    deps.config.preferences.set(PREFERENCES, preferences);
+    deps.config.savePreferences();
+    res.status(200);
+    res.send(preferences['showAlerts']);
   });
 
   deps.app.post('/system-plugin/software-update/config/selectedBranches', function (req, res) {
     preferences['selectedBranches'] = req.body;
-    res.status(200);
-    res.send(preferences['selectedBranches']);
     deps.config.preferences.set(PREFERENCES, preferences);
     deps.config.savePreferences();
+    res.status(200);
+    res.send(preferences['selectedBranches']);
   });
 }
 
 function getPreferences(config) {
   var preferences = config.preferences.get(PREFERENCES);
   if (preferences == undefined) {
-    preferences = {};
+    preferences = { showAlerts: { showAlerts: true} };
     config.preferences.set(PREFERENCES, preferences);
   }
   console.log('Software Update plugin loaded preferences: ' + JSON.stringify(preferences));
