@@ -3,7 +3,7 @@
  */
 
 describe('test', function() {
-  it('5 should be 5', function() {
-    (5).should.be.exactly(5);
+  it('The example plugin should be loaded', function() {
+    window.examplePlugin.should.be.ok;
   });
 });
