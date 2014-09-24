@@ -23,7 +23,7 @@
 
 
 <script>
-(function (window, $, undefined) {
+$( document ).ready(function() {
 
   if (window.mochaPhantomJS) {
     mochaPhantomJS.run();
@@ -31,7 +31,8 @@
   else {
     mocha.run();
   }
-}(window, jQuery));
+});
+
 
 </script>
 </body>

@@ -1,7 +1,4 @@
 module.exports = function(grunt) {
-  var banner = '/*\n<%= pkg.name %> <%= pkg.version %>';
-  banner += '- <%= pkg.description %>\n<%= pkg.repository.url %>\n';
-  banner += 'Built on <%= grunt.template.today("yyyy-mm-dd") %>\n*/\n';
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -18,7 +15,7 @@ module.exports = function(grunt) {
         timeout: 3000,
         ignoreLeaks: false,
         ui: 'bdd',
-        reporter: 'tap'
+        reporter: 'spec'
       },
       all: { src: [
         'src/*plugins/**/tests/*.js',
@@ -28,14 +25,15 @@ module.exports = function(grunt) {
     mocha: { // client side
       test: {
         src: ['src/*plugins/**/public/tests/*.html']
-      },
-    },
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-mocha');
 
+  grunt.registerTask('test', ['simplemocha', 'mocha']);
   grunt.registerTask('default',
-    ['jshint', 'simplemocha', 'mocha']);
+    ['jshint', 'test' ]);
 };
