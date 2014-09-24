@@ -1,6 +1,7 @@
 (function (window, $, undefined) {
   'use strict';
 
+  window.examplePlugin = this;
   // to prevent intererence, we disable this plugin.
   // to see the things working, comment the following statement
   return;
