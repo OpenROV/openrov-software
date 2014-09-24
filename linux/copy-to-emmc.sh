@@ -291,7 +291,7 @@ copy_rootfs () {
 		echo default-on > /sys/class/leds/beaglebone\:green\:usr3/trigger
 	fi
 
-	if [ -e /sys/class/leds/beaglebone\:green\:hearbeat/trigger ] ; then
+	if [ -e /sys/class/leds/beaglebone\:green\:heartbeat/trigger ] ; then
 		echo default-on > /sys/class/leds/beaglebone\:green\:heartbeat/trigger
 		echo default-on > /sys/class/leds/beaglebone\:green\:mmc0/trigger
 		echo default-on > /sys/class/leds/beaglebone\:green\:usr2/trigger
