@@ -5,15 +5,18 @@
     var self = this;
 
     self.getBranches = function(callback) {
-      $.get(config.dashboardUrl + "/plugin/software/branches", callback );
+      setTimeout(function() {
+        $.get(config.dashboardUrl() + "/plugin/software/branches", callback );
+      }, 3000);
     };
 
     self.checkForUpdates = function(callback){
       config.getSelectedBranches(function(selectedBranches){
-        $.post(config.dashboardUrl + "/plugin/software/updates", selectedBranches,
+alert(JSON.stringify(selectedBranches));
+        $.post(config.dashboardUrl() + "/plugin/software/updates", selectedBranches,
         function(updates) {
           callback(updates);
-        });
+        }, 'application/json');
       });
       return { updates: false }
     };

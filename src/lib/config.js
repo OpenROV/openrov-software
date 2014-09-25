@@ -50,7 +50,7 @@ nconf.defaults({
   'port': 8080,
   'serial': '/dev/ttyO1',
   'serial_baud': 115200,
-  'dashboardURL': 'http://localhost',
+  'dashboardURL': '',
   'USE_MOCK' : false
 });
 
