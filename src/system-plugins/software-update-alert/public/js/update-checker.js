@@ -1,6 +1,17 @@
 (function (window, $, undefined) {
   'use strict';
 
+  $.postJSON = function(url, data, callback) {
+    return jQuery.ajax({
+      'type': 'POST',
+      'url': url,
+      'contentType': 'application/json',
+      'data': JSON.stringify(data),
+      'dataType': 'json',
+      'success': callback
+    });
+  };
+
   function SoftwareUpdateChecker(config) {
     var self = this;
 
@@ -12,12 +23,13 @@
 
     self.checkForUpdates = function(callback){
       config.getSelectedBranches(function(selectedBranches){
-alert(JSON.stringify(selectedBranches));
-        $.post(config.dashboardUrl() + "/plugin/software/updates", selectedBranches,
-        function(updates) {
-          callback(updates);
-        }, 'application/json');
-      });
+        $.postJSON(
+          config.dashboardUrl() + "/plugin/software/updates",
+          selectedBranches,
+          function(updates) {
+            callback(updates);
+          });
+        });
       return { updates: false }
     };
 

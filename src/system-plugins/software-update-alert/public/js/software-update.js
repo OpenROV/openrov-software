@@ -82,9 +82,9 @@
       'src="http://'+ window.location.hostname +':3000"></iframe></div>');
     $('#proxy-container').hide();
 
-    setTimeout(function() {
     self.model.showAlerts.subscribe(function(newValue) {
       if (newValue) {
+        setTimeout(function() {
         checker.checkForUpdates(function (updates) {
           if (updates && updates.length > 0) {
             var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
@@ -93,9 +93,9 @@
             container.removeClass('hide');
           }
         });
+        }, 10000);
       }
     });
-    }, 3000);
   };
   window.Cockpit.plugins.push(SoftwareUpdater);
 }(window, jQuery));
