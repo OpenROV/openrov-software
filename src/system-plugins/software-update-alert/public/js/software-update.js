@@ -78,10 +78,12 @@
     });
     $('#software-update-alert-container').load(jsFileLocation + '../ui-templates.html', function () {
     });
-    $('body').append('<div id="proxy-container"  class="span12"><iframe  class="span12" style="height: 300px" src="http://localhost:3000"></iframe></div>');
+    $('body').append('<div id="proxy-container"  class="span12"><iframe  class="span12" style="height: 300px" ' +
+      'src="http://'+ window.location.hostname +':3000"></iframe></div>');
     $('#proxy-container').hide();
 
-    this.model.showAlerts.subscribe(function(newValue) {
+    setTimeout(function() {
+    self.model.showAlerts.subscribe(function(newValue) {
       if (newValue) {
         checker.checkForUpdates(function (updates) {
           if (updates && updates.length > 0) {
@@ -93,6 +95,7 @@
         });
       }
     });
+    }, 3000);
   };
   window.Cockpit.plugins.push(SoftwareUpdater);
 }(window, jQuery));
