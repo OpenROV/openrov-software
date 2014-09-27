@@ -98,9 +98,7 @@
 
         command.active = true;
         registerControls(command);
-//        controllers.forEach(function (controller) {
-//          controller.register(command);
-//        });
+
 
         console.log("activated command " + command.name);
       });
