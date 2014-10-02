@@ -7,6 +7,7 @@
 
 OpenROV Cockpit
 ================
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/OpenROV/openrov-software?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 "[OpenROV](http://openrov.com/) is a DIY telerobotics community centered around underwater exploration & adventure."  One goal of OpenROV is to have onboard video for live viewing as the user operates the ROV.  Enter: OpenROV Cockpit.
 
