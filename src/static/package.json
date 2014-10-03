@@ -1,7 +1,11 @@
 {
   "name": "static-openrov",
   "devDependencies": {
-    "bower": "^1.3.3"
+    "bower": "^1.3.3",
+    "grunt": "^0.4.5",
+    "grunt-mocha": "^0.4.11",
+    "mocha": "^1.21.4",
+    "should": "^4.0.4"
   },
   "scripts": {
     "bower": "./node_modules/bower/bin/bower --config.interactive=false --allow-root install"
