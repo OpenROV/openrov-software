@@ -40,8 +40,9 @@
         updateChecker.getBranches(function (branches) {
           configManager.getSelectedBranches(function (selectedBranches) {
             self.branches.removeAll();
+            var selected = selectedBranches.branches ? selectedBranches.branches : branches;
+            if (selected.length === 0) { selected = branches; }
             branches.forEach(function (branch) {
-              var selected = selectedBranches.branches ? selectedBranches.branches : [];
               var branchConfig = selected.filter(function (b) {
                 return b == branch;
               });
@@ -85,6 +86,22 @@
     self.model.showAlerts.subscribe(function(newValue) {
       if (newValue) {
         setTimeout(function() {
+          checkForUpdates(checker);
+        }, 10000);
+      }
+    });
+
+    setTimeout(
+      function() {
+        $.post(configManager.dashboardUrl() + '/plugin/software/update/run')
+          .done(function() {
+            console.log('Started apt-get update on cockpit');
+            checkForUpdates(checker);
+           })
+          .fail(function() { console.log('Error starting apt-get update on cockpit') });
+      }, 2 * 60 * 1000); //two minutes
+
+      function checkForUpdates(checker) {
         checker.checkForUpdates(function (updates) {
           if (updates && updates.length > 0) {
             var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
@@ -93,9 +110,9 @@
             container.removeClass('hide');
           }
         });
-        }, 10000);
-      }
-    });
+
+    }
+
   };
   window.Cockpit.plugins.push(SoftwareUpdater);
 }(window, jQuery));

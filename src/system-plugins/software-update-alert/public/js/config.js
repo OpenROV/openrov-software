@@ -19,7 +19,7 @@ SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   self.getShowAlerts = function (callback) {
     $.get('/system-plugin/software-update/config/showAlerts', function (settings) {
       if (callback != undefined)
-        callback(settings.showAlerts === "true");
+        callback(settings.showAlerts === "true" || settings.showAlerts === true);
     });
   };
   self.setShowAlerts = function (value) {
