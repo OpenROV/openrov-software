@@ -40,8 +40,9 @@
         updateChecker.getBranches(function (branches) {
           configManager.getSelectedBranches(function (selectedBranches) {
             self.branches.removeAll();
+            var selected = selectedBranches.branches ? selectedBranches.branches : branches;
+            if (selected.length === 0) { selected = branches; }
             branches.forEach(function (branch) {
-              var selected = selectedBranches.branches ? selectedBranches.branches : [];
               var branchConfig = selected.filter(function (b) {
                 return b == branch;
               });
