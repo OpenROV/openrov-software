@@ -18,7 +18,7 @@
     self.branches = ko.observableArray();
     self.isSaved = ko.observable(false);
 
-    self.changedSelectedBranches = function() {
+    self.changed = function() {
       var selected = [];
       self.branches().forEach(function(branch) {
         if (branch.selected() === true) {
@@ -48,7 +48,6 @@
               });
               self.branches.push({ name: branch, selected: ko.observable(branchConfig.length > 0)});
             });
-            self.changedSelectedBranches();
           });
         })
       }
@@ -83,6 +82,26 @@
     $('body').append('<div id="proxy-container"  class="span12"><iframe  class="span12" style="height: 300px" ' +
       'src="http://'+ window.location.hostname +':3000"></iframe></div>');
     $('#proxy-container').hide();
+
+
+    //var logoTitleModel = { cockpitVersion: ko.observable('N/A'), bbSerial: ko.observable('N/A') };
+    var logoTitleModel = {};
+    logoTitleModel.cockpitVersion = ko.observable('N/A');
+    logoTitleModel.bbSerial = ko.observable('N/A');
+     $('a.brand').attr('data-bind', 'attr: {title: "Version: " + cockpitVersion() + "\\nBB Serial: " + bbSerial()}');
+    $.get(configManager.dashboardUrl() + '/plugin/software/installed/openrov-cockpit', function(data) {
+        if (data.length > 0) {
+          logoTitleModel.cockpitVersion(data[0].package + ' - ' + data[0].version);
+          console.log('Cockpit version: ' + logoTitleModel.cockpitVersion());
+        }
+       })
+      .fail(function() { console.log('Error getting the cockpit version') });
+    $.get(configManager.dashboardUrl() + '/plugin/software/bbserial', function(data) {
+         logoTitleModel.bbSerial(data.bbSerial);
+         console.log('BB Serial: ' + logoTitleModel.bbSerial());
+       })
+      .fail(function() { console.log('Error getting the cockpit version') });
+    ko.applyBindings(logoTitleModel, $('a.brand')[0]);
 
     self.model.showAlerts.subscribe(function(newValue) {
       if (newValue) {
