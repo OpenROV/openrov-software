@@ -9,7 +9,7 @@ SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   self.getSelectedBranches = function (callback) {
     $.get('/system-plugin/software-update/config/selectedBranches', function (config) {
       if (callback != undefined)
-        callback(config ? config : { branches: [] } );
+        callback(config && config.branches ? config : { branches: [] } );
     });
   };
   self.setSelectedBranches = function (branches) {
