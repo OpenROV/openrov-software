@@ -48,6 +48,7 @@
               });
               self.branches.push({ name: branch, selected: ko.observable(branchConfig.length > 0)});
             });
+            self.changedSelectedBranches();
           });
         })
       }
