@@ -32,12 +32,27 @@
     };
 
     configManager.getShowAlerts(function(showAlerts){
-      self.showAlerts(showAlerts)
+      self.showAlerts(showAlerts);
+      subscribeToShowAlerts();
     });
+    getBranches();
 
-    self.showAlerts.subscribe(function(newValue){
-      if (self.showAlerts()) {
-        updateChecker.getBranches(function (branches) {
+    function subscribeToShowAlerts() {
+      var showAlertsSubscription = undefined;
+      showAlertsSubscription = self.showAlerts.subscribe(function(newValue){
+        if (self.showAlerts()) {
+          getBranches();
+          showAlertsSubscription.dispose();
+        }
+        configManager.setShowAlerts(self.showAlerts());
+        self.isSaved(true);
+        setTimeout(function() {self.isSaved(false)}, 2000);
+        return true;
+      });
+    }
+
+    function getBranches() {
+      updateChecker.getBranches(function (branches) {
           configManager.getSelectedBranches(function (selectedBranches) {
             self.branches.removeAll();
             var selected = selectedBranches.branches ? selectedBranches.branches : branches;
@@ -52,11 +67,6 @@
           });
         })
       }
-      configManager.setShowAlerts(self.showAlerts());
-      self.isSaved(true);
-      setTimeout(function() {self.isSaved(false)}, 2000);
-      return true;
-    });
 
   };
 
@@ -85,11 +95,11 @@
     $('#proxy-container').hide();
 
 
-    //var logoTitleModel = { cockpitVersion: ko.observable('N/A'), bbSerial: ko.observable('N/A') };
     var logoTitleModel = {};
     logoTitleModel.cockpitVersion = ko.observable('N/A');
     logoTitleModel.bbSerial = ko.observable('N/A');
-     $('a.brand').attr('data-bind', 'attr: {title: "Version: " + cockpitVersion() + "\\nBB Serial: " + bbSerial()}');
+    $('a.brand').attr('data-bind', 'attr: {title: "Version: " + cockpitVersion() + "\\nBB Serial: " + bbSerial()}');
+
     $.get(configManager.dashboardUrl() + '/plugin/software/installed/openrov-cockpit', function(data) {
         if (data.length > 0) {
           logoTitleModel.cockpitVersion(data[0].package + ' - ' + data[0].version);
@@ -105,10 +115,10 @@
     ko.applyBindings(logoTitleModel, $('a.brand')[0]);
 
     self.model.showAlerts.subscribe(function(newValue) {
-      if (newValue) {
+      if ((self.model.showAlerts() !== newValue) && newValue === true) {
         setTimeout(function() {
           checkForUpdates(checker);
-        }, 10000);
+        }, 5000);
       }
     });
 
@@ -122,15 +132,15 @@
           .fail(function() { console.log('Error starting apt-get update on cockpit') });
       }, 2 * 60 * 1000); //two minutes
 
-      function checkForUpdates(checker) {
-        checker.checkForUpdates(function (updates) {
-          if (updates && updates.length > 0) {
-            var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
-            var container = $('#software-update-alert-container');
-            ko.applyBindings(model, container[0]);
-            container.removeClass('hide');
-          }
-        });
+    function checkForUpdates(checker) {
+      checker.checkForUpdates(function (updates) {
+        if (updates && updates.length > 0) {
+          var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
+          var container = $('#software-update-alert-container');
+          ko.applyBindings(model, container[0]);
+          container.removeClass('hide');
+        }
+      });
 
     }
 
