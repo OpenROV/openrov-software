@@ -43,11 +43,11 @@
     var self = this;
     var jsFileLocation = urlOfJsFile('motor_diags.js');
     // the js folder path
-    $('#diagpanel').load(jsFileLocation + '../diagpanel.html', function () { self.listen(); });
+    $('#diagpanel').load(jsFileLocation + '../diagpanel.html', function () { self.loaded(); });
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
-  Motor_diags.prototype.listen = function listen() {
+  Motor_diags.prototype.loaded = function() {
     var motordiag = this;
     $('#diagnostic .back-button').click(function () {
       motordiag.SaveSettings();
@@ -153,7 +153,7 @@
         }
       }
     };
-    ko.applyBindings(this, $('#motordiags')[0]);
+    ko.applyBindings(md, $('#motordiags')[0]);
   };
   Motor_diags.prototype.sendTestMotorMessage = function sendTestMotorMessage() {
     var portVal = this.portMotorSpeed();

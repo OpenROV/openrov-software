@@ -1,6 +1,7 @@
-(function (window, $, undefined) {
+$( document ).ready(function() {
   'use strict';
 
+  window.examplePlugin = this;
   // to prevent intererence, we disable this plugin.
   // to see the things working, comment the following statement
   return;
@@ -58,4 +59,4 @@
 
   };
   window.Cockpit.plugins.push(Example);
-}(window, jQuery));
+});

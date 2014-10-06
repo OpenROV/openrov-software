@@ -3,7 +3,7 @@ var SoftwareUpdaterConfig;
 SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   var self = this;
 
-  self.dashboardUrl = ko.observable();
+  self.dashboardUrl = ko.observable(undefined);
   getDashboardUrl();
 
   self.getSelectedBranches = function (callback) {
@@ -19,7 +19,7 @@ SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   self.getShowAlerts = function (callback) {
     $.get('/system-plugin/software-update/config/showAlerts', function (settings) {
       if (callback != undefined)
-        callback(settings.showAlerts === "true");
+        callback(settings.showAlerts === "true" || settings.showAlerts === true);
     });
   };
   self.setShowAlerts = function (value) {
@@ -27,8 +27,17 @@ SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   };
 
   function getDashboardUrl() {
-    $.get('/system-plugin/software-update/config/dashboardUrl', function(config) {
-      self.dashboardUrl = config.url;
+    $.ajax({
+      url: '/system-plugin/software-update/config/dashboardUrl',
+      success: function(result) {
+        var url = result.url;
+        if (url.trim().length == 0 || url.trim().indexOf('http') === -1)
+        {
+          url = "http://" + window.location.hostname;
+        }
+        self.dashboardUrl(url);
+      },
+      async: false
     });
   }
 };

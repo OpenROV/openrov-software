@@ -16,8 +16,8 @@
                 <strong>Show updates for these branches:</strong>
                 <div data-bind="foreach: branches">
                   <label>
-                    <input type="checkbox" data-bind="value: name, checked: selected, click: $root.changed">
-                    <span data-bind="text: name, click: $root.changed"></span>
+                    <input type="checkbox" data-bind="value: name, checked: selected, click: $root.changeSelectedBranches">
+                    <span data-bind="text: name, click: $root.changeSelectedBranches"></span>
                   </label>
                 </div>
                 <span data-bind="fadeVisible: { value: $data.isSaved, fadeIn: false} "><i class="icon-ok" title="Saved!"></i> Saved!</span>
