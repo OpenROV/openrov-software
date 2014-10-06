@@ -18,7 +18,7 @@
     self.branches = ko.observableArray();
     self.isSaved = ko.observable(false);
 
-    self.changed = function() {
+    self.changeSelectedBranches = function() {
       var selected = [];
       self.branches().forEach(function(branch) {
         if (branch.selected() === true) {
@@ -48,7 +48,7 @@
               });
               self.branches.push({ name: branch, selected: ko.observable(branchConfig.length > 0)});
             });
-            self.changedSelectedBranches();
+            self.changeSelectedBranches();
           });
         })
       }
