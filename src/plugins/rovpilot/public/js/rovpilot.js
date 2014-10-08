@@ -110,9 +110,9 @@
         {
           name: "rovPilot.adjustCameraTilt_down",
           description: "Point the camera further down.",
-          defaults: { keyboard: 'z', gamepad: 'Y' },
+          defaults: { keyboard: 'z', gamepad: 'A' },
           down: function () {
-            rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1);
+            rov.cockpit.emit('rovpilot.adjustCameraTilt', -0.1);
           }
         },
         {
@@ -126,9 +126,9 @@
         {
           name: "rovPilot.adjustCameraTilt_up",
           description: "Point the camera further up.",
-          defaults: { keyboard: 'q', gamepad: 'A' },
+          defaults: { keyboard: 'q', gamepad: 'Y' },
           down: function () {
-            rov.cockpit.emit('rovpilot.adjustCameraTilt', -0.1);
+            rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1);
           }
         },
 
