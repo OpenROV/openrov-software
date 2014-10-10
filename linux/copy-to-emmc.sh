@@ -135,7 +135,7 @@ format_boot () {
 }
 
 format_root () {
-	mkfs.ext4 ${destination}p2 -L rootfs
+	mkfs.ext4 ${destination}p2 -L rootfs -N 500000
 	tune2fs -o journal_data_writeback ${destination}p2 
 	tune2fs -O ^has_journal ${destination}p2
 	flush_cache
