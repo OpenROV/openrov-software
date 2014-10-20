@@ -8,6 +8,8 @@ the developers managing and developing this open source project. In return,
 they should reciprocate that respect in addressing your issue or assessing
 patches and features.
 
+To get started, <a href="https://www.clahub.com/agreements/OpenROV/openrov-software">sign the Contributor License Agreement</a>.
+
 
 ## Using the issue tracker
 
