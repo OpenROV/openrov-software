@@ -81,7 +81,7 @@
             }
             rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
             rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
-            //console.log('rov.lift:' + rov.lift);
+            console.log('rov.lift:' + rov.lift);
           }
         },
         {
