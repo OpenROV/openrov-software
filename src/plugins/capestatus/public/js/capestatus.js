@@ -205,8 +205,16 @@
       self.bindingModel.currentVoltage(data.vout.toFixed(1));
     }
 
-    if ('iout' in data)
-      self.bindingModel.currentCurrent(data.iout.toFixed(3) + 'A');
+    // #315: use battery total current, if available; else, fallback to iout
+    var amps = 0;
+    if ('btti' in data) {
+      amps = data.btti;
+    } else if ('iout' in data) {
+      amps = data.iout;
+    }
+    if (amps != 0) {
+      self.bindingModel.currentCurrent(amps.toFixed(3) + 'A');
+    }
 
     if ('servo' in data) {
       var angle = 90 / 500 * data.servo * -1 - 90;
