@@ -93,6 +93,9 @@ var OpenROVController = function (eventLoop) {
     if ('fthr' in status) {
       navdata.thrust = status.fthr;
     }
+    if ('mtrmod' in status){
+	console.log('mtrmod: ' + status.mtrmod);
+    }
     if ('boot' in status){
       this.Capabilities = 0;
       controller.updateSetting();
@@ -114,6 +117,7 @@ var OpenROVController = function (eventLoop) {
     hardware.write(command);
     command = 'rmtrmod();';
     hardware.write(command);
+    console.log('send rmtrmod');
   };
   controller.updateSetting = function () {
 
@@ -142,7 +146,9 @@ var OpenROVController = function (eventLoop) {
       nstarbord = nstarbord * -1;
     }
     //API to Arduino to pass a percent in 2 decimal accuracy requires multipling by 100 before sending.
-    command = 'mtrmod(' + port * 100 + ',' + vertical * 100 + ',' + starbord * 100 + ',' + nport * 100 + ',' + nvertical * 100 + ',' + nstarbord * 100 + ');';
+    command = 'mtrmod1(' + port * 100 + ',' + vertical * 100 + ',' + starbord * 100 + ');';
+    hardware.write(command);
+    command = 'mtrmod2(' + nport * 100 + ',' + nvertical * 100 + ',' + nstarbord * 100 + ');';
     hardware.write(command);
   };
   controller.notSafeToControl = function () {
@@ -228,21 +234,19 @@ var OpenROVController = function (eventLoop) {
   globalEventLoop.on('serial-start', function () {
     hardware.connect();
     controller.updateSetting();
+    controller.requestSettings();
+    controller.requestCapabilities();
     logger.log('Opened serial connection after firmware upload');
   });
 
-  controller.updateSetting();
   //Every few seconds we check to see if capabilities or settings changes on the arduino.
   //This handles the cases where we have garbled communication or a firmware update of the arduino.
-  controller.requestSettings();
-  controller.requestCapabilities();
-
   setInterval(function () {
-    if (!controller.notSafeToControl()) return;
+    if (controller.notSafeToControl() === false) return;
       controller.updateSetting();
       controller.requestSettings();
       controller.requestCapabilities();
-  }, 10000);
+  }, 1000);
 
   return controller;
 };
