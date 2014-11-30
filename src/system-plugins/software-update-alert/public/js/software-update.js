@@ -55,8 +55,9 @@
       updateChecker.getBranches(function (branches) {
           configManager.getSelectedBranches(function (selectedBranches) {
             self.branches.removeAll();
+            branches = JSON.parse(branches);
             var selected = selectedBranches.branches ? selectedBranches.branches : branches;
-            if (selected.length === 0) { selected = branches; }
+            if (selected.length === 0) { selected = ['stable']; }
             branches.forEach(function (branch) {
               var branchConfig = selected.filter(function (b) {
                 return b == branch;

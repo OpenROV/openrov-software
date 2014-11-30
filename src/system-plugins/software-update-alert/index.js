@@ -40,7 +40,7 @@ function softwareUpdate(name, deps) {
 function getPreferences(config) {
   var preferences = config.preferences.get(PREFERENCES);
   if (preferences == undefined) {
-    preferences = { showAlerts: { showAlerts: true} };
+    preferences = { showAlerts: { showAlerts: true}, selectedBranches: { branches: "stable"} };
     config.preferences.set(PREFERENCES, preferences);
   }
   console.log('Software Update plugin loaded preferences: ' + JSON.stringify(preferences));
