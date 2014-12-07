@@ -87,9 +87,10 @@ function capestatus(name, deps) {
     if (preferences === undefined) {
       preferences = {
         batteries: [
-          new Battery('TrustFire', 8.0, 13.0)
+          new Battery('TrustFire', 8.0, 13.0),
+          new Battery('LiFePO4', 7.0, 10.0)
         ],
-        selectedBattery: 'TrustFire'
+        selectedBattery: 'LiFePO4'
       };
       config.preferences.set(PREFERENCES, preferences);
     }

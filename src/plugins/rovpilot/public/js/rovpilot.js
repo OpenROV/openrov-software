@@ -106,7 +106,7 @@
           }
         },
 
-        // camera up/centre/down
+        // camera down/centre/up
         {
           name: "rovPilot.adjustCameraTilt_down",
           description: "Point the camera further down.",
