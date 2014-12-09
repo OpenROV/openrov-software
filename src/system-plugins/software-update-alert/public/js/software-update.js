@@ -15,21 +15,7 @@
     var self = this;
 
     self.showAlerts = ko.observable(false);
-    self.branches = ko.observableArray();
     self.isSaved = ko.observable(false);
-
-    self.changeSelectedBranches = function() {
-      var selected = [];
-      self.branches().forEach(function(branch) {
-        if (branch.selected() === true) {
-          selected.push(branch.name);
-        }
-      });
-      configManager.setSelectedBranches( { branches: selected });
-      self.isSaved(true);
-      setTimeout(function() {self.isSaved(false)}, 2000);
-      return true;
-    };
 
     configManager.getShowAlerts(function(showAlerts){
       self.showAlerts(showAlerts);
@@ -41,7 +27,6 @@
       var showAlertsSubscription = undefined;
       showAlertsSubscription = self.showAlerts.subscribe(function(newValue){
         if (self.showAlerts()) {
-          getBranches();
           showAlertsSubscription.dispose();
         }
         configManager.setShowAlerts(self.showAlerts());
@@ -50,24 +35,6 @@
         return true;
       });
     }
-
-    function getBranches() {
-      updateChecker.getBranches(function (branches) {
-          configManager.getSelectedBranches(function (selectedBranches) {
-            self.branches.removeAll();
-            branches = JSON.parse(branches);
-            var selected = selectedBranches.branches ? selectedBranches.branches : branches;
-            if (selected.length === 0) { selected = ['stable']; }
-            branches.forEach(function (branch) {
-              var branchConfig = selected.filter(function (b) {
-                return b == branch;
-              });
-              self.branches.push({ name: branch, selected: ko.observable(branchConfig.length > 0)});
-            });
-            self.changeSelectedBranches();
-          });
-        })
-      }
 
   };
 
