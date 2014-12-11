@@ -21,7 +21,6 @@
       self.showAlerts(showAlerts);
       subscribeToShowAlerts();
     });
-    getBranches();
 
     function subscribeToShowAlerts() {
       var showAlertsSubscription = undefined;
