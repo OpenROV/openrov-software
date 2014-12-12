@@ -16,9 +16,11 @@
 
     self.showAlerts = ko.observable(false);
     self.isSaved = ko.observable(false);
+    self.configLoaded = ko.observable(false);
 
     configManager.getShowAlerts(function(showAlerts){
       self.showAlerts(showAlerts);
+      self.configLoaded(true);
       subscribeToShowAlerts();
     });
 
@@ -47,6 +49,7 @@
 
     console.log('Loading Software update plugin.');
     this.cockpit = cockpit;
+    var packagesUpdated = false;
 
     $('#plugin-settings').append('<div id="software-update-settings"></div>');
     $('body').prepend('<div id="software-update-alert-container" class="alert alert-success hide"></div>');
@@ -82,7 +85,7 @@
     ko.applyBindings(logoTitleModel, $('a.brand')[0]);
 
     self.model.showAlerts.subscribe(function(newValue) {
-      if ((self.model.showAlerts() !== newValue) && newValue === true) {
+      if (self.model.configLoaded() === true && newValue === true && packagesUpdated === true) {
         setTimeout(function() {
           checkForUpdates(checker);
         }, 5000);
@@ -91,9 +94,10 @@
 
     setTimeout(
       function() {
-        $.post(configManager.dashboardUrl() + '/plugin/software/update/run')
+        $.post(configManager.dashboardUrl() + '/plugin/software/update/start')
           .done(function() {
-            console.log('Started apt-get update on cockpit');
+            packagesUpdated = true;
+            console.log('Done apt-get update on cockpit');
             checkForUpdates(checker);
            })
           .fail(function() { console.log('Error starting apt-get update on cockpit') });
@@ -113,4 +117,5 @@
 
   };
   window.Cockpit.plugins.push(SoftwareUpdater);
+
 }(window, jQuery));

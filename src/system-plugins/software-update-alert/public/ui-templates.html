@@ -1,11 +1,12 @@
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <strong>Software updates!</strong> 
+  <button type="button" class="close" onclick="$('#software-update-alert-container').addClass('hide
+')">&times;</button>
+  <strong>Software updates!</strong><br>
     The following components have updates:
   <ul data-bind="foreach: packages">
     <li data-bind="text: package"></li>
   </ul>
 
   <a data-bind="attr: {href: dashboardUrl() + '/#/software'}"
-     target="_blank" onclick="$('#softwareUpdateAlert').alert('close')">
-    Click to update!
+     target="_blank" onclick="$('#software-update-alert-container').addClass('hide')">
+  Click to update!
   </a>

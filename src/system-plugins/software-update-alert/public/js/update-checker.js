@@ -16,7 +16,7 @@
     var self = this;
 
     self.checkForUpdates = function(callback){
-      $.postJSON(
+      $.get(
         config.dashboardUrl() + "/plugin/software/updates/openrov-rov-*",
         function(updates) {
           callback(updates);
