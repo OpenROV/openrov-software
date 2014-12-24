@@ -70,7 +70,3 @@ else
 fi
 
 ${TEST_COMMAND}
-
-if [ -e "/.chroot_is_done" ]; then
-  ./lib/unmount.sh
-fi
