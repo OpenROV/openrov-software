@@ -16,7 +16,7 @@ script:
   - npm install --arch=armhf || onerror
   - git clean -d -x -f -e node_modules
   - cd src/static
-  - npm install
+  - npm install --loglevel error
   - npm run bower
   - cd ../..
 
