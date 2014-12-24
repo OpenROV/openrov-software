@@ -58,7 +58,7 @@ if [ -e "/.chroot_is_done" ]; then
   env
   echo "Building..."
   echo "Environment: $(uname -a)"
-  ./payload.sh
+  bash -ex ./payload.sh
 else
   if [ "${ARCH}" = "arm" ]; then
     # ARM test run, need to set up chrooted environment first
