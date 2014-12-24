@@ -6,16 +6,6 @@ SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
   self.dashboardUrl = ko.observable(undefined);
   getDashboardUrl();
 
-  self.getSelectedBranches = function (callback) {
-    $.get('/system-plugin/software-update/config/selectedBranches', function (config) {
-      if (callback != undefined)
-        callback(config ? config : { branches: [] } );
-    });
-  };
-  self.setSelectedBranches = function (branches) {
-    $.post('/system-plugin/software-update/config/selectedBranches', branches);
-  };
-
   self.getShowAlerts = function (callback) {
     $.get('/system-plugin/software-update/config/showAlerts', function (settings) {
       if (callback != undefined)

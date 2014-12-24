@@ -12,10 +12,6 @@ function softwareUpdate(name, deps) {
     res.send({url: deps.config.dashboardURL});
   });
 
-  deps.app.get('/system-plugin/software-update/config/selectedBranches', function (req, res) {
-    res.send(preferences['selectedBranches']);
-  });
-
   deps.app.get('/system-plugin/software-update/config/showAlerts', function (req, res) {
     res.send(preferences['showAlerts']);
   });
@@ -27,20 +23,12 @@ function softwareUpdate(name, deps) {
     res.status(200);
     res.send(preferences['showAlerts']);
   });
-
-  deps.app.post('/system-plugin/software-update/config/selectedBranches', function (req, res) {
-    preferences['selectedBranches'] = req.body;
-    deps.config.preferences.set(PREFERENCES, preferences);
-    deps.config.savePreferences();
-    res.status(200);
-    res.send(preferences['selectedBranches']);
-  });
 }
 
 function getPreferences(config) {
   var preferences = config.preferences.get(PREFERENCES);
   if (preferences == undefined) {
-    preferences = { showAlerts: { showAlerts: true} };
+    preferences = { showAlerts: { showAlerts: true}, selectedBranches: { branches: "stable"} };
     config.preferences.set(PREFERENCES, preferences);
   }
   console.log('Software Update plugin loaded preferences: ' + JSON.stringify(preferences));
