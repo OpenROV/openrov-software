@@ -10,8 +10,4 @@ apt-get install -y curl
 curl -sL https://deb.nodesource.com/setup | bash -
 apt-get install -y nodejs
 
-npm install
-
-cd src/static
-npm install
-npm run bower
+npm rebuild

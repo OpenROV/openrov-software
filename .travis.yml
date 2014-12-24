@@ -1,4 +1,6 @@
-language: python
+language: node_js
+node_js:
+  - 0.10
 install: gem install fpm
 
 env:
@@ -9,8 +11,14 @@ env:
   - REAL_GIT_BRANCH="`git for-each-ref --format='%(objectname) %(refname:short)' refs/heads
     | grep $TRAVIS_COMMIT | awk '{print $2}'`"
   - ARCH=arm
-  
+
 script:
+  - npm install --arch=armhf || onerror
+  - git clean -d -x -f -e node_modules
+  - cd src/static
+  - npm install
+  - npm run bower
+
   - "bash -ex .travis-ci.sh"
 
 after_success:
