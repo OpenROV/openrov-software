@@ -1,17 +1,15 @@
 language: python
 install: gem install fpm
-node_js:
-  - 0.10
 
 env:
-  - ARCH=arm
   global:
   - VERSION_NUMBER="`cat package.json | grep version | grep -o '[0-9]\.[0-9]\.[0-9]\+'`"
   - BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
   - secure: "P4i5RD2+chpGAPtkn1JYChOc+TVEHdHVVWA40uVAaHqRGm0I/kAvA2i4xXun0VAFFJJjQgC7BSdzQs9kP6IVu4x7VVXyOt3OYMql8ehsH6LU3Q476Rb+HIOzX30qYx+7F+cHUPFp/BTiyEJ+IOjU6sDTWLmSDpjUvVD2Tzg+PLI="
   - REAL_GIT_BRANCH="`git for-each-ref --format='%(objectname) %(refname:short)' refs/heads
     | grep $TRAVIS_COMMIT | awk '{print $2}'`"
-
+  - ARCH=arm
+  
 script:
   - "bash -ex .travis-ci.sh"
 
