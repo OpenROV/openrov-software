@@ -18,6 +18,7 @@ script:
   - cd src/static
   - npm install
   - npm run bower
+  - cd ../..
 
   - "bash -ex .travis-ci.sh"
 
