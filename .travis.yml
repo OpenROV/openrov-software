@@ -9,9 +9,6 @@ env:
   - REAL_GIT_BRANCH="`git for-each-ref --format='%(objectname) %(refname:short)' refs/heads
     | grep $TRAVIS_COMMIT | awk '{print $2}'`"
   - ARCH=arm
-addons:
-  hosts:
-    - registry.npmjs.org
 
 script:
   - "bash -ex .travis-ci.sh"
