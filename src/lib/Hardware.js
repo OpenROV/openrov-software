@@ -42,7 +42,7 @@ function Hardware() {
     if (CONFIG.production && serialConnected) {
       var currenttime = new Date();
       var delay = 3-((currenttime.getTime() - timesent.getTime()));
-      if (delay < 0) delay == 0;
+      if (delay < 0) delay = 0;
       timesent = currenttime; 
       timesent.setMilliseconds(timesent.getMilliseconds + delay);
       setTimeout(function(){
