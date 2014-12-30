@@ -11,6 +11,7 @@ env:
   - ARCH=arm
 
 script:
+  - cat /etc/hosts
   - "bash -ex .travis-ci.sh"
 
 after_success:

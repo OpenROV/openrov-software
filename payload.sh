@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+cat /etc/hosts
 echo 'nameserver 8.8.4.4' > /etc/resolv.conf
 echo 'nameserver 208.67.222.222' >> /etc/resolv.conf
 echo 'nameserver 208.67.220.220' >> /etc/resolv.conf
