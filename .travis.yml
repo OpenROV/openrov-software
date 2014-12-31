@@ -10,6 +10,11 @@ env:
     | grep $TRAVIS_COMMIT | awk '{print $2}'`"
   - ARCH=arm
 
+before_script:
+  - sudo add-apt-repository ppa:linaro-maintainers/tools -y
+  - sudo apt-get update -q
+  - sudo apt-get install qemu
+
 script:
   - cat /etc/hosts
   - "bash -ex .travis-ci.sh"
