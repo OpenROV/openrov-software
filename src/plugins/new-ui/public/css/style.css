@@ -38,16 +38,19 @@
     margin: 15px;
 }
 
-#UI .compassNeedle {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 200px;
-    left: 45px;
-}
-
 #UI .newui-item h4 {
     text-align: center;
     color: white;
+    top: -20px;
+    background-color: black;
+    padding: 5px 10px;
+    display: inline-block;
+    left: 20%
+}
 
+#UI #heading-item { margin-top: 5px;}
+#UI #newui-compass {
+    width: 150px;
+    top: -30px;
+    margin-bottom: -25px;
 }

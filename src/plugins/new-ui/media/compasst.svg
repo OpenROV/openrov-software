@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="svg3988" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 989.19 980.61" version="1.2" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <metadata id="metadata4078">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="g4986" transform="translate(22.040901,12.197624)">
+  <g id="rose">
+   <circle id="circle" stroke-width="10" d="m 832.5,472.5 c 0,198.82251 -161.17749,360 -360,360 -198.82251,0 -360,-161.17749 -360,-360 0,-198.82251 161.17749,-360 360,-360 198.82251,0 360,161.17749 360,360 z" cy="472.5" stroke="#000" cx="472.5" r="360" fill="none"/>
+   <rect id="rect4935" y="96" width="10" x="467.5" height="30"/>
+   <rect id="rect4937" transform="matrix(-1,0,0,-1,945,945)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4943" transform="matrix(0,1,-1,0,945,0)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4949" transform="matrix(0,-1,1,0,0,945)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4951" transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,-195.71591,472.5)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4953" transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,472.5,1140.7159)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4955" transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,1140.7159,472.5)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4957" transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,472.5,-195.71591)" height="30" width="10" y="96" x="467.5"/>
+   <g id="indicators" font-size="100px" font-family="Sans" style="word-spacing:0;letter-spacing:0;" letter-spacing="0" word-spacing="0" font-weight="bold">
+    <text id="indicator_n" style="text-anchor:middle;text-align:center;" line-height="125%" y="90.702766" x="471.9191">N</text>
+    <text id="text4961" style="text-anchor:middle;text-align:center;" transform="matrix(-1,0,0,-1,943.74133,945)" line-height="125%" y="80.803268" x="471.90582">S</text>
+    <text id="text4965" style="text-anchor:middle;text-align:center;" transform="matrix(0,1,-1,0,0,0)" line-height="125%" y="-864.25293" x="471.84961">E</text>
+    <text id="text4967" style="text-anchor:middle;text-align:center;" transform="matrix(0,-1,1,0,0,0)" line-height="125%" y="80.859489" x="-473.15039">W</text>
+    <text id="text4969" style="text-anchor:middle;text-align:center;" transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" line-height="125%" font-size="72px" y="278.64713" x="-4.2105641">NW</text>
+    <text id="text4971" style="text-anchor:middle;text-align:center;" transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)" line-height="125%" font-size="72px" y="-393.78027" x="-670.0802">SW</text>
+    <text id="text4973" style="text-anchor:middle;text-align:center;" transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)" line-height="125%" font-size="72px" y="-1060.8452" x="1.1167512">SE</text>
+    <text id="text4975" style="text-anchor:middle;text-align:center;" transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)" line-height="125%" font-size="72px" y="-391.12482" x="667.26764">NE</text>
+   </g>
+  </g>
+  <text id="heading" style="letter-spacing:0;text-anchor:middle;word-spacing:0;text-align:center;" font-family="Sans" font-size="305.56399536px" letter-spacing="0" line-height="125%" word-spacing="0" y="578.01447" x="460.67117" font-weight="bold">0</text>
+  <g id="indicator" stroke="#000" transform="translate(17.197253,32.920483)">
+   <path id="path4064" stroke-width="0.142416" d="m455.69,101.81c-0.036-0.01-0.036-0.012,0.014-0.118l0.05-0.107v0.12c0,0.065-0.005,0.118-0.013,0.117-0.006,0-0.03-0.007-0.05-0.013z"/>
+   <path id="path4066" stroke-width="5" fill="none" d="M456.13,192.2v-91.798l-62.43,130.28z"/>
+   <path id="path4068" stroke-width="5" fill="none" d="M456.13,192.2,522.54,230.68,456.13,100.4z"/>
+   <path id="path4070" stroke-width=".516.713" d="m396.29,227.73c0-0.2,57.356-120.04,58.458-122.14,0.51-0.972,0.524,0.132,0.536,42.497l0.013,43.496-28.863,17.774c-15.873,9.775-29.15,17.956-29.502,18.18-0.353,0.223-0.642,0.31-0.642,0.195z"/>
+   <path id="path4072" stroke-width="0.039216" d="m455.29,105.12c-0.017-0.023-0.068-0.07-0.114-0.1-0.078-0.056-0.093-0.06-0.204-0.076l-0.12-0.017,0.233-0.487,0.234-0.488,0.004,0.3c0.003,0.166,0.003,0.438,0,0.606l-0.003,0.305-0.03-0.045z"/>
+  </g>
+  <circle id="bearing" cy="80" cx="472.5" r="20"/>
+ </g>
+</svg>

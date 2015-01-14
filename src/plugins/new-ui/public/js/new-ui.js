@@ -33,8 +33,13 @@
         $('#newui-video').width($(window).innerWidth() - $('#newui-controlpad').innerWidth() );
         $('#compass').hide();
 
-        $('.topdowncompass').appendTo('#newui-compass');
-        $('.topdowncompass').removeClass('pull-left');
+        //$('.topdowncompass').appendTo('#newui-compass');
+        //$('.topdowncompass').removeClass('pull-left');
+        $('#newui-compass').load(jsFileLocation + '../compass.html', function () {
+          window.OpenRovPluginNewUICompass.format({indicator: 'white'});
+          window.OpenRovPluginNewUICompass.setHeading(200);
+          window.OpenRovPluginNewUICompass.setBearing();
+        });
 
       });
     }
