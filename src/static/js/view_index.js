@@ -85,19 +85,3 @@ $('#keyboardpopover').hover(function () {
   $('#keyboardpopover').attr('data-content', $('#keyboardInstructions').html());
 });
 $('[rel=\'popover\']').popover();
-// The next session draws the video img to a canvas which is then managed by the GPU
-// and is much faster than the browser painting the img tag.
-var canvas = document.getElementById('video-canvas');
-var srcImg = document.getElementById('video');
-var videocontainer = $('#video-container');
-var newCanvas, newImg;
-setInterval(function () {
-  var width = videocontainer.innerWidth();
-  var height = videocontainer.innerHeight();
-  canvas.width = width;
-  canvas.height = height;
-  var ctx = canvas.getContext('2d');
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  var proportionalHeight = width * srcImg.height / srcImg.width;
-  ctx.drawImage(srcImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
-}, 64);  //only need to redraw at the framerate of source video
