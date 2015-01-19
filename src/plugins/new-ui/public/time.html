@@ -9,125 +9,98 @@
 <style type="text/css">
 
   /*For Testing:*/
-  /*body { color: #ffffff; background-color: #000000 }*/
-  /*.center {*/
-    /*left: 0;*/
-    /*right: 0;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*float: none;*/
-  /*}*/
-  /** {*/
-    /*position: relative;*/
-    /*z-index: 1;*/
-  /*}*/
+  body { color: #ffffff; background-color: #000000 }
+  .center {
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+  }
+  * {
+    position: relative;
+    z-index: 1;
+  }
   /*/For Testing*/
 
-  #switches-container {
+  #time-container {
     display: table;
-    border-collapse: collapse;
+    color: #ffffff;
+    width: 100%;
   }
-  .switches-header-row {
+  .time-row {
     display: table-row;
   }
-  .switches-row {
-    display: table-row;
-    font-size: smaller;
-    line-height: 1em;
-  }
-  .switches-switch-on,
-  .switches-switch-off {
+  .time-cell {
     display: table-cell;
-    width: 30%;
   }
-  .switches-switch-on {
-    text-align: right;
-    padding-right: 0.4em;
-    border-right: solid 1px white;
+  #time-container #time,
+  #time-container #runtime
+  {
+    font-size: 2em;
   }
-  .switches-switch-off {
-    text-align: left;
-    padding-left: 0.4em;
+  .line-cell {
+    display: table-cell;
+    width: 50%; height: 5px
   }
-  .switches-header-row > div,
-  .switches-row > div {
-    padding-top: 0.1em;
+  .description-cell {
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 0.9em;
   }
-  .switches-header-row {
-    border-bottom: solid 1px #ffffff;
-    font-weight: bold;
+  .line-cell hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 0.1em solid white;
+    margin: 0 0 .2em;
+    padding: 0;
   }
-  .switch-on > .switches-switch-on { color: #ffffff }
-  .switch-on > .switches-switch-off { color: transparent }
-  .switch-off > .switches-switch-on { color: transparent }
-  .switch-off > .switches-switch-off { color: #ffffff }
+  .text-center { text-align: center;}
 
 </style>
-<div id="switches-container" class="center">
-  <div class="switches-header-row">
-    <div class="switches-switch-on">ON</div>
-    <div class="switches-switch-off">OFF</div>
+<div id="time-container" class="center">
+  <div class="time-row">
+    <div id="time" class="time-cell text-center">00:00:00</div>
   </div>
-
+  <div class="time-row">
+    <div class="time-cell">
+      <span class="line-cell"><hr /></span>
+      <span class="time-cell description-cell text-center">RUN</span>
+      <span class="line-cell"><hr /></span>
+    </div>
+  </div>
+  <div class="time-row">
+    <div id="runtime" class="time-cell text-center">00:00:00</div>
+  </div>
 </div>
 
 <script>
   $(function () {
-    var Switches = function () {
+    var Time = function () {
       var self = this;
-      var switches = {
-        COM: {switchable: false, state: true},
-        GPD: {switchable: false, state: true},
-        TNK: {switchable: true, state: false},
-        DLK: {switchable: true, state: false},
-        HLK: {switchable: true, state: false},
-        LSR: {switchable: true, state: true},
-        LED: {switchable: true, state: false}
-        };
+      var timeCell = $("#time");
+      var runtimeCell = $("#runtime");
 
-      var container = $('#switches-container');
-
-      var update = function () {
-        for (var aSwitch in switches) {
-          var theSwitch = $('#' + aSwitch);
-          var toRemove = switches[aSwitch].state ? "switch-off" : 'switch-on';
-          var toAdd = switches[aSwitch].state ? "switch-on" : 'switch-off';
-          theSwitch.removeClass(toRemove);
-          theSwitch.addClass(toAdd);
-        }
+      var update = function() {
+        timeCell.text(new Date().toLocaleTimeString());
       };
 
-      self.onSwitch = function(aSwitch) { };
-      self.switch = function(aSwitch) {
-        switches[aSwitch].state = !switches[aSwitch].state;
-        update();
+      self.runtime = function(runtime) {
+        runtimeCell.text(runtime);
       };
 
-      for (var aSwitch in switches) {
-        container.append(
-          '<div class="switches-row" id="' + aSwitch + '">'+
-          '<div class="switches-switch-on">' + aSwitch + '</div>'+
-          '<div class="switches-switch-off">'+ aSwitch + '</div>'+
-          '</div>');
-        if (switches[aSwitch].switchable) {
-          $('#' + aSwitch).click(function () {
-            var property = $(this).attr('id');
-            self.switch(property);
-            self.onSwitch(property);
-          })
-        }
-      }
+      setInterval(update, 1000);
 
-      update();
       return self;
     };
 
-    window.OpenRovPluginNewUISwitches = new Switches();
+    window.OpenRovPluginNewUISwitches = new Time();
   });
 
 
   $(function () {
-    if (window.location.href.indexOf('switches.html') > 0) {
+    if (window.location.href.indexOf('time.html') > 0) {
     }
   })
 </script>

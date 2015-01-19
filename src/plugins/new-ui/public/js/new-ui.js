@@ -46,6 +46,9 @@
         $('#newui-switches').load(jsFileLocation + '../switches.html', function () {
         });
 
+        $('#newui-time').load(jsFileLocation + '../time.html', function () {
+        });
+
       });
     }
   };
