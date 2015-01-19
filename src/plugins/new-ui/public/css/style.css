@@ -34,7 +34,7 @@
 }
 
 #UI .newui-item {
-    border: 1px solid grey;
+    border: 1px solid white;
     margin: 15px;
 }
 
@@ -49,28 +49,12 @@
 }
 
 #UI #heading-item { margin-top: 5px;}
-#UI #newui-compass {
-    width: 150px;
-    top: -30px;
-    margin-bottom: -25px;
-}
 
-#UI #newui-depth {
-    width: 150px;
+#UI .control {
+    width: 100%;
     top: -30px;
     margin-bottom: -25px;
     color: white;
-}
-#UI #newui-switches {
-    width: 150px;
-    top: -30px;
-    margin-bottom: -25px;
-    color: white;
-}
-
-#UI #newui-time {
-    width: 150px;
-    top: -30px;
-    margin-bottom: -25px;
-    color: white;
+    margin-left: 0;
+    margin-right: 0;
 }
