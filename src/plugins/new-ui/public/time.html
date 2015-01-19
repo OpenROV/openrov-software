@@ -1,107 +1,105 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
 <!--For Test:-->
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.8.3.min.js" ></script>
-<script type="text/javascript" src="../public/js/0_jquery.svg.min.js" ></script>
-<script type="text/javascript" src="../public/js/1_jquery.svgdom.min.js" ></script>
-<script type="text/javascript" src="../public/js/2_jquery.svganim.min.js" ></script>
+<!--<script type="text/javascript" src="https://code.jquery.com/jquery-1.8.3.min.js" ></script>-->
+<!--<script type="text/javascript" src="../public/js/0_jquery.svg.min.js" ></script>-->
+<!--<script type="text/javascript" src="../public/js/1_jquery.svgdom.min.js" ></script>-->
+<!--<script type="text/javascript" src="../public/js/2_jquery.svganim.min.js" ></script>-->
 
 <!--/For Test-->
 
-<style type="text/css">
+<polymer-element name="newui-time" attributes="time">
+  <template>
+    <style type="text/css">
 
-  /*For Testing:*/
-  body { color: #ffffff; background-color: #000000 }
-  .center {
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    float: none;
-  }
-  * {
-    position: relative;
-    z-index: 1;
-  }
-  /*/For Testing*/
+      /*For Testing:*/
+      /*body { color: #ffffff; background-color: #000000 }*/
+      /*.center {*/
+        /*left: 0;*/
+        /*right: 0;*/
+        /*margin-le ft: auto;*/
+        /*margin-right: auto;*/
+        /*float: none;*/
+      /*}*/
+      /** {*/
+        /*position: relative;*/
+        /*z-index: 1;*/
+      /*}*/
+      /*/For Testing*/
 
-  #time-container {
-    display: table;
-    color: #ffffff;
-    width: 100%;
-  }
-  .time-row {
-    display: table-row;
-  }
-  .time-cell {
-    display: table-cell;
-  }
-  #time-container #time,
-  #time-container #runtime
-  {
-    font-size: 2em;
-  }
-  .line-cell {
-    display: table-cell;
-    width: 50%; height: 5px
-  }
-  .description-cell {
-    padding-left: 4px;
-    padding-right: 4px;
-    font-size: 0.9em;
-  }
-  .line-cell hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 0.1em solid white;
-    margin: 0 0 .2em;
-    padding: 0;
-  }
-  .text-center { text-align: center;}
+      #time-container {
+        display: table;
+        color: #ffffff;
+        width: 100%;
+      }
+      .time-row {
+        display: table-row;
+      }
+      .time-cell {
+        display: table-cell;
+      }
+      #time-container #time,
+      #time-container #runtime
+      {
+        font-size: 2em;
+      }
+      .line-cell {
+        display: table-cell;
+        width: 50%; height: 5px
+      }
+      .description-cell {
+        padding-left: 4px;
+        padding-right: 4px;
+        font-size: 0.9em;
+      }
+      .line-cell hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 0.1em solid white;
+        margin: 0 0 .2em;
+        padding: 0;
+      }
+      .text-center { text-align: center;}
 
-</style>
-<div id="time-container" class="center">
-  <div class="time-row">
-    <div id="time" class="time-cell text-center">00:00:00</div>
-  </div>
-  <div class="time-row">
-    <div class="time-cell">
-      <span class="line-cell"><hr /></span>
-      <span class="time-cell description-cell text-center">RUN</span>
-      <span class="line-cell"><hr /></span>
+    </style>
+    <div id="time-container" class="center">
+      <div class="time-row">
+        <div id="time" class="time-cell text-center">{{time}}</div>
+      </div>
+      <div class="time-row">
+        <div class="time-cell">
+          <span class="line-cell"><hr /></span>
+          <span class="time-cell description-cell text-center">RUN</span>
+          <span class="line-cell"><hr /></span>
+        </div>
+      </div>
+      <div class="time-row">
+        <div id="runtime" class="time-cell text-center">00:00:00</div>
+      </div>
     </div>
-  </div>
-  <div class="time-row">
-    <div id="runtime" class="time-cell text-center">00:00:00</div>
-  </div>
-</div>
 
-<script>
-  $(function () {
-    var Time = function () {
-      var self = this;
-      var timeCell = $("#time");
-      var runtimeCell = $("#runtime");
+  </template>
+  <script>
+    Polymer({
+      time: new Date().toLocaleTimeString(),
+      runtime: "00:00:00",
+      ready: function() {
+        var self = this;
 
-      var update = function() {
-        timeCell.text(new Date().toLocaleTimeString());
-      };
+        var update = function () {
+          self.time = new Date().toLocaleTimeString()
+        };
 
-      self.runtime = function(runtime) {
-        runtimeCell.text(runtime);
-      };
+        setInterval(update, 1000);
+      },
+      setRuntime: function (runtime) {
+        self.runtime = runtime;
+      }
+    });
+  </script>
 
-      setInterval(update, 1000);
+</polymer-element>
+  
 
-      return self;
-    };
-
-    window.OpenRovPluginNewUISwitches = new Time();
-  });
-
-
-  $(function () {
-    if (window.location.href.indexOf('time.html') > 0) {
-    }
-  })
-</script>
 
