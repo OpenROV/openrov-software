@@ -1,10 +1,76 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 
-</body>
-</html>
+<polymer-element name="rov-video">
+  <template>
+    <style type="text/css">
+      #container {
+        height: 100%;
+        width: 100%;
+      }
+
+      #video {
+        border: 2px solid black;
+        background-color: black;
+        max-width: 100%;
+        vertical-align: middle;
+        height: 100%;
+      }
+
+      .hidden {
+      display: none;
+      visibility: hidden;
+      }
+    </style>
+
+    <div id="container">
+      <img class="hidden" id="video" src="../../themes/OpenROV/img/no_camera.jpg"/>
+      <canvas id='videoCanvas'></canvas>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      ready: function() {
+
+        var canvas = this.$.videoCanvas;
+        var srcImg = this.$.video;
+        var videocontainer = $(this.$.container);
+
+
+
+        setInterval(function () {
+          var width = videocontainer.innerWidth();
+          var height = videocontainer.innerHeight();
+          canvas.width = width;
+          canvas.height = height;
+          var ctx = canvas.getContext('2d');
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          var proportionalHeight = width * srcImg.height / srcImg.width;
+
+
+          try {
+            ctx.drawImage(srcImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
+          }
+          catch(e) { }
+        }, 64);  //only need to redraw at the framerate of source video
+
+        var socket = window.io.connect();
+
+        socket.on('videoStarted', function (data) {
+          var address = 'http://' + socket.io.engine.hostname + ':' + CONFIG.video_port + '/?action=stream';
+          $(srcImg).attr('src', address);
+          console.log('video enabled');
+        });
+        socket.on('VideoStopped', function (data) {
+          console.log('video stopped');
+        });
+
+
+      }
+    });
+  </script>
+
+</polymer-element>
+  
+
+

@@ -40,7 +40,6 @@
   <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
   <script type='text/javascript' src='js/libs/gamepad.js'></script>
   <script type='text/javascript' src='js/utilities.js'></script>
-  <script type='text/javascript' src="js/frame.js"></script>
   <script type='text/javascript' src="js/cockpit.js"></script>
   <script type='text/javascript' src='js/libs/db.js'></script>
   <script type='text/javascript' src="js/libs/IndexedDBShim.min.js"></script>
@@ -51,6 +50,8 @@
   <script type='text/javascript' src='js/knockout-extentions.js'></script>
   <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
   <link rel="import" href="bower_components/polymer/polymer.html">
+
+  <link rel="import" href="/webcomponents/video/video.html">
 
 
   <% for(var i=0; i<scripts.length; i++) {%>
@@ -78,8 +79,7 @@
           <div class="row-fluid full-height">
             <div class="span9 border full-height" id="outter-videocontainer">
               <div id="video-container" class="full-height center pagination-centered" border='1'>
-                <img class="hidden" id="video" src="themes/OpenROV/img/no_camera.jpg"/>
-                <canvas id='video-canvas'/>
+                <rov-video></rov-video>
               </div>
             </div>
             <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
