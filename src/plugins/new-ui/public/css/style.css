@@ -3,29 +3,29 @@
     color: white;
 }
 
-#UI .navbar-fixed-top .navbar-inner {
+.navbar-fixed-top .navbar-inner {
     height: 30px;
 }
 
-#UI .logo {
+.logo {
     width: 140px;
     vertical-align: middle;
 }
 
-#UI a .navbar-titel {
+a .navbar-titel {
     font-size: 20px;
     line-height: 22px;
 }
 
-#UI .navbar .brand {
+.navbar .brand {
     padding-top: 5px;
 }
 
-#UI .navbar .brand * {
+.navbar .brand * {
     vertical-align: middle;
 }
 
-#UI #newui-controlpad {
+#newui-controlpad {
     position: absolute;
     top: 35px;
     right: 0;
@@ -33,12 +33,12 @@
     height: 400px;
 }
 
-#UI .newui-item {
+.newui-item {
     border: 1px solid white;
     margin: 15px;
 }
 
-#UI .newui-item h4 {
+.newui-item h4 {
     text-align: center;
     color: white;
     top: -20px;
@@ -48,9 +48,9 @@
     left: 20%
 }
 
-#UI #heading-item { margin-top: 5px;}
+#heading-item { margin-top: 5px;}
 
-#UI .control {
+.control {
     width: 100%;
     top: -30px;
     margin-bottom: -25px;

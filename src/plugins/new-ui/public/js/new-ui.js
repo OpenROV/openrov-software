@@ -15,38 +15,47 @@
     };
 
     function loadNewUi() {
-      var body = $('body');
-      var children = body.children();
-      body.append('<div id="UI" class=""></div>');
-      body.append('<div id="oldChildren"></div>');
-      children.appendTo('#oldChildren');
-      $('#oldChildren').hide();
 
       var jsFileLocation = urlOfJsFile('new-ui.js');
 
-      $('#UI').load(jsFileLocation + '../new-ui.html', function () {
+      Polymer.import([jsFileLocation + '../new-ui.html'], function() {
 
-        $('#software-update-alert-container').appendTo('#newui-body');
-        $('#video-container').appendTo('#newui-video');
-        $('head').append('<link rel="import" href="/plugin/new-ui/time.html" />');
-        $('head').append('<link rel="import" href="/plugin/new-ui/compass.html" />');
+        var body = $('body');
+        var children = body.children();
+        body.append('<div id="oldChildren"></div>');
+        children.appendTo('#oldChildren');
+        $('#oldChildren').hide();
 
-        //somehow the width of the controlpad is not determind at first
-        setTimeout(function() {
-          var innerWidth = $('#newui-controlpad').innerWidth();
-          $('#newui-video').height($(window).innerHeight() - $('#newui-topbar').innerHeight() );
-          $('#newui-video').width($(window).innerWidth() -  innerWidth);
-        }, 500);
-        $('#compass').hide();
-
-        $('#newui-depth').load(jsFileLocation + '../depth.html', function () {
-          window.OpenRovPluginNewUIDepth.format({indicatorActive: 'white', indicatorInactive: 'black'});
-          window.OpenRovPluginNewUIDepth.setDepth(3.71);
-        });
-        $('#newui-switches').load(jsFileLocation + '../switches.html', function () {
-        });
-
+        body.append('<div id="UI" class=""><x-newui></x-newui></div>');
       });
+
+      //$('#UI').load(jsFileLocation + '../new-ui.html', function () {
+      //
+      //  window.OpenROVPluginNewUI = {};
+      //  window.OpenROVPluginNewUI.ready = function() {
+      //
+      //  };
+      //
+      //  $('#software-update-alert-container').appendTo('#newui-body');
+      //
+      //  $('head').append('<link rel="import" href="/plugin/new-ui/time.html" />');
+      //  $('head').append('<link rel="import" href="/plugin/new-ui/compass.html" />');
+      //  $('head').append('<link rel="import" href="/plugin/new-ui/video.html" />');
+      //
+      //  //somehow the width of the controlpad is not determind at first
+      //  setTimeout(function() {
+      //
+      //  }, 500);
+      //  $('#compass').hide();
+      //
+      //  $('#newui-depth').load(jsFileLocation + '../depth.html', function () {
+      //    window.OpenRovPluginNewUIDepth.format({indicatorActive: 'white', indicatorInactive: 'black'});
+      //    window.OpenRovPluginNewUIDepth.setDepth(3.71);
+      //  });
+      //  $('#newui-switches').load(jsFileLocation + '../switches.html', function () {
+      //  });
+      //
+      //});
     }
   };
   window.Cockpit.plugins.push(Ui);

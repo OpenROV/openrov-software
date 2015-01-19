@@ -1,47 +1,70 @@
-<div id="newui-body">
-  <div id="newui-container" class="full-height">
-    <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
-      <div id="newui-topbar" class="navbar-inner">
-        <a class="brand" href="#"><img src="themes/OpenROV/img/openrov.png" class="logo"><span class="navbar-titel">Cockpit</span></a>
-      </div>
-    </div>
-  </div>
-  <div id="newui-video" class="full-height"></div>
-  <div id="newui-controlpad">
-    <div class="newui-item" id="heading-item">
-      <div class="center">
-        <H4>Heading</H4>
-        <div id="newui-compass" class="center control">
-          <newui-compass heading="200" bearing="180"></newui-compass>
-        </div>
-      </div>
-    </div>
-    <div class="newui-item" id="depth-item">
-      <div class="center">
-        <H4>Depth</H4>
-        <div id="newui-depth" class="center control"></div>
-      </div>
-    </div>
-    <div class="newui-item" id="throttle-item">
-      <div class="center">
-        <H4>Throttle</H4>
-        <div id="newui-throttle" class="center control"></div>
-      </div>
-    </div>
-    <div class="newui-item" id="switches-item">
-      <div class="center">
-        <H4>Switches</H4>
-        <div id="newui-switches" class="center control"></div>
-      </div>
-    </div>
-    <div class="newui-item" id="time-item">
-      <div class="center">
-        <H4>Time</H4>
-        <div id="newui-time" class="center control">
-          <newui-time></newui-time>
-        </div>
-      </div>
-    </div>
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="/plugin/new-ui/time.html" />
+<link rel="import" href="/plugin/new-ui/compass.html" />
+<link rel="import" href="/plugin/new-ui/video.html" />
 
-  </div>
-</div>
+<polymer-element name="x-newui">
+  <template>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <div id="newui-body">
+      <div id="newui-container" class="full-height">
+        <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
+          <div id="newui-topbar" class="navbar-inner">
+            <a class="brand" href="#"><img src="../../themes/OpenROV/img/openrov.png" class="logo"><span class="navbar-titel">Cockpit</span></a>
+          </div>
+        </div>
+      </div>
+      <div id="newui-video" class="full-height">
+        <newui-video id="videoElement"></newui-video>
+      </div>
+      <div id="newui-controlpad">
+        <div class="newui-item" id="heading-item">
+          <div class="center">
+            <H4>Heading</H4>
+            <div id="newui-compass" class="center control">
+              <newui-compass heading="200" bearing="180"></newui-compass>
+            </div>
+          </div>
+        </div>
+        <div class="newui-item" id="depth-item">
+          <div class="center">
+            <H4>Depth</H4>
+            <div id="newui-depth" class="center control"></div>
+          </div>
+        </div>
+        <div class="newui-item" id="throttle-item">
+          <div class="center">
+            <H4>Throttle</H4>
+            <div id="newui-throttle" class="center control"></div>
+          </div>
+        </div>
+        <div class="newui-item" id="switches-item">
+          <div class="center">
+            <H4>Switches</H4>
+            <div id="newui-switches" class="center control"></div>
+          </div>
+        </div>
+        <div class="newui-item" id="time-item">
+          <div class="center">
+            <H4>Time</H4>
+            <div id="newui-time" class="center control">
+              <newui-time></newui-time>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      ready: function() {
+        var video = this.$.videoElement;
+        video.setElement($('#video-container'));
+
+      }
+    })
+  </script>
+</polymer-element>

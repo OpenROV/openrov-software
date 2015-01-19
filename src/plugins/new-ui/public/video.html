@@ -1,0 +1,31 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="newui-video">
+  <template>
+    <style type="text/css">
+
+    </style>
+    <div id="videoContainer" class="center">
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      ready: function() {
+      },
+      setElement: function (element) {
+        if (element.length > 0) {
+          var container = $(this.$.videoContainer);
+          $(element).appendTo(container);
+        }
+//        var innerWidth = $('#newui-controlpad').innerWidth();
+//        $('#newui-video').height($(window).innerHeight() - $('#newui-topbar').innerHeight() );
+//        $('#newui-video').width($(window).innerWidth() -  innerWidth);
+      }
+    });
+  </script>
+
+</polymer-element>
+  
+
+
