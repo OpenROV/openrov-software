@@ -29,6 +29,7 @@
         $('#software-update-alert-container').appendTo('#newui-body');
         $('#video-container').appendTo('#newui-video');
         $('head').append('<link rel="import" href="/plugin/new-ui/time.html" />');
+        $('head').append('<link rel="import" href="/plugin/new-ui/compass.html" />');
 
         //somehow the width of the controlpad is not determind at first
         setTimeout(function() {
@@ -38,21 +39,12 @@
         }, 500);
         $('#compass').hide();
 
-        $('#newui-compass').load(jsFileLocation + '../compass.html', function () {
-          window.OpenRovPluginNewUICompass.format({indicator: 'white'});
-          window.OpenRovPluginNewUICompass.setHeading(200);
-          window.OpenRovPluginNewUICompass.setBearing();
-        });
-
         $('#newui-depth').load(jsFileLocation + '../depth.html', function () {
           window.OpenRovPluginNewUIDepth.format({indicatorActive: 'white', indicatorInactive: 'black'});
           window.OpenRovPluginNewUIDepth.setDepth(3.71);
         });
         $('#newui-switches').load(jsFileLocation + '../switches.html', function () {
         });
-
-        //$('head').append('<link rel="import" href="' + jsFileLocation + '../time.html' +'">');
-        //$('#newui-time').append('<newui-time></newui-time>')
 
       });
     }
