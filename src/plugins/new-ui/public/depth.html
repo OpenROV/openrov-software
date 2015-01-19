@@ -1,0 +1,179 @@
+<!--For Test:-->
+<!--<script type="text/javascript" src="https://code.jquery.com/jquery-1.8.3.min.js" ></script>-->
+<!--<script type="text/javascript" src="../public/js/0_jquery.svg.min.js" ></script>-->
+<!--<script type="text/javascript" src="../public/js/1_jquery.svgdom.min.js" ></script>-->
+<!--<script type="text/javascript" src="../public/js/2_jquery.svganim.min.js" ></script>-->
+
+<!--<div>-->
+<!--<button id="test">Test</button>-->
+<!--<input type="text" id="testDepth" />-->
+<!--</div>-->
+
+<!--/For Test-->
+
+<style type="text/css">
+
+  /*For Testing:*/
+  /*.center {*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*float: none;*/
+  /*}*/
+  /** {*/
+    /*position: relative;*/
+    /*z-index: 1;*/
+  /*}*/
+  /*/For Testing*/
+
+  .unit { font-size: 0.95em; }
+  .text-center { text-align: center;}
+  #depth-container { width: 100%; }
+  #depth-depth {
+    font-size: 2.4em;
+    margin-bottom: -6px;
+  }
+  .depth-line-container,
+  #depth-change-container {
+    display:table;
+    width:100%;
+  }
+  .depth-line-container span,
+  #depth-change-container>div {
+    display:table-cell;
+    text-align:center;
+  }
+  .depth-line { width: 50%; height: 5px}
+  .depth-line-text {
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 0.9em;
+  }
+  .depth-line hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 0.2em solid white;
+    margin: 0 0 .2em;
+    padding: 0;
+  }
+
+  #depth-change-up { padding-left: 1em }
+  #depth-change-down { padding-right: 1em }
+  #depth-change-value { vertical-align: middle; font-size: 1.4em }
+  #depth-change-unit { margin-top: -6px; }
+  .depth-change-indicator { width: 20px; height: 20px }
+  svg { width: 100%; }
+</style>
+<div id="depth-container">
+  <div id="depth-depth" class="center text-center">
+    3.71
+  </div>
+  <div id="depth-unit" class="center text-center unit">(m)</div>
+  <div class="depth-line-container">
+    <span class="depth-line"><hr /></span>
+    <span class="depth-line-text">VSI</span>
+    <span class="depth-line"><hr /></span>
+  </div>
+  <div id="depth-change-container">
+    <div id="depth-change-up" class="depth-change-indicator">
+      <svg viewBox="0 0 100 100">
+        <polygon points="0,100 50,0 100,100" style="fill:black;stroke:black;stroke-width:4" />
+      </svg>
+    </div>
+    <div id="depth-change-value">+0.02</div>
+    <div id="depth-change-down" class="depth-change-indicator">
+      <svg viewBox="0 0 100 100">
+        <polygon points="0,0 50,100 100,0 " style="fill:none;stroke:black;stroke-width:4" />
+      </svg>
+    </div>
+  </div>
+  <div id="depth-change-unit" class="center text-center unit">m/s</div>
+
+</div>
+
+<script>
+  $(function () {
+    var Depth = function () {
+      var self = this;
+      var options = {
+        indicatorActive: "#000000",
+        indicatorInactive: "#ffffff",
+        strokeActive: "#ffffff",
+        strokeInactive: "#ffffff"
+      };
+
+      var oldDepth = 0;
+      var currentDepth = 0;
+
+      var depthChangeUp = $('#depth-change-up').find('svg polygon');
+      var depthChangeDown = $('#depth-change-down').find('svg polygon');
+      var depthText = $('#depth-depth');
+      var depthChange = $('#depth-change-value');
+
+      var update = function () {
+        if (currentDepth > oldDepth) { // descending
+          depthChangeUp.animate({ svgFill: options.indicatorInactive}, {duration: 600});
+          depthChangeDown.animate({ svgFill: options.indicatorActive}, {duration: 600});
+        }
+        else if (currentDepth < oldDepth) { // ascending
+          depthChangeUp.animate({ svgFill: options.indicatorActive}, {duration: 600});
+          depthChangeDown.animate({ svgFill: options.indicatorInactive}, {duration: 600});
+
+        }
+        else { // neutral
+          depthChangeUp.animate({ svgFill: options.indicatorInactive}, {duration: 600});
+          depthChangeDown.animate({ svgFill: options.indicatorInactive}, {duration: 600});
+        }
+        depthText.text(currentDepth);
+        var difference = oldDepth - currentDepth;
+
+        var changeText = "";
+        if (difference > 0) {
+          changeText = "+";
+        }
+        changeText += difference.toFixed(2);
+        depthChange.text(changeText);
+
+        oldDepth = currentDepth;
+      };
+
+      self.format = function (newOptions) {
+        options.indicatorActive = newOptions.indicatorActive ? newOptions.indicatorActive : options.indicatorActive;
+        options.indicatorInactive = newOptions.indicatorInactive ? newOptions.indicatorInactive : options.indicatorInactive;
+        options.strokeActive = newOptions.strokeActive ? newOptions.strokeActive : options.strokeActive;
+        options.strokeInactive = newOptions.strokeInactive ? newOptions.strokeInactive : options.strokeInactive;
+
+        depthChangeUp.css({fill: options.indicatorInactive, stroke: options.strokeInactive});
+        depthChangeDown.css({fill: options.indicatorInactive, stroke: options.strokeInactive});
+      };
+
+      self.setDepth = function (depthInMeters) {
+        currentDepth = depthInMeters;
+      };
+
+      setInterval(update, 1000);
+
+      return self;
+    };
+
+    window.OpenRovPluginNewUIDepth = new Depth();
+  });
+
+
+  $(function () {
+    if (window.location.href.indexOf('depth.html') > 0) {
+      var testButton = $('#test');
+      if (testButton) {
+        testButton.click(function() {
+          var value = $('#testDepth').val();
+          window.OpenRovPluginNewUIDepth.setDepth(parseFloat(value));
+        });
+      }
+
+
+    }
+  })
+</script>
+

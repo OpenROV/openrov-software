@@ -1,13 +1,15 @@
+<!--For Test:-->
 <!--<script type="text/javascript" src="https://code.jquery.com/jquery-1.8.3.min.js" ></script>-->
 <!--<script type="text/javascript" src="../public/js/0_jquery.svg.min.js" ></script>-->
 <!--<script type="text/javascript" src="../public/js/1_jquery.svgdom.min.js" ></script>-->
 <!--<script type="text/javascript" src="../public/js/2_jquery.svganim.min.js" ></script>-->
+<!--/For Test-->
 
 <style type="text/css">
-  #container { width: 100%; height: 100%; }
+  #compass-container { width: 100%; height: 100%; }
   svg { width: 100%; }
 </style>
-<div id="container">
+<div id="compass-container">
 
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
   <svg id="svg3988" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 989.19 980.61" version="1.2" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -70,7 +72,7 @@
       var bearing = $('#bearing');
       var indicator = $('#indicator');
       var circle = $('#circle');
-      var container = $('#container');
+      var container = $('#compass-container');
 
       self.format = function (newOptions) {
         options.indicator = newOptions.indicator ? newOptions.indicator : options.indicator;

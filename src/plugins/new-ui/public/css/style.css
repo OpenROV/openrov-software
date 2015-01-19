@@ -54,3 +54,16 @@
     top: -30px;
     margin-bottom: -25px;
 }
+
+#UI #newui-depth {
+    width: 150px;
+    top: -30px;
+    margin-bottom: -25px;
+    color: white;
+}
+#UI #newui-switches {
+    width: 150px;
+    top: -30px;
+    margin-bottom: -25px;
+    color: white;
+}
