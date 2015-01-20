@@ -37,6 +37,7 @@
 
       var socket = window.io.connect();
       var srcAddress = undefined;
+      var originalSrcAddress;
       socket.on('videoStarted', function (data) {
         var address = 'http://' + socket.io.engine.hostname + ':' + CONFIG.video_port + '/?action=stream';
         srcAddress = address;
@@ -55,6 +56,7 @@
           var canvas = this.$.videoCanvas;
           var srcImg = this.$.video;
           var videocontainer = $(this.$.container);
+          originalSrcAddress = $(srcImg).attr('src');
 
           var startRendering = function () {
             $(srcImg).attr('src', srcAddress);
@@ -67,11 +69,12 @@
               ctx.fillRect(0, 0, canvas.width, canvas.height);
               var proportionalHeight = width * srcImg.height / srcImg.width;
 
-
               try {
                 ctx.drawImage(srcImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
               }
               catch (e) {
+                clearInterval(this.intervall);
+                $(srcImg).attr('src', originalSrcAddress);
               }
             }, 64);  //only need to redraw at the framerate of source video
           };
@@ -85,6 +88,7 @@
             });
             socket.on('VideoStopped', function() {
               clearInterval(this.intervall);
+              $(srcImg).attr('src', originalSrcAddress);
             })
           }
         },
