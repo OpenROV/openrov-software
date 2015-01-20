@@ -74,8 +74,11 @@
         fragment.appendChild(li);
       }
     }
-    $('#TelemetryList').empty();
-    $('#TelemetryList')[0].appendChild(fragment.cloneNode(true));
+    var list = $('#TelemetryList');
+    list.empty();
+    if (list.length > 0) {
+      list[0].appendChild(fragment.cloneNode(true));
+    }
   };
   window.Cockpit.plugins.push(Telemetry);
 }(window, jQuery));

@@ -219,6 +219,7 @@ img.center {
 
 #footer{
   height: 150px;
+    bottom: -10px;
 }
 
 .full-height{

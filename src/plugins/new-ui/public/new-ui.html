@@ -8,18 +8,18 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
     <link rel="stylesheet" href="css/style.css">
-    <div id="newui-body">
-      <div id="newui-container" class="full-height">
+    <div id="newuiBody" class="full-height">
+      <div id="newuiContainer">
         <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
           <div id="newui-topbar" class="navbar-inner">
             <a class="brand" href="#"><img src="../../themes/OpenROV/img/openrov.png" class="logo"><span class="navbar-titel">Cockpit</span></a>
           </div>
         </div>
       </div>
-      <div id="newui-video" class="full-height">
-        <newui-video id="videoElement"></newui-video>
+      <div id="newuiVideo" class="full-height">
+        <rov-video id="videoElement"></rov-video>
       </div>
-      <div id="newui-controlpad">
+      <div id="newuiControlpad">
         <div class="newui-item" id="heading-item">
           <div class="center">
             <H4>Heading</H4>
@@ -61,8 +61,7 @@
   <script>
     Polymer({
       ready: function() {
-        var video = this.$.videoElement;
-        video.setElement($('#video-container'));
+        this.$['newui-video'].width = this.$['newui-body'].width - this.$['newui-controlpad'].width;
 
       }
     })

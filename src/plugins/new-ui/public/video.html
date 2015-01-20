@@ -3,24 +3,18 @@
 <polymer-element name="newui-video">
   <template>
     <style type="text/css">
-
+      #videoContainer {
+        height: 100%;
+      }
     </style>
     <div id="videoContainer" class="center">
+      <rov-video></rov-video>
     </div>
 
   </template>
   <script>
     Polymer({
       ready: function() {
-      },
-      setElement: function (element) {
-        if (element.length > 0) {
-          var container = $(this.$.videoContainer);
-          $(element).appendTo(container);
-        }
-//        var innerWidth = $('#newui-controlpad').innerWidth();
-//        $('#newui-video').height($(window).innerHeight() - $('#newui-topbar').innerHeight() );
-//        $('#newui-video').width($(window).innerWidth() -  innerWidth);
       }
     });
   </script>

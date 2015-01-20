@@ -24,9 +24,9 @@
         var children = body.children();
         body.append('<div id="oldChildren"></div>');
         children.appendTo('#oldChildren');
-        $('#oldChildren').hide();
+        $('#oldChildren').empty();
 
-        body.append('<div id="UI" class=""><x-newui></x-newui></div>');
+        body.append('<div id="UI" class="full-height"><x-newui></x-newui></div>');
       });
 
       //$('#UI').load(jsFileLocation + '../new-ui.html', function () {

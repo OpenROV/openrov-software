@@ -16,6 +16,10 @@
         height: 100%;
       }
 
+      #videoCanvas {
+        width: 100%;
+      }
+
       .hidden {
       display: none;
       visibility: hidden;
@@ -29,45 +33,66 @@
 
   </template>
   <script>
-    Polymer({
-      ready: function() {
+    (function() {
 
-        var canvas = this.$.videoCanvas;
-        var srcImg = this.$.video;
-        var videocontainer = $(this.$.container);
-
-
-
-        setInterval(function () {
-          var width = videocontainer.innerWidth();
-          var height = videocontainer.innerHeight();
-          canvas.width = width;
-          canvas.height = height;
-          var ctx = canvas.getContext('2d');
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          var proportionalHeight = width * srcImg.height / srcImg.width;
+      var socket = window.io.connect();
+      var srcAddress = undefined;
+      socket.on('videoStarted', function (data) {
+        var address = 'http://' + socket.io.engine.hostname + ':' + CONFIG.video_port + '/?action=stream';
+        srcAddress = address;
+        console.log('video enabled');
+      });
+      socket.on('VideoStopped', function (data) {
+        srcAddress = undefined;
+        console.log('video stopped');
+      });
 
 
-          try {
-            ctx.drawImage(srcImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
+      Polymer({
+        intervall: undefined,
+        attached: function () {
+
+          var canvas = this.$.videoCanvas;
+          var srcImg = this.$.video;
+          var videocontainer = $(this.$.container);
+
+          var startRendering = function () {
+            $(srcImg).attr('src', srcAddress);
+            this.intervall = setInterval(function () {
+              var width = videocontainer.innerWidth();
+              var height = videocontainer.innerHeight();
+              canvas.width = width;
+              canvas.height = height;
+              var ctx = canvas.getContext('2d');
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              var proportionalHeight = width * srcImg.height / srcImg.width;
+
+
+              try {
+                ctx.drawImage(srcImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
+              }
+              catch (e) {
+              }
+            }, 64);  //only need to redraw at the framerate of source video
+          };
+
+          if (srcAddress) {
+            startRendering();
           }
-          catch(e) { }
-        }, 64);  //only need to redraw at the framerate of source video
-
-        var socket = window.io.connect();
-
-        socket.on('videoStarted', function (data) {
-          var address = 'http://' + socket.io.engine.hostname + ':' + CONFIG.video_port + '/?action=stream';
-          $(srcImg).attr('src', address);
-          console.log('video enabled');
-        });
-        socket.on('VideoStopped', function (data) {
-          console.log('video stopped');
-        });
-
-
-      }
-    });
+          else {
+            socket.once('videoStarted', function() {
+              startRendering();
+            });
+            socket.on('VideoStopped', function() {
+              clearInterval(this.intervall);
+            })
+          }
+        },
+        detached: function() {
+          clearInterval(this.intervall);
+        }
+      });
+    })();
   </script>
 
 </polymer-element>

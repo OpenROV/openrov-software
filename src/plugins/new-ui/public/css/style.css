@@ -25,12 +25,18 @@ a .navbar-titel {
     vertical-align: middle;
 }
 
+#newui-video {
+    width:auto;
+    overflow:hidden
+}
+
 #newui-controlpad {
     position: absolute;
     top: 35px;
     right: 0;
     width: 200px;
-    height: 400px;
+    height: auto;
+    float: right;
 }
 
 .newui-item {
