@@ -52,6 +52,7 @@
   <link rel="import" href="bower_components/polymer/polymer.html">
 
   <link rel="import" href="/webcomponents/video/video.html">
+  <link rel="import" href="/webcomponents/horizon/horizon.html">
 
 
   <% for(var i=0; i<scripts.length; i++) {%>
@@ -79,7 +80,8 @@
           <div class="row-fluid full-height">
             <div class="span9 border full-height" id="outter-videocontainer">
               <div id="video-container" class="full-height center pagination-centered" border='1'>
-
+                <rov-video></rov-video>
+                <rov-horizon id="horizon"></rov-horizon>
               </div>
             </div>
             <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">

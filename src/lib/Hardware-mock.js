@@ -88,6 +88,18 @@ function Hardware() {
     var status = reader.parseStatus(data);
     hardware.emit('status', status);
   }
+
+  var currentDepth = 0;
+  var interval = setInterval(function() {
+    currentDepth += 0.5;
+    hardware.emit('status', reader.parseStatus('deap:' + currentDepth));
+    if (currentDepth > 5) {
+      clearInterval(interval);
+    }
+  }, 2000);
+
+
+
   return hardware;
 }
 module.exports = Hardware;
