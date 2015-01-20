@@ -60,8 +60,10 @@
   </template>
   <script>
     Polymer({
-      ready: function() {
-        this.$['newui-video'].width = this.$['newui-body'].width - this.$['newui-controlpad'].width;
+      domReady: function() {
+        var bodyWidth = $(this.$.newuiBody).innerWidth();
+        var controlpadWidth = $(this.$.newuiControlpad).innerWidth();
+        $(this.$.newuiVideo).width(bodyWidth - controlpadWidth);
 
       }
     })

@@ -1,4 +1,4 @@
-#newui-container {
+#newuiContainer {
     width: 100%;
     color: white;
 }
@@ -25,12 +25,12 @@ a .navbar-titel {
     vertical-align: middle;
 }
 
-#newui-video {
+#newuiVideo {
     width:auto;
     overflow:hidden
 }
 
-#newui-controlpad {
+#newuiControlpad {
     position: absolute;
     top: 35px;
     right: 0;
