@@ -1,134 +1,107 @@
-<!--For Test:-->
-<!--<script type="text/javascript" src="https://code.jquery.com/jquery-1.8.3.min.js" ></script>-->
-<!--<script type="text/javascript" src="../public/js/0_jquery.svg.min.js" ></script>-->
-<!--<script type="text/javascript" src="../public/js/1_jquery.svgdom.min.js" ></script>-->
-<!--<script type="text/javascript" src="../public/js/2_jquery.svganim.min.js" ></script>-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<polymer-element name="newui-switches">
+  <template>
 
-<!--/For Test-->
-
-<style type="text/css">
-
-  /*For Testing:*/
-  /*body { color: #ffffff; background-color: #000000 }*/
-  /*.center {*/
-    /*left: 0;*/
-    /*right: 0;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*float: none;*/
-  /*}*/
-  /** {*/
-    /*position: relative;*/
-    /*z-index: 1;*/
-  /*}*/
-  /*/For Testing*/
-
-  #switches-container {
-    display: table;
-    border-collapse: collapse;
-  }
-  .switches-header-row {
-    display: table-row;
-  }
-  .switches-row {
-    display: table-row;
-    font-size: 1em;
-    line-height: 1em;
-  }
-  .switches-switch-on,
-  .switches-switch-off {
-    display: table-cell;
-    width: 30%;
-  }
-  .switches-switch-on {
-    text-align: right;
-    padding-right: 0.4em;
-    border-right: solid 1px white;
-  }
-  .switches-switch-off {
-    text-align: left;
-    padding-left: 0.4em;
-  }
-  .switches-header-row > div,
-  .switches-row > div {
-    padding-top: 0.1em;
-  }
-  .switches-header-row {
-    border-bottom: solid 1px #ffffff;
-    font-weight: bold;
-  }
-  .switch-on > .switches-switch-on { color: #ffffff }
-  .switch-on > .switches-switch-off { color: transparent }
-  .switch-off > .switches-switch-on { color: transparent }
-  .switch-off > .switches-switch-off { color: #ffffff }
-
-</style>
-<div id="switches-container" class="center">
-  <div class="switches-header-row">
-    <div class="switches-switch-on">ON</div>
-    <div class="switches-switch-off">OFF</div>
-  </div>
-
-</div>
-
-<script>
-  $(function () {
-    var Switches = function () {
-      var self = this;
-      var switches = {
-        COM: {switchable: false, state: true},
-        GPD: {switchable: false, state: true},
-        TNK: {switchable: true, state: false},
-        DLK: {switchable: true, state: false},
-        HLK: {switchable: true, state: false},
-        LSR: {switchable: true, state: true},
-        LED: {switchable: true, state: false}
-        };
-
-      var container = $('#switches-container');
-
-      var update = function () {
-        for (var aSwitch in switches) {
-          var theSwitch = $('#' + aSwitch);
-          var toRemove = switches[aSwitch].state ? "switch-off" : 'switch-on';
-          var toAdd = switches[aSwitch].state ? "switch-on" : 'switch-off';
-          theSwitch.removeClass(toRemove);
-          theSwitch.addClass(toAdd);
-        }
-      };
-
-      self.onSwitch = function(aSwitch) { };
-      self.switch = function(aSwitch) {
-        switches[aSwitch].state = !switches[aSwitch].state;
-        update();
-      };
-
-      for (var aSwitch in switches) {
-        container.append(
-          '<div class="switches-row" id="' + aSwitch + '">'+
-          '<div class="switches-switch-on">' + aSwitch + '</div>'+
-          '<div class="switches-switch-off">'+ aSwitch + '</div>'+
-          '</div>');
-        if (switches[aSwitch].switchable) {
-          $('#' + aSwitch).click(function () {
-            var property = $(this).attr('id');
-            self.switch(property);
-            self.onSwitch(property);
-          })
-        }
+    <style type="text/css">
+      #switches-container {
+        display: table;
+        border-collapse: collapse;
       }
+      .switches-header-row {
+        display: table-row;
+      }
+      .switches-row {
+        display: table-row;
+        font-size: 1em;
+        line-height: 1em;
+      }
+      .switches-switch-on,
+      .switches-switch-off {
+        display: table-cell;
+        width: 30%;
+      }
+      .switches-switch-on {
+        text-align: right;
+        padding-right: 0.4em;
+        border-right: solid 1px white;
+      }
+      .switches-switch-off {
+        text-align: left;
+        padding-left: 0.4em;
+      }
+      .switches-header-row > div,
+      .switches-row > div {
+        padding-top: 0.1em;
+      }
+      .switches-header-row {
+        border-bottom: solid 1px #ffffff;
+        font-weight: bold;
+      }
+      .switch-on > .switches-switch-on { color: #ffffff }
+      .switch-on > .switches-switch-off { color: transparent }
+      .switch-off > .switches-switch-on { color: transparent }
+      .switch-off > .switches-switch-off { color: #ffffff }
 
-      update();
-      return self;
-    };
+    </style>
+    <div id="switchesContainer" class="center">
+      <div class="switches-header-row">
+        <div class="switches-switch-on">ON</div>
+        <div class="switches-switch-off">OFF</div>
+      </div>
 
-    window.OpenRovPluginNewUISwitches = new Switches();
-  });
+    </div>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        switches: {
+          COM: {switchable: false, state: true},
+          GPD: {switchable: false, state: true},
+          TNK: {switchable: true, state: false},
+          DLK: {switchable: true, state: false},
+          HLK: {switchable: true, state: false},
+          LSR: {switchable: true, state: true},
+          LED: {switchable: true, state: false}
+        },
+        update: function() {
+          for (var aSwitch in this.switches) {
+            var theSwitch = $(this.$.switchesContainer).find('#' + aSwitch);
+            var toRemove = this.switches[aSwitch].state ? "switch-off" : 'switch-on';
+            var toAdd = this.switches[aSwitch].state ? "switch-on" : 'switch-off';
+            theSwitch.removeClass(toRemove);
+            theSwitch.addClass(toAdd);
+          }
+        },
+        switch: function(aSwitch) {
+          var self = this;
+          self.switches[aSwitch].state = !self.switches[aSwitch].state;
+          self.update();
+        },
+        domReady: function() {
+          var self = this;
+          var container = $(this.$.switchesContainer);
 
+          self.onSwitch = function(aSwitch) { };
 
-  $(function () {
-    if (window.location.href.indexOf('switches.html') > 0) {
-    }
-  })
-</script>
+          for (var aSwitch in self.switches) {
+            container.append(
+              '<div class="switches-row" id="' + aSwitch + '">'+
+              '<div class="switches-switch-on">' + aSwitch + '</div>'+
+              '<div class="switches-switch-off">'+ aSwitch + '</div>'+
+              '</div>');
+            if (self.switches[aSwitch].switchable) {
+              container.find('#' + aSwitch).click(function () {
+                var property = $(this).attr('id');
+                self.switch(property);
+                self.onSwitch(property);
+              })
+            }
+          }
 
+          self.update();
+        }
+      });
+    })();
+
+  </script>
+</polymer-element>
