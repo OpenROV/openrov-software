@@ -592,9 +592,11 @@
   };
   ROVpilot.prototype.powerOnESCs = function powerOnESCs() {
     this.cockpit.socket.emit('escs_poweron');
+    this.cockpit.emit('rovpilot.esc.enabled');
   };
   ROVpilot.prototype.powerOffESCs = function powerOffESCs() {
     this.cockpit.socket.emit('escs_poweroff');
+    this.cockpit.emit('rovpilot.esc.disabled');
   };
   ROVpilot.prototype.adjustVerticleTrim = function adjustVerticleTrim(value) {
     this.vtrim += value;
@@ -710,7 +712,9 @@
       rov.cockpit.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
     }
     if ('claser' in status) {
-      rov.bindingModel.lasersEnabled(status.claser == 255);
+      var enabled = status.claser == 255;
+      rov.bindingModel.lasersEnabled(enabled);
+      rov.cockpit.emit('rovpilot.laser.' + (enabled ? 'enabled' : 'disabled'));
     }
   };
   window.Cockpit.plugins.push(ROVpilot);
