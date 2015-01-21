@@ -71,8 +71,6 @@
   </template>
   <script>
     (function() {
-      var socket = window.io.connect();
-
       Polymer({
         depth: 0.0,
         change: "0.0",
@@ -123,8 +121,8 @@
 
           setInterval(update, 1000);
 
-          socket.on('navdata', function (data) {
-            if (data.depth) {
+          window.cockpit.on('capestatus.navigationData', function (data) {
+            if ('depth' in data) {
               currentDepth = data.depth;
             }
           });

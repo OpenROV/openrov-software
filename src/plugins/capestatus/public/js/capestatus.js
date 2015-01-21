@@ -165,7 +165,10 @@
 
     setInterval(function () {
       self.updateConnectionStatus();
-      self.bindingModel.theLocaltime(new Date().toLocaleTimeString());
+      var now = new Date();
+      var nowFormatted = now.toLocaleTimeString();
+      self.cockpit.emit('capestatus.time.time', { raw: now, formatted: nowFormatted});
+      self.bindingModel.theLocaltime(now);
     }, 1000);
 
   };
@@ -202,7 +205,9 @@
   capestatus.Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
     if ('time' in data) {
-      self.bindingModel.formattedRunTime(msToTime(data.time));
+      var formattedRuntime = msToTime(data.time);
+      self.bindingModel.formattedRunTime(formattedRuntime);
+      self.cockpit.emit('capestatus.time.runtime', { raw: data.time, formatted: formattedRuntime});
     }
 
     if ('vout' in data) {
