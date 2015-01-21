@@ -700,10 +700,14 @@
   ROVpilot.prototype.UpdateStatusIndicators = function(status) {
     var rov = this;
     if ('targetDepth' in status) {
-      rov.bindingModel.depthHoldEnabled(status.targetDepth != DISABLED);
+      var enabled = status.targetDepth != DISABLED;
+      rov.bindingModel.depthHoldEnabled(enabled);
+      rov.cockpit.emit('rovpilot.depthHold.' + (enabled ? 'enabled' : 'disabled'));
     }
     if ('targetHeading' in status) {
-      rov.bindingModel.headingHoldEnabled(status.targetHeading != DISABLED);
+      var enabled = status.targetHeading != DISABLED;
+      rov.bindingModel.headingHoldEnabled(enabled);
+      rov.cockpit.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
     }
     if ('claser' in status) {
       rov.bindingModel.lasersEnabled(status.claser == 255);

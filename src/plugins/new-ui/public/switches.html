@@ -62,11 +62,11 @@
         switches: {
           COM: {switchable: false, state: true},
           GPD: {switchable: false, state: false},
-          TNK: {switchable: true, state: false},
-          DLK: {switchable: true, state: false},
-          HLK: {switchable: true, state: false},
-          LSR: {switchable: true, state: true},
-          LED: {switchable: true, state: false}
+          TNK: {switchable: false, state: false},
+          DLK: {switchable: false, state: false},
+          HLK: {switchable: false, state: false},
+          LSR: {switchable: false, state: true},
+          LED: {switchable: false, state: false}
         },
         update: function() {
           for (var aSwitch in this.switches) {
@@ -99,6 +99,22 @@
           });
           window.cockpit.on('tankControl.disabled', function () {
             self.switches.TNK.state = false;
+            self.update();
+          });
+          window.cockpit.on('rovpilot.depthHold.enabled', function () {
+            self.switches.DLK.state = true;
+            self.update();
+          });
+          window.cockpit.on('rovpilot.depthHold.disabled', function () {
+            self.switches.DLK.state = false;
+            self.update();
+          });
+          window.cockpit.on('rovpilot.headingHold.enabled', function () {
+            self.switches.HLK.state = true;
+            self.update();
+          });
+          window.cockpit.on('rovpilot.headingHold.disabled', function () {
+            self.switches.HLK.state = false;
             self.update();
           });
 
