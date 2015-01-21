@@ -93,6 +93,14 @@
             self.switches.GPD.state = false;
             self.update();
           });
+          window.cockpit.on('tankControl.enabled', function () {
+            self.switches.TNK.state = true;
+            self.update();
+          });
+          window.cockpit.on('tankControl.disabled', function () {
+            self.switches.TNK.state = false;
+            self.update();
+          });
 
           socket.on('status', function() { self.lastPing = new Date(); })
         },

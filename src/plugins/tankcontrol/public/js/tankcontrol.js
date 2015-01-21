@@ -105,12 +105,14 @@
 
     if (!this.tankControlActive) {
       rov.cockpit.emit('inputController.activate', controls);
+      rov.cockpit.emit('tankControl.enabled');
       rov.tankControlActive = true;
       console.log('Tank Control Active');
     }
     else {
       rov.cockpit.emit('inputController.deactivate', controls);
       rov.tankControlActive = false;
+      rov.cockpit.emit('tankControl.disabled');
       console.log('Tank Control Deactivated');
     }
   };
