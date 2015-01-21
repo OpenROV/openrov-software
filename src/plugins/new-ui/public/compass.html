@@ -1,7 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <polymer-element name="newui-compass" attributes="heading bearing">
   <template>
-    <div id="compass-container">
+    <style>
+      #compass-container {
+        width: 90%;
+      }
+      .center {
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
+      }
+    </style>
+    <div id="compass-container" class="center">
       <svg id="svg3988" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 989.19 980.61" version="1.2" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
       <metadata id="metadata4078">
       <rdf:RDF>

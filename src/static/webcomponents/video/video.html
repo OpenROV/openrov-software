@@ -8,6 +8,7 @@
         width: 100%;
       }
 
+      #noVideo,
       #video {
         border: 2px solid black;
         background-color: black;
@@ -24,10 +25,27 @@
       display: none;
       visibility: hidden;
       }
+
+      .center {
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
+      }
+
+      img.center {
+        display: block;
+      }
+      img.center.hidden {
+        display: none;
+      }
+
     </style>
 
     <div id="container">
       <img class="hidden" id="video" src="../../themes/OpenROV/img/no_camera.jpg"/>
+      <img class="hidden center" id="noVideo" src="../../themes/OpenROV/img/no_camera.jpg"/>
       <canvas id='videoCanvas'></canvas>
     </div>
 
@@ -37,7 +55,6 @@
 
       var socket = window.io.connect();
       var srcAddress = undefined;
-      var originalSrcAddress;
       socket.on('videoStarted', function (data) {
         var address = 'http://' + socket.io.engine.hostname + ':' + CONFIG.video_port + '/?action=stream';
         srcAddress = address;
@@ -50,17 +67,19 @@
 
 
       Polymer({
-        intervall: undefined,
-        attached: function () {
+        interval: undefined,
+        domReady: function () {
 
           var canvas = this.$.videoCanvas;
           var srcImg = this.$.video;
+          var noVideoImg = this.$.noVideo;
           var videocontainer = $(this.$.container);
-          originalSrcAddress = $(srcImg).attr('src');
 
           var startRendering = function () {
+            var self = this;
             $(srcImg).attr('src', srcAddress);
-            this.intervall = setInterval(function () {
+            var interval = setInterval(function () {
+              var internalinterval = interval;
               var width = videocontainer.innerWidth();
               var height = videocontainer.innerHeight();
               canvas.width = width;
@@ -73,8 +92,10 @@
                 ctx.drawImage(srcImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
               }
               catch (e) {
-                clearInterval(this.intervall);
-                $(srcImg).attr('src', originalSrcAddress);
+                clearInterval(internalinterval);
+                //ctx.drawImage(noVideoImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
+                $(canvas).addClass('hidden');
+                $(noVideoImg).removeClass('hidden');
               }
             }, 64);  //only need to redraw at the framerate of source video
           };
@@ -87,13 +108,12 @@
               startRendering();
             });
             socket.on('VideoStopped', function() {
-              clearInterval(this.intervall);
-              $(srcImg).attr('src', originalSrcAddress);
+              clearInterval(this.interval);
             })
           }
         },
         detached: function() {
-          clearInterval(this.intervall);
+          clearInterval(this.interval);
         }
       });
     })();
