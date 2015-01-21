@@ -710,6 +710,9 @@
       var enabled = status.targetHeading != DISABLED;
       rov.bindingModel.headingHoldEnabled(enabled);
       rov.cockpit.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
+      if (enabled) {
+        rov.cockpit.emit('rovpilot.headingHold.target', status.targetHeading);
+      }
     }
     if ('claser' in status) {
       var enabled = status.claser == 255;

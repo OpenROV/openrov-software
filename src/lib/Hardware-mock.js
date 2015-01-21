@@ -60,7 +60,7 @@ function Hardware() {
     if (commandText === 'holdHeading_toggle') {
         var targetHeading = 0;
         if (!hardware.targetHoldEnabled) {
-            targetHeading = 10;
+            targetHeading = 44;
             hardware.targetHoldEnabled= true;
             console.log('HARDWARE-MOCK heading hold enabled');
         }

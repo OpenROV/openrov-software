@@ -70,9 +70,17 @@
         background: 'black'
       },
       ready: function() {
+        var self = this;
         this.setHeading(this.heading);
         this.setBearing(this.bearing);
         this.format(this.options);
+
+        window.cockpit.on('rovpilot.headingHold.target', function(target) {
+          self.setBearing(target);
+        });
+        window.cockpit.on('rovpilot.headingHold.disabled', function() {
+          self.setBearing(undefined);
+        });
       },
       format:  function (newOptions) {
         this.options.indicator = newOptions.indicator ? newOptions.indicator : this.options.indicator;
@@ -88,10 +96,10 @@
         var bearing = $(this.$.bearing);
         if (value) {
           bearing.animate({svgTransform: 'rotate(' + value + ', 472.5, 472.5)'}, 20);
-          bearing.css({display: 'default'})
+          bearing.animate({svgOpacity: '100'}, 10)
         }
         else {
-          bearing.css({display: 'none'})
+          bearing.animate({svgOpacity: '0'}, 10)
         }
       }
     });
