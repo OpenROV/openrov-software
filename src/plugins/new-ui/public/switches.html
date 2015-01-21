@@ -56,7 +56,9 @@
   </template>
   <script>
     (function () {
+      var socket = io.connect();
       Polymer({
+        lastPing: new Date(),
         switches: {
           COM: {switchable: false, state: true},
           GPD: {switchable: false, state: true},
@@ -80,6 +82,10 @@
           self.switches[aSwitch].state = !self.switches[aSwitch].state;
           self.update();
         },
+        ready: function() {
+          var self = this;
+          socket.on('status', function() { self.lastPing = new Date(); })
+        },
         domReady: function() {
           var self = this;
           var container = $(this.$.switchesContainer);
@@ -102,6 +108,12 @@
           }
 
           self.update();
+
+          setInterval(function() {
+            var delay = new Date() - self.lastPing;
+            self.switches.COM.state = delay <= 3000;
+            self.update();
+          }, 1000)
         }
       });
     })();
