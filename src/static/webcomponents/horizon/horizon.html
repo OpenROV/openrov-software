@@ -11,7 +11,6 @@
   <script>
     (function() {
 
-      var socket = window.io.connect();
       var skyColor = '#33f';
       var earthColor = '#992';
       var frontCameraFovY = 70;
@@ -65,8 +64,7 @@
         },
         domReady: function () {
           var self = this;
-          // Bind to navdata events on websockets
-          socket.on('navdata', function (data) {
+          window.cockpit.on('capestatus.navigationData', function (data) {
             self.setData(data);
           });
         },

@@ -176,6 +176,10 @@
     this.cockpit.socket.on('status', function (data) {
       capes.UpdateStatusIndicators(data);
     });
+
+    this.cockpit.socket.on('navdata', function (data) {
+      capes.cockpit.emit('capestatus.navigationData', data)
+    })
   };
   capestatus.Capestatus.prototype.batteryLevel = function batteryLevel(voltage, battery) {
     if (battery === null) { return 'level1'; }
@@ -225,6 +229,8 @@
     if ('hdgd' in data) {
       self.cockpit.emit('capestatus.heading', data.hdgd);
     }
+
+    if ('navdata')
 
     this.lastPing = new Date();
   };
