@@ -56,11 +56,10 @@
   </template>
   <script>
     (function () {
-      var socket = io.connect();
       Polymer({
         lastPing: new Date(),
         switches: {
-          COM: {switchable: false, state: false},
+          COM: {switchable: false, state: false, message: { enabled: 'capestatus.connection.connected', disabled: 'capestatus.connection.disconnected'} },
           GPD: {switchable: false, state: false, message: { enabled: 'gamepad.connected', disabled: 'gamepad.disconnected'} },
           TNK: {switchable: false, state: false, message: 'tankControl'},
           DLK: {switchable: false, state: false, message: 'rovpilot.depthHold'},
@@ -82,11 +81,6 @@
           var self = this;
           self.switches[aSwitch].state = !self.switches[aSwitch].state;
           self.update();
-        },
-        ready: function() {
-          var self = this;
-
-          socket.on('status', function() { self.lastPing = new Date(); })
         },
         registerListeners: function(aSwitch) {
           var self = this;
@@ -134,15 +128,14 @@
               })
             }
             this.registerListeners(aSwitch);
-
           }
 
-          self.update();
-          setInterval(function() {
-            var delay = new Date() - self.lastPing;
-            self.switches.COM.state = delay <= 3000;
+          window.cockpit.on('capestatus.lights', function(level) {
+            var state = false;
+            if (level !== 'level0') { state = true; }
+            self.switches.LED.state = state;
             self.update();
-          }, 1000)
+          });
         }
       });
     })();

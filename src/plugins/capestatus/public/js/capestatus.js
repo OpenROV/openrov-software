@@ -216,8 +216,11 @@
     if ('cpuUsage' in data)
       self.bindingModel.currentCpuUsage((data.cpuUsage * 100).toFixed(0) + '%');
 
-    if ('LIGP' in data)
-      self.bindingModel.brightnessLevel('level' + Math.ceil(data.LIGP * 10));
+    if ('LIGP' in data) {
+      var level = 'level' + Math.ceil(data.LIGP * 10);
+      self.bindingModel.brightnessLevel(level);
+      self.cockpit.emit('capestatus.lights', level);
+    }
 
     this.lastPing = new Date();
   };
@@ -227,7 +230,10 @@
     var now = new Date();
     var delay = now - this.lastPing;
 
-    self.bindingModel.isConnected(delay <= 3000);
+    var isConnected = delay <= 3000;
+    self.bindingModel.isConnected(isConnected);
+
+    self.cockpit.emit('capestatus.connection.' + (isConnected ? 'connected' : 'disconnected'));
   };
   window.Cockpit.plugins.push(capestatus.Capestatus);
 
