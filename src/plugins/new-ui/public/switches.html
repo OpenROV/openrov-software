@@ -61,7 +61,7 @@
         lastPing: new Date(),
         switches: {
           COM: {switchable: false, state: true},
-          GPD: {switchable: false, state: true},
+          GPD: {switchable: false, state: false},
           TNK: {switchable: true, state: false},
           DLK: {switchable: true, state: false},
           HLK: {switchable: true, state: false},
@@ -84,6 +84,16 @@
         },
         ready: function() {
           var self = this;
+
+          window.cockpit.on('gamepad.connected', function () {
+            self.switches.GPD.state = true;
+            self.update();
+          });
+          window.cockpit.on('gamepad.disconnected', function () {
+            self.switches.GPD.state = false;
+            self.update();
+          });
+
           socket.on('status', function() { self.lastPing = new Date(); })
         },
         domReady: function() {

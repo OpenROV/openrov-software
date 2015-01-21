@@ -77,6 +77,7 @@ $(function () {
       $('.hud').toggleClass('hidden');
     }
   });
+  window.cockpit = cockpit;
 });
 //We have a contract for centralizing all keyboad instructions. This code
 //wires that content to where we display it in a popover.
