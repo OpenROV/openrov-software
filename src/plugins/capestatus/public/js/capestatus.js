@@ -222,6 +222,10 @@
       self.cockpit.emit('capestatus.lights', level);
     }
 
+    if ('hdgd' in data) {
+      self.cockpit.emit('capestatus.heading', data.hdgd);
+    }
+
     this.lastPing = new Date();
   };
 

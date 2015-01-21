@@ -43,7 +43,7 @@ function Hardware() {
     if (commandText === 'holdDepth_toggle') {
         var targetDepth = 0;
         if (!hardware.depthHoldEnabled) {
-            targetDepth = 10;
+            targetDepth = currentDepth;
             hardware.depthHoldEnabled = true;
             console.log('HARDWARE-MOCK depth hold enabled');
         }
@@ -60,7 +60,7 @@ function Hardware() {
     if (commandText === 'holdHeading_toggle') {
         var targetHeading = 0;
         if (!hardware.targetHoldEnabled) {
-            targetHeading = 44;
+            targetHeading = currentHeading;
             hardware.targetHoldEnabled= true;
             console.log('HARDWARE-MOCK heading hold enabled');
         }
@@ -90,12 +90,20 @@ function Hardware() {
   }
 
   var currentDepth = 0;
+  var currentHeading = 0;
   var interval = setInterval(function() {
     currentDepth += 0.5;
     hardware.emit('status', reader.parseStatus('deap:' + currentDepth));
-    if (currentDepth > 5) {
-      clearInterval(interval);
+    if (currentDepth > 50) {
+      currentDepth = 0;
     }
+
+    currentHeading += 5;
+    hardware.emit('status', reader.parseStatus('hdgd:' + currentHeading));
+    if (currentHeading >= 360) {
+      currentHeading = 0;
+    }
+
   }, 2000);
 
 

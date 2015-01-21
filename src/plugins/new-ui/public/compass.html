@@ -62,7 +62,7 @@
   <script>
     Polymer({
       heading: 0,
-      bearing: 0,
+      bearing: undefined,
       options: {
         indicator: "white",
         bezel: 'white',
@@ -81,6 +81,10 @@
         window.cockpit.on('rovpilot.headingHold.disabled', function() {
           self.setBearing(undefined);
         });
+        window.cockpit.on('capestatus.heading', function(heading) {
+          self.setHeading(heading);
+        });
+
       },
       format:  function (newOptions) {
         this.options.indicator = newOptions.indicator ? newOptions.indicator : this.options.indicator;
