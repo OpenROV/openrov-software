@@ -52,12 +52,13 @@
         </div>
       </div>
       <div class="time-row">
-        <div id="runtime" class="time-cell text-center">00:00:00</div>
+        <div id="runtime" class="time-cell text-center">{{ runtime }}</div>
       </div>
     </div>
 
   </template>
   <script>
+    var socket = io.connect();
     Polymer({
       time: new Date().toLocaleTimeString(),
       runtime: "00:00:00",
@@ -67,11 +68,26 @@
         var update = function () {
           self.time = new Date().toLocaleTimeString()
         };
+        var formatRuntime = function (s) {
+          function addZ(n) {
+            return (n < 10 ? '0' : '') + n;
+          }
+          var ms = s % 1000;
+          s = (s - ms) / 1000;
+          var secs = s % 60;
+          s = (s - secs) / 60;
+          var mins = s % 60;
+          var hrs = (s - mins) / 60;
+          return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs);  // + '.' + ms;
+        };
 
         setInterval(update, 1000);
-      },
-      setRuntime: function (runtime) {
-        self.runtime = runtime;
+
+        socket.on('status', function(data) {
+          if ('time' in data) {
+            self.runtime = formatRuntime(data.time);
+          }
+        });
       }
     });
   </script>
