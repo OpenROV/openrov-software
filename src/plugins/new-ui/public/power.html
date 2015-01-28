@@ -94,6 +94,14 @@
           window.cockpit.on('capestatus.battery.current.battery2', function(current) {
             self.setRightBattery(current);
           });
+
+          var setBatteryConfig = function(config) {
+            self.minVoltage = config.minVoltage;
+            self.maxVoltage = config.maxVoltage;
+            self.setVoltage(self.voltage);
+          };
+          window.cockpit.emit('capestatus.request.battery.config', setBatteryConfig);
+          window.cockpit.emit('capestatus.battery.config', setBatteryConfig)
         },
         setLeftBattery: function(current) {
           this.setCurrent($(this.$.left), this.leftIndicator, current);

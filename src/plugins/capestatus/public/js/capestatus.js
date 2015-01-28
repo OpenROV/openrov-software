@@ -74,6 +74,24 @@
       batteryConfig.setSelected(newValue);
     });
 
+    var toBatteryConfig = function(battery) {
+      if (battery) {
+        return {
+          name: battery.name(),
+          minVoltage: battery.minVoltage(),
+          maxVoltage: battery.maxVoltage()
+        };
+      }
+      return { name: '', minVoltage: 0, maxVoltage: 0 };
+    };
+
+    self.settingsModel.selectedBattery.subscribe(function(battery) {
+      self.cockpit.emit('capestatus.battery.config', toBatteryConfig(battery) );
+    });
+    self.cockpit.on('capestatus.request.battery.config', function(clb) {
+      clb(toBatteryConfig(self.settingsModel.selectedBattery()));
+    });
+
     Battery = function(name, minVoltage, maxVoltage) {
       var bat = this;
       bat.name = ko.observable(name !== undefined ? name : '')
@@ -264,8 +282,6 @@
     if ('hdgd' in data) {
       self.cockpit.emit('capestatus.heading', data.hdgd);
     }
-
-    if ('navdata')
 
     this.lastPing = new Date();
   };
