@@ -15,6 +15,7 @@
         <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
           <div id="newui-topbar" class="navbar-inner">
             <a class="brand" href="#"><img src="../../themes/OpenROV/img/openrov.png" class="logo"><span class="navbar-titel">Cockpit</span></a>
+            <div id="menu"></div>
           </div>
         </div>
       </div>
@@ -68,7 +69,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </template>
@@ -78,7 +78,12 @@
         var bodyWidth = $(this.$.newuiBody).innerWidth();
         var controlpadWidth = $(this.$.newuiControlpad).innerWidth();
         $(this.$.newuiVideo).width(bodyWidth - controlpadWidth);
-
+      },
+      setMenu: function(menuItem) {
+        menuItem.appendTo($(this.$.menu));
+      },
+      setSettingsPanel: function(element) {
+        element.appendTo($(this.$.newuiBody));
       }
     })
   </script>

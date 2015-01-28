@@ -24,38 +24,12 @@
         var children = body.children();
         body.append('<div id="oldChildren"></div>');
         children.appendTo('#oldChildren');
+
+        body.append('<div id="UI" class="full-height"><x-newui id="new-ui"></x-newui></div>');
+        $('#new-ui')[0].setMenu($('#menuitems'));
+        $('#new-ui')[0].setSettingsPanel($('#settings'));
         $('#oldChildren').empty();
-
-        body.append('<div id="UI" class="full-height"><x-newui></x-newui></div>');
       });
-
-      //$('#UI').load(jsFileLocation + '../new-ui.html', function () {
-      //
-      //  window.OpenROVPluginNewUI = {};
-      //  window.OpenROVPluginNewUI.ready = function() {
-      //
-      //  };
-      //
-      //  $('#software-update-alert-container').appendTo('#newui-body');
-      //
-      //  $('head').append('<link rel="import" href="/plugin/new-ui/time.html" />');
-      //  $('head').append('<link rel="import" href="/plugin/new-ui/compass.html" />');
-      //  $('head').append('<link rel="import" href="/plugin/new-ui/video.html" />');
-      //
-      //  //somehow the width of the controlpad is not determind at first
-      //  setTimeout(function() {
-      //
-      //  }, 500);
-      //  $('#compass').hide();
-      //
-      //  $('#newui-depth').load(jsFileLocation + '../depth.html', function () {
-      //    window.OpenRovPluginNewUIDepth.format({indicatorActive: 'white', indicatorInactive: 'black'});
-      //    window.OpenRovPluginNewUIDepth.setDepth(3.71);
-      //  });
-      //  $('#newui-switches').load(jsFileLocation + '../switches.html', function () {
-      //  });
-      //
-      //});
     }
   };
   window.Cockpit.plugins.push(Ui);
