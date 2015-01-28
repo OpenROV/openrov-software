@@ -3,6 +3,7 @@
 <link rel="import" href="/plugin/new-ui/compass.html" />
 <link rel="import" href="/plugin/new-ui/depth.html" />
 <link rel="import" href="/plugin/new-ui/switches.html" />
+<link rel="import" href="/plugin/new-ui/power.html" />
 
 <polymer-element name="x-newui">
   <template>
@@ -41,6 +42,14 @@
           <div class="center">
             <H4>Throttle</H4>
             <div id="newui-throttle" class="center control"></div>
+          </div>
+        </div>
+        <div class="newui-item" id="power-item">
+          <div class="center">
+            <H4>Battery</H4>
+            <div id="newui-power" class="center control">
+              <newui-power id="power"></newui-power>
+            </div>
           </div>
         </div>
         <div class="newui-item" id="switches-item">

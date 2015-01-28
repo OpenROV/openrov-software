@@ -84,7 +84,7 @@ function Hardware() {
   }, 1000);
   setInterval(sendEvent, 3000);
   function sendEvent() {
-    var data = 'vout:8.3;iout:0.2;';
+    var data = 'vout:8.3;iout:0.2;BT1I:0.3;BT2I:0.5';
     var status = reader.parseStatus(data);
     hardware.emit('status', status);
   }

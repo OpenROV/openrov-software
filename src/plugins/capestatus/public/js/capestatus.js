@@ -211,19 +211,49 @@
     }
 
     if ('vout' in data) {
-      self.bindingModel.currentVoltage(data.vout.toFixed(1));
+      var value = data.vout.toFixed(1);
+      self.bindingModel.currentVoltage(value);
+      self.cockpit.emit('capestatus.battery.voltage', value);
     }
 
-    if ('iout' in data)
-      self.bindingModel.currentCurrent(data.iout.toFixed(3) + 'A');
+    if ('iout' in data) {
+      var value = data.iout.toFixed(3);
+      self.bindingModel.currentCurrent(value + 'A');
+      self.cockpit.emit('capestatus.battery.current.out', value);
+    }
+
+    if ('BT1I' in data) {
+      var value = parseFloat(data['BT1I']);
+      self.cockpit.emit('capestatus.battery.current.battery1', value);
+    }
+    if ('BT2I' in data) {
+      var value = parseFloat(data['BT2I']);
+      self.cockpit.emit('capestatus.battery.current.battery2', value);
+    }
+    if ('SC1I' in data) {
+      var value = parseFloat(data['SC1I']);
+      self.cockpit.emit('capestatus.battery.current.esc1', value);
+    }
+    if ('SC2I' in data) {
+      var value = parseFloat(data['SC2I']);
+      self.cockpit.emit('capestatus.battery.current.esc2', value);
+    }
+    if ('SC3I' in data) {
+      var value = parseFloat(data['SC3I']);
+      self.cockpit.emit('capestatus.battery.current.esc3', value);
+    }
 
     if ('servo' in data) {
       var angle = 90 / 500 * data.servo * -1 - 90;
       self.bindingModel.servoAngle(angle);
+      self.cockpit.emit('capestatus.servo.angle', angle);
     }
 
-    if ('cpuUsage' in data)
-      self.bindingModel.currentCpuUsage((data.cpuUsage * 100).toFixed(0) + '%');
+    if ('cpuUsage' in data) {
+      var value = (data.cpuUsage * 100).toFixed(0);
+      self.bindingModel.currentCpuUsage(value + '%');
+      self.cockpit.emit('capestatus.cpu', value);
+    }
 
     if ('LIGP' in data) {
       var level = 'level' + Math.ceil(data.LIGP * 10);
