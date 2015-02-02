@@ -11,9 +11,9 @@ env:
   - ARCH=arm
 
 before_script:
-  - sudo add-apt-repository ppa:linaro-maintainers/tools -y
+#  - sudo add-apt-repository ppa:linaro-maintainers/tools -y
   - sudo apt-get update -q
-  - sudo apt-get install qemu
+  - sudo apt-get install qemu=2.0.0+dfsg-2ubuntu1.3
 
 script:
   - cat /etc/hosts
