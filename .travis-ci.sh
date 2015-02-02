@@ -9,7 +9,7 @@ VERSION=wheezy
 CHROOT_ARCH=armhf
 
 # Debian package dependencies for the host
-HOST_DEPENDENCIES="debootstrap qemu-user-static binfmt-support sbuild"
+HOST_DEPENDENCIES="debootstrap qemu qemu-user-static binfmt-support sbuild"
 
 # Debian package dependencies for the chrooted environment
 GUEST_DEPENDENCIES="pv"
