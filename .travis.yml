@@ -1,4 +1,6 @@
-language: python
+language: node_js
+node_js:
+  - "0.10"
 install: gem install fpm
 
 env:
@@ -10,14 +12,14 @@ env:
     | grep $TRAVIS_COMMIT | awk '{print $2}'`"
   - ARCH=arm
 
-before_script:
-  - sudo add-apt-repository ppa:linaro-maintainers/tools -y
-  - sudo apt-get update -q
-
-
 script:
   - cat /etc/hosts
-  - "bash -ex .travis-ci.sh"
+  - npm install --arch=armhf
+  - cd src/static
+  - npm install --arch=armhf --loglevel error
+  - npm run bower
+  - cd ../..
+
 
 after_success:
 - echo version_number $VERSION_NUMBER
