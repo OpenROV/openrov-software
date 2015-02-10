@@ -46,12 +46,14 @@
     $('#diagpanel').load(jsFileLocation + '../diagpanel.html', function () {
       self.listen();
       document.querySelector('rov-diagnostics').registerCloseHandler(function () {
-        self.SaveSettings();
+        self.SaveDiagnostics();
       });
+      self.SaveDiagnostics(); // initial save so the settings are sent to arduinos
+
     });
     $('#runtimePanel').load(jsFileLocation + '../settings.html', function () {
       document.querySelector('rov-settings').registerCloseHandler(function () {
-        self.SaveSettings2();
+        self.SaveSettings();
       });
     });
   };
@@ -186,14 +188,14 @@
     if ('smoothingIncriment' in settings)
       $('#smoothingIncriment').val(settings.smoothingIncriment);
   };
-  Motor_diags.prototype.SaveSettings = function SaveSettings() {
+  Motor_diags.prototype.SaveDiagnostics = function SaveDiagnostics() {
     this.cockpit.socket.emit('update_settings', { deadzone_pos: $('#deadzone_pos').val() });
     this.cockpit.socket.emit('update_settings', { deadzone_neg: $('#deadzone_neg').val() });
     this.cockpit.socket.emit('update_settings', { reverse_port_thruster: this.reversePortThruster() });
     this.cockpit.socket.emit('update_settings', { reverse_starbord_thruster: this.reverseStarbordThruster() });
     this.cockpit.socket.emit('update_settings', { reverse_lift_thruster: this.reverseLiftThruster() });
   };
-  Motor_diags.prototype.SaveSettings2 = function SaveSettings() {
+  Motor_diags.prototype.SaveSettings = function SaveDiagnostics() {
     this.cockpit.socket.emit('update_settings', { smoothingIncriment: $('#smoothingIncriment').val() });
   };
   window.Cockpit.plugins.push(Motor_diags);
