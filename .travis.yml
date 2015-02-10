@@ -1,33 +1,42 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
 install: gem install fpm
-
 env:
   global:
   - VERSION_NUMBER="`cat package.json | grep version | grep -o '[0-9]\.[0-9]\.[0-9]\+'`"
   - BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
-  - secure: "P4i5RD2+chpGAPtkn1JYChOc+TVEHdHVVWA40uVAaHqRGm0I/kAvA2i4xXun0VAFFJJjQgC7BSdzQs9kP6IVu4x7VVXyOt3OYMql8ehsH6LU3Q476Rb+HIOzX30qYx+7F+cHUPFp/BTiyEJ+IOjU6sDTWLmSDpjUvVD2Tzg+PLI="
   - REAL_GIT_BRANCH="`git for-each-ref --format='%(objectname) %(refname:short)' refs/heads
     | grep $TRAVIS_COMMIT | awk '{print $2}'`"
   - ARCH=arm
-
 script:
-  - cat /etc/hosts
-  - npm install --arch=armhf
-  - cd src/static
-  - npm install --arch=armhf --loglevel error
-  - npm run bower
-  - cd ../..
-
-
+- cat /etc/hosts
+- npm install --arch=armhf
+- cd src/static
+- npm install --arch=armhf --loglevel error
+- npm run bower
+- cd ../..
 after_success:
 - echo version_number $VERSION_NUMBER
 - echo real_get_branch $REAL_GIT_BRANCH
 - rm -rf OpenROV/build-*
-- 'fpm -f -m info@openrov.com -s dir -t deb -a armhf -n openrov-cockpit -v
-  $VERSION_NUMBER-$REAL_GIT_BRANCH.$BUILD_NUMBER.`git rev-parse --short HEAD` --description ''OpenROV Cockpit'' .=/opt/openrov/cockpit '
+- 'fpm -f -m info@openrov.com -s dir -t deb -a armhf -n openrov-cockpit -v $VERSION_NUMBER-$REAL_GIT_BRANCH.$BUILD_NUMBER.`git
+  rev-parse --short HEAD` --description ''OpenROV Cockpit'' .=/opt/openrov/cockpit '
 - mkdir build
 - DEBFILE="`ls *.deb`"
 - cp *.deb build/openrov-cockpit_latest-${REAL_GIT_BRANCH}_armhf.deb
 - mv *.deb build/
+deploy:
+  provider: s3
+  access_key_id: AKIAIUN4NNHBKIOZE2JA
+  secret_access_key:
+    secure: YoK8n6Frgn4A0292Yu2yUiEsrL/hHUZnvxY9W5mfVyxHjoA1wz9qGdxlCsr81LxkKH5nUor1XGxcCaFj8jSGAdtaw6Fv+dBJv031QWSGqPxLchFxg2ioTTe7i/PcWE+9fIPEdrEKOAqdKM7v7vm+oikzuxmoksCS9m1p3TverEI=
+  bucket: openrov-software-nightlies
+  skip_cleanup: true
+  region: us-west-2
+  endpoint: bucket-name.s3-website-us-west-2.amazonaws.com
+  local-dir: build
+  upload-dir: openrov-cockpit
+  acl: public_read
+  on:
+    repo: BrianAdams/openrov-software
