@@ -38,23 +38,27 @@
       1
     ];
     // Add required UI elements
-    $('#settings H4:contains(\'Runtime Settings\')').after('<div class="control-group"> \t\t      <label class="control-label" for="smoothingIncriment">Motor Response Aggressivness:</label> \t\t      <input type="text" id="smoothingIncriment" /> \t\t  </div>');
-    $('#diagnostic H3:contains(\'Diagnostics\')').append('<div id="diagpanel"></div>');
+    $('#plugin-settings').append('<div id="runtimePanel">');
+    $('#diagnostic').append('<div id="diagpanel"></div>');
     var self = this;
     var jsFileLocation = urlOfJsFile('motor_diags.js');
     // the js folder path
-    $('#diagpanel').load(jsFileLocation + '../diagpanel.html', function () { self.listen(); });
+    $('#diagpanel').load(jsFileLocation + '../diagpanel.html', function () {
+      self.listen();
+      document.querySelector('rov-diagnostics').registerCloseHandler(function () {
+        self.SaveSettings();
+      });
+    });
+    $('#runtimePanel').load(jsFileLocation + '../settings.html', function () {
+      document.querySelector('rov-settings').registerCloseHandler(function () {
+        self.SaveSettings2();
+      });
+    });
   };
   //This pattern will hook events in the cockpit and pull them all back
   //so that the reference to this instance is available for further processing
   Motor_diags.prototype.listen = function listen() {
     var motordiag = this;
-    $('#diagnostic .back-button').click(function () {
-      motordiag.SaveSettings();
-    });
-    $('#settings .back-button').click(function () {
-      motordiag.SaveSettings2();
-    });
     this.cockpit.socket.on('settings', function (data) {
       motordiag.LoadSettings(data);
     });

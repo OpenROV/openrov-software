@@ -54,6 +54,7 @@
   <link rel="import" href="/webcomponents/video/video.html">
   <link rel="import" href="/webcomponents/horizon/horizon.html">
   <link rel="import" href="/webcomponents/settings/settings.html">
+  <link rel="import" href="/webcomponents/diagnostics/diagnostics.html">
   <link rel="import" href="/webcomponents/menu/menu.html">
 
 
@@ -71,7 +72,7 @@
 
         <rov-menu id="menuitems" class="nav pull-right">
           <li><a href="#" id="show-settings" onclick="document.querySelector('rov-settings').open();">Settings</a></li>
-          <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
+          <li><a href="#" id="show-diagnostic" onclick="document.querySelector('rov-diagnostics').open();" >Diagnostic</a></li>
         </rov-menu>
 
       </div>
@@ -102,17 +103,16 @@
     <rov-settings id="plugin-settings">
     </rov-settings>
 
-    <div class="drop-in-right" id="diagnostic">
-      <div class="back-button"></div><h3>Diagnostics</h3>
+    <rov-diagnostics id="diagnostic">
       <div class="settings-block">
-          <h4>Pre-Flight Check</h4>
+        <h4>Pre-Flight Check</h4>
       </div>
       <div class="settings-block">
         <h4>Callibration</h4>
         <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
         <a href="#" class="btn" id="zero_depth">Zero Depth</a>
       </div>
-    </div>
+    </rov-diagnostics>
 
     <div class="hidden" id="keyboardInstructions">
         <p>

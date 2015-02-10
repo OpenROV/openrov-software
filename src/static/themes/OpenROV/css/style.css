@@ -217,6 +217,7 @@ img.center {
   height: 80%;
 }
 
+#diagnostic,
 #plugin-settings {
     z-index: 1039;
 }

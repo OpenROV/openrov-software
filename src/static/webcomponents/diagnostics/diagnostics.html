@@ -2,14 +2,14 @@
 <link rel="import" href="../drop-in-dialog/drop-in-dialog.html">
 
 
-<polymer-element name="rov-settings" attributes="" extends="drop-in-dialog">
+<polymer-element name="rov-diagnostics" attributes="" extends="drop-in-dialog">
   <template>
     <shadow></shadow>
   </template>
   <script>
     (function() {
       Polymer({
-        header: 'Settings',
+        header: 'Diagnostics',
         open: function() {
           window.cockpit.sendUpdateEnabled = false;
           this.super();

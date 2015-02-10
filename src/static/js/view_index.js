@@ -29,20 +29,20 @@ $(function () {
   /* ------------------------------------------
        diagnostic
        */
-  var options = {};
-  $('#show-diagnostic').click(function () {
-    $('#diagnostic').show('fold');
-    cockpit.sendUpdateEnabled = false;
-    Mousetrap.bind('esc', hideDiagnostic);
-  });
-  $('#diagnostic .back-button').click(function () {
-    hideDiagnostic();
-  });
-  function hideDiagnostic() {
-    $('#diagnostic').hide('fold');
-    cockpit.sendUpdateEnabled = true;
-    Mousetrap.unbind('esc');
-  }
+  //var options = {};
+  //$('#show-diagnostic').click(function () {
+  //  $('#diagnostic').show('fold');
+  //  cockpit.sendUpdateEnabled = false;
+  //  Mousetrap.bind('esc', hideDiagnostic);
+  //});
+  //$('#diagnostic .back-button').click(function () {
+  //  hideDiagnostic();
+  //});
+  //function hideDiagnostic() {
+  //  $('#diagnostic').hide('fold');
+  //  cockpit.sendUpdateEnabled = true;
+  //  Mousetrap.unbind('esc');
+  //}
   $('#zero_depth').click(function () {
     socket.emit('depth_zero');
   });
