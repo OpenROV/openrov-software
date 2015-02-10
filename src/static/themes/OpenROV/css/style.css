@@ -217,6 +217,10 @@ img.center {
   height: 80%;
 }
 
+#plugin-settings {
+    z-index: 1039;
+}
+
 #footer{
   height: 150px;
     bottom: -10px;

@@ -27,23 +27,6 @@ $(function () {
     var socket = window.io.connect();
   }
   /* ------------------------------------------
-       settings
-    */
-  var options = {};
-  $('#show-settings').click(function () {
-    $('#settings').show('fold');
-    cockpit.sendUpdateEnabled = false;
-    Mousetrap.bind('esc', hideSettings);
-  });
-  $('#settings .back-button').click(function () {
-    hideSettings();
-  });
-  function hideSettings() {
-    $('#settings').hide('fold');
-    cockpit.sendUpdateEnabled = true;
-    Mousetrap.unbind('esc');
-  }
-  /* ------------------------------------------
        diagnostic
        */
   var options = {};

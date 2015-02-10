@@ -27,7 +27,6 @@
 
         body.append('<div id="UI" class="full-height"><x-newui id="new-ui"></x-newui></div>');
         $('#new-ui')[0].setMenu($('#menuitems'));
-        $('#new-ui')[0].setSettingsPanel($('#settings'));
         $('#oldChildren').empty();
       });
     }
