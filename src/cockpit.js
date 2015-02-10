@@ -183,6 +183,7 @@ function addPluginAssets(result) {
 }
 
 var loader = new PluginLoader();
+loader.loadPlugins(path.join(__dirname, 'ui-plugins'), '/ui-plugin', deps, addPluginAssets);
 loader.loadPlugins(path.join(__dirname, 'system-plugins'), '/system-plugin', deps, addPluginAssets);
 loader.loadPlugins(path.join(__dirname, 'plugins'), '/plugin', deps, addPluginAssets);
 mkdirp.sync('/usr/share/cockpit/bower_components');
