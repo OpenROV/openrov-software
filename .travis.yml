@@ -11,9 +11,9 @@ env:
   - ARCH=arm
 script:
 - cat /etc/hosts
-- npm install --arch=armhf
+- npm install --target_arch=armhf
 - cd src/static
-- npm install --arch=armhf --loglevel error
+- npm install --target_arch=armhf --loglevel error
 - npm run bower
 - cd ../..
 after_success:
