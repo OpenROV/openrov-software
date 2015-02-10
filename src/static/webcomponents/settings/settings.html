@@ -21,19 +21,23 @@
     (function() {
       Polymer({
         settings: undefined,
+        closeHandlers: [],
         open: function() {
           this.settings.css('display', 'block');
           window.cockpit.sendUpdateEnabled = false;
           var self = this;
           Mousetrap.bind('esc',  function() { self.hideSettings(); });
         },
-        register: function(foo) {
-
+        registerCloseHandler: function(handler) {
+          this.closeHandlers.push(handler);
         },
         hideSettings: function () {
           this.settings.css('display', 'none');
           window.cockpit.sendUpdateEnabled = true;
           Mousetrap.unbind('esc');
+          this.closeHandlers.forEach(function(handler) {
+            handler();
+          });
         },
         domReady: function () {
           var self = this;

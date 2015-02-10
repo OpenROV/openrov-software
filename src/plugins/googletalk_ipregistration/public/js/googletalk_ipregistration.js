@@ -10,8 +10,7 @@
     //this technique forces relative path to the js file instead of the execution directory
     var jsFileLocation = urlOfJsFile('googletalk_ipregistration.js');
 
-    $('#settings')
-      .find('#plugin-settings')
+    $('#plugin-settings')
       .append('<div id="gtalk-settings"></div>');
     $('#gtalk-settings').load(jsFileLocation + '../settings.html');
   };
@@ -19,7 +18,7 @@
   //so that the reference to this instance is available for further processing
   Googletalk_ipregistraion.prototype.listen = function listen() {
     var googletalk = this;
-    $('#settings').find('.back-button').click(function () {
+    document.querySelector('rov-settings').registerCloseHandler(function () {
       googletalk.SaveSettings();
     });
     this.cockpit.socket.on('settings', function (data) {

@@ -13,8 +13,7 @@
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('arduinofirmwareupload.js');
 
-    $('#settings')
-      .find('#plugin-settings')
+    $('#plugin-settings')
       .append('<div id="firmware-settings"></div>');
     $('#firmware-settings')
       .load(
@@ -22,7 +21,7 @@
         function() {
           ko.applyBindings(self.arduinoFirmwareVM, document.getElementById("firmware-settings"));
         });
-    $('#settings').after('<div id="firmware-modal"></div>');
+    $('body').append('<div id="firmware-modal"></div>');
     $('#firmware-modal')
       .load(
         jsFileLocation + '../modal.html',
