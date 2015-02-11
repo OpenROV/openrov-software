@@ -20,8 +20,11 @@
   //so that the reference to this instance is available for further processing
   Googletalk_ipregistraion.prototype.listen = function listen() {
     var googletalk = this;
-    this.cockpit.extensionPoints.rovSettings.registerCloseHandler(function () {
-      googletalk.SaveSettings();
+
+    $(function() {
+      googletalk.cockpit.extensionPoints.rovSettings.registerCloseHandler(function () {
+        googletalk.SaveSettings();
+      });
     });
     this.cockpit.socket.on('settings', function (data) {
       googletalk.LoadSettings(data);

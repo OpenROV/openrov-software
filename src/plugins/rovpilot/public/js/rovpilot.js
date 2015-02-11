@@ -45,10 +45,18 @@
     $('body').append('<div id="rovPilot-templates"></div>');
     $('#rovPilot-templates').load(jsFileLocation + '../ui-templates.html', function () {
       $('html /deep/ #footercontent').prepend('<div id="rovPilot_thrustFactor" data-bind="template: {name: \'template_rovPilot_thrustFactor\'}"></div>');
-      ko.applyBindings(rov.bindingModel, document.querySelector('html /deep/ #rovPilot_thrustFactor'));
+
+      var thrustFactor = document.querySelector('html /deep/ #rovPilot_thrustFactor');
+      if (thrustFactor) {
+        ko.applyBindings(rov.bindingModel, thrustFactor);
+      }
 
       $('html /deep/ #navtoolbar').append('<div id="rovPilot_navtoolbar" class="nav" data-bind="template: {name: \'template_rovPilot_navToolbar\'}"></div>');
-      ko.applyBindings(rov.bindingModel, document.querySelector('html /deep/ #rovPilot_navtoolbar'));
+      var navToolbar = document.querySelector('html /deep/ #rovPilot_navtoolbar');
+      if (navToolbar) {
+        ko.applyBindings(rov.bindingModel, navToolbar);
+
+      }
     });
 
     $('#keyboardInstructions')

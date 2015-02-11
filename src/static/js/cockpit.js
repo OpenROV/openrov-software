@@ -20,7 +20,9 @@
     this.loadUi(function() {
       self.extensionPoints = {
         settingsElement: $('html /deep/ rov-settings'),
-        rovSettings: document.querySelector('html /deep/ rov-settings')
+        rovSettings: { registerCloseHandler: function(handler) {
+          self.extensionPoints.settingsElement[0].registerCloseHandler(handler);
+        }}
       };
 
       self.loadPlugins();
@@ -43,7 +45,8 @@
   };
 
   Cockpit.prototype.loadUi = function(done) {
-    var uiName = 'standard-ui'; //temp
+    //var uiName = 'standard-ui'; //temp
+    var uiName = 'new-ui'; //temp
     this.uiLoader.load(uiName, done);
   };
 

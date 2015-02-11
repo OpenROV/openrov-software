@@ -31,10 +31,14 @@
         defaults: { keyboard: 'h' },
         down: function() { self.cycleTextColor(); }
       });
+    var list = $('html /deep/ #TelemetryList');
+    self.telemetryList = list.length > 0 ? list[0] : undefined;
 
-    $('html /deep/ #TelemetryList')[0].addEventListener('click', function (e) {
-      self.handleDescendantEvent(e);
-    }, true);
+    if (self.telemetryList) {
+      self.telemetryList.addEventListener('click', function (e) {
+        self.handleDescendantEvent(e);
+      }, true);
+    }
   };
   Telemetry.prototype.cycleTextColor = function() {
     var self = this;
@@ -43,7 +47,9 @@
     if (self.textcolor > 255) {
       self.textcolor = 0;
     }
-    $('html /deep/ #TelemetryList')[0].style.color = 'rgb(' + self.textcolor + ',' + self.textcolor + ',255)';
+    if (self.telemetryList) {
+      self.telemetryList.style.color = 'rgb(' + self.textcolor + ',' + self.textcolor + ',255)';
+    }
   };
   Telemetry.prototype.handleDescendantEvent = function handleDescendantEvent(e) {
     if (e.type == 'click' && e.eventPhase == Event.CAPTURING_PHASE) {

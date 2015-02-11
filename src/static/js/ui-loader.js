@@ -19,7 +19,9 @@
       Polymer.import([newUi[0].polymerTemplateFile], function() {
         $('#UI').append(newUi[0].template);
         self.currentUI = newUi[0];
-        done();
+        $(function() {
+          done();
+        });
       });
 
     }
