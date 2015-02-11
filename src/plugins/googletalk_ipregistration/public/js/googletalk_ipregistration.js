@@ -26,11 +26,11 @@
     });
   };
   Googletalk_ipregistraion.prototype.LoadSettings = function LoadSettings(config) {
-    if ('googletalk_rovid' in settings)
+    if ('googletalk_rovid' in config)
       $('#googleTalkROVid').val(config.googletalk_rovid);
-    if ('googletalk_rovpassword' in settings)
+    if ('googletalk_rovpassword' in config)
       $('#googleTalkROVpassword').val(config.googletalk_rovpassword);
-    if ('googletalk_rov_pilotid' in settings)
+    if ('googletalk_rov_pilotid' in config)
       $('#googleTalkPilotId').val(config.googletalk_rov_pilotid);
   };
   Googletalk_ipregistraion.prototype.SaveSettings = function SaveSettings() {

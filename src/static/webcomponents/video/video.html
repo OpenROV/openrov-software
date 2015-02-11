@@ -77,10 +77,15 @@
           var srcImg = this.$.video;
           var noVideoImg = this.$.noVideo;
           var videocontainer = $(this.$.container);
+          var isRendering = false;
 
           var startRendering = function () {
             var self = this;
             $(srcImg).attr('src', srcAddress);
+
+            $(canvas).removeClass('hidden');
+            $(noVideoImg).addClass('hidden');
+
             var interval = setInterval(function () {
               var internalinterval = interval;
               var width = videocontainer.innerWidth();
@@ -91,14 +96,16 @@
               ctx.fillRect(0, 0, canvas.width, canvas.height);
               var proportionalHeight = width * srcImg.height / srcImg.width;
 
+
               try {
                 ctx.drawImage(srcImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
+                isRendering = true;
               }
               catch (e) {
                 clearInterval(internalinterval);
-                //ctx.drawImage(noVideoImg, 0, (canvas.height - proportionalHeight) / 2, width, proportionalHeight);
                 $(canvas).addClass('hidden');
                 $(noVideoImg).removeClass('hidden');
+                isRendering = false;
               }
             }, 64);  //only need to redraw at the framerate of source video
           };
@@ -120,6 +127,12 @@
               }
             });
 
+            window.cockpit.on('capestatus.connection.connected', function() {
+              if (!isRendering) {
+                videoStarted();
+                startRendering();
+              }
+            });
           }
         },
         detached: function() {
