@@ -56,7 +56,7 @@
           // Setup compass canvas
           var divRect = div.getBoundingClientRect(), ctx, x, i, needle;
           this.visibleWidth = divRect.width * (720 / 120);
-          this.canvas = this.$.compassCanvas; //document.createElement('canvas');
+          this.canvas = this.$.compassCanvas;
           this.canvas.width = this.visibleWidth * 2;
           this.canvas.height = divRect.height + 30;
           ctx = this.canvas.getContext('2d');

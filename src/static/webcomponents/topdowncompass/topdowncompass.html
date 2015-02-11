@@ -8,8 +8,8 @@
     <style type="text/css">
     </style>
 
-    <div class="topdowncompasspanel">
-
+    <div id="compass" class="topdowncompass pull-left">
+      <div id="needle" class="compassNeedle"></div>
     </div>
 
   </template>
@@ -18,6 +18,29 @@
 
       Polymer({
         ready: function () {
+          var compass = this;
+          window.cockpit.on('capestatus.heading', function(heading) {
+            compass.moveTo(heading);
+          });
+        },
+        moveTo: function(degrees) {
+
+          var aR;
+          this.heading = this.heading || 0; // if rot undefined or 0, make 0, else rot
+          aR = this.heading % 360;
+          if ( aR < 0 ) { aR += 360; }
+          if ( aR < 180 && (degrees > (aR + 180)) ) { this.heading -= 360; }
+          if ( aR >= 180 && (degrees <= (aR - 180)) ) { this.heading += 360; }
+          this.heading  += (degrees - aR);
+
+
+          var cp = $(this.$.needle);
+
+          cp.css({
+            "transform" : "rotate(" + (this.heading) + "deg)",
+            "-ms-transform" : "rotate(" + (this.heading) + "deg)",
+            "-webkit-transform" : "rotate(" + (this.heading) + "deg)"
+          })
         }
       });
     })();
