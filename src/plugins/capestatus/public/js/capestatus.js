@@ -152,20 +152,17 @@
 
     var statusSettings = cockpit.extensionPoints.settingsElement.find('#capestatus-settings');
     statusSettings.load(jsFileLocation + '../settings.html', function () {
-
-      $( document ).ready( function() {
-          ko.applyBindingsWithValidation(
-          self.settingsModel,
-          statusSettings[0],
-          {
-            insertMessages: true,
-            decorateElement: true,
-            errorElementClass: 'error',
-            errorMessageClass: 'help-inline',
-            errorClass: 'error'
-          }
-        );
-      })
+      ko.applyBindingsWithValidation(
+        self.settingsModel,
+        statusSettings[0],
+        {
+          insertMessages: true,
+          decorateElement: true,
+          errorElementClass: 'error',
+          errorMessageClass: 'help-inline',
+          errorClass: 'error'
+        }
+      );
     });
 
     setInterval(function () {

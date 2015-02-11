@@ -52,7 +52,9 @@
       }
       configManager.setShowAlerts(self.showAlerts());
       self.isSaved(true);
-      setTimeout(function() {self.isSaved(false)}, 2000);
+      setTimeout(function() {
+        self.isSaved(false)
+      }, 2000);
       return true;
     });
 
@@ -75,7 +77,7 @@
     var jsFileLocation = urlOfJsFile('software-update.js');
     var updateSettings = this.cockpit.extensionPoints.settingsElement.find('#software-update-settings');
       updateSettings.load(jsFileLocation + '../settings.html', function () {
-      ko.applyBindings(self.model, document.getElementById('software-update-settings'));
+      ko.applyBindings(self.model, updateSettings[0]);
     });
     $('#software-update-alert-container').load(jsFileLocation + '../ui-templates.html', function () {
     });
