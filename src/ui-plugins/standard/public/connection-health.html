@@ -1,0 +1,47 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<polymer-element name="connection-health" attributes="" extends="drop-in-dialog">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <style>
+      #connectionHealth{
+        margin:5px 10px;
+        width:30px;
+        height: 30px;
+        background: url('../../../themes/OpenROV/img/bbconnection.png') no-repeat 0 0;
+      }
+
+      #connectionHealth.connected {
+        background-position: -29px 0;
+      }
+    </style>
+
+    <div class="container-fluid">
+      <div class="span1 pull-left">
+        <h6>Connection</h6>
+        <div id="connectionHealth" class="{{ isConnected ? 'connected' : '' }}"></div>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        isConnected: false,
+        domReady: function() {
+          var self = this;
+
+          window.cockpit.on('capestatus.connection.connected', function() {
+            self.isConnected = true;
+          });
+          window.cockpit.on('capestatus.connection.disconnected', function() {
+            self.isConnected = false;
+          });
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>

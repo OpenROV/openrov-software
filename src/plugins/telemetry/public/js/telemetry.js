@@ -9,8 +9,8 @@
     this.importantTelemetry = {};
     this.textcolor = 0;
     // Add required UI elements
-    $('#rov_status_panel').append('<div id="telemetry" class="controller well well-small" >\t\t    <ul>\t\t       <li id="TelemetryList">\t\t       </li>\t\t    </ul>\t\t</div>');
-    $('#keyboardInstructions').append('<p><i>h</i> to cycle text color of telemetry</p>');
+    $('html /deep/ #rov_status_panel').append('<div id="telemetry" class="controller well well-small" >\t\t    <ul>\t\t       <li id="TelemetryList">\t\t       </li>\t\t    </ul>\t\t</div>');
+    $('html /deep/ #keyboardInstructions').append('<p><i>h</i> to cycle text color of telemetry</p>');
     var self = this;
     setInterval(function () {
       self.displayTelemetry();
@@ -32,7 +32,7 @@
         down: function() { self.cycleTextColor(); }
       });
 
-    $('#TelemetryList')[0].addEventListener('click', function (e) {
+    $('html /deep/ #TelemetryList')[0].addEventListener('click', function (e) {
       self.handleDescendantEvent(e);
     }, true);
   };
@@ -43,7 +43,7 @@
     if (self.textcolor > 255) {
       self.textcolor = 0;
     }
-    $('#TelemetryList')[0].style.color = 'rgb(' + self.textcolor + ',' + self.textcolor + ',255)';
+    $('html /deep/ #TelemetryList')[0].style.color = 'rgb(' + self.textcolor + ',' + self.textcolor + ',255)';
   };
   Telemetry.prototype.handleDescendantEvent = function handleDescendantEvent(e) {
     if (e.type == 'click' && e.eventPhase == Event.CAPTURING_PHASE) {
@@ -74,7 +74,7 @@
         fragment.appendChild(li);
       }
     }
-    var list = $('#TelemetryList');
+    var list = $('html /deep/ #TelemetryList');
     list.empty();
     if (list.length > 0) {
       list[0].appendChild(fragment.cloneNode(true));

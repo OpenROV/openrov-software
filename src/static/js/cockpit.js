@@ -11,14 +11,23 @@
 
   //Cockpit is inheriting from EventEmitter2.
   var Cockpit = function Cockpit(csocket) {
+    var self = this;
     this.socket = csocket;
+    this.uiLoader = new window.UiLoader();
     this.sendUpdateEnabled = true;
     this.capabilities = 0;
     this.loadedPlugins = [];
-    this.loadPlugins();
-    console.log('loaded plugins');
-    // Register the various event handlers
-    this.listen();
+    this.loadUi(function() {
+      self.extensionPoints = {
+        settingsElement: $('html /deep/ #plugin-settings'),
+        rovSettings: document.querySelector('html /deep/ rov-settings')
+      };
+
+      self.loadPlugins();
+      console.log('loaded plugins');
+      // Register the various event handlers
+      self.listen();
+    });
   };
   Cockpit.prototype = new EventEmitter2();
   Cockpit.prototype.constructor = Cockpit;
@@ -31,6 +40,11 @@
         cockpit.capabilities = data.capabilities;
       }
     });
+  };
+
+  Cockpit.prototype.loadUi = function(done) {
+    var uiName = 'standard-ui'; //temp
+    this.uiLoader.load(uiName, done);
   };
 
   Cockpit.prototype.loadPlugins = function loadPlugins() {
@@ -67,5 +81,6 @@
   };
   // Static array containing all plugins to load
   Cockpit.plugins = [];
+  Cockpit.UIs = [];
   window.Cockpit = Cockpit;
 }(window, document));

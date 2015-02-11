@@ -55,16 +55,19 @@
 
       var socket = window.io.connect();
       var srcAddress = undefined;
-      socket.on('videoStarted', function (data) {
+
+      var videoStarted = function() {
         var address = 'http://' + socket.io.engine.hostname + ':' + CONFIG.video_port + '/?action=stream';
         srcAddress = address;
         console.log('video enabled');
+      };
+      socket.on('videoStarted', function (data) {
+        videoStarted();
       });
       socket.on('VideoStopped', function (data) {
         srcAddress = undefined;
         console.log('video stopped');
       });
-
 
       Polymer({
         interval: undefined,
@@ -109,7 +112,14 @@
             });
             socket.on('VideoStopped', function() {
               clearInterval(this.interval);
-            })
+            });
+            socket.emit('videoStatus', function(status) {
+              if (status) {
+                videoStarted();
+                startRendering();
+              }
+            });
+
           }
         },
         detached: function() {

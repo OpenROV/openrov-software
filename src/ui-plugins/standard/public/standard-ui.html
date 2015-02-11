@@ -1,0 +1,100 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../webcomponents/video/video.html">
+<link rel="import" href="../../webcomponents/horizon/horizon.html">
+<link rel="import" href="../../webcomponents/settings/settings.html">
+<link rel="import" href="../../webcomponents/diagnostics/diagnostics.html">
+<link rel="import" href="../../webcomponents/menu/menu.html">
+<link rel="import" href="capestatus-footer.html">
+<link rel="import" href="connection-health.html">
+<link rel="import" href="servo-tilt.html">
+<link rel="import" href="brightness-indicator.html">
+
+<polymer-element name="rov-ui-standard">
+  <template>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
+      <div class="navbar-inner">
+        <a class="brand" href="#"><img src="../../themes/OpenROV/img/openrov.png" class="logo"/><span class="navbar-titel">Cockpit</span></a>
+        <ul class="nav" id="navtoolbar">
+          <li><a href="/#"><img id="keyboardpopover" src="../../themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" /></a></li>
+          <li><a href="/#" id="servoTilt"><servo-tilt></servo-tilt></a></li>
+          <li><brightness-indicator></brightness-indicator></li>
+        </ul>
+
+        <rov-menu id="menuitems" class="nav pull-right">
+          <li><a href="/#" id="show-settings" onclick="document.querySelector('html /deep/ rov-settings').open();">Settings</a></li>
+          <li><a href="/#" id="show-diagnostic" onclick="document.querySelector('html /deep/ rov-diagnostics').open();" >Diagnostic</a></li>
+        </rov-menu>
+
+      </div>
+    </div>
+
+    <!-- Main ROW -->
+    <div id="main-row" class="container-fluid full-height">
+      <div class="row-fluid full-height">
+        <div class="span9 border full-height" id="outter-videocontainer">
+          <div id="video-container" class="full-height center pagination-centered" border='1'>
+            <rov-video></rov-video>
+            <rov-horizon id="horizon"></rov-horizon>
+          </div>
+        </div>
+        <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
+          <div id="buttonPanel" class="controller well well-small"></div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom nav-collapse collapse visible-desktop">
+      <div class="navbar-inner">
+        <div id="footercontent" class="container-fluid" style="height: 100%">
+          <connection-health class="pull-left"></connection-health>
+          <capestatus-footer class="pull-right"></capestatus-footer>
+        </div>
+      </div>
+    </div>
+
+    <rov-settings id="plugin-settings">
+    </rov-settings>
+
+    <rov-diagnostics id="diagnostic">
+      <div class="settings-block">
+        <h4>Pre-Flight Check</h4>
+      </div>
+      <div class="settings-block">
+        <h4>Callibration</h4>
+        <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
+        <a href="#" class="btn" id="zero_depth">Zero Depth</a>
+      </div>
+    </rov-diagnostics>
+
+    <div class="hidden" id="keyboardInstructions">
+      <p>
+        Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
+        Use <i>1</i>-<i>5</i> to set power. <i>7</i>,<i>8</i> (lift) and <i>9</i>,<i>0</i> (thrust) trim. Space for all stop.
+      </p>
+      <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
+      <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
+      <p>Use <i>l</i> to toggle callibration lasers.</p>
+    </div>
+
+
+
+  </template>
+  <script>
+    Polymer({
+      domReady: function() {
+        var bodyWidth = $(this.$.newuiBody).innerWidth();
+        var controlpadWidth = $(this.$.newuiControlpad).innerWidth();
+        $(this.$.newuiVideo).width(bodyWidth - controlpadWidth);
+      },
+      setMenu: function(menuItem) {
+        menuItem.appendTo($(this.$.menu));
+      },
+      setSettingsPanel: function(element) {
+        element.appendTo($(this.$.newuiBody));
+      }
+    })
+  </script>
+</polymer-element>

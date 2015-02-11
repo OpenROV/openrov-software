@@ -72,6 +72,10 @@ io.sockets.on('connection', function (socket) {
     camera.capture();
     socket.emit('videoStarted');
   }
+  socket.on('videoStatus', function(clk) {
+    console.log('FFFFFFFFFFFFFFFFFFFF ' + camera.IsCapturing)
+    clk(camera.IsCapturing);
+  });
   socket.emit('settings', CONFIG.preferences.get());
   socket.on('ping', function (id) {
     socket.emit('pong', id);

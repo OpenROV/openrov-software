@@ -11,15 +11,17 @@
     // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
-    $('#video-container').append('<div id="compass" class="hud"></div>');
+    $('html /deep/ #video-container').append('<div id="compass" class="hud"></div>');
     var div = $('#compass').get(0);
     // Listen to navdata updates
     var compass = this;
     this.cockpit.socket.on('navdata', function (data) {
-      if (!jQuery.isEmptyObject(data)) {
-        requestAnimationFrame(function () {
-          compass.moveTo(data.hdgd);
-        });
+      if (compass.canvas) { //make sure we're loaded already
+        if (!jQuery.isEmptyObject(data)) {
+          requestAnimationFrame(function () {
+            compass.moveTo(data.hdgd);
+          });
+        }
       }
     });
     // Setup compass canvas

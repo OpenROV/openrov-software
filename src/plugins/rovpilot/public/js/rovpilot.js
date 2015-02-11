@@ -44,11 +44,11 @@
     var jsFileLocation = urlOfJsFile('rovpilot.js');
     $('body').append('<div id="rovPilot-templates"></div>');
     $('#rovPilot-templates').load(jsFileLocation + '../ui-templates.html', function () {
-      $('#footercontent').prepend('<div id="rovPilot_thrustFactor" data-bind="template: {name: \'template_rovPilot_thrustFactor\'}"></div>');
-      ko.applyBindings(rov.bindingModel, document.getElementById('rovPilot_thrustFactor'));
+      $('html /deep/ #footercontent').prepend('<div id="rovPilot_thrustFactor" data-bind="template: {name: \'template_rovPilot_thrustFactor\'}"></div>');
+      ko.applyBindings(rov.bindingModel, document.querySelector('html /deep/ #rovPilot_thrustFactor'));
 
-      $('#navtoolbar').append('<div id="rovPilot_navtoolbar" class="nav" data-bind="template: {name: \'template_rovPilot_navToolbar\'}"></div>');
-      ko.applyBindings(rov.bindingModel, document.getElementById('rovPilot_navtoolbar'));
+      $('html /deep/ #navtoolbar').append('<div id="rovPilot_navtoolbar" class="nav" data-bind="template: {name: \'template_rovPilot_navToolbar\'}"></div>');
+      ko.applyBindings(rov.bindingModel, document.querySelector('html /deep/ #rovPilot_navtoolbar'));
     });
 
     $('#keyboardInstructions')

@@ -1,12 +1,9 @@
 (function (window, $, undefined) {
   'use strict';
 
-  var Ui = function(cockpit) {
-// for plugin management:
+  var Ui = function NewUI(cockpit) {
     this.name = 'new-ui';   // for the settings
     this.viewName = 'New UI'; // for the UI
-    this.canBeDisabled = true; //allow enable/disable
-    this.defaultEnabled = false;
     this.enable = function () {
       loadNewUi();
     };
@@ -25,11 +22,10 @@
         body.append('<div id="oldChildren"></div>');
         children.appendTo('#oldChildren');
 
-        body.append('<div id="UI" class="full-height"><x-newui id="new-ui"></x-newui></div>');
-        $('#new-ui')[0].setMenu($('#menuitems'));
+        body.append('<x-newui id="new-ui"></x-newui>');
         $('#oldChildren').empty();
       });
     }
   };
-  window.Cockpit.plugins.push(Ui);
+  window.Cockpit.UIs.push(new Ui());
 }(window, jQuery));

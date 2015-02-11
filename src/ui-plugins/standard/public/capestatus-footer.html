@@ -1,0 +1,87 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+
+<polymer-element name="capestatus-footer" attributes="" extends="drop-in-dialog">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <div class="container-fluid">
+      <div class="span2 pull-right">
+        <h2>{{formattedRunTime}}</h2>
+        <h4>{{ theLocaltime }}</h4>
+      </div>
+      <div class="span2 pull-right">
+        <h2>{{ currentCpuUsage }}%</h2>
+      </div>
+      <div class="span2 pull-right">
+        <h2>{{ currentVoltage }}v</h2>
+        <div id="batteryIndicator" class="{{ currentVoltage | batteryLevel }}"></div>
+      </div>
+      <div class="span2 pull-right">
+        <h2>{{ currentCurrent }}A</h2>
+      </div>
+    </div>
+
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        formattedRunTime: 'runtime',
+        theLocaltime: 'localtime',
+        currentCpuUsage: '10%',
+        currentCurrent: '0.1',
+        currentVoltage: 0,
+        minVoltage: 0,
+        maxVoltage: 0,
+        domReady: function() {
+          var self = this;
+
+          var setBatteryConfig = function(config) {
+            self.minVoltage = config.minVoltage;
+            self.maxVoltage = config.maxVoltage;
+          };
+
+          window.cockpit.emit('capestatus.request.battery.config', setBatteryConfig);
+          window.cockpit.on('capestatus.battery.config', setBatteryConfig);
+
+          window.cockpit.on('capestatus.time.runtime', function(runtime) {
+            self.formattedRunTime = runtime.formatted;
+          });
+          window.cockpit.on('capestatus.time.time', function(time) {
+            self.theLocaltime = time.formatted;
+          });
+          window.cockpit.on('capestatus.cpu', function(cpu) {
+            self.currentCpuUsage = cpu;
+          });
+          window.cockpit.on('capestatus.battery.voltage', function(voltage) {
+            self.currentVoltage = voltage;
+          });
+          window.cockpit.on('capestatus.battery.current.out', function(current) {
+            self.currentCurrent = current;
+          });
+        },
+        batteryLevel: function (voltage) {
+
+          var minVoltage = parseFloat(this.minVoltage);
+          var maxVoltage = parseFloat(this.maxVoltage);
+          var difference = maxVoltage - minVoltage;
+          var steps = difference / 5;
+
+          if (voltage < (minVoltage + steps))
+            return 'level1';
+          if (voltage < (minVoltage + (steps *2)))
+            return 'level2';
+          if (voltage < (minVoltage + (steps *3)))
+            return 'level3';
+          if (voltage < (minVoltage + (steps *4)))
+            return 'level4';
+          return 'level5';
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>
