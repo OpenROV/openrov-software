@@ -3,15 +3,30 @@
 <polymer-element name="video-compass">
   <template>
     <style type="text/css">
+      #container {
+        width: 100%;
+        height: 30px;
+        bottom: 0;
+      }
       #compass {
         position: absolute;
         width: 100%;
         height: 30px;
-        bottom: 0px;
         z-index: 5;
+        background-image: -webkit-radial-gradient(50% 50%, circle cover, rgb(68, 68, 68) 0%, black 100%);
+        overflow: hidden;
+      }
+
+      .hud {
+        width: 100%;
       }
     </style>
-    <div id="compass" class="hud"></div>
+    <div id="container">
+      <div id="compass" class="hud">
+        <canvas id="compassCanvas" class="hud" style="position: absolute"></canvas>
+        <canvas id="needle"></canvas>
+      </div>
+    </div>
 
   </template>
   <script>
@@ -39,20 +54,22 @@
 
           // Setup compass canvas
           var divRect = div.getBoundingClientRect(), ctx, x, i, needle;
-          div.style.position = 'absolute';
+//          div.style.position = 'absolute';
           // div.style.bottom = '0px';
-          div.style.backgroundImage = '-webkit-radial-gradient(50% 50%, circle cover, rgb(68, 68, 68) 0%, black 100%)';
+//          div.style.backgroundImage = '-webkit-radial-gradient(50% 50%, circle cover, rgb(68, 68, 68) 0%, black 100%)';
           this.visibleWidth = divRect.width * (720 / 120);
           // divRect.width;
-          this.canvas = document.createElement('canvas');
+          this.canvas = this.$.compassCanvas; //document.createElement('canvas');
           this.canvas.width = this.visibleWidth * 2;
           this.canvas.height = divRect.height;
-          this.canvas.style.position = 'absolute';
-          this.canvas.className = 'hud';
-          div.style.overflow = 'hidden';
+//          this.canvas.style.position = 'absolute';
+//          this.canvas.className = 'hud';
+//          div.style.overflow = 'hidden';
           ctx = this.canvas.getContext('2d');
           x = 0;
           ctx.textAlign = 'center';
+//          div.appendChild(this.canvas);
+
           for (i = 0; i < 360 * 2; i += 1) {
             ctx.beginPath();
             ctx.moveTo(x, 0);
@@ -78,9 +95,8 @@
             ctx.stroke();
             x += this.visibleWidth / 720;
           }
-          div.appendChild(this.canvas);
-          needle = document.createElement('canvas');
-          needle.id = "needle";
+          needle = this.$.needle; //document.createElement('canvas');
+//          needle.id = "needle";
           needle.width = 15;
           needle.height = 15;
           needle.style.top = 0;
@@ -93,7 +109,7 @@
           ctx.lineTo(needle.width, 0);
           ctx.lineTo(0, 0);
           ctx.fill();
-          div.appendChild(needle);
+//          div.appendChild(needle);
           this.moveTo(0);
 
           // Bind on window events to resize
