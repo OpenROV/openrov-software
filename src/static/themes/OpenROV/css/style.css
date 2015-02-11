@@ -347,14 +347,6 @@ img.center {
     left: 0px;
 }
 
-#compass {
-	position: absolute;
-	width: 100%;
-	height: 30px;
-	bottom: 0px;
-	z-index: 5;
-}
-
 #rov_status_panel .well {
   background-color: black;
   color: white;
