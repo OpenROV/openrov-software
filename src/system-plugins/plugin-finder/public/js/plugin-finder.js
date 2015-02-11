@@ -133,12 +133,13 @@
     this.model = new PluginFinderModel();
     var self = this;
     var configManager = new PluginFinderConfig();
-    $('#plugin-settings').append('<div id="plugin-finder-settings"></div>');
+    this.cockpit.extensionPoints.settingsElement.append('<div id="plugin-finder-settings"></div>');
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('plugin-finder.js');
-    $('#plugin-finder-settings').load(jsFileLocation + '../settings.html', function () {
+    var finderSettings = this.cockpit.extensionPoints.settingsElement.find('#plugin-finder-settings');
+      finderSettings.load(jsFileLocation + '../settings.html', function () {
       //Get plugins from somewhere and bind them somewhere
-      ko.applyBindings(self.model, document.getElementById('pluginFinder-settings'));
+      ko.applyBindings(self.model, finderSettings[0]);
 
       $('#collapsePluginFinder').on('show', function (e) {
         if (self.model.cachedAvailablePlugins.length==0){

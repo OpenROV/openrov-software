@@ -60,17 +60,18 @@
     this.model = new PluginManagerModel();
     var self = this;
     var configManager = new PluginManagerConfig();
-    $('#plugin-settings').append('<div id="plugin-manager-settings"></div>');
+    this.cockpit.extensionPoints.settingsElement.append('<div id="plugin-manager-settings"></div>');
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('plugin-manager.js');
-    $('#plugin-manager-settings').load(jsFileLocation + '../settings.html', function () {
+    var settings = this.cockpit.extensionPoints.settingsElement.find('#plugin-manager-settings');
+    settings.load(jsFileLocation + '../settings.html', function () {
       cockpit.loadedPlugins.forEach(function (plugin) {
         console.log('evaluating plugin for pluginmanager');
         if (plugin.canBeDisabled) {
           self.model.controlablePlugins.push(new Plugin(plugin, configManager));
         }
       });
-      ko.applyBindings(self.model, document.getElementById('pluginManager-settings'));
+      ko.applyBindings(self.model, settings[0]);
     });
   };
   window.Cockpit.plugins.push(PluginManager);

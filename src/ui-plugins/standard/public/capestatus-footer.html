@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 
-<polymer-element name="capestatus-footer" attributes="" extends="drop-in-dialog">
+<polymer-element name="capestatus-footer" attributes="">
   <template>
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -17,7 +17,7 @@
       </div>
       <div class="span2 pull-right">
         <h2>{{ currentVoltage }}v</h2>
-        <div id="batteryIndicator" class="{{ currentVoltage | batteryLevel }}"></div>
+        <div id="batteryIndicator" class="{{ batteryLevel }}"></div>
       </div>
       <div class="span2 pull-right">
         <h2>{{ currentCurrent }}A</h2>
@@ -36,6 +36,9 @@
         currentVoltage: 0,
         minVoltage: 0,
         maxVoltage: 0,
+        computed: {
+          batteryLevel : 'getBatteryLevel(currentVoltage, minVoltage, maxVoltage)'
+        },
         domReady: function() {
           var self = this;
 
@@ -63,10 +66,10 @@
             self.currentCurrent = current;
           });
         },
-        batteryLevel: function (voltage) {
+        getBatteryLevel: function (voltage, minVoltage, maxVoltage) {
 
-          var minVoltage = parseFloat(this.minVoltage);
-          var maxVoltage = parseFloat(this.maxVoltage);
+          var minVoltage = parseFloat(minVoltage);
+          var maxVoltage = parseFloat(maxVoltage);
           var difference = maxVoltage - minVoltage;
           var steps = difference / 5;
 

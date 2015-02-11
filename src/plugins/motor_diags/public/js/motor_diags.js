@@ -38,7 +38,7 @@
       1
     ];
     // Add required UI elements
-    $('#plugin-settings').append('<div id="runtimePanel">');
+    this.cockpit.extensionPoints.settingsElement.append('<div id="runtimePanel">');
     $('#diagnostic').append('<div id="diagpanel"></div>');
     var self = this;
     var jsFileLocation = urlOfJsFile('motor_diags.js');
@@ -51,8 +51,8 @@
       self.SaveDiagnostics(); // initial save so the settings are sent to arduinos
 
     });
-    $('#runtimePanel').load(jsFileLocation + '../settings.html', function () {
-      document.querySelector('rov-settings').registerCloseHandler(function () {
+    this.cockpit.extensionPoints.settingsElement.find('#runtimePanel').load(jsFileLocation + '../settings.html', function () {
+      cockpit.extensionPoints.rovSettings.registerCloseHandler(function () {
         self.SaveSettings();
       });
     });

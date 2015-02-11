@@ -19,7 +19,7 @@
     this.loadedPlugins = [];
     this.loadUi(function() {
       self.extensionPoints = {
-        settingsElement: $('html /deep/ #plugin-settings'),
+        settingsElement: $('html /deep/ rov-settings'),
         rovSettings: document.querySelector('html /deep/ rov-settings')
       };
 

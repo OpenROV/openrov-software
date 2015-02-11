@@ -150,19 +150,22 @@
     var jsFileLocation = urlOfJsFile('capestatus.js');
     cockpit.extensionPoints.settingsElement.append('<div id="capestatus-settings"></div>');
 
-    $('#capestatus-settings').load(jsFileLocation + '../settings.html', function () {
+    var statusSettings = cockpit.extensionPoints.settingsElement.find('#capestatus-settings');
+    statusSettings.load(jsFileLocation + '../settings.html', function () {
 
-      ko.applyBindingsWithValidation(
-        self.settingsModel,
-        document.querySelector('html /deep/ #capestatus-settings'),
-        {
-          insertMessages: true,
-          decorateElement: true,
-          errorElementClass: 'error',
-          errorMessageClass: 'help-inline',
-          errorClass: 'error'
-        }
-      );
+      $( document ).ready( function() {
+          ko.applyBindingsWithValidation(
+          self.settingsModel,
+          statusSettings[0],
+          {
+            insertMessages: true,
+            decorateElement: true,
+            errorElementClass: 'error',
+            errorMessageClass: 'help-inline',
+            errorClass: 'error'
+          }
+        );
+      })
     });
 
     setInterval(function () {

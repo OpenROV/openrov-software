@@ -5,12 +5,24 @@
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+    <!--<script type='text/javascript' src="/js/libs/bootstrap.min.js"></script>-->
 
-    <div class="drop-in-right" id="settings">
+    <script>
+      jQuery.ajax({
+        url: '/js/libs/bootstrap.min.js',
+        success: function (data) {
+          (new Function('document', 'window', data))
+            .call({}, wrap(document), wrap(window));
+        },
+        dataType: 'text'
+      });
+    </script>
+
+    <div class="drop-in-right" id="{{childId}}">
       <div class="back-button"></div>
       <h2>{{ header }}</h2>
-      <div class="accordion" id="plugin-settings">
-        <content select="div"></content>
+      <div class="accordion" id="{{childId}}_">
+        <content id="childItems" select="div"></content>
       </div>
     </div>
 
@@ -19,6 +31,7 @@
     (function() {
       Polymer({
         header: '',
+        childId: '',
         settings: undefined,
         closeHandlers: [],
         open: function() {
@@ -38,10 +51,22 @@
         },
         domReady: function () {
           var self = this;
-          this.settings = $(this.$.settings);
+          this.settings = $(this.$[this.childId]);
           this.settings.find('.back-button').click(function() {
             self.hide();
           });
+          var distNodes = this.$.childItems.getDistributedNodes();
+          distNodes.array().forEach(function(node) {
+            var res = $(node).find('a.accordion-toggle');
+            if (res && res.length > 0) {
+              var href= res.attr('href');
+              var element = $(node).find(href);
+
+              res.click(function() {
+                element.collapse('toggle');
+              })
+            }
+          })
         }
       })
     })();

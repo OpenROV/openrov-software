@@ -10,9 +10,11 @@
     (function() {
       Polymer({
         header: 'Settings',
+        childId: 'settings-container',
         open: function() {
           window.cockpit.sendUpdateEnabled = false;
           this.super();
+          $('html /deep/ #capestatus-settings').collapse('show');
         },
         hide: function () {
           window.cockpit.sendUpdateEnabled = true;

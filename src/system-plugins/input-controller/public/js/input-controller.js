@@ -99,10 +99,11 @@
     self.cockpit.on('inputController.activate', activateControls);
     self.cockpit.on('inputController.deactivate', deactivateControls);
 
-    $('#plugin-settings').append('<div id="inputcontroller-settings"></div>');
+    this.cockpit.extensionPoints.settingsElement.append('<div id="inputcontroller-settings"></div>');
     var jsFileLocation = urlOfJsFile('input-controller.js');
-    $('#inputcontroller-settings').load(jsFileLocation + '../settings.html', function () {
-      ko.applyBindings(self.model, document.getElementById('inputcontroller-settings'));
+    var controllerSettings = this.cockpit.extensionPoints.settingsElement.find('#inputcontroller-settings');
+    controllerSettings.load(jsFileLocation + '../settings.html', function () {
+      ko.applyBindings(self.model, controllerSettings[0]);
     });
     return self;
   };
