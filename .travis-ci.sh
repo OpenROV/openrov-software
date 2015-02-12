@@ -33,7 +33,13 @@ function setup_arm_chroot {
   chmod a+x envvars.sh
 
   # Install dependencies inside chroot
-  sudo cp /usr/bin/qemu-arm-static ${CHROOT_DIR}/usr/bin/
+  wget https://github.com/OpenROV/openrov-image/blob/v2.5.1-rc1/contrib/qemu-arm-static.gz?raw=true
+
+
+  # Load a known good version of qemu-arm-static
+  sudo cp qemu-arm-static.gz?raw=true ${CHROOT_DIR}/usr/bin/qemu-arm-static.gz
+  gunzip ${CHROOT_DIR}/usr/bin/qemu-arm-static.gz
+  chmod +x ${CHROOT_DIR}/usr/bin/qemu-arm-static
   sudo cp /etc/hosts ${CHROOT_DIR}/etc/
   #  sudo chroot ${CHROOT_DIR} apt-get update
   #  sudo chroot ${CHROOT_DIR} apt-get --allow-unauthenticated install \

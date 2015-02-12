@@ -1,6 +1,4 @@
-language: node_js
-node_js:
-- '0.10'
+language: python
 install: gem install fpm
 env:
   global:
@@ -11,11 +9,8 @@ env:
   - ARCH=arm
 script:
 - cat /etc/hosts
-- npm install --target_arch=armhf
-- cd src/static
-- npm install --target_arch=armhf --loglevel error
-- npm run bower
-- cd ../..
+- "bash -ex .travis-ci.sh"
+
 after_success:
 - echo version_number $VERSION_NUMBER
 - echo real_get_branch $REAL_GIT_BRANCH
