@@ -39,8 +39,8 @@ function setup_arm_chroot {
 
   # Load a known good version of qemu-arm-static
   sudo cp qemu-arm-static.gz?raw=true ${CHROOT_DIR}/usr/bin/qemu-arm-static.gz
-  gunzip ${CHROOT_DIR}/usr/bin/qemu-arm-static.gz
-  chmod +x ${CHROOT_DIR}/usr/bin/qemu-arm-static
+  sudo gunzip ${CHROOT_DIR}/usr/bin/qemu-arm-static.gz
+  sudo chmod +x ${CHROOT_DIR}/usr/bin/qemu-arm-static
   sudo cp /etc/hosts ${CHROOT_DIR}/etc/
   #  sudo chroot ${CHROOT_DIR} apt-get update
   #  sudo chroot ${CHROOT_DIR} apt-get --allow-unauthenticated install \
