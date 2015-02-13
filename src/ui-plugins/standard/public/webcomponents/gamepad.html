@@ -14,6 +14,11 @@
         background-color: transparent;
       }
 
+      #gamepad img {
+        padding: 10px 0px 10px;
+        width: 32px;
+      }
+
     </style>
     <a href="/#" id="gamepad" class="{{ ! gamepadConected ? 'hidden' : '' }}">
       <img id="gamepadPopover" src="/themes/OpenROV/img/gamepad.png" rel="popover">
@@ -24,7 +29,7 @@
     (function() {
       Polymer({
         gamepadConected: false,
-        domReady: function() {
+        ready: function() {
           var self = this;
 
           window.cockpit.on('plugin.input.gamepad.connected', function() {

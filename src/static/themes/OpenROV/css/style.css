@@ -21,6 +21,17 @@ body {
     opacity: 0.75;
 }
 
+.navbar .nav>li>a {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+ul.nav>li>* {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
 a .navbar-titel {
     color: #ffffff;
     margin-left: 20px;
@@ -32,6 +43,8 @@ a .navbar-titel {
 .navbar-inverse #menuitems.nav>li>a {
     color: #ffffff;
     line-height: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 .navbar-inverse .nav>li>a:hover {
     opacity: 0.75;
