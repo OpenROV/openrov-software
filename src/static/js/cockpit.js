@@ -14,9 +14,11 @@
     var self = this;
     this.socket = csocket;
     this.uiLoader = new window.UiLoader();
+    this.messaging = new window.MessageManager(csocket, this);
     this.sendUpdateEnabled = true;
     this.capabilities = 0;
     this.loadedPlugins = [];
+
     this.loadUi(function() {
       self.extensionPoints = {
         settingsElement: $('html /deep/ rov-settings'),
@@ -45,8 +47,8 @@
   };
 
   Cockpit.prototype.loadUi = function(done) {
-    //var uiName = 'standard-ui'; //temp
-    var uiName = 'new-ui'; //temp
+    var uiName = 'standard-ui'; //temp
+    //var uiName = 'new-ui'; //temp
     this.uiLoader.load(uiName, done);
   };
 

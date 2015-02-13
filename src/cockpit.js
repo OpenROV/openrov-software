@@ -73,7 +73,6 @@ io.sockets.on('connection', function (socket) {
     socket.emit('videoStarted');
   }
   socket.on('videoStatus', function(clk) {
-    console.log('FFFFFFFFFFFFFFFFFFFF ' + camera.IsCapturing)
     clk(camera.IsCapturing);
   });
   socket.emit('settings', CONFIG.preferences.get());

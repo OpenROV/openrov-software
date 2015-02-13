@@ -183,7 +183,12 @@
 
     this.cockpit.socket.on('navdata', function (data) {
       capes.cockpit.emit('capestatus.navigationData', data)
-    })
+    });
+
+    this.cockpit.on('capestatus.laser.toggle', function () {
+      capes.toggleLasers();
+    });
+
   };
   capestatus.Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
@@ -242,6 +247,7 @@
       self.cockpit.emit('capestatus.heading', data.hdgd);
     }
 
+
     this.lastPing = new Date();
   };
 
@@ -254,6 +260,11 @@
 
     self.cockpit.emit('capestatus.connection.' + (isConnected ? 'connected' : 'disconnected'));
   };
+
+  capestatus.Capestatus.prototype.toggleLasers = function toggleLasers() {
+    this.cockpit.socket.emit('laser_update');
+  };
+
   window.Cockpit.plugins.push(capestatus.Capestatus);
 
 }(window, jQuery));

@@ -11,6 +11,7 @@
 <link rel="import" href="./webcomponents/connection-health.html">
 <link rel="import" href="./webcomponents/servo-tilt.html">
 <link rel="import" href="./webcomponents/brightness-indicator.html">
+<link rel="import" href="./webcomponents/lasers.html">
 
 <polymer-element name="rov-ui-standard">
   <template>
@@ -24,6 +25,7 @@
           <li><a href="/#"><img id="keyboardpopover" src="../../themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" /></a></li>
           <li><a href="/#" id="servoTilt"><servo-tilt></servo-tilt></a></li>
           <li><brightness-indicator></brightness-indicator></li>
+          <li><rov-lasers></rov-lasers></li>
         </ul>
 
         <rov-menu id="menuitems" class="nav pull-right">

@@ -33,11 +33,9 @@
       thrustfactor: ko.observable(2),
       depthHoldEnabled: ko.observable(false),
       headingHoldEnabled: ko.observable(false),
-      lasersEnabled: ko.observable(false),
       gamepadDisconnected : ko.observable(true),
       toggleDepthHold : rov.toggleholdDepth,
       toggleHeadingHold : rov.toggleholdHeading,
-      toggleLasers : rov.toggleLasers
     };
 
     // Add required UI elements
@@ -74,15 +72,6 @@
     // Lasers
     rov.cockpit.emit('inputController.register',
       [
-        {
-          name: "rovPilot.laserToggle",
-          description: "Toggles the lasers on or off.",
-          defaults: { keyboard: 'l' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.toggleLasers');
-          }
-        },
-
         // lights increment
         {
           name: "rovPilot.adjustLights_increment",
@@ -488,9 +477,6 @@
     rov.cockpit.on('rovpilot.adjustLights', function (v) {
       rov.adjustLights(v);
     });
-    rov.cockpit.on('rovpilot.toggleLasers', function (v) {
-      rov.toggleLasers();
-    });
     rov.cockpit.on('rovpilot.toggleLights', function (v) {
       rov.toggleLights();
     });
@@ -581,9 +567,6 @@
       this.light += value;
     }
     this.setLights(this.light);
-  };
-  ROVpilot.prototype.toggleLasers = function toggleLasers() {
-    this.cockpit.socket.emit('laser_update');
   };
   ROVpilot.prototype.toggleLights = function toggleLights() {
     if (this.light > 0) {
@@ -721,11 +704,6 @@
       if (enabled) {
         rov.cockpit.emit('rovpilot.headingHold.target', status.targetHeading);
       }
-    }
-    if ('claser' in status) {
-      var enabled = status.claser == 255;
-      rov.bindingModel.lasersEnabled(enabled);
-      rov.cockpit.emit('rovpilot.laser.' + (enabled ? 'enabled' : 'disabled'));
     }
   };
   window.Cockpit.plugins.push(ROVpilot);
