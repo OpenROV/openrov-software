@@ -1,0 +1,37 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<polymer-element name="rov-thrustfactor" attributes="">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <style>
+      .label.badge {
+        background-color: transparent;
+        font-size: x-large;
+        text-align: center;
+      }
+    </style>
+
+    <div class="span1 pull-left">
+      <h6>Thrust&nbsp;Factor</h6>
+      <div class="label badge">{{ thrustFactor }}</div>
+    </div>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        thrustFactor: 0,
+        ready: function() {
+          var self = this;
+
+          window.cockpit.on('rovpilot.thrustlevel', function(value) {
+            self.thrustFactor = value;
+          });
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>

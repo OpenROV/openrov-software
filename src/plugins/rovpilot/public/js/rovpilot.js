@@ -28,34 +28,7 @@
     var trimHeld = false;
     rov.priorControls = {};
 
-    rov.bindingModel = {
-      cockpit: rov.cockpit,
-      thrustfactor: ko.observable(2),
-      depthHoldEnabled: ko.observable(false),
-      headingHoldEnabled: ko.observable(false),
-      gamepadDisconnected : ko.observable(true),
-      toggleDepthHold : rov.toggleholdDepth,
-      toggleHeadingHold : rov.toggleholdHeading,
-    };
-
-    // Add required UI elements
-    var jsFileLocation = urlOfJsFile('rovpilot.js');
-    $('body').append('<div id="rovPilot-templates"></div>');
-    $('#rovPilot-templates').load(jsFileLocation + '../ui-templates.html', function () {
-      $('html /deep/ #footercontent').prepend('<div id="rovPilot_thrustFactor" data-bind="template: {name: \'template_rovPilot_thrustFactor\'}"></div>');
-
-      var thrustFactor = document.querySelector('html /deep/ #rovPilot_thrustFactor');
-      if (thrustFactor) {
-        ko.applyBindings(rov.bindingModel, thrustFactor);
-      }
-
-      $('html /deep/ #navtoolbar').append('<div id="rovPilot_navtoolbar" class="nav" data-bind="template: {name: \'template_rovPilot_navToolbar\'}"></div>');
-      var navToolbar = document.querySelector('html /deep/ #rovPilot_navtoolbar');
-      if (navToolbar) {
-        ko.applyBindings(rov.bindingModel, navToolbar);
-
-      }
-    });
+    rov.thrustFactor = 2;
 
     $('#keyboardInstructions')
       .append('<p>press <i>i</i> to toggle lights</p>')
@@ -372,7 +345,7 @@
           description: "Toggles the heading hold on/off",
           defaults: { keyboard: 'm' },
           down: function () {
-            rov.cockpit.emit('rovpilot.toggleholdHeading');
+            rov.cockpit.emit('rovpilot.headingHold.toggle');
           }
         },
 
@@ -382,7 +355,7 @@
           description: "Toggles the depth hold on/off",
           defaults: { keyboard: 'n' },
           down: function () {
-            rov.cockpit.emit('rovpilot.toggleholdDepth');
+            rov.cockpit.emit('rovpilot.depthHold.toggle');
           }
         }
       ]);
@@ -391,17 +364,19 @@
   //so that the reference to this instance is available for further processing
   ROVpilot.prototype.listen = function listen() {
     var rov = this;
+    this.powerLevel(this.thrustFactor);
+
     rov.cockpit.emit('headsUpMenu.register', [
       {
         label: "Toggle Depth hold",
         callback: function () {
-          rov.cockpit.emit('rovpilot.toggleholdDepth');
+          rov.cockpit.emit('rovpilot.depthHold.toggle');
         }
       },
       {
         label: "Toggle Heading hold",
         callback: function () {
-          rov.cockpit.emit('rovpilot.toggleholdHeading');
+          rov.cockpit.emit('rovpilot.headingHold.toggle');
         }
       },
       {
@@ -414,12 +389,6 @@
 
     rov.cockpit.socket.on('status', function (data) {
       rov.UpdateStatusIndicators(data);
-    });
-    rov.cockpit.on('gamepad.connected', function () {
-      rov.bindingModel.gamepadDisconnected(false);
-    });
-    rov.cockpit.on('gamepad.disconnected', function () {
-      rov.bindingModel.gamepadDisconnected(true);
     });
 
     rov.cockpit.on('rovpilot.allStop', function () {
@@ -482,10 +451,10 @@
     rov.cockpit.on('rovpilot.powerOffESCs', function () {
       rov.powerOffESCs();
     });
-    rov.cockpit.on('rovpilot.toggleholdHeading', function () {
+    rov.cockpit.on('rovpilot.headingHold.toggle', function () {
       rov.toggleholdHeading();
     });
-    rov.cockpit.on('rovpilot.toggleholdDepth', function () {
+    rov.cockpit.on('rovpilot.depthHold.toggle', function () {
       rov.toggleholdDepth();
     });
     rov.cockpit.on('rovpilot.manualMotorThrottle', function (p, v, s) {
@@ -618,7 +587,7 @@
   };
 
   ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel() {
-    var currentPowerLevel = this.bindingModel.thrustfactor();
+    var currentPowerLevel = this.thrustFactor;
     currentPowerLevel++;
     if (currentPowerLevel > 5)
       currentPowerLevel = 1;
@@ -643,7 +612,8 @@
         this.power = 1;
         break;
     }
-    this.bindingModel.thrustfactor(value);
+    this.cockpit.emit('rovpilot.thrustlevel', value);
+    this.thrustFactor = value;
   };
   ROVpilot.prototype.allStop = function allStop() {
     this.vtrim = 0;
@@ -687,12 +657,10 @@
     var rov = this;
     if ('targetDepth' in status) {
       var enabled = status.targetDepth != DISABLED;
-      rov.bindingModel.depthHoldEnabled(enabled);
       rov.cockpit.emit('rovpilot.depthHold.' + (enabled ? 'enabled' : 'disabled'));
     }
     if ('targetHeading' in status) {
       var enabled = status.targetHeading != DISABLED;
-      rov.bindingModel.headingHoldEnabled(enabled);
       rov.cockpit.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
       if (enabled) {
         rov.cockpit.emit('rovpilot.headingHold.target', status.targetHeading);

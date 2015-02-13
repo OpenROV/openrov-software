@@ -13,6 +13,8 @@
 <link rel="import" href="./webcomponents/brightness-indicator.html">
 <link rel="import" href="./webcomponents/lasers.html">
 <link rel="import" href="./webcomponents/gamepad.html">
+<link rel="import" href="./webcomponents/holds.html">
+<link rel="import" href="./webcomponents/thrustfactor.html">
 
 <polymer-element name="rov-ui-standard">
   <template>
@@ -28,6 +30,7 @@
           <li><brightness-indicator  class="pull-left"></brightness-indicator></li>
           <li><rov-gamepad class="pull-left"></rov-gamepad></li>
           <li><rov-lasers class="pull-left"></rov-lasers></li>
+          <li><rov-depth-and-heading-hold class="pull-left"></rov-depth-and-heading-hold></li>
         </ul>
 
         <rov-menu id="menuitems" class="nav pull-right">
@@ -59,6 +62,7 @@
     <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom nav-collapse collapse visible-desktop">
       <div class="navbar-inner">
         <div id="footercontent" class="container-fluid" style="height: 100%">
+          <rov-thrustfactor class="pull-left"></rov-thrustfactor>
           <connection-health class="pull-left"></connection-health>
           <rov-topdowncompass class="pull-left"></rov-topdowncompass>
           <bb-ping class="pull-left"></bb-ping>
