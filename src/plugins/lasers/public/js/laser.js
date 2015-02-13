@@ -32,6 +32,16 @@
       ]
     });
 
+    self.cockpit.emit('headsUpMenu.register', [
+      {
+        label: "Toggle Lasers",
+        callback: function () {
+          self.cockpit.emit('plugin.laser.laser.toggle');
+        }
+      }
+    ]);
+
+
   };
 
   window.Cockpit.plugins.push(plugins.Laser);

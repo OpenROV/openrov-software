@@ -185,10 +185,6 @@
       capes.cockpit.emit('capestatus.navigationData', data)
     });
 
-    this.cockpit.on('capestatus.laser.toggle', function () {
-      capes.toggleLasers();
-    });
-
   };
   capestatus.Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
@@ -259,10 +255,6 @@
     var isConnected = delay <= 3000;
 
     self.cockpit.emit('capestatus.connection.' + (isConnected ? 'connected' : 'disconnected'));
-  };
-
-  capestatus.Capestatus.prototype.toggleLasers = function toggleLasers() {
-    this.cockpit.socket.emit('laser_update');
   };
 
   window.Cockpit.plugins.push(capestatus.Capestatus);

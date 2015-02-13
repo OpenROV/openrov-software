@@ -394,12 +394,6 @@
     var rov = this;
     rov.cockpit.emit('headsUpMenu.register', [
       {
-        label: "Toggle Lasers",
-        callback: function () {
-          rov.cockpit.emit('rovpilot.toggleLasers');
-        }
-      },
-      {
         label: "Toggle Depth hold",
         callback: function () {
           rov.cockpit.emit('rovpilot.toggleholdDepth');
