@@ -69,7 +69,6 @@
     }, SAMPLE_PERIOD);
 
     // =============== input settings =============
-    // Lasers
     rov.cockpit.emit('inputController.register',
       [
         // lights increment

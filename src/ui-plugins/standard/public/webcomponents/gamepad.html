@@ -1,0 +1,41 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<polymer-element name="rov-gamepad" attributes="">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <style>
+      .indicator {
+        top: 5px;
+        height: 20px;
+        line-height: 20px;
+        padding: 10px 2px;
+        background-color: transparent;
+      }
+
+    </style>
+    <a href="/#" id="gamepad" class="{{ ! gamepadConected ? 'hidden' : '' }}">
+      <img id="gamepadPopover" src="/themes/OpenROV/img/gamepad.png" rel="popover">
+    </a>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        gamepadConected: false,
+        domReady: function() {
+          var self = this;
+
+          window.cockpit.on('plugin.input.gamepad.connected', function() {
+            self.gamepadConected = true;
+          });
+          window.cockpit.on('plugin.input.gamepad.disconnected', function() {
+            self.gamepadConected = false;
+          });
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>
