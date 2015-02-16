@@ -77,8 +77,8 @@
         window.cockpit.on('rovpilot.headingHold.disabled', function() {
           self.setBearing(undefined);
         });
-        window.cockpit.on('capestatus.heading', function(heading) {
-          self.setHeading(heading);
+        window.cockpit.on('plugin.navigationData.data', function(data) {
+          self.setHeading(data.heading);
         });
 
       },

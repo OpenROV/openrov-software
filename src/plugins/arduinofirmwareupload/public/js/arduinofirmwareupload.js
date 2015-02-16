@@ -62,10 +62,10 @@
             */
     var selectedFile;
     var fileReader = new FileReader();
-    $('#arduinoFirmware').live('change', function (evnt) {
-      selectedFile = evnt.target.files[0];
-      self.selectedFile(selectedFile);
-    });
+    //$('#arduinoFirmware').live('change', function (evnt) {
+    //  selectedFile = evnt.target.files[0];
+    //  self.selectedFile(selectedFile);
+    //});
 
     this.arduinoFirmwareVM.details.subscribe(function (data) {
       $('#arduiniFirmware-details').scrollTop($('#arduiniFirmware-details')[0].scrollHeight);

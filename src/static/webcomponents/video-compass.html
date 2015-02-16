@@ -47,9 +47,9 @@
           // Listen to navdata updates
           var compass = this;
 
-          window.cockpit.on('capestatus.heading', function(heading) {
+          window.cockpit.on('plugin.navigationData.data', function(data) {
             if (compass.canvas) { //make sure we're loaded already
-              compass.moveTo(heading);
+              compass.moveTo(data.heading);
             }
           });
 

@@ -64,9 +64,10 @@
         },
         domReady: function () {
           var self = this;
-          window.cockpit.on('capestatus.navigationData', function (data) {
+          window.cockpit.on('plugin.navigationData.data', function (data) {
             self.setData(data);
           });
+          this.draw();
         },
         render: function (data) {
           this.setValues({

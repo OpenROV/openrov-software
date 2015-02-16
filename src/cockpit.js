@@ -108,9 +108,6 @@ io.sockets.on('connection', function (socket) {
   controller.on('status', function (status) {
     socket.volatile.emit('status', status);
   });
-  controller.on('navdata', function (navdata) {
-    socket.volatile.emit('navdata', navdata);
-  });
   controller.on('rovsys', function (data) {
     socket.emit('rovsys', data);
   });

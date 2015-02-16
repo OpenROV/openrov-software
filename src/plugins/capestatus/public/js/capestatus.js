@@ -170,11 +170,6 @@
     this.cockpit.socket.on('status', function (data) {
       capes.UpdateStatusIndicators(data);
     });
-
-    this.cockpit.socket.on('navdata', function (data) {
-      capes.cockpit.emit('capestatus.navigationData', data)
-    });
-
   };
   capestatus.Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
@@ -217,10 +212,6 @@
     if ('cpuUsage' in data) {
       var value = (data.cpuUsage * 100).toFixed(0);
       self.cockpit.emit('capestatus.cpu', value);
-    }
-
-    if ('hdgd' in data) {
-      self.cockpit.emit('capestatus.heading', data.hdgd);
     }
 
     this.lastPing = new Date();

@@ -6,12 +6,10 @@
     deps.io.sockets.on('connection', function (socket) {
       // Cockpit
       socket.on('plugin.cameraTilt.set', function (angle) {
-        console.log('############## ' + angle);
         setCameraTilt(angle);
       });
 
       socket.on('plugin.cameraTilt.adjust', function (value) {
-        console.log('############## adjust ' + value);
         adjustCameraTilt(value);
       });
 

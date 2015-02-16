@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <polymer-element name="rov-topdowncompass">
   <template>
@@ -19,8 +19,8 @@
       Polymer({
         ready: function () {
           var compass = this;
-          window.cockpit.on('capestatus.heading', function(heading) {
-            compass.moveTo(heading);
+          window.cockpit.on('plugin.navigationData.data', function(data) {
+            compass.moveTo(data.heading);
           });
         },
         moveTo: function(degrees) {

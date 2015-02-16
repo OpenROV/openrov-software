@@ -85,7 +85,7 @@
     $('#buttonPanel').append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
     $('#keyboardInstructions').append('<p><i>r</i> to toggle recording of telemetry</p>');
     $('#exportButton').click(exportData);
-    this.cockpit.socket.on('navdata', function (data) {
+    this.cockpit.on('plugin.navigationData.data', function (data) {
       if (!jQuery.isEmptyObject(data)) {
         blackbox.logNavData(data);
       }

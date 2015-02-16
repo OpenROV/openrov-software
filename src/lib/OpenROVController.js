@@ -13,14 +13,6 @@ var setup_serial = function () {
     logger.log('Error while starting the UART1 setup scipt!\nThe error was: ' + err);
   });
 };
-var navdata = {
-    roll: 0,
-    pitch: 0,
-    yaw: 0,
-    thrust: 0,
-    depth: 0,
-    hdgd: 0
-  };
 var statusdata = {};
 var settingsCollection = {
     smoothingIncriment: 0,
@@ -35,9 +27,6 @@ var OpenROVController = function (eventLoop) {
   var physics = new ArduinoPhysics();
   var hardware = new Hardware();
   var controller = new EventEmitter();
-  setInterval(function () {
-    controller.emit('navdata', navdata);
-  }, 100);
   setInterval(function () {
     controller.emit('status', statusdata);
   }, 1000);
@@ -72,24 +61,6 @@ var OpenROVController = function (eventLoop) {
     }
     if ('log' in status) {
       console.log('log: ' + status.log);
-    }
-    if ('hdgd' in status) {
-      navdata.hdgd = status.hdgd;
-    }
-    if ('deap' in status) {
-      navdata.depth = status.deap;
-    }
-    if ('pitc' in status) {
-      navdata.pitch = status.pitc;
-    }
-    if ('roll' in status) {
-      navdata.roll = status.roll;
-    }
-    if ('yaw' in status) {
-      navdata.yaw = status.yaw;
-    }
-    if ('fthr' in status) {
-      navdata.thrust = status.fthr;
     }
   });
   setup_serial();

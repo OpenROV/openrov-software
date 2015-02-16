@@ -22,7 +22,7 @@
 
     self = this;
 
-    this.cockpit.socket.on('navdata', function (data) {
+    this.cockpit.on('plugin.navigationData.data', function (data) {
       if (!jQuery.isEmptyObject(data)) {
         self.rotation_x = data.roll;
         self.rotation_y = data.pitch;

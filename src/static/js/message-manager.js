@@ -25,30 +25,36 @@
     var self = this;
     if (!parameters) { return; }
     if (parameters.toSocket) {
-      if (! jQuery.isArray(parameters.toSocket)) {
+      if (!jQuery.isArray(parameters.toSocket)) {
         throw new Error('Can\'t handle toSocket argument of type: ' + jQuery.type(parameters.toSocket));
       }
 
       var toSocket = [];
-      parameters.toSocket.forEach(function(toSocketArg) {
+      parameters.toSocket.forEach(function (toSocketArg) {
         if (jQuery.type(toSocketArg) === 'string') {
           toSocket.push({name: toSocketArg, signature: []});
         }
-        else if(jQuery.isPlainObject(toSocketArg)) {
+        else if (jQuery.isPlainObject(toSocketArg)) {
           toSocket.push({name: toSocketArg.name, signature: toSocketArg.signature}); // we don't just copy object to makre sure it has the right layout
         }
         else {
           throw new Error('Can\'t handle toSocket argument of type: ' + jQuery.type(toSocketArg));
         }
       });
-      toSocket.forEach(function(socketConfig) {
+      toSocket.forEach(function (socketConfig) {
         var code =
           'cockpit.on("' +
-            socketConfig.name + '",' +
-            self.generateSocketEmitCallback(socketConfig) +
-            ');';
+          socketConfig.name + '",' +
+          self.generateSocketEmitCallback(socketConfig) +
+          ');';
         eval(code);
       });
+    }
+
+    if (parameters.fromSocket) {
+      if (!jQuery.isArray(parameters.fromSocket)) {
+        throw new Error('Can\'t handle fromSocket argument of type: ' + jQuery.type(parameters.fromSocket));
+      }
 
       var fromSocket = [];
       parameters.fromSocket.forEach(function(fromSocketArg) {
