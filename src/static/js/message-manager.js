@@ -31,7 +31,7 @@
 
       var toSocket = [];
       parameters.toSocket.forEach(function(toSocketArg) {
-        if (jQuery.type(toSocketArg)) {
+        if (jQuery.type(toSocketArg) === 'string') {
           toSocket.push({name: toSocketArg, signature: []});
         }
         else if(jQuery.isPlainObject(toSocketArg)) {
@@ -42,16 +42,17 @@
         }
       });
       toSocket.forEach(function(socketConfig) {
-        eval(
+        var code =
           'cockpit.on("' +
             socketConfig.name + '",' +
             self.generateSocketEmitCallback(socketConfig) +
-            ');');
+            ');';
+        eval(code);
       });
 
       var fromSocket = [];
       parameters.fromSocket.forEach(function(fromSocketArg) {
-        if (jQuery.type(fromSocketArg)) {
+        if (jQuery.type(fromSocketArg) === 'string') {
           fromSocket.push({name: fromSocketArg, signature: []});
         }
         else if(jQuery.isPlainObject(fromSocketArg)) {
@@ -62,11 +63,12 @@
         }
       });
       fromSocket.forEach(function(socketConfig) {
-        eval(
+        var code =
           'cockpit.socket.on("' +
             socketConfig.name + '",' +
             self.generateCockpitEmitCallback(socketConfig) +
-            ');');
+            ');';
+        eval(code);
       });
     }
   };

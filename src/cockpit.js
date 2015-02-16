@@ -8,6 +8,7 @@
  */
 var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server, {log:false, origins:'*:*'}), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
 var PluginLoader = require('./lib/PluginLoader');
+var ArduinoPhysics = require('./lib/ArduinoPhysics');
 
 app.configure(function () {
   app.use(express.static(__dirname + '/static/'));
@@ -83,12 +84,6 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('tilt_update', function (value) {
     controller.sendTilt(value);
-  });
-  socket.on('brightness_update', function (value) {
-    controller.sendLight(value);
-  });
-  socket.on('laser_update', function (value) {
-    controller.sendLaser(value);
   });
   socket.on('depth_zero', function () {
     controller.send('dzer()');
@@ -173,7 +168,8 @@ var deps = {
     io: io,
     rov: controller,
     config: CONFIG,
-    globalEventLoop: globalEventLoop
+    globalEventLoop: globalEventLoop,
+    physics: new ArduinoPhysics()
   };
 // Load the plugins
 function addPluginAssets(result) {

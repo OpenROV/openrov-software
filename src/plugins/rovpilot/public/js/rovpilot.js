@@ -13,7 +13,6 @@
     //default to no trim
     rov.ttrim = 0;
     rov.tilt = 0;
-    rov.light = 0;
     rov.sendToROVEnabled = true;
     rov.positions = {
       throttle: 0,
@@ -44,37 +43,6 @@
     // =============== input settings =============
     rov.cockpit.emit('inputController.register',
       [
-        // lights increment
-        {
-          name: "rovPilot.adjustLights_increment",
-          description: "Makes the ROV lights brighter.",
-          defaults: { keyboard: 'p', gamepad: 'DPAD_UP' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.adjustLights', 0.1);
-          }
-        },
-
-        // lights decrement
-        {
-          name: "rovPilot.adjustLights_decrement",
-          description: "Makes the ROV lights dimmer.",
-          defaults: { keyboard: 'o', gamepad: 'DPAD_DOWN' },
-
-          down: function () {
-            rov.cockpit.emit('rovpilot.adjustLights', -0.1);
-          }
-        },
-
-        // lights toggle
-        {
-          name: "rovPilot.toggleLights",
-          description: "Toggles the ROV lights on/off.",
-          defaults: { keyboard: 'i' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.toggleLights');
-          }
-        },
-
         // camera up/centre/down
         {
           name: "rovPilot.adjustCameraTilt_down",
@@ -436,12 +404,6 @@
     rov.cockpit.on('rovpilot.setCameraTilt', function (v) {
       rov.setCameraTilt(v);
     });
-    rov.cockpit.on('rovpilot.adjustLights', function (v) {
-      rov.adjustLights(v);
-    });
-    rov.cockpit.on('rovpilot.toggleLights', function (v) {
-      rov.toggleLights();
-    });
     rov.cockpit.on('rovpilot.incrimentPowerLevel', function () {
       rov.incrimentPowerLevel();
     });
@@ -510,32 +472,6 @@
   ROVpilot.prototype.adjustCameraTilt = function adjustCameraTilt(value) {
     this.tilt += value;
     this.setCameraTilt(this.tilt);
-  };
-  ROVpilot.prototype.setLights = function setLights(value) {
-    this.light = value;
-    if (this.light > 1)
-      this.light = 1;
-    if (this.light < 0)
-      this.light = 0;
-    this.cockpit.socket.emit('brightness_update', this.light);
-  };
-  ROVpilot.prototype.adjustLights = function adjustLights(value) {
-    if (this.light === 0 && value < 0) {
-      //this code rounds the horn so to speak by jumping from zero to max and vise versa
-      this.light = 0;  //disabled the round the horn feature
-    } else if (this.light == 1 && value > 0) {
-      this.light = 1;  //disabled the round the horn feature
-    } else {
-      this.light += value;
-    }
-    this.setLights(this.light);
-  };
-  ROVpilot.prototype.toggleLights = function toggleLights() {
-    if (this.light > 0) {
-      this.setLights(0);
-    } else {
-      this.setLights(1);
-    }
   };
   ROVpilot.prototype.toggleholdHeading = function toggleholdHeading() {
     this.cockpit.socket.emit('holdHeading_toggle');

@@ -130,7 +130,7 @@
             this.registerListeners(aSwitch);
           }
 
-          window.cockpit.on('capestatus.lights', function(level) {
+          window.cockpit.on('plugin.lights.level', function(level) {
             var state = false;
             if (level !== 'level0') { state = true; }
             self.switches.LED.state = state;
