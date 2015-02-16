@@ -24,7 +24,7 @@
       } else {
         claserstate = 0;
       }
-      deps.rov.writeCommand('claser(' + claserstate + ');');
+      deps.rov.send('claser(' + claserstate + ')');
     };
 
   }

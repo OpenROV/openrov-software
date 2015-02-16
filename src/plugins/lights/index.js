@@ -49,8 +49,8 @@
       if (lights < 0)
         lights = 0;
 
-      var command = 'ligt(' + deps.physics.mapLight(value) + ');';
-      deps.rov.writeCommand(command);
+      var command = 'ligt(' + deps.physics.mapLight(value) + ')';
+      deps.rov.send(command);
 
     };
 

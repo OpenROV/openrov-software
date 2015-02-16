@@ -30,9 +30,9 @@
         tilt = -1;
 
       var servoTilt = deps.physics.mapTiltServo(tilt);
-      var command = 'tilt(' + servoTilt + ');';
+      var command = 'tilt(' + servoTilt + ')';
 
-      deps.rov.writeCommand(command);
+      deps.rov.send(command);
     };
 
     var adjustCameraTilt = function(value) {

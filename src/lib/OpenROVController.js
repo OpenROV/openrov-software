@@ -68,13 +68,6 @@ var OpenROVController = function (eventLoop) {
   controller.ArduinoFirmwareVersion = 0;
   controller.Capabilities = 0;
 
-  controller.writeCommand = function(command) {
-    if (this.notSafeToControl())
-      return;
-
-    console.log('Sending command to arduino: ' + command);
-    hardware.write(command);
-  };
   controller.requestCapabilities = function () {
     console.log('Sending rcap to arduino');
     var command = 'rcap();';
@@ -128,7 +121,12 @@ var OpenROVController = function (eventLoop) {
     return true;
   };
   controller.send = function (cmd) {
+    if (this.notSafeToControl())
+      return;
+
     var command = cmd + ';';
+    console.log('Sending command to arduino: ' + command);
+
     hardware.write(command);
   };
   controller.sendMotorTest = function (port, starbord, vertical) {
