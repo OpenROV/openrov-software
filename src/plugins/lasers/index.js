@@ -5,7 +5,7 @@
 
     deps.io.sockets.on('connection', function (socket) {
       // Cockpit
-      socket.on('plugin.laser.laser.toggle', function () {
+      socket.on('plugin.laser.toggle', function () {
         sendLaser();
       });
 
@@ -13,7 +13,7 @@
       deps.rov.on('status', function (data) {
         if ('claser' in data) {
           var enabled = data.claser == 255;
-          socket.emit('plugin.laser.laser.' + (enabled ? 'enabled' : 'disabled'));
+          socket.emit('plugin.laser.' + (enabled ? 'enabled' : 'disabled'));
         }
       });
     });

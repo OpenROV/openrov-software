@@ -12,7 +12,7 @@
           description: "Toggles the lasers on or off.",
           defaults: { keyboard: 'l' },
           down: function () {
-            cockpit.emit('plugin.laser.laser.toggle');
+            cockpit.emit('plugin.laser.toggle');
           }
         }
       ]);
@@ -25,10 +25,10 @@
 
     // register the messages that should be transfered from and to the socket
     self.cockpit.messaging.register({
-      toSocket: ['plugin.laser.laser.toggle'],
+      toSocket: ['plugin.laser.toggle'],
       fromSocket: [
-        'plugin.laser.laser.enabled',
-        'plugin.laser.laser.disabled'
+        'plugin.laser.enabled',
+        'plugin.laser.disabled'
       ]
     });
 
@@ -36,7 +36,7 @@
       {
         label: "Toggle Lasers",
         callback: function () {
-          self.cockpit.emit('plugin.laser.laser.toggle');
+          self.cockpit.emit('plugin.laser.toggle');
         }
       }
     ]);
