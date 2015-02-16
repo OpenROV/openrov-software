@@ -44,8 +44,8 @@
       [
         // All Trim hold toggle
         {
-          name: "rovPilot.toogleAllTrimHold",
-          description: "Toogle all trim hold functions on/off",
+          name: "rovPilot.toggleAllTrimHold",
+          description: "Toggle all trim hold functions on/off",
           defaults: { gamepad: 'RB' },
           down: function () {
             rov.cockpit.emit('rovpilot.toggleAllTrimHold');
