@@ -9,16 +9,6 @@
     var Battery = function() {};
     var batteryConfig = new capestatus.BatteryConfig();
 
-    self.bindingModel = {
-      cockpit: self.cockpit,
-      currentCpuUsage: ko.observable(''),
-      currentVoltage: ko.observable(0),
-      currentCurrent: ko.observable(''),
-      isConnected: ko.observable(false),
-      brightnessLevel: ko.observable('level0'),
-      servoAngle: ko.observable(0)
-    };
-
     self.settingsModel = {
       batteryTypes: ko.observableArray(),
       batteryType: ko.observable(),
@@ -229,15 +219,9 @@
       self.cockpit.emit('capestatus.cpu', value);
     }
 
-    if ('LIGP' in data) {
-      var level = 'level' + Math.ceil(data.LIGP * 10);
-      self.cockpit.emit('capestatus.lights', level);
-    }
-
     if ('hdgd' in data) {
       self.cockpit.emit('capestatus.heading', data.hdgd);
     }
-
 
     this.lastPing = new Date();
   };
