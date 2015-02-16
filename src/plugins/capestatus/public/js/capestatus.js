@@ -224,11 +224,6 @@
       self.cockpit.emit('capestatus.battery.current.esc3', value);
     }
 
-    if ('servo' in data) {
-      var angle = 90 / 500 * data.servo * -1 - 90;
-      self.cockpit.emit('capestatus.servo.angle', angle);
-    }
-
     if ('cpuUsage' in data) {
       var value = (data.cpuUsage * 100).toFixed(0);
       self.cockpit.emit('capestatus.cpu', value);

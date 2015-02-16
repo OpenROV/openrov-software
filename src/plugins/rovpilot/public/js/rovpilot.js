@@ -12,7 +12,6 @@
     rov.vtrim = 0;
     //default to no trim
     rov.ttrim = 0;
-    rov.tilt = 0;
     rov.sendToROVEnabled = true;
     rov.positions = {
       throttle: 0,
@@ -43,32 +42,6 @@
     // =============== input settings =============
     rov.cockpit.emit('inputController.register',
       [
-        // camera up/centre/down
-        {
-          name: "rovPilot.adjustCameraTilt_down",
-          description: "Point the camera further down.",
-          defaults: { keyboard: 'z', gamepad: 'Y' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.adjustCameraTilt', 0.1);
-          }
-        },
-        {
-          name: "rovPilot.adjustCameraTilt_centre",
-          description: "Point the camera straight ahead.",
-          defaults: { keyboard: 'a', gamepad: 'B' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.setCameraTilt', 0);
-          }
-        },
-        {
-          name: "rovPilot.adjustCameraTilt_up",
-          description: "Point the camera further up.",
-          defaults: { keyboard: 'q', gamepad: 'A' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.adjustCameraTilt', -0.1);
-          }
-        },
-
         // All Trim hold toggle
         {
           name: "rovPilot.toogleAllTrimHold",
@@ -398,12 +371,6 @@
     rov.cockpit.on('rovpilot.adjustThrottleTrim', function (v) {
       rov.adjustThrottleTrim(v);
     });
-    rov.cockpit.on('rovpilot.adjustCameraTilt', function (v) {
-      rov.adjustCameraTilt(v);
-    });
-    rov.cockpit.on('rovpilot.setCameraTilt', function (v) {
-      rov.setCameraTilt(v);
-    });
     rov.cockpit.on('rovpilot.incrimentPowerLevel', function () {
       rov.incrimentPowerLevel();
     });
@@ -460,18 +427,6 @@
       lastSentManualThrottle.vertical = vertical;
       lastSentManualThrottle.starbord = starbord;
     }
-  };
-  ROVpilot.prototype.setCameraTilt = function setCameraTilt(value) {
-    this.tilt = value;
-    if (this.tilt > 1)
-      this.tilt = 1;
-    if (this.tilt < -1)
-      this.tilt = -1;
-    this.cockpit.socket.emit('tilt_update', this.tilt);
-  };
-  ROVpilot.prototype.adjustCameraTilt = function adjustCameraTilt(value) {
-    this.tilt += value;
-    this.setCameraTilt(this.tilt);
   };
   ROVpilot.prototype.toggleholdHeading = function toggleholdHeading() {
     this.cockpit.socket.emit('holdHeading_toggle');

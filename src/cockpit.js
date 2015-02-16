@@ -82,9 +82,6 @@ io.sockets.on('connection', function (socket) {
     controller.send('ping(' + id + ')');
   });
 
-  socket.on('tilt_update', function (value) {
-    controller.sendTilt(value);
-  });
   socket.on('depth_zero', function () {
     controller.send('dzer()');
   });

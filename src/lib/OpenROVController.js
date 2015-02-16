@@ -174,13 +174,6 @@ var OpenROVController = function (eventLoop) {
     var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
     hardware.write(command);
   };
-  controller.sendTilt = function (value) {
-    if (this.notSafeToControl())
-      return;
-    var servoTilt = physics.mapTiltServo(value);
-    var command = 'tilt(' + servoTilt + ');';
-    hardware.write(command);
-  };
   controller.stop = function (value) {
     if (this.notSafeToControl())
       return;
