@@ -22,12 +22,12 @@
   <script>
     (function() {
       Polymer({
-        thrustFactor: 0,
+        powerLevel: 0,
         ready: function() {
           var self = this;
 
-          window.cockpit.on('rovpilot.thrustlevel', function(value) {
-            self.thrustFactor = value;
+          window.cockpit.on('rovpilot.powerLevel', function(value) {
+            self.powerLevel = value;
           });
         }
       })

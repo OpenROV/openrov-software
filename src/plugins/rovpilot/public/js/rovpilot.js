@@ -1,32 +1,13 @@
 (function (window, $, undefined) {
   'use strict';
   var ROVpilot;
-  var DISABLED = "DISABLED";
   ROVpilot = function ROVpilot(cockpit) {
     console.log('Loading ROVpilot plugin in the browser.');
     var rov = this;
     // Instance variables
     rov.cockpit = cockpit;
-    rov.power = 0.25;
-    //default to mid power
-    rov.vtrim = 0;
-    //default to no trim
-    rov.ttrim = 0;
-    rov.sendToROVEnabled = true;
-    rov.positions = {
-      throttle: 0,
-      yaw: 0,
-      lift: 0,
-      pitch: 0,
-      roll: 0
-    };
-    rov.sendUpdateEnabled = true;
-    var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq;
-    //ms
-    var trimHeld = false;
-    rov.priorControls = {};
 
-    rov.thrustFactor = 2;
+    rov.powerLevel = 2;
 
     $('#keyboardInstructions')
       .append('<p>press <i>i</i> to toggle lights</p>')
@@ -34,10 +15,6 @@
       .append('<p>press <i>]</i> to disable ESCs</p>')
       .append('<p>press <i>m</i> to toggle heading hold (BETA)</p>')
       .append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
-
-    setInterval(function () {
-      rov.sendPilotingData();
-    }, SAMPLE_PERIOD);
 
     // =============== input settings =============
     rov.cockpit.emit('inputController.register',
@@ -184,7 +161,7 @@
           description: "Set the power level of the ROV to level 1.",
           defaults: { keyboard: '1' },
           down: function () {
-            rov.cockpit.emit('rovpilot.powerLevel', 1);
+            rov.cockpit.emit('rovpilot.setPowerLevel', 1);
           }
         },
         // power level 2
@@ -193,7 +170,7 @@
           description: "Set the power level of the ROV to level 2.",
           defaults: { keyboard: '2' },
           down: function () {
-            rov.cockpit.emit('rovpilot.powerLevel', 2);
+            rov.cockpit.emit('rovpilot.setPowerLevel', 2);
           }
         },
         // power level 3
@@ -202,7 +179,7 @@
           description: "Set the power level of the ROV to level 3.",
           defaults: { keyboard: '3' },
           down: function () {
-            rov.cockpit.emit('rovpilot.powerLevel', 3);
+            rov.cockpit.emit('rovpilot.setPowerLevel', 3);
           }
         },
         // power level 4
@@ -211,7 +188,7 @@
           description: "Set the power level of the ROV to level 4.",
           defaults: { keyboard: '4' },
           down: function () {
-            rov.cockpit.emit('rovpilot.powerLevel', 4);
+            rov.cockpit.emit('rovpilot.setPowerLevel', 4);
           }
         },
         // power level 5
@@ -220,7 +197,7 @@
           description: "Set the power level of the ROV to level 5.",
           defaults: { keyboard: '5' },
           down: function () {
-            rov.cockpit.emit('rovpilot.powerLevel', 5);
+            rov.cockpit.emit('rovpilot.setPowerLevel', 5);
           }
         },
 
@@ -305,7 +282,6 @@
   //so that the reference to this instance is available for further processing
   ROVpilot.prototype.listen = function listen() {
     var rov = this;
-    this.powerLevel(this.thrustFactor);
 
     rov.cockpit.emit('headsUpMenu.register', [
       {
@@ -328,235 +304,42 @@
       }
     ]);
 
-    rov.cockpit.socket.on('status', function (data) {
-      rov.UpdateStatusIndicators(data);
+    // register the messages that should be transfered from and to the socket
+    rov.cockpit.messaging.register({
+      toSocket: [
+        "rovpilot.allStop",
+        "rovpilot.incrimentPowerLevel",
+        "rovpilot.powerOnESCs",
+        "rovpilot.powerOffESCs",
+        "rovpilot.headingHold.toggle",
+        "rovpilot.depthHold.toggle",
+        "rovpilot.disable",
+        "rovpilot.enable",
+        'rovpilot.powerLevel.request',
+        {name: 'rovpilot.setThrottle', signature: ['value']},
+        {name: 'rovpilot.setYaw', signature: ['value']},
+        {name: 'rovpilot.setLift', signature: ['value']},
+        {name: 'rovpilot.setPitchControl', signature: ['value']},
+        {name: 'rovpilot.setRollControl', signature: ['value']},
+        {name: 'rovpilot.setPowerLevel', signature: ['value']},
+        {name: 'rovpilot.adjustVerticleTrim', signature: ['value']},
+        {name: 'rovpilot.adjustThrottleTrim', signature: ['value']},
+        {name: 'rovpilot.adjustThrottleTrim', signature: ['p', 'v', 's']}
+      ],
+      fromSocket: [
+        'rovpilot.esc.enabled',
+        'rovpilot.esc.disabled',
+        'rovpilot.depthHold.enabled',
+        'rovpilot.depthHold.disabled',
+        'rovpilot.headingHold.enabled',
+        'rovpilot.headingHold.disabled',
+        {name: 'rovpilot.headingHold.target', signature: ['value']},
+        {name: 'rovpilot.powerLevel', signature: ['value']}
+      ]
     });
 
-    rov.cockpit.on('rovpilot.allStop', function () {
-      rov.allStop();
-    });
-    rov.cockpit.on('rovpilot.setThrottle', function (v) {
-      rov.setThrottle(v);
-    });
-    rov.cockpit.on('rovpilot.setYaw', function (v) {
-      rov.setYaw(v);
-    });
-    rov.cockpit.on('rovpilot.setLift', function (v) {
-      rov.setLift(v);
-    });
-    rov.cockpit.on('rovpilot.setPitch', function (v) {
-      rov.setPitch(v);
-    });
-    rov.cockpit.on('rovpilot.setPitchControl', function (v) {
-      rov.setPitchControl(v);
-    });
-    rov.cockpit.on('rovpilot.setRoll', function (v) {
-      rov.setRoll(v);
-    });
-    rov.cockpit.on('rovpilot.setRollControl', function (v) {
-      rov.setRollControl(v);
-    });
-    rov.cockpit.on('rovpilot.setPortElevonControl', function (v) {
-      rov.setPortElevonControl(v);
-    });
-    rov.cockpit.on('rovpilot.setStartboardElevonControl', function (v) {
-      rov.setStartboardElevonControl(v);
-    });
-    rov.cockpit.on('rovpilot.powerLevel', function (v) {
-      rov.powerLevel(v);
-    });
-    rov.cockpit.on('rovpilot.adjustVerticleTrim', function (v) {
-      rov.adjustVerticleTrim(v);
-    });
-    rov.cockpit.on('rovpilot.adjustThrottleTrim', function (v) {
-      rov.adjustThrottleTrim(v);
-    });
-    rov.cockpit.on('rovpilot.incrimentPowerLevel', function () {
-      rov.incrimentPowerLevel();
-    });
-    rov.cockpit.on('rovpilot.powerOnESCs', function () {
-      rov.powerOnESCs();
-    });
-    rov.cockpit.on('rovpilot.powerOffESCs', function () {
-      rov.powerOffESCs();
-    });
-    rov.cockpit.on('rovpilot.headingHold.toggle', function () {
-      rov.toggleholdHeading();
-    });
-    rov.cockpit.on('rovpilot.depthHold.toggle', function () {
-      rov.toggleholdDepth();
-    });
-    rov.cockpit.on('rovpilot.manualMotorThrottle', function (p, v, s) {
-      rov.manualMotorThrottle(p, v, s);
-    });
-    rov.cockpit.on('rovpilot.disable', function () {
-      rov.disablePilot();
-    });
-    rov.cockpit.on('rovpilot.enable', function () {
-      rov.enablePilot();
-    });
-  };
-  var lastSentManualThrottle = {
-    port: 0,
-    vertical: 0,
-    starbord: 0
-  };
-  ROVpilot.prototype.disablePilot = function disablePilot() {
-    this.sendToROVEnabled = false;
-    console.log('disabled rov pilot.');
-  };
-  ROVpilot.prototype.enablePilot = function enablePilot() {
-    this.sendToROVEnabled = true;
-    console.log('enabled rov pilot.');
-  };
-  ROVpilot.prototype.manualMotorThrottle = function manualMotorThrottle(port, vertical, starbord) {
-    var maxdiff = 0;
-    maxdiff = Math.max(maxdiff, Math.abs(port - lastSentManualThrottle.port));
-    maxdiff = Math.max(maxdiff, Math.abs(vertical - lastSentManualThrottle.vertical));
-    maxdiff = Math.max(maxdiff, Math.abs(starbord - lastSentManualThrottle.starbord));
-    if (vertical < 0)
-      vertical = vertical * 2;
-    //make up for async props
-    if (maxdiff > 0.001) {
-      this.cockpit.socket.emit('motor_test', {
-        port: -port * this.power,
-        starbord: -starbord * this.power,
-        vertical: vertical * this.power
-      });
-      lastSentManualThrottle.port = port;
-      lastSentManualThrottle.vertical = vertical;
-      lastSentManualThrottle.starbord = starbord;
-    }
-  };
-  ROVpilot.prototype.toggleholdHeading = function toggleholdHeading() {
-    this.cockpit.socket.emit('holdHeading_toggle');
-  };
-  ROVpilot.prototype.toggleholdDepth = function toggleholdDepth() {
-    this.cockpit.socket.emit('holdDepth_toggle');
-  };
-  ROVpilot.prototype.powerOnESCs = function powerOnESCs() {
-    this.cockpit.socket.emit('escs_poweron');
-    this.cockpit.emit('rovpilot.esc.enabled');
-  };
-  ROVpilot.prototype.powerOffESCs = function powerOffESCs() {
-    this.cockpit.socket.emit('escs_poweroff');
-    this.cockpit.emit('rovpilot.esc.disabled');
-  };
-  ROVpilot.prototype.adjustVerticleTrim = function adjustVerticleTrim(value) {
-    this.vtrim += value;
-    this.positions.lift = 1 / 1000 * this.vtrim;
-  };
-  ROVpilot.prototype.adjustThrottleTrim = function adjustThrottleTrim(value) {
-    this.ttrim += value;
-    this.positions.throttle = 1 / 1000 * this.ttrim;
-  };
-  ROVpilot.prototype.toggleAllTrimHold = function toggleAllTrimHold() {
-    this.trimHeld = !bool;
-    if (this.trimHeld) {
-      this.ttrim = positions.throttle;
-      this.vtrim = positions.throttle;
-    }
-  };
-  ROVpilot.prototype.setThrottle = function setThrottle(value) {
-    this.positions.throttle = value;
-    if (value === 0)
-      this.positions.throttle = this.ttrim;
-  };
-  ROVpilot.prototype.setLift = function setLift(value) {
-    this.positions.lift = value;
-    if (value === 0)
-      this.positions.lift = this.vtrim;
-  };
-  ROVpilot.prototype.setYaw = function setYaw(value) {
-    this.positions.yaw = value;
-  };
-  ROVpilot.prototype.setPitchControl = function setPitchControl(value) {
-    this.positions.pitch = value;
-  };
-  ROVpilot.prototype.setRollControl = function setRollControl(value) {
-    this.positions.roll = value;
-  };
+    rov.cockpit.emit('rovpilot.powerLevel.request');
 
-  ROVpilot.prototype.incrimentPowerLevel = function incrimentPowerLevel() {
-    var currentPowerLevel = this.thrustFactor;
-    currentPowerLevel++;
-    if (currentPowerLevel > 5)
-      currentPowerLevel = 1;
-    this.powerLevel(currentPowerLevel);
-  };
-  ROVpilot.prototype.powerLevel = function powerLevel(value) {
-
-    switch (value) {
-      case 1:
-        this.power = 0.12;
-        break;
-      case 2:
-        this.power = 0.25;
-        break;
-      case 3:
-        this.power = 0.40;
-        break;
-      case 4:
-        this.power = 0.70;
-        break;
-      case 5:
-        this.power = 1;
-        break;
-    }
-    this.cockpit.emit('rovpilot.thrustlevel', value);
-    this.thrustFactor = value;
-  };
-  ROVpilot.prototype.allStop = function allStop() {
-    this.vtrim = 0;
-    this.ttrim = 0;
-    this.positions.throttle = 0;
-    this.positions.yaw = 0;
-    this.positions.lift = 0;
-    this.positions.pitch = 0;
-    this.positions.roll = 0;
-  };
-  ROVpilot.prototype.sendPilotingData = function sendPilotingData() {
-    var positions = this.positions;
-    var updateRequired = false;
-    //Only send if there is a change
-    var controls = {};
-    controls.throttle = positions.throttle * this.power;
-    controls.yaw = positions.yaw * this.power * 1.5;
-    controls.yaw = Math.min(Math.max(controls.yaw, -1), 1);
-    controls.lift = positions.lift * this.power;
-    controls.pitch = positions.pitch;
-    controls.roll = positions.roll;
-    for (var i in positions) {
-      if (controls[i] != this.priorControls[i]) {
-        updateRequired = true;
-      }
-    }
-    if (this.sendUpdateEnabled && updateRequired || this.sendToROVEnabled === false) {
-      if (this.sendToROVEnabled) {
-//        this.cockpit.socket.emit('control_update', controls);
-        for(var control in controls){
-          if(controls[control] != this.priorControls[control]){
-            this.cockpit.socket.emit(control, controls[control]);
-          }
-        }
-      }
-      this.cockpit.emit('rovpilot.control_update', controls);
-      this.priorControls = controls;
-    }
-  };
-  ROVpilot.prototype.UpdateStatusIndicators = function(status) {
-    var rov = this;
-    if ('targetDepth' in status) {
-      var enabled = status.targetDepth != DISABLED;
-      rov.cockpit.emit('rovpilot.depthHold.' + (enabled ? 'enabled' : 'disabled'));
-    }
-    if ('targetHeading' in status) {
-      var enabled = status.targetHeading != DISABLED;
-      rov.cockpit.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
-      if (enabled) {
-        rov.cockpit.emit('rovpilot.headingHold.target', status.targetHeading);
-      }
-    }
   };
   window.Cockpit.plugins.push(ROVpilot);
 }(window, jQuery));
