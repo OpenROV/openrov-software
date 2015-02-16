@@ -62,7 +62,7 @@
       });
 
       socket.on('rovpilot.setPowerLevel', function (v) {
-        self.setPowerLevel(v);
+        self.setPowerLevel(v, socket);
       });
 
       socket.on('rovpilot.adjustVerticleTrim', function (value) {
@@ -81,19 +81,19 @@
         if (currentPowerLevel > 5) {
           currentPowerLevel = 1;
         }
-        self.setPowerLevel(currentPowerLevel);
+        self.setPowerLevel(currentPowerLevel, socket);
       });
 
       socket.on('rovpilot.powerOnESCs', function () {
         self.rov.send('escp(1)');
 
-        self.io.emit('rovpilot.esc.enabled'); // should be handled through status
+        socket.emit('rovpilot.esc.enabled'); // should be handled through status
       });
 
       socket.on('rovpilot.powerOffESCs', function () {
         self.rov.send('escp(0)');
 
-        self.io.emit('rovpilot.esc.disabled'); // should be handled through status
+        socket.emit('rovpilot.esc.disabled'); // should be handled through status
       });
 
       socket.on('rovpilot.headingHold.toggle', function () {
@@ -115,28 +115,26 @@
       });
 
       socket.on('rovpilot.powerLevel.request', function() {
-        self.setPowerLevel(self.powerLevel);
+        self.setPowerLevel(self.powerLevel, socket);
+      });
+
+      // Arduino
+      deps.rov.on('status', function (status) {
+        var enabled;
+        if ('targetDepth' in status) {
+          enabled = status.targetDepth != DISABLED;
+          socket.emit('rovpilot.depthHold.' + (enabled ? 'enabled' : 'disabled'));
+        }
+        if ('targetHeading' in status) {
+          enabled = status.targetHeading != DISABLED;
+          socket.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
+          if (enabled) {
+            socket.emit('rovpilot.headingHold.target', status.targetHeading);
+          }
+        }
       });
 
     });
-
-    // Arduino
-    deps.rov.on('status', function (status) {
-      var enabled;
-      if ('targetDepth' in status) {
-        enabled = status.targetDepth != DISABLED;
-        self.io.emit('rovpilot.depthHold.' + (enabled ? 'enabled' : 'disabled'));
-      }
-      if ('targetHeading' in status) {
-        enabled = status.targetHeading != DISABLED;
-        self.io.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
-        if (enabled) {
-          self.io.emit('rovpilot.headingHold.target', status.targetHeading);
-        }
-      }
-    });
-
-
 
     this.startInterval  = function() {
       setInterval(
@@ -145,7 +143,6 @@
         },
         100);
     };
-
 
     this.startInterval();
 
@@ -162,7 +159,7 @@
     this.positions.roll = 0;
   };
 
-  ROVPilot.prototype.setPowerLevel = function setPowerLevel(value) {
+  ROVPilot.prototype.setPowerLevel = function setPowerLevel(value, socket) {
 
     switch (value) {
       case 1:
@@ -181,7 +178,7 @@
         this.power = 1;
         break;
     }
-    this.io.emit('rovpilot.powerLevel', value);
+    socket.emit('rovpilot.powerLevel', value);
     this.powerLevel = value;
   };
 
@@ -239,9 +236,8 @@
     }
   };
 
-  var createROVPilot = function(name, deps) {
+  module.exports = function (name, deps) {
     return new ROVPilot(deps);
   };
-  module.exports = createROVPilot;
 
 })();
