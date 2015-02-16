@@ -65,7 +65,7 @@
         self.setPowerLevel(v, socket);
       });
 
-      socket.on('rovpilot.adjustVerticleTrim', function (value) {
+      socket.on('rovpilot.adjustVerticalTrim', function (value) {
         self.vtrim += value;
         self.positions.lift = 1 / 1000 * self.vtrim;
       });
@@ -75,7 +75,7 @@
         self.positions.throttle = 1 / 1000 * self.ttrim;
       });
 
-      socket.on('rovpilot.incrimentPowerLevel', function () {
+      socket.on('rovpilot.incrementPowerLevel', function () {
         var currentPowerLevel = self.powerLevel;
         currentPowerLevel++;
         if (currentPowerLevel > 5) {

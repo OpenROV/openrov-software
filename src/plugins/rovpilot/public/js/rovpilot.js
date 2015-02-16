@@ -1,4 +1,4 @@
-(function (window, $, undefined) {
+(function (window, $) {
   'use strict';
   var ROVpilot;
   ROVpilot = function ROVpilot(cockpit) {
@@ -35,7 +35,7 @@
           description: "Increment the thruster power level",
           defaults: { },
           down: function () {
-            rov.cockpit.emit('rovpilot.incrimentPowerLevel');
+            rov.cockpit.emit('rovpilot.incrementPowerLevel');
           }
         },
 
@@ -203,21 +203,21 @@
 
         // vtrim +
         {
-          name: "rovPilot.adjustVerticleTrim_increase",
+          name: "rovPilot.adjustVerticalTrim_increase",
           description: "Increase the vertical trim",
           defaults: { keyboard: '7' },
           down: function () {
-            rov.cockpit.emit('rovpilot.adjustVerticleTrim', 1);
+            rov.cockpit.emit('rovpilot.adjustVerticalTrim', 1);
           }
         },
 
         // vtrim -
         {
-          name: "rovPilot.adjustVerticleTrim_decrease",
+          name: "rovPilot.adjustVerticalTrim_decrease",
           description: "Decrease the vertical trim",
           defaults: { keyboard: '8' },
           down: function () {
-            rov.cockpit.emit('rovpilot.adjustVerticleTrim', -1);
+            rov.cockpit.emit('rovpilot.adjustVerticalTrim', -1);
           }
         },
 
@@ -299,7 +299,7 @@
       {
         label: "Increment power level",
         callback: function () {
-          rov.cockpit.emit('rovpilot.incrimentPowerLevel');
+          rov.cockpit.emit('rovpilot.incrementPowerLevel');
         }
       }
     ]);
@@ -308,7 +308,7 @@
     rov.cockpit.messaging.register({
       toSocket: [
         "rovpilot.allStop",
-        "rovpilot.incrimentPowerLevel",
+        "rovpilot.incrementPowerLevel",
         "rovpilot.powerOnESCs",
         "rovpilot.powerOffESCs",
         "rovpilot.headingHold.toggle",
@@ -322,7 +322,7 @@
         {name: 'rovpilot.setPitchControl', signature: ['value']},
         {name: 'rovpilot.setRollControl', signature: ['value']},
         {name: 'rovpilot.setPowerLevel', signature: ['value']},
-        {name: 'rovpilot.adjustVerticleTrim', signature: ['value']},
+        {name: 'rovpilot.adjustVerticalTrim', signature: ['value']},
         {name: 'rovpilot.adjustThrottleTrim', signature: ['value']},
         {name: 'rovpilot.adjustThrottleTrim', signature: ['p', 'v', 's']}
       ],
