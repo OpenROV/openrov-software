@@ -26,8 +26,8 @@
       });
 
     // Add required UI elements
-    $('#video-container').append('<div id="headsup-menu-base"></div>');
-    var headsUpMenu = $('#headsup-menu-base');
+    cockpit.extensionPoints.videoContainer.append('<div id="headsup-menu-base"></div>');
+    var headsUpMenu = cockpit.extensionPoints.videoContainer.find('#headsup-menu-base');
     headsUpMenu.hide();
 
     var menuItems = [];
@@ -37,13 +37,21 @@
     var jsFileLocation = urlOfJsFile('headsup-menu.js');
 
 
+    cockpit.extensionPoints.videoContainer.prepend('<style id="headsup-menu-style"></style>');
+    var styles = cockpit.extensionPoints.videoContainer.find('#headsup-menu-style');
+    styles.load(
+      jsFileLocation + '../css/style.css',
+      function() {
+
+      });
     headsUpMenu.load(
       jsFileLocation + '../headsup.html',
       function() {
 
-        ko.applyBindings(self, document.getElementById("headsup-menu-base"));
+        headsUpMenu.find('#headsup-menu-templates').appendTo($('body'));
+        ko.applyBindings(self, headsUpMenu[0]);
 
-        $('.menuRow').hover(
+        headsUpMenu.find('.menuRow').hover(
           function(){ $(this).find('.btn').addClass('btn-primary') },
           function(){ $(this).find('.btn').removeClass('btn-primary') }
         );
@@ -88,7 +96,7 @@
           description: "Show the heads up menu.",
           defaults: { keyboard: 'e', gamepad: 'START' },
           down: function () {
-            $('#headsup-menu-base').show();
+            headsUpMenu.show();
           },
           up: executeMenuItem,
           secondary: [
@@ -113,7 +121,7 @@
     };
 
     // for plugin management:
-    this.name = "headsup-menu" // for the settings
+    this.name = "headsup-menu"; // for the settings
     this.viewName = "Heads up menu"; // for the UI
     this.canBeDisabled = true;
     this.enable = function() { enablePlugin(); };
