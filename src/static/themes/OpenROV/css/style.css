@@ -330,7 +330,7 @@ img.center {
 }
 
 #blackboxstatus{
-    margin:5px 10px;
+    margin:0 10px;
     width:30px;
     height: 30px;
     background-image: url('../img/bbconnection.png');
@@ -374,4 +374,10 @@ img.center {
 .accordion-toggle {
     font-size: large;
     font-weight: bold;
+}
+
+#buttonPanel {
+    padding: 5px;
+    display: block;
+    min-height: inherit;
 }

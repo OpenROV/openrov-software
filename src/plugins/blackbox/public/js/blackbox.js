@@ -6,12 +6,144 @@
   var telemetry = [];
   var server;
   var idb;
+
+  var Blackbox = function Blackbox(cockpit) {
+    console.log('Loading Blackbox plugin.');
+    this.cockpit = cockpit;
+    this.recording = false;
+    var blackbox = this;
+    // add required UI elements
+    cockpit.extensionPoints.buttonPannel.append('<span id="blackboxstatus" class="false pull-right"></span>');
+    cockpit.extensionPoints.buttonPannel.append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
+    $('#keyboardInstructions').append('<p><i>r</i> to toggle recording of telemetry</p>');
+    cockpit.extensionPoints.buttonPannel.find('#exportButton').click(exportData);
+    this.cockpit.on('plugin.navigationData.data', function (data) {
+      if (!jQuery.isEmptyObject(data)) {
+        blackbox.logNavData(data);
+      }
+    });
+    this.cockpit.socket.on('status', function (data) {
+      if (!jQuery.isEmptyObject(data)) {
+        blackbox.logStatusData(data);
+      }
+    });
+  };
+  /*
+         * Register keyboard event listener
+         */
+  Blackbox.prototype.listen = function listen() {
+    var self = this;
+
+    self.cockpit.emit('inputController.register',
+      {
+        name: "blackbox.record",
+        description: "Start recording telemetry data.",
+        defaults: { keyboard: 'r' },
+        down: function() { self.keyDown();  }
+      });
+    };
+
+  var refreshintervalID;
+  //	var server;
+  //	var telemetry = [];
+  Blackbox.prototype.toggleRecording = function toggleRecording() {
+    console.log('Recording = ' + this.recording);
+    if (!this.recording) {
+      console.log('Recording Telemetry');
+      cockpit.extensionPoints.buttonPannel.find('#blackboxstatus').toggleClass('false true');
+      cockpit.extensionPoints.buttonPannel.find('#exportButton').toggleClass('disabled enabled');
+      var blackbox = this;
+      refreshintervalID = self.setInterval(blackbox.logTelemetryData, 1000);
+    } else {
+      console.log('Stopping Telemetry');
+      cockpit.extensionPoints.buttonPannel.find('#blackboxstatus').toggleClass('true false');
+      cockpit.extensionPoints.buttonPannel.find('#exportButton').toggleClass('enabled disabled');
+      clearInterval(refreshintervalID);
+    }
+    this.recording = !this.recording;
+  };
+  Blackbox.prototype.test = function () {
+    console.log('tteesstt');
+    blackbox.logTelemetryData();
+  };
+  /*
+         * Process onkeydown.
+         */
+  Blackbox.prototype.keyDown = function keyDown(ev) {
+    var self = this;
+    if (!this.recording) {
+      this.openDB(function() {self.toggleRecording()});
+    } else {
+      this.closeDB(function() {self.toggleRecording()});
+    }
+  };
+  Blackbox.prototype.logNavData = function logNavData(navdata) {
+    if (!this.recording) {
+      return;
+    }
+    navdata.timestamp = new Date().getTime();
+    server.navdata.add(navdata).done(function (item) {
+      console.log('saved');
+    });
+  };
+  Blackbox.prototype.logTelemetryData = function logTelemetryData() {
+    var clone = {};
+    for (var i in telemetry) {
+      clone[i] = telemetry[i];
+    }
+    clone.timestamp = new Date().getTime();
+    server.telemetry.add(clone).done(function (item) {
+      console.log('saved telemetry');
+    }).fail(function (a, x) {
+      console.log(x);
+    });
+  };
+  Blackbox.prototype.logStatusData = function logStatusData(data) {
+    if (!this.recording) {
+      return;
+    }
+    for (var i in data) {
+      telemetry[i] = data[i];
+    }
+  };
+  Blackbox.prototype.openDB = function openDB(callback) {
+    db.open({
+      server: 'openrov-blackbox',
+      version: 1,
+      schema: {
+        navdata: {
+          key: {
+            keyPath: 'timestamp',
+            autoIncrement: false
+          },
+          indexes: {}
+        },
+        telemetry: {
+          key: {
+            keyPath: 'timestamp',
+            autoIncrement: false
+          }
+        }
+      }
+    }).done(function (s) {
+      server = s;
+      idb = server.db();
+      callback();
+    });
+  };
+  Blackbox.prototype.closeDB = function closeDB(callback) {
+    server.close();
+    callback();
+  };
+  window.Cockpit.plugins.push(Blackbox);
+
+
   var exportData = function (e) {
     //block click before ready
     if (!idb)
       return;
     e.preventDefault();
-    var link = $('#exportLink');
+    var link = cockpit.extensionPoints.buttonPannel.find('#exportLink');
     //Ok, so we begin by creating the root object:
     var data = {};
     var promises = [];
@@ -75,132 +207,5 @@
       }
     }
   }
-  var Blackbox = function Blackbox(cockpit) {
-    console.log('Loading Blackbox plugin.');
-    this.cockpit = cockpit;
-    this.recording = false;
-    var blackbox = this;
-    // add required UI elements
-    $('#buttonPanel').append('<span id="blackboxstatus" class="false pull-right"></span>');
-    $('#buttonPanel').append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
-    $('#keyboardInstructions').append('<p><i>r</i> to toggle recording of telemetry</p>');
-    $('#exportButton').click(exportData);
-    this.cockpit.on('plugin.navigationData.data', function (data) {
-      if (!jQuery.isEmptyObject(data)) {
-        blackbox.logNavData(data);
-      }
-    });
-    this.cockpit.socket.on('status', function (data) {
-      if (!jQuery.isEmptyObject(data)) {
-        blackbox.logStatusData(data);
-      }
-    });
-  };
-  /*
-         * Register keyboard event listener
-         */
-  Blackbox.prototype.listen = function listen() {
-    var self = this;
 
-    self.cockpit.emit('inputController.register',
-      {
-        name: "blackbox.record",
-        description: "Start recording telemetry data.",
-        defaults: { keyboard: 'r' },
-        down: function() { self.keyDown();  }
-      });
-    };
-
-  var refreshintervalID;
-  //	var server;
-  //	var telemetry = [];
-  Blackbox.prototype.toggleRecording = function toggleRecording() {
-    console.log('Recording = ' + this.recording);
-    if (!this.recording) {
-      console.log('Recording Telemetry');
-      $('#blackboxstatus').toggleClass('false true');
-      $('#exportButton').toggleClass('disabled enabled');
-      var blackbox = this;
-      refreshintervalID = self.setInterval(blackbox.logTelemetryData, 1000);
-    } else {
-      console.log('Stopping Telemetry');
-      $('#blackboxstatus').toggleClass('true false');
-      $('#exportButton').toggleClass('enabled disabled');
-      clearInterval(refreshintervalID);
-    }
-    this.recording = !this.recording;
-  };
-  Blackbox.prototype.test = function () {
-    console.log('tteesstt');
-    blackbox.logTelemetryData();
-  };
-  /*
-         * Process onkeydown.
-         */
-  Blackbox.prototype.keyDown = function keyDown(ev) {
-    if (!this.recording) {
-      this.openDB(this.toggleRecording());
-    } else {
-      this.closeDB(this.toggleRecording());
-    }
-  };
-  Blackbox.prototype.logNavData = function logNavData(navdata) {
-    if (!this.recording) {
-      return;
-    }
-    navdata.timestamp = new Date().getTime();
-    server.navdata.add(navdata).done(function (item) {
-      console.log('saved');
-    });
-  };
-  Blackbox.prototype.logTelemetryData = function logTelemetryData() {
-    var clone = {};
-    for (var i in telemetry) {
-      clone[i] = telemetry[i];
-    }
-    clone.timestamp = new Date().getTime();
-    server.telemetry.add(clone).done(function (item) {
-      console.log('saved telemetry');
-    }).fail(function (a, x) {
-      console.log(x);
-    });
-  };
-  Blackbox.prototype.logStatusData = function logStatusData(data) {
-    if (!this.recording) {
-      return;
-    }
-    for (var i in data) {
-      telemetry[i] = data[i];
-    }
-  };
-  Blackbox.prototype.openDB = function openDB(callback) {
-    db.open({
-      server: 'openrov-blackbox',
-      version: 1,
-      schema: {
-        navdata: {
-          key: {
-            keyPath: 'timestamp',
-            autoIncrement: false
-          },
-          indexes: {}
-        },
-        telemetry: {
-          key: {
-            keyPath: 'timestamp',
-            autoIncrement: false
-          }
-        }
-      }
-    }).done(function (s) {
-      server = s;
-      idb = server.db();
-      callback();
-    });
-  };
-  Blackbox.prototype.closeDB = function closeDB(callback) {
-    server.close();
-    callback();
-  };
-  window.Cockpit.plugins.push(Blackbox);
 }(window, document));

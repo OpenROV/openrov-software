@@ -24,7 +24,9 @@
         settingsElement: $('html /deep/ rov-settings'),
         rovSettings: { registerCloseHandler: function(handler) {
           self.extensionPoints.settingsElement[0].registerCloseHandler(handler);
-        }}
+        }},
+        keyboardInstructions: $('html /deep/ #keyboardInstructions'),
+        buttonPannel: $('html /deep/ #buttonPanel')
       };
 
       self.loadPlugins();
