@@ -14,7 +14,7 @@
     var jsFileLocation = urlOfJsFile('arduinofirmwareupload.js');
 
     this.cockpit.extensionPoints.settingsElement
-      .append('<div id="firmware-settings"></div>');
+      .append('<div id="firmware-settings">');
 
     var firmwareSettings = this.cockpit.extensionPoints.settingsElement.find('#firmware-settings');
       firmwareSettings.load(
@@ -22,14 +22,19 @@
         function() {
           ko.applyBindings(self.arduinoFirmwareVM, firmwareSettings[0]);
         });
-    $('body').append('<div id="firmware-modal"></div>');
-    $('#firmware-modal')
-      .load(
+    $('body').append('</div><div id="firmware-modal"></div>');
+    var firmwareModal = $('#firmware-modal');
+      firmwareModal.load(
         jsFileLocation + '../modal.html',
         function() {
-          ko.applyBindings(self.arduinoFirmwareVM, document.getElementById("firmware-modal"));
+          ko.applyBindings(self.arduinoFirmwareVM, firmwareModal[0]);
 
-          $('#arduinoFirmware-startupload').click(function () {
+          var button =firmwareSettings.find('#arduinoFirmware-upload');
+          button.click(function() {
+            firmwareModal.find('#firmware-upload-dialog').modal('show');
+          });
+
+          firmwareModal.find('#arduinoFirmware-startupload').click(function () {
             fileReader.onload = function (evnt) {
               console.log('Upload event: ' + selectedFile.name);
               self.cockpit.socket.emit('arduinofirmware-upload', {
@@ -49,10 +54,10 @@
             });
             selectedFile = null;
           });
-          $('#arduinoFirmware-closeupload').click(function () {
-            self.arduinoFirmwareVM.reset();  //$('#firmware-upload-dialog').modal('hide');
+          firmwareModal.find('#arduinoFirmware-closeupload').click(function () {
+            self.arduinoFirmwareVM.reset();
           });
-          $('#arduinoFirmware-showdetails').click(function () {
+          firmwareModal.find('#arduinoFirmware-showdetails').click(function () {
             self.arduinoFirmwareVM.toggleDetails();
           });
         });
@@ -68,7 +73,8 @@
     //});
 
     this.arduinoFirmwareVM.details.subscribe(function (data) {
-      $('#arduiniFirmware-details').scrollTop($('#arduiniFirmware-details')[0].scrollHeight);
+      firmwareModal.find('#arduiniFirmware-details').scrollTop(
+        firmwareModal.find('#arduiniFirmware-details')[0].scrollHeight);
     });
   };
   //This pattern will hook events in the cockpit and pull them all back
