@@ -71,11 +71,11 @@
     console.log('Loading Software update plugin.');
     this.cockpit = cockpit;
 
-    this.cockpit.extensionPoints.settingsElement.append('<div id="software-update-settings"></div>');
+    this.cockpit.extensionPoints.rovSettings.append('<div id="software-update-settings"></div>');
     $('body').prepend('<div id="software-update-alert-container" class="alert alert-success hide"></div>');
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('software-update.js');
-    var updateSettings = this.cockpit.extensionPoints.settingsElement.find('#software-update-settings');
+    var updateSettings = this.cockpit.extensionPoints.rovSettings.find('#software-update-settings');
       updateSettings.load(jsFileLocation + '../settings.html', function () {
       ko.applyBindings(self.model, updateSettings[0]);
     });

@@ -99,9 +99,9 @@
     self.cockpit.on('inputController.activate', activateControls);
     self.cockpit.on('inputController.deactivate', deactivateControls);
 
-    this.cockpit.extensionPoints.settingsElement.append('<div id="inputcontroller-settings"></div>');
+    this.cockpit.extensionPoints.rovSettings.append('<div id="inputcontroller-settings"></div>');
     var jsFileLocation = urlOfJsFile('input-controller.js');
-    var controllerSettings = this.cockpit.extensionPoints.settingsElement.find('#inputcontroller-settings');
+    var controllerSettings = this.cockpit.extensionPoints.rovSettings.find('#inputcontroller-settings');
     controllerSettings.load(jsFileLocation + '../settings.html', function () {
       ko.applyBindings(self.model, controllerSettings[0]);
     });

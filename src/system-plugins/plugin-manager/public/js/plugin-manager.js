@@ -60,10 +60,10 @@
     this.model = new PluginManagerModel();
     var self = this;
     var configManager = new PluginManagerConfig();
-    this.cockpit.extensionPoints.settingsElement.append('<div id="plugin-manager-settings"></div>');
+    this.cockpit.extensionPoints.rovSettings.append('<div id="plugin-manager-settings"></div>');
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('plugin-manager.js');
-    var settings = this.cockpit.extensionPoints.settingsElement.find('#plugin-manager-settings');
+    var settings = this.cockpit.extensionPoints.rovSettings.find('#plugin-manager-settings');
     settings.load(jsFileLocation + '../settings.html', function () {
       cockpit.loadedPlugins.forEach(function (plugin) {
         console.log('evaluating plugin for pluginmanager');

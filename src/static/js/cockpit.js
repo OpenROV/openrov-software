@@ -24,7 +24,8 @@
         rovSettings: $('html /deep/ rov-settings'),
         rovDiagnostics: $('html /deep/ rov-diagnostics /deep/ #dropIn'),
         keyboardInstructions: $('html /deep/ #keyboardInstructions'),
-        buttonPanel: $('html /deep/ #buttonPanel')
+        buttonPanel: $('html /deep/ #buttonPanel'),
+        menu: $('html /deep/ rov-menu')
       };
 
       self.extensionPoints.rovSettings.registerCloseHandler = function(handler) {

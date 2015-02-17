@@ -5,16 +5,30 @@
   // to see the things working, comment the following statement
   return;
 
-
   var Example;
   Example = function Example(cockpit) {
 
     console.log('Loading example plugin in the browser.');
 
-    // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
-    $('#menu').prepend('<div id="example" class="hidden">[example]</div>');
+    cockpit.extensionPoints.menu.append('<li><a href="/#"><div id="example">Example</div></a></li>');
+    cockpit.extensionPoints.menu.find('#example').click(function() {
+      alert('Example plugin.\nThere will be a message sent to the ROV in 5 seconds.')
+      setTimeout(function() {
+        cockpit.emit('plugin.example.foo');
+      }, 5000)
+    });
+
+    cockpit.messaging.register({
+      toSocket: [ // what will we send to the ROV?
+        'plugin.example.foo',
+        { name: 'plugin.example.bar', signature: ['param1', 'param2'] } // for messages with values
+      ],
+      fromSocket: [ // what will we receive from the ROV?
+        { name: 'plugin.example.message', signature: ['message'] }
+      ]
+    });
 
     this.cockpit.emit('inputController.register',
       {
@@ -55,6 +69,10 @@
       }
     };
     rov.cockpit.emit('headsUpMenu.register', item);
+
+    rov.cockpit.on('plugin.example.message', function(message) {
+      alert('received message from rov: ' + message);
+    })
 
   };
   window.Cockpit.plugins.push(Example);

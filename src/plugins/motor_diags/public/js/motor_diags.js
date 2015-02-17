@@ -38,7 +38,7 @@
       1
     ];
     // Add required UI elements
-    this.cockpit.extensionPoints.settingsElement.append('<div id="runtimePanel">');
+    this.cockpit.extensionPoints.rovSettings.append('<div id="runtimePanel">');
     $('#diagnostic').append('<div id="diagpanel"></div>');
     var self = this;
     var jsFileLocation = urlOfJsFile('motor_diags.js');

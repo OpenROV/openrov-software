@@ -13,10 +13,10 @@
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('arduinofirmwareupload.js');
 
-    this.cockpit.extensionPoints.settingsElement
+    this.cockpit.extensionPoints.rovSettings
       .append('<div id="firmware-settings">');
 
-    var firmwareSettings = this.cockpit.extensionPoints.settingsElement.find('#firmware-settings');
+    var firmwareSettings = this.cockpit.extensionPoints.rovSettings.find('#firmware-settings');
       firmwareSettings.load(
         jsFileLocation + '../settings.html',
         function() {

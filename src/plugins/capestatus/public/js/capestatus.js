@@ -138,9 +138,9 @@
 
 
     var jsFileLocation = urlOfJsFile('capestatus.js');
-    cockpit.extensionPoints.settingsElement.append('<div id="capestatus-settings"></div>');
+    cockpit.extensionPoints.rovSettings.append('<div id="capestatus-settings"></div>');
 
-    var statusSettings = cockpit.extensionPoints.settingsElement.find('#capestatus-settings');
+    var statusSettings = cockpit.extensionPoints.rovSettings.find('#capestatus-settings');
     statusSettings.load(jsFileLocation + '../settings.html', function () {
       ko.applyBindingsWithValidation(
         self.settingsModel,

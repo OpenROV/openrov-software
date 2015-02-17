@@ -11,9 +11,9 @@
     //this technique forces relative path to the js file instead of the execution directory
     var jsFileLocation = urlOfJsFile('googletalk_ipregistration.js');
 
-    this.cockpit.extensionPoints.settingsElement
+    this.cockpit.extensionPoints.rovSettings
       .append('<div id="gtalk-settings"></div>');
-    settingsElement = this.cockpit.extensionPoints.settingsElement.find('#gtalk-settings');
+    settingsElement = this.cockpit.extensionPoints.rovSettings.find('#gtalk-settings');
     settingsElement.load(jsFileLocation + '../settings.html');
   };
   //This pattern will hook events in the cockpit and pull them all back
