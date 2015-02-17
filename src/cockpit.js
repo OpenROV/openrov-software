@@ -76,18 +76,13 @@ io.sockets.on('connection', function (socket) {
   socket.on('videoStatus', function(clk) {
     clk(camera.IsCapturing);
   });
+
   socket.emit('settings', CONFIG.preferences.get());
   socket.on('ping', function (id) {
     socket.emit('pong', id);
     controller.send('ping(' + id + ')');
   });
 
-  socket.on('depth_zero', function () {
-    controller.send('dzer()');
-  });
-  socket.on('compass_callibrate', function () {
-    controller.send('ccal()');
-  });
   socket.on('update_settings', function (value) {
     for (var property in value)
       if (value.hasOwnProperty(property))

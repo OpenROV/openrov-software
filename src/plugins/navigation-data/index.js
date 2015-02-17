@@ -35,6 +35,13 @@
         }
       });
 
+      socket.on('depth_zero', function () {
+        deps.rov.send('dzer()');
+      });
+      socket.on('compass_callibrate', function () {
+        deps.rov.send('ccal()');
+      });
+
       setInterval(function () {
         socket.emit('plugin.navigationData.data', navdata);
       }, 100);
