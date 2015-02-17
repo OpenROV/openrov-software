@@ -23,6 +23,7 @@
       self.extensionPoints = {
         rovSettings: $('html /deep/ rov-settings'),
         rovDiagnostics: $('html /deep/ rov-diagnostics /deep/ #dropIn'),
+        videoContainer: $('html /deep/ rov-video'),
         keyboardInstructions: $('html /deep/ #keyboardInstructions'),
         buttonPanel: $('html /deep/ #buttonPanel'),
         menu: $('html /deep/ rov-menu')

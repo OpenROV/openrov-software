@@ -11,7 +11,7 @@
     var self = this;
     $.getScript('bower_components/fpsmeter/dist/fpsmeter.js', function () {
       $('#menu').append('<span id=\'fpsmeter\'></span>');
-      self.meter = new FPSMeter($('#video-container')[0], {
+      self.meter = new FPSMeter(cockpit.extensionPoints.videoContainer[0], {
         interval: 100,
         smoothing: 10,
         show: 'fps',
