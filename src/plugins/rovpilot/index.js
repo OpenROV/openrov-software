@@ -100,8 +100,16 @@
         deps.rov.send('holdHeading_toggle()');
       });
 
+      socket.on('rovpilot.headingHold.set', function (value) {
+        deps.rov.send('holdHeading_toggle('+ value +')');
+      });
+
       socket.on('rovpilot.depthHold.toggle', function () {
         deps.rov.send('holdDepth_toggle()');
+      });
+
+      socket.on('rovpilot.depthHold.set', function (value) {
+        deps.rov.send('holdDepth_toggle('+ value +')');
       });
 
       socket.on('rovpilot.manualMotorThrottle', function (p, v, s) {

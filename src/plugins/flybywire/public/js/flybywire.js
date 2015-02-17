@@ -18,7 +18,7 @@
     this.maxDegreeOfHeadingChange = 5;
     this.maxDepthChange = 0.1;
     // Add required UI elements
-    $('#keyboardInstructions').append('<p><i>g</i> to toggle flybywire</p>');
+    cockpit.extensionPoints.keyboardInstructions.append('<p><i>g</i> to toggle flybywire</p>');
   };
   FlyByWire.prototype.listen = function listen() {
     var rov = this;
@@ -41,7 +41,7 @@
   FlyByWire.prototype.processControlChanges = function processControlChanges(controls) {
     if (controls.throttle != this.targetThrottle) {
       this.targetThrottle = controls.throttle;
-      this.cockpit.socket.emit('thro', controls.throttle);
+      this.cockpit.emit('rovpilot.setThrottle', controls.throttle);
     }
     if (controls.yaw !== 0) {
       this.targetHeading += this.maxDegreeOfHeadingChange * controls.yaw;
@@ -49,7 +49,7 @@
         this.targetHeading -= 360;
       if (this.targetHeading < 0)
         this.targetHeading += 360;
-      this.cockpit.socket.emit('holdHeading_on', this.targetHeading);
+      this.cockpit.socket.emit('rovpilot.headingHold.set', this.targetHeading);
     }
     if (controls.lift !== 0) {
       if (controls.lift < 0 && this.targetDepth <= 0)
@@ -57,7 +57,7 @@
       this.targetDepth += this.maxDepthChange * controls.lift;
       if (this.targetDepth < 0)
         this.targetDepth = 0;
-      this.cockpit.socket.emit('holdDepth_on', this.targetDepth);
+      this.cockpit.socket.emit('rovpilot.depthHold.set', this.targetDepth);
     }
   };
   FlyByWire.prototype.toggleControl = function toggleControl() {
@@ -65,8 +65,8 @@
     if (!this.flybywireControlActive) {
       rov.cockpit.emit('rovpilot.disable');
 
-      rov.cockpit.emit('rovpilot.toggleholdHeading');
-      rov.cockpit.emit('rovpilot.toggleholdDepth');
+      rov.cockpit.emit('rovpilot.headingHold.toggle');
+      rov.cockpit.emit('rovpilot.depthHold.toggle');
 
       rov.flybywireControlActive = true;
       console.log('FlyByWire Control Active');
@@ -74,8 +74,8 @@
 
       rov.flybywireControlActive = false;
       rov.cockpit.emit('rovpilot.enable');
-      rov.cockpit.emit('rovpilot.toggleholdHeading');
-      rov.cockpit.emit('rovpilot.toggleholdDepth');
+      rov.cockpit.emit('rovpilot.headingHold.toggle');
+      rov.cockpit.emit('rovpilot.depthHold.toggle');
       console.log('FlyByWire Control Deactivated');
     }
   };
