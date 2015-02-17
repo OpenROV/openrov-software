@@ -13,10 +13,10 @@
     this.recording = false;
     var blackbox = this;
     // add required UI elements
-    cockpit.extensionPoints.buttonPannel.append('<span id="blackboxstatus" class="false pull-right"></span>');
-    cockpit.extensionPoints.buttonPannel.append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
+    cockpit.extensionPoints.buttonPanel.append('<span id="blackboxstatus" class="false pull-right"></span>');
+    cockpit.extensionPoints.buttonPanel.append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
     $('#keyboardInstructions').append('<p><i>r</i> to toggle recording of telemetry</p>');
-    cockpit.extensionPoints.buttonPannel.find('#exportButton').click(exportData);
+    cockpit.extensionPoints.buttonPanel.find('#exportButton').click(exportData);
     this.cockpit.on('plugin.navigationData.data', function (data) {
       if (!jQuery.isEmptyObject(data)) {
         blackbox.logNavData(data);
@@ -50,14 +50,14 @@
     console.log('Recording = ' + this.recording);
     if (!this.recording) {
       console.log('Recording Telemetry');
-      cockpit.extensionPoints.buttonPannel.find('#blackboxstatus').toggleClass('false true');
-      cockpit.extensionPoints.buttonPannel.find('#exportButton').toggleClass('disabled enabled');
+      cockpit.extensionPoints.buttonPanel.find('#blackboxstatus').toggleClass('false true');
+      cockpit.extensionPoints.buttonPanel.find('#exportButton').toggleClass('disabled enabled');
       var blackbox = this;
       refreshintervalID = self.setInterval(blackbox.logTelemetryData, 1000);
     } else {
       console.log('Stopping Telemetry');
-      cockpit.extensionPoints.buttonPannel.find('#blackboxstatus').toggleClass('true false');
-      cockpit.extensionPoints.buttonPannel.find('#exportButton').toggleClass('enabled disabled');
+      cockpit.extensionPoints.buttonPanel.find('#blackboxstatus').toggleClass('true false');
+      cockpit.extensionPoints.buttonPanel.find('#exportButton').toggleClass('enabled disabled');
       clearInterval(refreshintervalID);
     }
     this.recording = !this.recording;
@@ -143,7 +143,7 @@
     if (!idb)
       return;
     e.preventDefault();
-    var link = cockpit.extensionPoints.buttonPannel.find('#exportLink');
+    var link = cockpit.extensionPoints.buttonPanel.find('#exportLink');
     //Ok, so we begin by creating the root object:
     var data = {};
     var promises = [];

@@ -2,22 +2,38 @@
 <link rel="import" href="../drop-in-dialog/drop-in-dialog.html">
 
 
-<polymer-element name="rov-diagnostics" attributes="" extends="drop-in-dialog">
+<polymer-element name="rov-diagnostics" attributes="" >
   <template>
-    <shadow></shadow>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <drop-in-dialog id="dropIn" childId="{{ childId }}" header="{{ header }}">
+      <div class="settings-block">
+        <h4>Pre-Flight Check</h4>
+      </div>
+      <div class="settings-block">
+        <h4>Calibration</h4>
+        <div id="calibrations">
+          <a href="#" class="btn" id="callibrate_compass">Callibrate Compass</a>
+          <a href="#" class="btn" id="zero_depth">Zero Depth</a>
+        </div>
+      </div>
+      <content></content>
+    </drop-in-dialog>
+
   </template>
   <script>
     (function() {
       Polymer({
         header: 'Diagnostics',
-        id: 'diagnostics-settings',
+        childId: 'diagnostics-settings',
         open: function() {
           window.cockpit.sendUpdateEnabled = false;
-          this.super();
+          this.$.dropIn.open();
         },
         hide: function () {
           window.cockpit.sendUpdateEnabled = true;
-          this.super();
+          this.$.dropIn.hide();
         }
       })
     })();

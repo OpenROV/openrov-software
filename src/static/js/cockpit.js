@@ -21,13 +21,18 @@
 
     this.loadUi(function() {
       self.extensionPoints = {
-        settingsElement: $('html /deep/ rov-settings'),
-        rovSettings: { registerCloseHandler: function(handler) {
-          self.extensionPoints.settingsElement[0].registerCloseHandler(handler);
-        }},
+        rovSettings: $('html /deep/ rov-settings'),
+        rovDiagnostics: $('html /deep/ rov-diagnostics /deep/ #dropIn'),
         keyboardInstructions: $('html /deep/ #keyboardInstructions'),
-        buttonPannel: $('html /deep/ #buttonPanel')
+        buttonPanel: $('html /deep/ #buttonPanel')
       };
+
+      self.extensionPoints.rovSettings.registerCloseHandler = function(handler) {
+          self.extensionPoints.rovSettings[0].registerCloseHandler(handler);
+        };
+      self.extensionPoints.rovDiagnostics.registerCloseHandler = function(handler) {
+          self.extensionPoints.rovDiagnostics[0].registerCloseHandler(handler);
+        };
 
       self.loadPlugins();
       console.log('loaded plugins');

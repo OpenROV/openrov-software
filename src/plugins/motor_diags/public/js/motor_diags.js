@@ -51,7 +51,7 @@
       self.SaveDiagnostics(); // initial save so the settings are sent to arduinos
 
     });
-    this.cockpit.extensionPoints.settingsElement.find('#runtimePanel').load(jsFileLocation + '../settings.html', function () {
+    this.cockpit.extensionPoints.rovSettings.find('#runtimePanel').load(jsFileLocation + '../settings.html', function () {
       cockpit.extensionPoints.rovSettings.registerCloseHandler(function () {
         self.SaveSettings();
       });
