@@ -18,7 +18,7 @@
     self.branches = ko.observableArray();
     self.isSaved = ko.observable(false);
 
-    self.changed = function() {
+    self.changeSelectedBranches = function() {
       var selected = [];
       self.branches().forEach(function(branch) {
         if (branch.selected() === true) {
@@ -32,21 +32,38 @@
     };
 
     configManager.getShowAlerts(function(showAlerts){
-      self.showAlerts(showAlerts)
+      self.showAlerts(showAlerts);
+      subscribeToShowAlerts();
     });
+    getBranches();
 
-    self.showAlerts.subscribe(function(newValue){
-      if (self.showAlerts()) {
-        updateChecker.getBranches(function (branches) {
+    function subscribeToShowAlerts() {
+      var showAlertsSubscription = undefined;
+      showAlertsSubscription = self.showAlerts.subscribe(function(newValue){
+        if (self.showAlerts()) {
+          getBranches();
+          showAlertsSubscription.dispose();
+        }
+        configManager.setShowAlerts(self.showAlerts());
+        self.isSaved(true);
+        setTimeout(function() {self.isSaved(false)}, 2000);
+        return true;
+      });
+    }
+
+    function getBranches() {
+      updateChecker.getBranches(function (branches) {
           configManager.getSelectedBranches(function (selectedBranches) {
             self.branches.removeAll();
+            var selected = selectedBranches.branches ? selectedBranches.branches : branches;
+            if (selected.length === 0) { selected = branches; }
             branches.forEach(function (branch) {
-              var selected = selectedBranches.branches ? selectedBranches.branches : [];
               var branchConfig = selected.filter(function (b) {
                 return b == branch;
               });
               self.branches.push({ name: branch, selected: ko.observable(branchConfig.length > 0)});
             });
+            self.changeSelectedBranches();
           });
         })
       }
@@ -55,9 +72,6 @@
       setTimeout(function() {
         self.isSaved(false)
       }, 2000);
-      return true;
-    });
-
   };
 
   var SoftwareUpdater = function SoftwareUpdater(cockpit) {
@@ -81,21 +95,60 @@
     });
     $('#software-update-alert-container').load(jsFileLocation + '../ui-templates.html', function () {
     });
-    $('body').append('<div id="proxy-container"  class="span12"><iframe  class="span12" style="height: 300px" src="http://localhost:3000"></iframe></div>');
+    $('body').append('<div id="proxy-container"  class="span12"><iframe  class="span12" style="height: 300px" ' +
+      'src="http://'+ window.location.hostname +':3000"></iframe></div>');
     $('#proxy-container').hide();
 
-    this.model.showAlerts.subscribe(function(newValue) {
-      if (newValue) {
-        checker.checkForUpdates(function (updates) {
-          if (updates && updates.length > 0) {
-            var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
-            var container = $('#software-update-alert-container');
-            ko.applyBindings(model, container[0]);
-            container.removeClass('hide');
-          }
-        });
+
+    var logoTitleModel = {};
+    logoTitleModel.cockpitVersion = ko.observable('N/A');
+    logoTitleModel.bbSerial = ko.observable('N/A');
+    $('html /deep/ a.brand').attr('data-bind', 'attr: {title: "Version: " + cockpitVersion() + "\\nBB Serial: " + bbSerial()}');
+
+    $.get(configManager.dashboardUrl() + '/plugin/software/installed/openrov-cockpit', function(data) {
+        if (data.length > 0) {
+          logoTitleModel.cockpitVersion(data[0].package + ' - ' + data[0].version);
+          console.log('Cockpit version: ' + logoTitleModel.cockpitVersion());
+        }
+       })
+      .fail(function() { console.log('Error getting the cockpit version') });
+    $.get(configManager.dashboardUrl() + '/plugin/software/bbserial', function(data) {
+         logoTitleModel.bbSerial(data.bbSerial);
+         console.log('BB Serial: ' + logoTitleModel.bbSerial());
+       })
+      .fail(function() { console.log('Error getting the cockpit version') });
+    ko.applyBindings(logoTitleModel, $('a.brand')[0]);
+
+    self.model.showAlerts.subscribe(function(newValue) {
+      if ((self.model.showAlerts() !== newValue) && newValue === true) {
+        setTimeout(function() {
+          checkForUpdates(checker);
+        }, 5000);
       }
     });
+
+    setTimeout(
+      function() {
+        $.post(configManager.dashboardUrl() + '/plugin/software/update/run')
+          .done(function() {
+            console.log('Started apt-get update on cockpit');
+            checkForUpdates(checker);
+           })
+          .fail(function() { console.log('Error starting apt-get update on cockpit') });
+      }, 2 * 60 * 1000); //two minutes
+
+    function checkForUpdates(checker) {
+      checker.checkForUpdates(function (updates) {
+        if (updates && updates.length > 0) {
+          var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
+          var container = $('#software-update-alert-container');
+          ko.applyBindings(model, container[0]);
+          container.removeClass('hide');
+        }
+      });
+
+    }
+
   };
   window.Cockpit.plugins.push(SoftwareUpdater);
 }(window, jQuery));

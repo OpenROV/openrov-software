@@ -7,7 +7,7 @@
  * and then emits the content to the Node.js server in base64 (string) format.
  *
  */
-var spawn = require('child_process').spawn, util = require('util'), request = require('request'), EventEmitter = require('events').EventEmitter, fs = require('fs'), path = require('path'), CONFIG = require('./config'), logger = require('./logger').create(CONFIG), orutils = require('./orutils'), moment = require('moment');
+var spawn = require('child_process').spawn, util = require('util'), request = require('request'), EventEmitter = require('events').EventEmitter, fs = require('fs'), path = require('path'), CONFIG = require('./config'), logger = require('./logger').create(CONFIG), orutils = require('./orutils'), moment = require('moment');   
 var OpenROVCamera = function (options) {
   var camera = new EventEmitter();
   var capture_process;
@@ -16,7 +16,7 @@ var OpenROVCamera = function (options) {
   // rename to correspond with your C++ compilation
   var default_opts = {
       device: CONFIG.video_device,
-      resolution: CONFIG.video_resolution,
+      resolution: CONFIG.video_resolution, 
       framerate: CONFIG.video_frame_rate,
       port: CONFIG.video_port
     };
@@ -47,8 +47,10 @@ var OpenROVCamera = function (options) {
     request('http://localhost:' + options.port + '/?action=snapshot').pipe(fs.createWriteStream(filename));
     callback(filename);
   };
+  var restartCount = 0;
   // Actual camera capture starting mjpg-stremer
-  camera.capture = function (callback) {
+  var capture;
+  capture = function (callback) {
     logger.log('initiating camera on', options.device);
     logger.log('ensure beagle is at 100% cpu for this camera');
     spawn('cpufreq-set', [
@@ -71,16 +73,23 @@ var OpenROVCamera = function (options) {
         logger.log('camera: ' + data);
       });
       capture_process.stderr.on('data', function (data) {
-        logger.log('camera: ' + data);  //	camera.emit('error.device',data);
+        logger.log('camera: ' + data);
       });
       console.log('camera started');
       capture_process.on('exit', function (code) {
         console.log('child process exited with code ' + code);
         _capturing = false;
         camera.emit('error.device', code);
+        if ( restartCount < 10 ) {
+          console.log('starting new camera process for the ' + restartCount + ' time');
+          restartCount = restartCount + 1;
+          capture(callback);
+        }
+        else { console.log('camera process crashed too many times. giving up'); }
       });
     });
   };
+  camera.capture = capture;
   return camera;
 };
 module.exports = OpenROVCamera;

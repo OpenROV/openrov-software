@@ -5,6 +5,7 @@
     self.cockpit = cockpit;
     self.model = { commands: ko.observableArray() };
     var registerdCommands = {};
+    var registerdControls = {};
     var controllers = [];
     // add our known controllers
     controllers.push(new inputController.Keyboard(cockpit));
@@ -45,14 +46,20 @@
           return;
         var command = new inputController.Command(aControl);
         registerdCommands[command.name] = command;
+
+
         self.model.commands.push(command);
         console.log('InputController: Registering control ' + command.name);
         controllers.forEach(function (controller) {
           if (command.active) {
             controller.register(command);
+            for(var property in command.bindings) {
+              registerdControls[property+":"+command.bindings[property]] = command;
+            }
           }
         });
       });
+      controlsToRegister = [];
       checkDuplicates();
     };
     var unregisterControls = function (controlName) {
@@ -60,6 +67,12 @@
       // controlName could be a single object or an array
       controlsToRemove.forEach(function (control) {
         delete registerdCommands[control];
+        for(var property in control.bindings) {
+          //it is possible that a different control actually owns a particular binding
+          if (registerdControls[property+":"+control.bindings[property]] === control){
+            delete registerdControls[property+":"+control.bindings[property]];
+          }
+        }
       });
       controllers.forEach(function (controller) {
         controller.reset();
@@ -75,10 +88,18 @@
       var controlsToActivate = [].concat(controlName);
       controlsToActivate.forEach(function(commandName) {
         var command = registerdCommands[commandName];
+        command.replaced = [];
+        for(var property in command.bindings) {
+          if (registerdControls[property+":"+command.bindings[property]] !== undefined){
+            console.log("There is a conflict with " + registerdControls[property+":"+command.bindings[property]].name);
+            command.replaced.push(registerdControls[property+":"+command.bindings[property]]);
+          }
+        }
+
         command.active = true;
-        controllers.forEach(function (controller) {
-          controller.register(command);
-        });
+        registerControls(command);
+
+
         console.log("activated command " + command.name);
       });
     };
@@ -87,11 +108,15 @@
       controlsToDeactivate.forEach(function(commandName) {
         var command = registerdCommands[commandName];
         command.active = false;
-        controllers.forEach(function (controller) {
-          controller.unregister(command);
+        unregisterControls(command);
+        command.replaced.forEach(function(oldcommand){
+          registerControls(oldcommand);
+          console.log("re-activated " + oldcommand.name);
         });
+        command.replaced = null;
         console.log("Deactivated command " + command.name);
       });
+
     };
 
     self.cockpit.on('inputController.register', registerControls);

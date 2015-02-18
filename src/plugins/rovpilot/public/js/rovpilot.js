@@ -39,16 +39,6 @@
           }
         },
 
-        // All Stop
-        {
-          name: "rovPilot.allStop",
-          description: "Stop all motor action",
-          defaults: { keyboard: 'space' },
-          down: function () {
-            rov.cockpit.emit('rovpilot.allStop');
-          }
-        },
-
         // Up / Forward
         {
           name: "rovPilot.moveForward",
@@ -200,7 +190,6 @@
             rov.cockpit.emit('rovpilot.setPowerLevel', 5);
           }
         },
-
         // vtrim +
         {
           name: "rovPilot.adjustVerticalTrim_increase",
@@ -339,9 +328,7 @@
         {name: 'rovpilot.powerLevel', signature: ['value']}
       ]
     });
-
     rov.cockpit.emit('rovpilot.powerLevel.request');
-
   };
   window.Cockpit.plugins.push(ROVpilot);
 }(window, jQuery));

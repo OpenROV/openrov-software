@@ -43,7 +43,6 @@
     var self = this;
     var jsFileLocation = urlOfJsFile('motor_diags.js');
     // the js folder path
-
     this.diagPanel = this.cockpit.extensionPoints.rovDiagnostics.find('#diagpanel');
 
     this.diagPanel.load(jsFileLocation + '../diagpanel.html', function () {
@@ -60,9 +59,8 @@
       });
     });
   };
-  //This pattern will hook events in the cockpit and pull them all back
-  //so that the reference to this instance is available for further processing
-  Motor_diags.prototype.listen = function listen() {
+
+  Motor_diags.prototype.loaded = function() {
     var motordiag = this;
     this.cockpit.socket.on('settings', function (data) {
       motordiag.LoadSettings(data);
@@ -113,7 +111,6 @@
         motordiag.verticalMotorSlide(false);
       });
     });
-
     ko.applyBindings(this, motordiag.diagPanel[0]);
   };
   Motor_diags.prototype.sendTestMotorMessage = function sendTestMotorMessage() {
@@ -145,9 +142,6 @@
       motordiag.cockpit.extensionPoints.rovDiagnostics.find('#smoothingIncriment').val(settings.smoothingIncriment);
   };
   Motor_diags.prototype.SaveDiagnostics = function() {
-    var motordiag = this;
-    this.cockpit.socket.emit('update_settings', { deadzone_pos: motordiag.cockpit.extensionPoints.rovDiagnostics.find('#deadzone_pos').val() });
-    this.cockpit.socket.emit('update_settings', { deadzone_neg: motordiag.cockpit.extensionPoints.rovDiagnostics.find('#deadzone_neg').val() });
     this.cockpit.socket.emit('update_settings', { reverse_port_thruster: this.reversePortThruster() });
     this.cockpit.socket.emit('update_settings', { reverse_starbord_thruster: this.reverseStarbordThruster() });
     this.cockpit.socket.emit('update_settings', { reverse_lift_thruster: this.reverseLiftThruster() });

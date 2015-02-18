@@ -6,10 +6,9 @@
  * milliseconds.
  *
  */
-var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server, {log:false, origins:'*:*'}), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
+var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server, { log: false, origins: '*:*' }), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
 var PluginLoader = require('./lib/PluginLoader');
 var ArduinoPhysics = require('./lib/ArduinoPhysics');
-
 app.configure(function () {
   app.use(express.static(__dirname + '/static/'));
   app.use(express.json());
@@ -47,16 +46,14 @@ app.get('/', function (req, res) {
     styles: styles
   });
 });
-
 //socket.io cross domain access
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
   next();
 });
-
 var connections = 0;
 // SOCKET connection ==============================
 io.sockets.on('connection', function (socket) {
@@ -78,16 +75,18 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.emit('settings', CONFIG.preferences.get());
+  var lastping = 0;
   socket.on('ping', function (id) {
     socket.emit('pong', id);
-    controller.send('ping(' + id + ')');
+    if (new Date().getTime() - lastping > 1000) {
+      controller.send('ping(0)');
+      lastping = new Date().getTime();
+    }
   });
-
   socket.on('update_settings', function (value) {
     for (var property in value)
       if (value.hasOwnProperty(property))
         CONFIG.preferences.set(property, value[property]);
-
     CONFIG.savePreferences();
     controller.updateSetting();
     setTimeout(function () {
@@ -164,21 +163,19 @@ var deps = {
 function addPluginAssets(result) {
   scripts = scripts.concat(result.scripts);
   styles = styles.concat(result.styles);
-  result.assets.forEach(
-    function(asset) {
-      app.use(asset.path, express.static(asset.assets));
-    });
+  result.assets.forEach(function (asset) {
+    app.use(asset.path, express.static(asset.assets));
+  });
 }
-
 var loader = new PluginLoader();
 loader.loadPlugins(path.join(__dirname, 'ui-plugins'), '/ui-plugin', deps, addPluginAssets);
 loader.loadPlugins(path.join(__dirname, 'system-plugins'), '/system-plugin', deps, addPluginAssets);
 loader.loadPlugins(path.join(__dirname, 'plugins'), '/plugin', deps, addPluginAssets);
 mkdirp.sync('/usr/share/cockpit/bower_components');
-loader.loadPlugins('/usr/share/cockpit/bower_components', '/community-plugin', deps, addPluginAssets, function(file){return file.substring(0, 15) === "openrov-plugin-"});
-
+loader.loadPlugins('/usr/share/cockpit/bower_components', '/community-plugin', deps, addPluginAssets, function (file) {
+  return file.substring(0, 15) === 'openrov-plugin-';
+});
 controller.start();
-
 // Start the web server
 server.listen(app.get('port'), function () {
   console.log('Started listening on port: ' + app.get('port'));

@@ -5,7 +5,7 @@
     <li data-bind="text: package"></li>
   </ul>
 
-  <a data-bind="attr: {href: dashboardUrl + '/#/software'}"
+  <a data-bind="attr: {href: dashboardUrl() + '/#/software'}"
      target="_blank" onclick="$('#softwareUpdateAlert').alert('close')">
     Click to update!
   </a>
