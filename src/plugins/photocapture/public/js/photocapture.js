@@ -43,7 +43,7 @@
         name: "photoCapture.takeSnapshot",
         description: "Take a snapshot of the current video image.",
         defaults: { keyboard: 'c', gamepad: 'LB' },
-        down: function() { photoc.cockpit.socket.emit('snapshot'); }
+        down: function() { photoc.cockpit.emit('plugin.photoCapture.snapshot'); }
       });
 
     cockpit.extensionPoints.menu.find('#show-photos').click(function () {
