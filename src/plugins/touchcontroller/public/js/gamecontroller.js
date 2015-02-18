@@ -259,13 +259,16 @@
       //return;
       // Merge default options and specified options
       options = options || {};
-      extend(this.options, options);
+
+      this.options.canvas = options.canvas;
+      delete options.canvas;
+      extend(this.options, options); //breaks when passing an html element as canvas
       var userAgent = navigator.userAgent.toLowerCase();
       // See if we should run the performanceFriendly version (for slower CPUs)
       this.performanceFriendly = userAgent.indexOf('iphone') !== -1 || userAgent.indexOf('android') !== -1 || this.options.forcePerformanceFriendly;
       // Grab the canvas if one wasn't passed
       var ele;
-      if (!this.options.canvas || !(ele = document.getElementById(this.options.canvas))) {
+      if (!this.options.canvas || !(ele = this.options.canvas)) {
         this.options.canvas = document.getElementsByTagName('canvas')[0];
       } else if (ele) {
         this.options.canvas = ele;

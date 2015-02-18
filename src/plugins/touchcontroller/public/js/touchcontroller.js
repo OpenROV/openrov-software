@@ -1,13 +1,13 @@
 (function (window, $, undefined) {
-  'use strict';
   var Touchcontroller;
   var is_touch_device = 'ontouchstart' in document.documentElement;
   if (!is_touch_device)
     return;
   function setupGameController(cockpit) {
-    $('#outter-videocontainer').append('<canvas id="touchcontroller" class="row-fluid full-height testoverlay"></canvas>');
+    cockpit.extensionPoints.videoContainer.append('<canvas id="touchcontroller" class="row-fluid full-height testoverlay"></canvas>');
+    var canvas = cockpit.extensionPoints.videoContainer.find('#touchcontroller')[0];
     GameController.init({
-      canvas: 'touchcontroller',
+      canvas: canvas,
       left: {
         type: 'dpad',
         position: {
@@ -163,8 +163,6 @@
 
   Touchcontroller = function Touchcontroller(cockpit) {
     console.log('Loading Touchcontroller plugin in the browser.');
-    if (!is_touch_device)
-      return;
     setupGameController(cockpit);
 
     // Instance variables
