@@ -8,7 +8,7 @@
     this.cockpit = cockpit;
     // Add required UI elements
     var calibrations = cockpit.extensionPoints.rovDiagnostics.find('#calibrations');
-    calibrations.append('<a href="#" class="btn" id="toggle_watertype">Switch Water Type</a>');
+    calibrations.append('<a href="#" class="btn" style="z-index: 100" id="toggle_watertype">Switch Water Type</a>');
     // Listen to navdata updates
     var self = this;
     cockpit.extensionPoints.rovDiagnostics.find('#toggle_watertype').click(function () {
