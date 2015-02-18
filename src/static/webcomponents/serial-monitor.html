@@ -1,0 +1,56 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="serial-monitor" attributes="maxLines">
+  <template>
+    <style type="text/css">
+      #serialMonitorList {
+        width: 100%; height: 400px;
+      }
+    </style>
+
+    <div class="controller well well-small">
+      <textarea id="serialMonitorList">
+      </textarea>
+    </div>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        maxLines: 100,
+        domReady: function () {
+          var self = this;
+          var list = $(this.$.serialMonitorList);
+          window.cockpit.on('plugin.serial-monitor.serial-received', function (data) {
+            var text = self.tail(self.maxLines, list.val() + data);
+            list.val(text);
+            list.scrollTop(list[0].scrollHeight);
+          });
+        },
+        countNewlines: function countNewlines(haystack) {
+          return this.count('\n', haystack);
+        },
+        count: function count(needle, haystack) {
+          var num = 0, len = haystack.length;
+          for (var i = 0; i < len; i++) {
+            if (haystack.charAt(i) === needle) {
+              num++;
+            }
+          }
+          return num;
+        },
+        tail: function tail(limit, haystack) {
+          var lines = this.countNewlines(haystack) + 1;
+          if (lines > limit) {
+            return haystack.split('\n').slice(-limit).join('\n');
+          }
+          return haystack;
+        }
+      });
+    })();
+  </script>
+
+</polymer-element>
+  
+
+

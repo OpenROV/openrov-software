@@ -3,6 +3,7 @@ function Hardware() {
   var DISABLED = "DISABLED";
   var hardware = new EventEmitter();
   var reader = new StatusReader();
+  var emitRawSerial = false;
   hardware.depthHoldEnabled = false;
   hardware.targetHoldEnabled = false;
   hardware.laserEnabled = false;
@@ -13,6 +14,10 @@ function Hardware() {
   hardware.connect = function () {
     console.log('!Serial port opened');
   };
+  hardware.toggleRawSerialData = function toggleRawSerialData() {
+    emitRawSerial = !emitRawSerial;
+  };
+
   hardware.write = function (command) {
     console.log('HARDWARE-MOCK:' + command);
     var commandParts = command.split(/\(|\)/);
@@ -73,6 +78,9 @@ function Hardware() {
         hardware.emit('status', reader.parseStatus(status));
     }
     hardware.emit('status', reader.parseStatus('cmd:' + command));
+    if (emitRawSerial) {
+      hardware.emit('serial-recieved', command);
+    }
   };
   hardware.close = function () {
     console.log('!Serial port closed');
