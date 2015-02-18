@@ -3,6 +3,7 @@
   "dependencies": {
     "fpsmeter": "~0.3.1",
     "knockout.validation": "~1.0.2",
-    "polymer": "Polymer/polymer#~0.5.2"
+    "polymer": "Polymer/polymer#~0.5.2",
+    "paper-slider": "Polymer/paper-slider#~0.5.4"
   }
 }

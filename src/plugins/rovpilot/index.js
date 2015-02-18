@@ -125,7 +125,7 @@
       socket.on('rovpilot.powerLevel.request', function() {
         self.setPowerLevel(self.powerLevel, socket);
       });
-
+      
       // Arduino
       deps.rov.on('status', function (status) {
         var enabled;

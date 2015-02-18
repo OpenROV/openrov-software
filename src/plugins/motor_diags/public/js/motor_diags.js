@@ -44,12 +44,8 @@
     var jsFileLocation = urlOfJsFile('motor_diags.js');
     // the js folder path
 
-    this.cockpit.extensionPoints.rovDiagnostics.append('<style id="jquery-ui-styles"></style>');
-    var styles = this.cockpit.extensionPoints.rovDiagnostics.find('#jquery-ui-styles');
-    styles.load('/css/ui-lightness/jquery-ui-1.8.23.custom.css');
-
-
     this.diagPanel = this.cockpit.extensionPoints.rovDiagnostics.find('#diagpanel');
+
     this.diagPanel.load(jsFileLocation + '../diagpanel.html', function () {
       self.setupSliders();
       self.cockpit.extensionPoints.rovDiagnostics.registerCloseHandler(function () {
@@ -77,108 +73,54 @@
     });
     motordiag.portMotorSpeed.subscribe(function (newValue) {
       if (!motordiag.portMotorSlide()) {
-        motordiag.diagPanel.find('#portMotorSpeed').slider('value', newValue);
+        motordiag.diagPanel.find('#portMotorSpeed')[0].value = newValue;
       }
       motordiag.sendTestMotorMessage();
     });
     motordiag.starbordMotorSpeed.subscribe(function (newValue) {
       if (!motordiag.starbordMotorSlide()) {
-        motordiag.diagPanel.find('#starbordMotorSpeed').slider('value', newValue);
+        motordiag.diagPanel.find('#starbordMotorSpeed')[0].value = newValue;
       }
       motordiag.sendTestMotorMessage();
     });
     motordiag.verticalMotorSpeed.subscribe(function (newValue) {
       if (!motordiag.verticalMotorSlide()) {
-        motordiag.diagPanel.find('#verticalMotorSpeed').slider('value', newValue);
+        motordiag.diagPanel.find('#verticalMotorSpeed')[0].value = newValue;
       }
       motordiag.sendTestMotorMessage();
     });
   };
   Motor_diags.prototype.setupSliders = function() {
-    var md = this;
     var motordiag = this;
-    var starboardSlider = motordiag.diagPanel.find('#starbordMotorSpeed');
-    starboardSlider.slider({
-      min: -1,
-      max: 1,
-      value: 0,
-      step: 0.001,
-      slide: function (event, ui) {
-        md.starbordMotorSlide(true);
-        md.starbordMotorSpeed(ui.value);
-        md.starbordMotorSlide(false);
-      }
+
+    Polymer.import(['/bower_components/paper-slider/paper-slider.html'], function() {
+      var port = motordiag.diagPanel.find('#portMotorSpeed');
+      port.on('immediate-value-change', function() {
+        motordiag.portMotorSlide(true);
+        motordiag.portMotorSpeed(port[0].immediateValue);
+        motordiag.portMotorSlide(false);
+      });
+      var starbord = motordiag.diagPanel.find('#starbordMotorSpeed');
+      starbord.on('immediate-value-change', function() {
+        motordiag.starbordMotorSlide(true);
+        motordiag.starbordMotorSpeed(starbord[0].immediateValue);
+        motordiag.starbordMotorSlide(false);
+      });
+      var vertical = motordiag.diagPanel.find('#verticalMotorSpeed');
+      vertical.on('immediate-value-change', function() {
+        motordiag.verticalMotorSlide(true);
+        motordiag.verticalMotorSpeed(vertical[0].immediateValue);
+        motordiag.verticalMotorSlide(false);
+      });
     });
-    // $( "#starbordMotorSpeedVal" ).val( $( "#starbordMotorSpeed" ).slider( "value" ) );
-    motordiag.diagPanel.find('#portMotorSpeed').slider({
-      min: -1,
-      max: 1,
-      value: 0,
-      step: 0.001,
-      slide: function (event, ui) {
-        md.portMotorSlide(true);
-        md.portMotorSpeed(ui.value);
-        md.portMotorSlide(false);
-      }
-    });
-    motordiag.diagPanel.find('#portMotorSpeedVal')
-      .val(motordiag.diagPanel.find('#portMotorSpeed').slider('value'));
-    motordiag.diagPanel.find('#verticalMotorSpeed').slider({
-      min: -1,
-      max: 1,
-      value: 0,
-      step: 0.001,
-      slide: function (event, ui) {
-        md.verticalMotorSlide(true);
-        md.verticalMotorSpeed(ui.value);
-        md.verticalMotorSlide(false);
-      }
-    });
-    motordiag.diagPanel.find('#verticalMotorSpeedVal')
-      .val(motordiag.diagPanel.find('#verticalMotorSpeed').slider('value'));
-    ko.bindingHandlers.slider = {
-      init: function (element, valueAccessor, allBindingsAccessor) {
-        var options = allBindingsAccessor().sliderOptions || {};
-        var sliderValues = ko.utils.unwrapObservable(valueAccessor());
-        if (sliderValues.min !== undefined) {
-          options.range = true;
-          options.values = [
-            0,
-            0
-          ];
-        }
-        options.slide = function (e, ui) {
-          if (sliderValues.min) {
-            sliderValues.min(ui.values[0]);
-            sliderValues.max(ui.values[1]);
-          } else {
-            valueAccessor()(ui.value);
-          }
-        };
-        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-          $(element).slider('destroy');
-        });
-        $(element).slider(options);
-      },
-      update: function (element, valueAccessor) {
-        var sliderValues = ko.toJS(valueAccessor());
-        if (sliderValues.min !== undefined) {
-          $(element).slider('values', [
-            sliderValues.min,
-            sliderValues.max
-          ]);
-        } else {
-          $(element).slider('value', sliderValues);
-        }
-      }
-    };
+
     ko.applyBindings(this, motordiag.diagPanel[0]);
-  }
+  };
   Motor_diags.prototype.sendTestMotorMessage = function sendTestMotorMessage() {
     var portVal = this.portMotorSpeed();
     var starbordVal = this.starbordMotorSpeed();
     var verticalVal = this.verticalMotorSpeed();
-    this.cockpit.socket.emit('motor_test', {
+    this.cockpit.socket.emit('motor-diag.motorTest', {
       port: portVal,
       starbord: starbordVal,
       vertical: verticalVal
@@ -188,6 +130,7 @@
     this[propertyName](value);
   };
   Motor_diags.prototype.LoadSettings = function LoadSettings(settings) {
+    var motordiag = this;
     if ('deadzone_pos' in settings)
       motordiag.cockpit.extensionPoints.rovDiagnostics.find('#deadzone_pos').val(settings.deadzone_pos);
     if ('deadzone_neg' in settings)
@@ -201,14 +144,16 @@
     if ('smoothingIncriment' in settings)
       motordiag.cockpit.extensionPoints.rovDiagnostics.find('#smoothingIncriment').val(settings.smoothingIncriment);
   };
-  Motor_diags.prototype.SaveDiagnostics = function SaveDiagnostics() {
+  Motor_diags.prototype.SaveDiagnostics = function() {
+    var motordiag = this;
     this.cockpit.socket.emit('update_settings', { deadzone_pos: motordiag.cockpit.extensionPoints.rovDiagnostics.find('#deadzone_pos').val() });
     this.cockpit.socket.emit('update_settings', { deadzone_neg: motordiag.cockpit.extensionPoints.rovDiagnostics.find('#deadzone_neg').val() });
     this.cockpit.socket.emit('update_settings', { reverse_port_thruster: this.reversePortThruster() });
     this.cockpit.socket.emit('update_settings', { reverse_starbord_thruster: this.reverseStarbordThruster() });
     this.cockpit.socket.emit('update_settings', { reverse_lift_thruster: this.reverseLiftThruster() });
   };
-  Motor_diags.prototype.SaveSettings = function SaveDiagnostics() {
+  Motor_diags.prototype.SaveSettings = function() {
+    var motordiag = this;
     this.cockpit.socket.emit('update_settings', { smoothingIncriment: motordiag.cockpit.extensionPoints.rovDiagnostics.find('#smoothingIncriment').val() });
   };
   window.Cockpit.plugins.push(Motor_diags);

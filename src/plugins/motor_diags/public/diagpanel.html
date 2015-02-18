@@ -1,10 +1,16 @@
+<style>
+   paper-slider {
+      width: 80%;
+   }
+</style>
 <h4>Manually test motors</h4>
-<div id="motordiags">
+<div id="motordiags" style="width: 80%">
    <div class="control-group invisible-field">
       <label class="control-label" for="portMotorSpeed">Port Motor</label>
       <input type="text" data-bind="value: portMotorSpeed" />
       <div class="controls">
-         <div id="portMotorSpeed"></div>
+         <paper-slider min="-1" max="1" step="0.001" value="0" id="portMotorSpeed"></paper-slider>
+         <!--<div id="portMotorSpeed"></div>-->
       </div>
       <div  class="text-center">
          <div  data-bind="foreach: diagnosticMotorSpeedButtons">
@@ -21,7 +27,8 @@
       <label class="control-label" for="verticalMotorSpeedVal">Vertical Motor</label>
       <input type="text"  data-bind="value: verticalMotorSpeed" />
       <div class="controls">
-         <div id="verticalMotorSpeed"></div>
+         <paper-slider min="-1" max="1" step="0.001" value="0" id="verticalMotorSpeed"></paper-slider>
+         <!--<div id="verticalMotorSpeed"></div>-->
       </div>
       <div  class="text-center">
          <div  data-bind="foreach: diagnosticMotorSpeedButtons">
@@ -38,7 +45,8 @@
       <label class="control-label" for="starbordMotorSpeed">Starboard Motor</label>
       <input type="text"  data-bind="value: starbordMotorSpeed" />
       <div class="controls">
-         <div id="starbordMotorSpeed"></div>
+         <paper-slider min="-1" max="1" step="0.001" value="0" id="starbordMotorSpeed"></paper-slider>
+         <!--<div id="starbordMotorSpeed"></div>-->
       </div>
       <div  class="text-center">
          <div  data-bind="foreach: diagnosticMotorSpeedButtons">

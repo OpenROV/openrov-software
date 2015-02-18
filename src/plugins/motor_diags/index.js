@@ -5,6 +5,11 @@ function motor_diags(name, deps) {
       deps.controller.send('mcal()');
       console.log('mcal() sent');
     });
+
+    socket.on('motor-diag.motorTest', function(positions){
+       deps.rov.sendMotorTest(positions.port, positions.starbord, positions.vertical);
+      });
+
   });
 }
 module.exports = motor_diags;
