@@ -5,7 +5,6 @@
     console.log('Loading SerialMonitor plugin in the browser.');
     // Instance variables
     this.cockpit = cockpit;
-    $('html /deep/ #rov_status_panel').append('<serial-monitor class="hidden" style=""></serial-monitor>');
     var serialMonitorPanel = $('html /deep/ #rov_status_panel serial-monitor');
     cockpit.extensionPoints.keyboardInstructions.append('<p><i>u</i> to toggle raw serial-monitor</p>');
     var self = this;
