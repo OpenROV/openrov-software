@@ -8,7 +8,6 @@
     this.importantTelemetry = {};
     this.textcolor = 0;
     // Add required UI elements
-    $('html /deep/ #rov_status_panel').append('');
     cockpit.extensionPoints.keyboardInstructions.append('<p><i>h</i> to cycle text color of telemetry</p>');
   };
   //This pattern will hook events in the cockpit and pull them all back
