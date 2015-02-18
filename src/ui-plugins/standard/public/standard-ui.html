@@ -8,6 +8,7 @@
 <link rel="import" href="../../webcomponents/video-compass.html">
 <link rel="import" href="../../webcomponents/ping.html">
 <link rel="import" href="../../webcomponents/serial-monitor.html">
+<link rel="import" href="../../webcomponents/telemetry.html">
 <link rel="import" href="./webcomponents/capestatus-footer.html">
 <link rel="import" href="./webcomponents/connection-health.html">
 <link rel="import" href="./webcomponents/servo-tilt.html">
@@ -56,6 +57,7 @@
         </div>
         <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
           <div id="buttonPanel" class="controller well well-small"></div>
+          <telemetry-monitor id="telemetry" class="controller well well-small" ></telemetry-monitor>
         </div>
       </div>
     </div>

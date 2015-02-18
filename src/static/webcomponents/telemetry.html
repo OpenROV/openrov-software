@@ -1,0 +1,100 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="telemetry-monitor" attributes="maxLines">
+  <template>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <div class="controller well well-small">
+      <ul>
+        <li id="TelemetryList">
+        </li>
+      </ul>
+    </div>
+
+
+  </template>
+  <script>
+    (function() {
+
+      Polymer({
+        telemetry: {},
+        importantTelemetry: {},
+        textcolor: 0,
+        ready: function () {
+          var self = this;
+          window.cockpit.on('plugin.telemetry.cycleTextColor', function () {
+            self.cycleTextColor();
+          });
+          window.cockpit.on('plugin.telemetry.logData', function (data) {
+            self.logStatusData(data);
+          });
+        },
+        domReady: function () {
+          var self = this;
+          this.list = $(this.$.TelemetryList);
+          self.telemetryList = this.list.length > 0 ? this.list[0] : undefined;
+
+          if (self.telemetryList) {
+            self.telemetryList.addEventListener('click', function (e) {
+              self.handleDescendantEvent(e);
+            }, true);
+          }
+          setInterval(function () {
+            self.displayTelemetry();
+          }, 1000);
+
+        },
+        logStatusData: function (data) {
+          for (var i in data) {
+            this.telemetry[i] = data[i];
+          }
+        },
+      cycleTextColor: function() {
+          var self = this;
+
+          self.textcolor += 5;
+          if (self.textcolor > 255) {
+            self.textcolor = 0;
+          }
+          if (self.telemetryList) {
+            self.telemetryList.style.color = 'rgb(' + self.textcolor + ',' + self.textcolor + ',255)';
+          }
+        },
+        handleDescendantEvent: function(e) {
+          if (e.type == 'click' && e.eventPhase == Event.CAPTURING_PHASE) {
+            var telemetry_name = e.target.innerText.split(' ')[0];
+            if (this.importantTelemetry[telemetry_name] === true) {
+              this.importantTelemetry[telemetry_name] = false;
+            } else {
+              this.importantTelemetry[telemetry_name] = true;
+            }
+          }
+        },
+        displayTelemetry: function () {
+          var fragment = document.createDocumentFragment();
+          for (var item in this.telemetry) {
+            if (this.telemetry.hasOwnProperty(item)) {
+              var li = document.createElement('LI');
+              li.appendChild(document.createElement('SPAN').appendChild(document.createTextNode(item + ' ')));
+              li.appendChild(document.createElement('SPAN').appendChild(document.createTextNode(this.telemetry[item])));
+              //if (this.importantTelemetry.hasOwnProperty(item)) {
+              if (this.importantTelemetry[item] === true) {
+                li.setAttribute('class', 'important');
+              }
+              fragment.appendChild(li);
+            }
+          }
+          this.list.empty();
+          if (this.list.length > 0) {
+            this.list[0].appendChild(fragment.cloneNode(true));
+          }
+        }
+      });
+    })();
+  </script>
+
+</polymer-element>
+  
+
+
