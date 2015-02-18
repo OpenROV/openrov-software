@@ -3,7 +3,6 @@ function example(name, deps) {
 
   deps.io.on('connection', function(socket) {
     socket.on('plugin.example.foo', function() {
-      console.log('####################');
       socket.emit('plugin.example.message', 'bar');
     });
   });

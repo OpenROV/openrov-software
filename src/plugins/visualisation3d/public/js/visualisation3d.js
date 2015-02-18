@@ -6,10 +6,13 @@
     // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
-    $('#navtoolbar').prepend('<div id="example" class="label label-success">[example]</div>');
-    $('#video-container').prepend('<canvas class="hud" id="renderCanvas"></canvas>');
+    cockpit.extensionPoints.videoContainer.prepend('<style id="visualisationStyle"></canvas>');
+    cockpit.extensionPoints.videoContainer.prepend('<canvas class="hud hidden" id="renderCanvas"></canvas>');
+    var style = cockpit.extensionPoints.videoContainer.find('#visualisationStyle');
+    var jsFileLocation = urlOfJsFile('visualisation3d.js');
+    style.load(jsFileLocation + '../css/style.css', function () {});
 
-    var canvas = document.getElementById("renderCanvas");
+    var canvas = cockpit.extensionPoints.videoContainer.find("#renderCanvas")[0];
     console.log("1");
     var engine = new BABYLON.Engine(canvas, true);
     console.log("2");
@@ -20,7 +23,7 @@
     this.rotation_y = 0;
     this.rotation_z = 0;
 
-    self = this;
+    var self = this;
 
     this.cockpit.on('plugin.navigationData.data', function (data) {
       if (!jQuery.isEmptyObject(data)) {
@@ -35,6 +38,23 @@
     engine.runRenderLoop(function () {
       scene.render();
     });
+
+    // for plugin management:
+    this.name = 'visualisation3d';   // for the settings
+    this.viewName = 'Visualisation 3D'; // for the UI
+    this.canBeDisabled = true; //allow enable/disable
+    //this.defaultEnabled = false;
+    this.enable = function () {
+      $(canvas).removeClass('hidden');
+      $(canvas).removeAttr('width');
+      $(canvas).removeAttr('height');
+      self.runScript(scene, canvas);
+    };
+    this.disable = function () {
+      $(canvas).addClass('hidden');
+    };
+
+
 
   };
 
@@ -65,9 +85,8 @@
         knot.rotation.x = self.rotation_x;
         knot.rotation.y = self.rotation_y;
         knot.rotation.z = self.rotation_z;
-    })
+    });
   };
 
-  //uncomment the line below to enable the plugin!
-  //window.Cockpit.plugins.push(Visualisation3d);
+  window.Cockpit.plugins.push(Visualisation3d);
 }(window, jQuery));
