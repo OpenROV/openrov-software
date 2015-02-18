@@ -47,6 +47,7 @@
 
     this.diagPanel.load(jsFileLocation + '../diagpanel.html', function () {
       self.setupSliders();
+      self.loaded();
       self.cockpit.extensionPoints.rovDiagnostics.registerCloseHandler(function () {
         self.SaveDiagnostics();
       });
@@ -128,10 +129,6 @@
   };
   Motor_diags.prototype.LoadSettings = function LoadSettings(settings) {
     var motordiag = this;
-    if ('deadzone_pos' in settings)
-      motordiag.cockpit.extensionPoints.rovDiagnostics.find('#deadzone_pos').val(settings.deadzone_pos);
-    if ('deadzone_neg' in settings)
-      motordiag.cockpit.extensionPoints.rovDiagnostics.find('#deadzone_neg').val(settings.deadzone_neg);
     if ('reverse_port_thruster' in settings)
       this.reversePortThruster(settings.reverse_port_thruster);
     if ('reverse_starbord_thruster' in settings)
