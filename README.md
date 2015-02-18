@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/OpenROV/openrov-software/badge.png)](https://coveralls.io/r/OpenROV/openrov-software)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/OpenROV/openrov-software/badges/quality-score.png?s=c24130cbf17aaa23f2680e3b45a0ec675ef2037f)](https://scrutinizer-ci.com/g/OpenROV/openrov-software/)
 [![Code Coverage](https://scrutinizer-ci.com/g/OpenROV/openrov-software/badges/coverage.png?s=e356e3047940fb7ea47e36477c6064e23fee12c0)](https://scrutinizer-ci.com/g/OpenROV/openrov-software/)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/OpenROV/discuss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 OpenROV Cockpit
 ================
