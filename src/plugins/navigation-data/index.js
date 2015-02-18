@@ -35,10 +35,10 @@
         }
       });
 
-      socket.on('depth_zero', function () {
+      socket.on('plugin.navigationData.zeroDepth', function () {
         deps.rov.send('dzer()');
       });
-      socket.on('compass_callibrate', function () {
+      socket.on('plugin.navigationData.calibrateCompass', function () {
         deps.rov.send('ccal()');
       });
 

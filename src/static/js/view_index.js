@@ -26,29 +26,8 @@ $(function () {
   } else {
     var socket = window.io.connect();
   }
-  /* ------------------------------------------
-       diagnostic
-       */
-  //var options = {};
-  //$('#show-diagnostic').click(function () {
-  //  $('#diagnostic').show('fold');
-  //  cockpit.sendUpdateEnabled = false;
-  //  Mousetrap.bind('esc', hideDiagnostic);
-  //});
-  //$('#diagnostic .back-button').click(function () {
-  //  hideDiagnostic();
-  //});
-  //function hideDiagnostic() {
-  //  $('#diagnostic').hide('fold');
-  //  cockpit.sendUpdateEnabled = true;
-  //  Mousetrap.unbind('esc');
-  //}
-  $('#zero_depth').click(function () {
-    socket.emit('depth_zero');
-  });
-  $('#callibrate_compass').click(function () {
-    socket.emit('compass_callibrate');
-  });
+
+
   //plugin hooks
   var cockpit = new Cockpit(socket);
   $('#keyboardInstructions').append('<p><i>\\</i> to toggle heads up display</p>');
