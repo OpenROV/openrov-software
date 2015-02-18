@@ -6,10 +6,17 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
 
+    <style>
+      .contentContainer {
+        height: 90%;
+        overflow: auto;
+      }
+    </style>
+
       <div class="drop-in-right" id="{{childId}}">
       <div class="back-button"></div>
       <h2>{{ header }}</h2>
-      <div class="accordion" id="{{childId}}_">
+      <div class="accordion contentContainer" id="{{childId}}_">
         <content id="childItems" select="div"></content>
       </div>
     </div>

@@ -24,17 +24,17 @@
   //so that the reference to this instance is available for further processing
   Photocapture.prototype.listen = function listen() {
     var photoc = this;
-    photoc.cockpit.socket.on('photos-updated', function (data) {
+    photoc.cockpit.on('plugin.photoCapture.photos.updated', function (data) {
       console.log('got new photos');
       photoc.snapshots(data);
     });
-    photoc.cockpit.socket.on('photo-added', function (filename) {
+    photoc.cockpit.on('plugin.photoCapture.photos.added', function (filename) {
       console.log('got new photos');
       photoc.snapshots().push(filename);
       photoc.snapshots.valueHasMutated();
     });
     cockpit.extensionPoints.buttonPanel.find('#capture-photo').click(function () {
-      photoc.cockpit.socket.emit('snapshot');
+      photoc.cockpit.emit('plugin.photoCapture.snapshot');
       console.log('send snapshot request to server');
     });
 
@@ -51,6 +51,15 @@
       photoc.cockpit.sendUpdateEnabled = false;
     });
 
+    cockpit.messaging.register({
+      toSocket: [
+        'plugin.photoCapture.snapshot'
+      ],
+      fromSocket: [
+        {name: 'plugin.photoCapture.photos.updated', signature: ['value'] },
+        {name: 'plugin.photoCapture.photos.added', signature: ['value'] },
+      ]
+    });
   };
   window.Cockpit.plugins.push(Photocapture);
 }(window, jQuery));
