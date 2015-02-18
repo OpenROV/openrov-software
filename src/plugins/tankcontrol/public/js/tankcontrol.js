@@ -22,7 +22,7 @@
     };
 
     // Add required UI elements
-    $('#keyboardInstructions').append('<p><i>t</i> to toggle tank control</p>');
+    cockpit.extensionPoints.keyboardInstructions.append('<p><i>t</i> to toggle tank control</p>');
   };
   TankControl.prototype.listen = function listen() {
     var rov = this;

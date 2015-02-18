@@ -326,7 +326,7 @@
         {name: 'rovpilot.setPowerLevel', signature: ['value']},
         {name: 'rovpilot.adjustVerticalTrim', signature: ['value']},
         {name: 'rovpilot.adjustThrottleTrim', signature: ['value']},
-        {name: 'rovpilot.adjustThrottleTrim', signature: ['p', 'v', 's']}
+        {name: 'rovpilot.manualMotorThrottle', signature: ['p', 'v', 's']}
       ],
       fromSocket: [
         'rovpilot.esc.enabled',
