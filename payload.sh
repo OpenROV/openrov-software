@@ -13,7 +13,7 @@ apt-get install -y curl
 curl -sL https://deb.nodesource.com/setup | bash -
 apt-get install -y nodejs
 
-npm install --loglevel silly --local-address 127.0.0.2
+npm rebuild --loglevel silly 
 
 cd src/static
 npm install --loglevel error
