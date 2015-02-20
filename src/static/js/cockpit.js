@@ -56,9 +56,18 @@
   };
 
   Cockpit.prototype.loadUi = function(done) {
-    var uiName = 'standard-ui'; //temp
-    //var uiName = 'new-ui'; //temp
-    this.uiLoader.load(uiName, done);
+    var defaultUiName = 'standard-ui'; //temp
+    var self = this;
+    $.get('/plugin/ui-selector', function (config) {
+      if (config.selectedUi && config.selectedUi.trim().length > 0) {
+        self.uiLoader.load(config.selectedUi, done);
+      }
+      else {
+        self.uiLoader.load(defaultUiName, done);
+      }
+    }).fail(function() {
+      self.uiLoader.load(defaultUiName, done);
+    });
   };
 
   Cockpit.prototype.loadPlugins = function loadPlugins() {
