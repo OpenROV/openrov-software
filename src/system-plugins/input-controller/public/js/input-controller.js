@@ -6,10 +6,10 @@
     self.model = { commands: ko.observableArray() };
     self.registerdCommands = {};
     self.registerdControls = {};
-    var controllers = [];
+    self.controllers = [];
     // add our known controllers
-    controllers.push(new inputController.Keyboard(cockpit));
-    controllers.push(new inputController.Gamepad(cockpit));
+    self.controllers.push(new inputController.Keyboard(cockpit));
+    self.controllers.push(new inputController.Gamepad(cockpit));
 
     self.checkDuplicates = function () {
       var commandBindings = [];
@@ -50,7 +50,7 @@
     return self;
   };
 
-  inputController.InputController.prototype.registerControls = function (control) {
+  inputController.InputController.prototype.register = function (control) {
     var self = this;
     if (control === undefined)
       return;
@@ -78,7 +78,7 @@
     self.checkDuplicates();
   };
 
-  inputController.InputController.prototype.unregisterControls = function (controlName) {
+  inputController.InputController.prototype.unregister = function (controlName) {
     var self = this;
     var controlsToRemove = [].concat(controlName);
     // controlName could be a single object or an array
@@ -99,10 +99,10 @@
       commandsToRegister.push(self.registerdCommands[command]);
     }
     self.model.commands.length = 0;
-    self.registerControls(commandsToRegister);
+    self.register(commandsToRegister);
   };
 
-  inputController.InputController.prototype.activateControls = function(controlName) {
+  inputController.InputController.prototype.activate = function(controlName) {
     var self = this;
     var controlsToActivate = [].concat(controlName);
     controlsToActivate.forEach(function(commandName) {
@@ -116,21 +116,21 @@
       }
 
       command.active = true;
-      self.registerControls(command);
+      self.register(command);
 
       console.log("activated command " + command.name);
     });
   };
 
-  inputController.InputController.prototype.deactivateControls = function(controlName) {
+  inputController.InputController.prototype.deactivate = function(controlName) {
     var self = this;
     var controlsToDeactivate = [].concat(controlName);
     controlsToDeactivate.forEach(function(commandName) {
       var command = self.registerdCommands[commandName];
       command.active = false;
-      self.unregisterControls(command);
+      self.unregister(command);
       command.replaced.forEach(function(oldcommand){
-        self.registerControls(oldcommand);
+        self.register(oldcommand);
         console.log("re-activated " + oldcommand.name);
       });
       command.replaced = null;
