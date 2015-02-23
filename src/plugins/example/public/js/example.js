@@ -21,6 +21,10 @@ $( document ).ready(function() {
       }, 5000)
     });
 
+    cockpit.rov.on('plugin.example.message', function(message) {
+      alert(message);
+    });
+
     self.cockpit.extensionPoints.inputController.register(
       {
         name: "example.keyBoardMapping",
@@ -51,7 +55,6 @@ $( document ).ready(function() {
   };
 
   Example.prototype.listen = function listen() {
-    var rov = this;
     var item = {
       label: ko.observable("Example menu"),
       callback: function () {
