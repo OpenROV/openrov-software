@@ -66,10 +66,10 @@
             self.currentCurrent = current;
           });
         },
-        getBatteryLevel: function (voltage, minVoltage, maxVoltage) {
+        getBatteryLevel: function (voltage, min, max) {
 
-          var minVoltage = parseFloat(minVoltage);
-          var maxVoltage = parseFloat(maxVoltage);
+          var minVoltage = parseFloat(min);
+          var maxVoltage = parseFloat(max);
           var difference = maxVoltage - minVoltage;
           var steps = difference / 5;
 
