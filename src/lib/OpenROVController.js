@@ -221,7 +221,7 @@ OpenROVController.prototype.registerPassthrough = function(config) {
     if (!config.messagePrefix) {
       throw new Error('You need to specify a messagePrefix that is used to emit and receive message.');
     }
-    var messagePrefix = config.messagePrefix
+    var messagePrefix = config.messagePrefix;
     if (config.fromROV) {
       if (Array.isArray(config.fromROV)) {
         config.fromROV.forEach(function(item) {
@@ -244,7 +244,7 @@ OpenROVController.prototype.registerPassthrough = function(config) {
           });
         });
       }
-      else { throw new Error('config.fromROV needs to be an array.'); }
+      else { throw new Error('config.toROV needs to be an array.'); }
     }
   }
 };
