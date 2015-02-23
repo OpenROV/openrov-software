@@ -41,14 +41,12 @@ var deps = {
   server: server,
   app: app,
   rov: controller,
+  cockpit: new CockpitMessaging(io),
   config: CONFIG,
   globalEventLoop: globalEventLoop,
-  physics: new ArduinoPhysics(),
-  cockpit: new CockpitMessaging(io)
+  physics: new ArduinoPhysics()
 };
 
-
-controller.camera = camera;
 app.get('/config.js', function (req, res) {
   res.type('application/javascript');
   res.send('var CONFIG = ' + JSON.stringify(CONFIG));
