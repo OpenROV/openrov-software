@@ -272,7 +272,8 @@
   ROVpilot.prototype.listen = function listen() {
     var rov = this;
 
-    rov.cockpit.emit('headsUpMenu.register', [
+    if (this.cockpit.extensionPoints.headsUpMenu) {
+      this.cockpit.extensionPoints.headsUpMenu.register( [
       {
         label: "Toggle Depth hold",
         callback: function () {
@@ -292,7 +293,7 @@
         }
       }
     ]);
-
+    }
     rov.cockpit.rov.emit('rovpilot.powerLevel.request');
   };
   window.Cockpit.plugins.push(ROVpilot);

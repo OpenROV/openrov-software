@@ -9,21 +9,7 @@
     self.items = ko.observableArray();
     self.getTemplateName = function(item) { return "menuRow-" + item.type };
 
-    this.cockpit.on(
-      'headsUpMenu.register',
-      function (item) {
-        var items = [].concat(item); // item can be a single object or an array
-        items.forEach(function (anItem) {
-          anItem.uniqueId = generateUUID();
-          if (anItem['type'] == undefined) {
-            anItem.type = "button";
-          }
-          if (anItem['type'] == 'custom') {
-            anItem.headsUpTemplateId = 'custom-' + anItem.uniqueId;
-          }
-          self.items.push(anItem);
-        });
-      });
+    cockpit.extensionPoints.headsUpMenu = self;
 
     // Add required UI elements
     cockpit.extensionPoints.videoContainer.append('<div id="headsup-menu-base"></div>');
@@ -35,7 +21,6 @@
 
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('headsup-menu.js');
-
 
     cockpit.extensionPoints.videoContainer.prepend('<style id="headsup-menu-style"></style>');
     var styles = cockpit.extensionPoints.videoContainer.find('#headsup-menu-style');
@@ -129,6 +114,22 @@
 
     enablePlugin();
   };
+
+  HeadsUpMenu.prototype.register = function (item) {
+    var self = this;
+    var items = [].concat(item); // item can be a single object or an array
+    items.forEach(function (anItem) {
+      anItem.uniqueId = generateUUID();
+      if (anItem['type'] == undefined) {
+        anItem.type = "button";
+      }
+      if (anItem['type'] == 'custom') {
+        anItem.headsUpTemplateId = 'custom-' + anItem.uniqueId;
+      }
+      self.items.push(anItem);
+    });
+  };
+
 
   function generateUUID(){
     var d = Date.now();

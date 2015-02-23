@@ -59,8 +59,9 @@ $( document ).ready(function() {
         item.label(this.label() + " Foo Bar");
       }
     };
-    rov.cockpit.emit('headsUpMenu.register', item);
-
+    if (this.cockpit.extensionPoints.headsUpMenu) {
+      this.cockpit.extensionPoints.headsUpMenu.register(item);
+    }
   };
   window.Cockpit.plugins.push(Example);
 });
