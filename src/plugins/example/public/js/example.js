@@ -4,7 +4,7 @@ $( document ).ready(function() {
   window.examplePlugin = this;
   // to prevent intererence, we disable this plugin.
   // to see the things working, comment the following statement
-  return;
+  //return;
 
   var Example;
   Example = function Example(cockpit) {
@@ -25,8 +25,25 @@ $( document ).ready(function() {
       alert(message);
     });
 
+    var showMessageFoo = true;
+    cockpit.rov.on('plugin.example.example_foo', function(data) {
+      if (showMessageFoo) {
+        showMessageFoo = false;
+        alert('Message from arduino "example_foo": ' + data);
+        cockpit.rov.emit('plugin.example.example_to_bar', 'foobar')
+      }
+    });
+
+    var showMessageBar = true;
+    cockpit.rov.on('plugin.example.example_bar', function(data) {
+      if (showMessageBar) {
+        showMessageBar = false;
+        alert('Message from arduino "example_bar": ' + data);
+      }
+    });
+
     self.cockpit.extensionPoints.inputController.register(
-      {
+      [{
         name: "example.keyBoardMapping",
         description: "Example for keymapping.",
         defaults: { keyboard: 'alt+0', gamepad: 'X' },
@@ -40,7 +57,16 @@ $( document ).ready(function() {
             down: function() { console.log('####'); }
           }
         ]
-      });
+      },
+        {
+          name: 'example.testMessage',
+          description: 'another example',
+          defaults: { keyboard: 'alt+t' },
+          down: function() {
+            showMessageFoo = true;
+            showMessageBar = true;
+            cockpit.rov.emit('plugin.example.example_to_foo', 'abc'); }
+        }]);
 
     // for plugin management:
     this.name = 'example';   // for the settings

@@ -22,12 +22,13 @@ var settingsCollection = {
 
 var rovsys = { capabilities: 0 };
 
-var OpenROVController = function (eventLoop) {
+var OpenROVController = function (eventLoop, client) {
   var controller = this;
   var serial;
   var globalEventLoop = eventLoop;
   this.physics = new ArduinoPhysics();
   this.hardware = new Hardware();
+  this.cockpit = client;
 
   setInterval(function () {
     controller.emit('status', statusdata);
@@ -212,6 +213,40 @@ OpenROVController.prototype.stop = function (value) {
 OpenROVController.prototype.start = function (value) {
   var command = 'start()';
   this.send(command);
+};
+
+OpenROVController.prototype.registerPassthrough = function(config) {
+  var self = this;
+  if (config) {
+    if (!config.messagePrefix) {
+      throw new Error('You need to specify a messagePrefix that is used to emit and receive message.');
+    }
+    var messagePrefix = config.messagePrefix
+    if (config.fromROV) {
+      if (Array.isArray(config.fromROV)) {
+        config.fromROV.forEach(function(item) {
+          self.on('status', function (data) {
+            if (item in data) {
+              self.cockpit.emit(messagePrefix+'.'+item, data[item]);
+            }
+          });
+        });
+      }
+      else { throw new Error('config.fromROV needs to be an array.'); }
+    }
+    if (config.toROV) {
+      if (Array.isArray(config.toROV)) {
+        config.toROV.forEach(function(item) {
+          self.cockpit.on(messagePrefix+'.'+item, function(data) {
+            var arguments = Array.isArray(data) ? data.join() : data;
+            var command = item + '(' + arguments + ')';
+            self.send(command);
+          });
+        });
+      }
+      else { throw new Error('config.fromROV needs to be an array.'); }
+    }
+  }
 };
 
 module.exports = OpenROVController;

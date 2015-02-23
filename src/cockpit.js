@@ -33,7 +33,8 @@ process.env.NODE_ENV = true;
 var globalEventLoop = new EventEmitter();
 var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({ delay: DELAY });
-var controller = new OpenROVController(globalEventLoop);
+var client = new CockpitMessaging(io);
+var controller = new OpenROVController(globalEventLoop, client);
 var arduinoUploadController = new OpenROVArduinoFirmwareController(globalEventLoop);
 
 // Prepare dependency map for plugins
@@ -41,7 +42,7 @@ var deps = {
   server: server,
   app: app,
   rov: controller,
-  cockpit: new CockpitMessaging(io),
+  cockpit: client,
   config: CONFIG,
   globalEventLoop: globalEventLoop,
   physics: new ArduinoPhysics()

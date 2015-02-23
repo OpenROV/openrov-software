@@ -71,12 +71,23 @@ function Hardware() {
         }
         else {
             targetHeading = -500;
-            hardware.targetHoldEnabled = false
+            hardware.targetHoldEnabled = false;
             console.log('HARDWARE-MOCK heading hold DISABLED');
         }
         var status = 'targetHeading:' + (hardware.targetHoldEnabled ? targetHeading.toString() : DISABLED);
         hardware.emit('status', reader.parseStatus(status));
     }
+
+    // example tests for passthrough
+    if (commandText === 'example_to_foo') {
+      var status = 'example_foo:' + commandParts[1];
+      hardware.emit('status', reader.parseStatus(status));
+    }
+    if (commandText === 'example_to_bar') {
+      var status = 'example_bar:' + commandParts[1];
+      hardware.emit('status', reader.parseStatus(status));
+    }
+
     hardware.emit('status', reader.parseStatus('cmd:' + command));
     if (emitRawSerial) {
       hardware.emit('serial-recieved', command);
