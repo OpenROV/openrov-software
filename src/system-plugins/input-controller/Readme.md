@@ -1,7 +1,7 @@
 ## How to register controls
 Registration of controls is done through a emitted event: 
 
-    this.cockpit.emit('inputController.register',
+    self.cockpit.extensionPoints.inputController.register(
       {
         name: "example.keyBoardMapping",
         description: "Example for keymapping.",
@@ -22,7 +22,7 @@ For the Tankcontrol we needed a way to override and unregister (aka reapply old 
 To override a given command, simply register a new command.
 To unregister use:
      
-      rov.cockpit.emit('inputController.unregister', ['example.keyBoardMapping', 'example.keyBoardMapping2']);
+      self.cockpit.extensionPoints.inputController.unregister( ['example.keyBoardMapping', 'example.keyBoardMapping2']);
  
 __The 'unregister' function can accept a single string or a string array!__
 
@@ -34,7 +34,7 @@ After the unregistration, the InputController will reapply all other bindings au
 Rather than registering and unregistering, you can register a command as inactive, this way, it is registered, but not yet active.
 All you need to do is to activate it via a message later.
 
-    this.cockpit.emit('inputController.register',
+    self.cockpit.extensionPoints.inputController.register(
       {
         name: "example.keyBoardMapping",
         description: "Example for keymapping.",
@@ -46,15 +46,15 @@ All you need to do is to activate it via a message later.
 
 To activate:
 
-      rov.cockpit.emit('inputController.activate', 'example.keyBoardMapping');
+      self.cockpit.extensionPoints.inputController.activate('example.keyBoardMapping');
 
 To deactivate:
 
-      rov.cockpit.emit('inputController.deactivate', 'example.keyBoardMapping');
+      self.cockpit.extensionPoints.inputController.deactivate('example.keyBoardMapping');
 
 Both, activate and deactivate allow to use arrays too:
 
-      rov.cockpit.emit('inputController.activate', ['example.keyBoardMapping', 'example.keyBoardMapping2' ]);
-      rov.cockpit.emit('inputController.deactivate', ['example.keyBoardMapping', 'example.keyBoardMapping2' ]);
+      self.cockpit.extensionPoints.inputController.activate(['example.keyBoardMapping', 'example.keyBoardMapping2' ]);
+      self.cockpit.extensionPoints.inputController.deactivate(['example.keyBoardMapping', 'example.keyBoardMapping2' ]);
 
 See the Tankcontrol plugin for a working example.

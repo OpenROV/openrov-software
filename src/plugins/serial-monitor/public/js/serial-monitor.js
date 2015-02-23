@@ -10,22 +10,16 @@
     var self = this;
 
     // Toggle serial monitor
-    this.cockpit.emit('inputController.register',
+    cockpit.extensionPoints.inputController.register(
       {
         name: "serialMonitor.toggleSerialMonitor",
         description: "Shows/hides raw serial monitor.",
         defaults: { keyboard: 'u' },
         down: function() {
           serialMonitorPanel.toggleClass('hidden');
-          self.cockpit.socket.emit('plugin.serial-monitor.toggle');
+          self.cockpit.rov.emit('plugin.serial-monitor.toggle');
         }
       });
-    this.cockpit.messaging.register({
-      toSocket: ['plugin.serial-monitor.toggle'],
-      fromSocket: [
-        {name: 'plugin.serial-monitor.serial-received', signature: ['value']}
-      ]
-    });
   };
 
   //This pattern will hook events in the cockpit and pull them all back

@@ -32,10 +32,10 @@
         ready: function() {
           var self = this;
 
-          window.cockpit.on('plugin.input.gamepad.connected', function() {
+          window.cockpit.rov.on('plugin.input.gamepad.connected', function() {
             self.gamepadConected = true;
           });
-          window.cockpit.on('plugin.input.gamepad.disconnected', function() {
+          window.cockpit.rov.on('plugin.input.gamepad.disconnected', function() {
             self.gamepadConected = false;
           });
         }

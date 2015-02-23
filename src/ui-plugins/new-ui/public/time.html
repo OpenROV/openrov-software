@@ -64,10 +64,10 @@
       ready: function() {
         var self = this;
 
-        window.cockpit.on('capestatus.time.time', function(time) {
+        window.cockpit.rov.on('capestatus.time.time', function(time) {
           self.time = time.formatted;
         });
-        window.cockpit.on('capestatus.time.runtime', function(runtime) {
+        window.cockpit.rov.on('capestatus.time.runtime', function(runtime) {
           self.runtime = runtime.formatted;
         })
       }

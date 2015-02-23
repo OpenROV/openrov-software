@@ -19,7 +19,7 @@
       Polymer({
         ready: function () {
           var compass = this;
-          window.cockpit.on('plugin.navigationData.data', function(data) {
+          window.cockpit.rov.on('plugin.navigationData.data', function(data) {
             compass.moveTo(data.heading);
           });
         },

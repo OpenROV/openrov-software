@@ -15,6 +15,7 @@
     this.socket = csocket;
     this.uiLoader = new window.UiLoader();
     this.messaging = new window.MessageManager(csocket, this);
+    this.rov = this.messaging;
     this.sendUpdateEnabled = true;
     this.capabilities = 0;
     this.loadedPlugins = [];
@@ -26,7 +27,8 @@
         videoContainer: $('html /deep/ rov-video'),
         keyboardInstructions: $('html /deep/ #keyboardInstructions'),
         buttonPanel: $('html /deep/ #buttonPanel'),
-        menu: $('html /deep/ rov-menu')
+        menu: $('html /deep/ rov-menu'),
+        inputController: undefined //will be set by the plugin
       };
 
       self.extensionPoints.rovSettings.registerCloseHandler = function(handler) {

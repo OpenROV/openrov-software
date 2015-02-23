@@ -71,9 +71,9 @@
     };
 
     self.settingsModel.selectedBattery.subscribe(function(battery) {
-      self.cockpit.emit('capestatus.battery.config', toBatteryConfig(battery) );
+      self.cockpit.rov.emit('capestatus.battery.config', toBatteryConfig(battery) );
     });
-    self.cockpit.on('capestatus.request.battery.config', function(clb) {
+    self.cockpit.rov.on('capestatus.request.battery.config', function(clb) {
       clb(toBatteryConfig(self.settingsModel.selectedBattery()));
     });
 
@@ -159,7 +159,7 @@
       self.updateConnectionStatus();
       var now = new Date();
       var nowFormatted = now.toLocaleTimeString();
-      self.cockpit.emit('capestatus.time.time', { raw: now, formatted: nowFormatted});
+      self.cockpit.rov.emit('capestatus.time.time', { raw: now, formatted: nowFormatted});
     }, 1000);
 
   };
@@ -167,52 +167,12 @@
   //so that the reference to this instance is available for further processing
   capestatus.Capestatus.prototype.listen = function listen() {
     var capes = this;
-    this.cockpit.socket.on('status', function (data) {
+    this.cockpit.rov.on('status', function (data) {
       capes.UpdateStatusIndicators(data);
     });
   };
   capestatus.Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
-    if ('time' in data) {
-      var formattedRuntime = msToTime(data.time);
-      self.cockpit.emit('capestatus.time.runtime', { raw: data.time, formatted: formattedRuntime});
-    }
-
-    if ('vout' in data) {
-      var value = data.vout.toFixed(1);
-      self.cockpit.emit('capestatus.battery.voltage', value);
-    }
-
-    if ('iout' in data) {
-      var value = data.iout.toFixed(3);
-      self.cockpit.emit('capestatus.battery.current.out', value);
-    }
-
-    if ('BT1I' in data) {
-      var value = parseFloat(data['BT1I']);
-      self.cockpit.emit('capestatus.battery.current.battery1', value);
-    }
-    if ('BT2I' in data) {
-      var value = parseFloat(data['BT2I']);
-      self.cockpit.emit('capestatus.battery.current.battery2', value);
-    }
-    if ('SC1I' in data) {
-      var value = parseFloat(data['SC1I']);
-      self.cockpit.emit('capestatus.battery.current.esc1', value);
-    }
-    if ('SC2I' in data) {
-      var value = parseFloat(data['SC2I']);
-      self.cockpit.emit('capestatus.battery.current.esc2', value);
-    }
-    if ('SC3I' in data) {
-      var value = parseFloat(data['SC3I']);
-      self.cockpit.emit('capestatus.battery.current.esc3', value);
-    }
-
-    if ('cpuUsage' in data) {
-      var value = (data.cpuUsage * 100).toFixed(0);
-      self.cockpit.emit('capestatus.cpu', value);
-    }
 
     this.lastPing = new Date();
   };
@@ -224,7 +184,7 @@
 
     var isConnected = delay <= 3000;
 
-    self.cockpit.emit('capestatus.connection.' + (isConnected ? 'connected' : 'disconnected'));
+    self.cockpit.rov.emit('capestatus.connection.' + (isConnected ? 'connected' : 'disconnected'));
   };
 
   window.Cockpit.plugins.push(capestatus.Capestatus);

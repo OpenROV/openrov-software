@@ -4,80 +4,44 @@
     this.cockpit = cockpit;
     var self = this;
 
-    this.generateSocketEmitCallback = function(config) {
-      var arguments = config.signature.join();
-      return 'function clbk(' + arguments + ') { ' +
-        'self.socket.emit("' + config.name + '"' + (config.signature.length > 0 ? ',' + arguments : '') + ');' +
-        '}';
-    };
+    this.onAny(function (data) {
+      if (this.event !== 'newListener') {
+        socket.emit(this.event, data);
+      }
+    });
 
-    this.generateCockpitEmitCallback = function(config) {
-      var arguments = config.signature.join();
-      return 'function clbk(' + arguments + ') { ' +
-        'self.cockpit.emit("' + config.name + '"' + (config.signature.length > 0 ? ',' + arguments : '') + ');' +
-        '}';
-    };
+    this.onAny(function(data1, data2) {
+      if (this.event !== 'newListener') {
+        socket.emit(this.event, data1, data2);
+      }
+    });
+
+    this.onAny(function(data1, data2, data3) {
+      if (this.event !== 'newListener') {
+        socket.emit(this.event, data1, data2, data3);
+      }
+    });
+
+    this.onAny(function(data1, data2, data3, data4) {
+      if (this.event !== 'newListener') {
+        socket.emit(this.event, data1, data2, data3, data4);
+      }
+    });
+
+    this.onAny(function(data1, data2, data3, data4, data5) {
+      if (this.event !== 'newListener') {
+        socket.emit(this.event, data1, data2, data3, data4, data5);
+      }
+    });
+
+    this.on('newListener', function(aType, aListener) {
+      socket.on(aType, aListener);
+    });
 
     return this;
   };
-
-  MessageManager.prototype.register = function(parameters) {
-    var self = this;
-    if (!parameters) { return; }
-    if (parameters.toSocket) {
-      if (!jQuery.isArray(parameters.toSocket)) {
-        throw new Error('Can\'t handle toSocket argument of type: ' + jQuery.type(parameters.toSocket));
-      }
-
-      var toSocket = [];
-      parameters.toSocket.forEach(function (toSocketArg) {
-        if (jQuery.type(toSocketArg) === 'string') {
-          toSocket.push({name: toSocketArg, signature: []});
-        }
-        else if (jQuery.isPlainObject(toSocketArg)) {
-          toSocket.push({name: toSocketArg.name, signature: toSocketArg.signature}); // we don't just copy object to makre sure it has the right layout
-        }
-        else {
-          throw new Error('Can\'t handle toSocket argument of type: ' + jQuery.type(toSocketArg));
-        }
-      });
-      toSocket.forEach(function (socketConfig) {
-        var code =
-          'cockpit.on("' +
-          socketConfig.name + '",' +
-          self.generateSocketEmitCallback(socketConfig) +
-          ');';
-        eval(code);
-      });
-    }
-
-    if (parameters.fromSocket) {
-      if (!jQuery.isArray(parameters.fromSocket)) {
-        throw new Error('Can\'t handle fromSocket argument of type: ' + jQuery.type(parameters.fromSocket));
-      }
-
-      var fromSocket = [];
-      parameters.fromSocket.forEach(function(fromSocketArg) {
-        if (jQuery.type(fromSocketArg) === 'string') {
-          fromSocket.push({name: fromSocketArg, signature: []});
-        }
-        else if(jQuery.isPlainObject(fromSocketArg)) {
-          fromSocket.push({name: fromSocketArg.name, signature: fromSocketArg.signature}); // we don't just copy object to makre sure it has the right layout
-        }
-        else {
-          throw new Error('Can\'t handle fromSocket argument of type: ' + jQuery.type(fromSocketArg));
-        }
-      });
-      fromSocket.forEach(function(socketConfig) {
-        var code =
-          'cockpit.socket.on("' +
-            socketConfig.name + '",' +
-            self.generateCockpitEmitCallback(socketConfig) +
-            ');';
-        eval(code);
-      });
-    }
-  };
+  MessageManager.prototype = new EventEmitter2({ newListener: true });
+  MessageManager.prototype.constructor = MessageManager;
 
   window.MessageManager = MessageManager;
 })(jQuery);

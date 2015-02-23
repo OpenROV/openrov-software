@@ -11,10 +11,10 @@
     var diag = cockpit.extensionPoints.rovDiagnostics.find('#navigation-diag');
     diag.load(jsFileLocation + '../diagnostics.html', function () {
       cockpit.extensionPoints.rovDiagnostics.find('#zero_depth').click(function () {
-        cockpit.emit('plugin.navigationData.zeroDepth');
+        cockpit.rov.emit('plugin.navigationData.zeroDepth');
       });
       cockpit.extensionPoints.rovDiagnostics.find('#calibrate_compass').click(function () {
-        cockpit.emit('plugin.navigationData.calibrateCompass');
+        cockpit.rov.emit('plugin.navigationData.calibrateCompass');
       });
     })
   };
@@ -23,18 +23,7 @@
   //so that the reference to this instance is available for further processing
   plugins.NavigatoinData.prototype.listen = function listen() {
     var self = this;
-
-    // register the messages that should be transfered from and to the socket
-    self.cockpit.messaging.register({
-      toSocket: [
-        'plugin.navigationData.zeroDepth',
-        'plugin.navigationData.calibrateCompass'
-      ],
-      fromSocket: [
-        { name: 'plugin.navigationData.data', signature: ['data']}
-      ]
-    });
-
+    
   };
 
   window.Cockpit.plugins.push(plugins.NavigatoinData);

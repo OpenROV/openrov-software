@@ -47,22 +47,22 @@
             self.maxVoltage = config.maxVoltage;
           };
 
-          window.cockpit.emit('capestatus.request.battery.config', setBatteryConfig);
-          window.cockpit.on('capestatus.battery.config', setBatteryConfig);
+          window.cockpit.rov.emit('capestatus.request.battery.config', setBatteryConfig);
+          window.cockpit.rov.on('capestatus.battery.config', setBatteryConfig);
 
-          window.cockpit.on('capestatus.time.runtime', function(runtime) {
+          window.cockpit.rov.on('capestatus.time.runtime', function(runtime) {
             self.formattedRunTime = runtime.formatted;
           });
-          window.cockpit.on('capestatus.time.time', function(time) {
+          window.cockpit.rov.on('capestatus.time.time', function(time) {
             self.theLocaltime = time.formatted;
           });
-          window.cockpit.on('capestatus.cpu', function(cpu) {
+          window.cockpit.rov.on('capestatus.cpu', function(cpu) {
             self.currentCpuUsage = cpu;
           });
-          window.cockpit.on('capestatus.battery.voltage', function(voltage) {
+          window.cockpit.rov.on('capestatus.battery.voltage', function(voltage) {
             self.currentVoltage = voltage;
           });
-          window.cockpit.on('capestatus.battery.current.out', function(current) {
+          window.cockpit.rov.on('capestatus.battery.current.out', function(current) {
             self.currentCurrent = current;
           });
         },

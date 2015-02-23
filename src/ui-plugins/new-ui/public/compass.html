@@ -71,13 +71,13 @@
         this.setBearing(this.bearing);
         this.format(this.options);
 
-        window.cockpit.on('rovpilot.headingHold.target', function(target) {
+        window.cockpit.rov.on('rovpilot.headingHold.target', function(target) {
           self.setBearing(target);
         });
-        window.cockpit.on('rovpilot.headingHold.disabled', function() {
+        window.cockpit.rov.on('rovpilot.headingHold.disabled', function() {
           self.setBearing(undefined);
         });
-        window.cockpit.on('plugin.navigationData.data', function(data) {
+        window.cockpit.rov.on('plugin.navigationData.data', function(data) {
           self.setHeading(data.heading);
         });
 

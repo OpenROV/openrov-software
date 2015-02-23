@@ -47,7 +47,7 @@
           // Listen to navdata updates
           var compass = this;
 
-          window.cockpit.on('plugin.navigationData.data', function(data) {
+          window.cockpit.rov.on('plugin.navigationData.data', function(data) {
             if (compass.canvas) { //make sure we're loaded already
               compass.moveTo(data.heading);
             }

@@ -31,7 +31,8 @@ $(function () {
   //plugin hooks
   var cockpit = new Cockpit(socket);
   $('#keyboardInstructions').append('<p><i>\\</i> to toggle heads up display</p>');
-  cockpit.emit('inputController.register', {
+  self.cockpit.extensionPoints.inputController.register(
+   {
     name: 'main.toggleHeadsUpDisplay',
     description: 'Toggle the heads-up-display on/off',
     defaults: { keyboard: '\\' },

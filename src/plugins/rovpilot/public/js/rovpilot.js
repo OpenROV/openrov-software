@@ -17,7 +17,7 @@
       .append('<p>press <i>n</i> to toggle depth hold (BETA)</p>');
 
     // =============== input settings =============
-    rov.cockpit.emit('inputController.register',
+    rov.cockpit.extensionPoints.inputController.register(
       [
         // All Trim hold toggle
         {
@@ -25,7 +25,7 @@
           description: "Toggle all trim hold functions on/off",
           defaults: { gamepad: 'RB' },
           down: function () {
-            rov.cockpit.emit('rovpilot.toggleAllTrimHold');
+            rov.cockpit.rov.emit('rovpilot.toggleAllTrimHold');
           }
         },
 
@@ -35,7 +35,7 @@
           description: "Increment the thruster power level",
           defaults: { },
           down: function () {
-            rov.cockpit.emit('rovpilot.incrementPowerLevel');
+            rov.cockpit.rov.emit('rovpilot.incrementPowerLevel');
           }
         },
 
@@ -45,10 +45,10 @@
           description: "Set throttle forward.",
           defaults: { keyboard: 'up' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setThrottle', 1);
+            rov.cockpit.rov.emit('rovpilot.setThrottle', 1);
           },
           up: function () {
-            rov.cockpit.emit('rovpilot.setThrottle', 0);
+            rov.cockpit.rov.emit('rovpilot.setThrottle', 0);
           }
         },
 
@@ -58,7 +58,7 @@
           description: "Set throttle via axis input.",
           defaults: { gamepad: 'LEFT_STICK_Y' },
           axis: function (v) {
-            rov.cockpit.emit('rovpilot.setThrottle', -1 * v);
+            rov.cockpit.rov.emit('rovpilot.setThrottle', -1 * v);
           }
         },
 
@@ -68,10 +68,10 @@
           description: "Set throttle backwards (aft).",
           defaults: { keyboard: 'down' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setThrottle', -1);
+            rov.cockpit.rov.emit('rovpilot.setThrottle', -1);
           },
           up: function () {
-            rov.cockpit.emit('rovpilot.setThrottle', 0);
+            rov.cockpit.rov.emit('rovpilot.setThrottle', 0);
           }
         },
 
@@ -81,7 +81,7 @@
           description: "Turn the ROV via axis input.",
           defaults: { gamepad: 'LEFT_STICK_X' },
           axis: function (v) {
-            rov.cockpit.emit('rovpilot.setYaw', v);
+            rov.cockpit.rov.emit('rovpilot.setYaw', v);
           }
         },
 
@@ -91,10 +91,10 @@
           description: "Turn the ROV to the port side (left).",
           defaults: { keyboard: 'left' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setYaw', -1);
+            rov.cockpit.rov.emit('rovpilot.setYaw', -1);
           },
           up: function () {
-            rov.cockpit.emit('rovpilot.setYaw', 0);
+            rov.cockpit.rov.emit('rovpilot.setYaw', 0);
           }
         },
 
@@ -104,10 +104,10 @@
           description: "Turn the ROV to the starboard side (right).",
           defaults: { keyboard: 'right' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setYaw', 1);
+            rov.cockpit.rov.emit('rovpilot.setYaw', 1);
           },
           up: function () {
-            rov.cockpit.emit('rovpilot.setYaw', 0);
+            rov.cockpit.rov.emit('rovpilot.setYaw', 0);
           }
         },
 
@@ -117,7 +117,7 @@
           description: "Bring the ROV shallower or deeper via axis input.",
           defaults: { gamepad: 'RIGHT_STICK_Y' },
           axis: function (v) {
-            rov.cockpit.emit('rovpilot.setLift', -1 * v);
+            rov.cockpit.rov.emit('rovpilot.setLift', -1 * v);
           }
         },
         // Lift up
@@ -126,10 +126,10 @@
           description: "Bring the ROV shallower (up).",
           defaults: { keyboard: 'shift' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setLift', -1);
+            rov.cockpit.rov.emit('rovpilot.setLift', -1);
           },
           up: function () {
-            rov.cockpit.emit('rovpilot.setLift', 0);
+            rov.cockpit.rov.emit('rovpilot.setLift', 0);
           }
         },
         // Push down
@@ -138,10 +138,10 @@
           description: "Bring the ROV deeper (down).",
           defaults: { keyboard: 'ctrl' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setLift', 1);
+            rov.cockpit.rov.emit('rovpilot.setLift', 1);
           },
           up: function () {
-            rov.cockpit.emit('rovpilot.setLift', 0);
+            rov.cockpit.rov.emit('rovpilot.setLift', 0);
           }
         },
 
@@ -151,7 +151,7 @@
           description: "Set the power level of the ROV to level 1.",
           defaults: { keyboard: '1' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setPowerLevel', 1);
+            rov.cockpit.rov.emit('rovpilot.setPowerLevel', 1);
           }
         },
         // power level 2
@@ -160,7 +160,7 @@
           description: "Set the power level of the ROV to level 2.",
           defaults: { keyboard: '2' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setPowerLevel', 2);
+            rov.cockpit.rov.emit('rovpilot.setPowerLevel', 2);
           }
         },
         // power level 3
@@ -169,7 +169,7 @@
           description: "Set the power level of the ROV to level 3.",
           defaults: { keyboard: '3' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setPowerLevel', 3);
+            rov.cockpit.rov.emit('rovpilot.setPowerLevel', 3);
           }
         },
         // power level 4
@@ -178,7 +178,7 @@
           description: "Set the power level of the ROV to level 4.",
           defaults: { keyboard: '4' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setPowerLevel', 4);
+            rov.cockpit.rov.emit('rovpilot.setPowerLevel', 4);
           }
         },
         // power level 5
@@ -187,7 +187,7 @@
           description: "Set the power level of the ROV to level 5.",
           defaults: { keyboard: '5' },
           down: function () {
-            rov.cockpit.emit('rovpilot.setPowerLevel', 5);
+            rov.cockpit.rov.emit('rovpilot.setPowerLevel', 5);
           }
         },
         // vtrim +
@@ -196,7 +196,7 @@
           description: "Increase the vertical trim",
           defaults: { keyboard: '7' },
           down: function () {
-            rov.cockpit.emit('rovpilot.adjustVerticalTrim', 1);
+            rov.cockpit.rov.emit('rovpilot.adjustVerticalTrim', 1);
           }
         },
 
@@ -206,7 +206,7 @@
           description: "Decrease the vertical trim",
           defaults: { keyboard: '8' },
           down: function () {
-            rov.cockpit.emit('rovpilot.adjustVerticalTrim', -1);
+            rov.cockpit.rov.emit('rovpilot.adjustVerticalTrim', -1);
           }
         },
 
@@ -215,7 +215,7 @@
           name: "rovPilot.adjustThrottleTrim_increase",
           description: "Increase the throttle trim",
           defaults: { keyboard: '0' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustThrottleTrim', 1); }
+          down: function() { rov.cockpit.rov.emit('rovpilot.adjustThrottleTrim', 1); }
         },
 
         // ttrim -
@@ -223,7 +223,7 @@
           name: "rovPilot.adjustThrottleTrim_decrease",
           description: "Decrease the Throttle trim",
           defaults: { keyboard: '9' },
-          down: function() { rov.cockpit.emit('rovpilot.adjustThrottleTrim', -1); }
+          down: function() { rov.cockpit.rov.emit('rovpilot.adjustThrottleTrim', -1); }
         },
 
         // Power on ESC
@@ -232,7 +232,7 @@
           description: "Switches the ESCs on",
           defaults: { keyboard: '[' },
           down: function () {
-            rov.cockpit.emit('rovpilot.powerOnESCs');
+            rov.cockpit.rov.emit('rovpilot.powerOnESCs');
           }
         },
 
@@ -242,7 +242,7 @@
           description: "Switches the ESCs off",
           defaults: { keyboard: ']' },
           down: function () {
-            rov.cockpit.emit('rovpilot.powerOffESCs');
+            rov.cockpit.rov.emit('rovpilot.powerOffESCs');
           }
         },
 
@@ -252,7 +252,7 @@
           description: "Toggles the heading hold on/off",
           defaults: { keyboard: 'm' },
           down: function () {
-            rov.cockpit.emit('rovpilot.headingHold.toggle');
+            rov.cockpit.rov.emit('rovpilot.headingHold.toggle');
           }
         },
 
@@ -262,7 +262,7 @@
           description: "Toggles the depth hold on/off",
           defaults: { keyboard: 'n' },
           down: function () {
-            rov.cockpit.emit('rovpilot.depthHold.toggle');
+            rov.cockpit.rov.emit('rovpilot.depthHold.toggle');
           }
         }
       ]);
@@ -276,59 +276,24 @@
       {
         label: "Toggle Depth hold",
         callback: function () {
-          rov.cockpit.emit('rovpilot.depthHold.toggle');
+          rov.cockpit.rov.emit('rovpilot.depthHold.toggle');
         }
       },
       {
         label: "Toggle Heading hold",
         callback: function () {
-          rov.cockpit.emit('rovpilot.headingHold.toggle');
+          rov.cockpit.rov.emit('rovpilot.headingHold.toggle');
         }
       },
       {
         label: "Increment power level",
         callback: function () {
-          rov.cockpit.emit('rovpilot.incrementPowerLevel');
+          rov.cockpit.rov.emit('rovpilot.incrementPowerLevel');
         }
       }
     ]);
 
-    // register the messages that should be transfered from and to the socket
-    rov.cockpit.messaging.register({
-      toSocket: [
-        "rovpilot.allStop",
-        "rovpilot.incrementPowerLevel",
-        "rovpilot.powerOnESCs",
-        "rovpilot.powerOffESCs",
-        "rovpilot.headingHold.toggle",
-        {name: "rovpilot.headingHold.set", signature: ['value']},
-        "rovpilot.depthHold.toggle",
-        {name: "rovpilot.depthHold.set", signature: ['value']},
-        "rovpilot.disable",
-        "rovpilot.enable",
-        'rovpilot.powerLevel.request',
-        {name: 'rovpilot.setThrottle', signature: ['value']},
-        {name: 'rovpilot.setYaw', signature: ['value']},
-        {name: 'rovpilot.setLift', signature: ['value']},
-        {name: 'rovpilot.setPitchControl', signature: ['value']},
-        {name: 'rovpilot.setRollControl', signature: ['value']},
-        {name: 'rovpilot.setPowerLevel', signature: ['value']},
-        {name: 'rovpilot.adjustVerticalTrim', signature: ['value']},
-        {name: 'rovpilot.adjustThrottleTrim', signature: ['value']},
-        {name: 'rovpilot.manualMotorThrottle', signature: ['p', 'v', 's']}
-      ],
-      fromSocket: [
-        'rovpilot.esc.enabled',
-        'rovpilot.esc.disabled',
-        'rovpilot.depthHold.enabled',
-        'rovpilot.depthHold.disabled',
-        'rovpilot.headingHold.enabled',
-        'rovpilot.headingHold.disabled',
-        {name: 'rovpilot.headingHold.target', signature: ['value']},
-        {name: 'rovpilot.powerLevel', signature: ['value']}
-      ]
-    });
-    rov.cockpit.emit('rovpilot.powerLevel.request');
+    rov.cockpit.rov.emit('rovpilot.powerLevel.request');
   };
   window.Cockpit.plugins.push(ROVpilot);
 }(window, jQuery));

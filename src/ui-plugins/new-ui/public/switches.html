@@ -96,11 +96,11 @@
               enabledKey = self.switches[aSwitch].message.enabled;
               disabledKey = self.switches[aSwitch].message.disabled;
             }
-            window.cockpit.on(enabledKey, function () {
+            window.cockpit.rov.on(enabledKey, function () {
               self.switches[aSwitch].state = true;
               self.update();
             });
-            window.cockpit.on(disabledKey, function () {
+            window.cockpit.rov.on(disabledKey, function () {
               self.switches[aSwitch].state = false;
               self.update();
             });
@@ -130,7 +130,7 @@
             this.registerListeners(aSwitch);
           }
 
-          window.cockpit.on('plugin.lights.level', function(level) {
+          window.cockpit.rov.on('plugin.lights.level', function(level) {
             var state = false;
             if (level !== 'level0') { state = true; }
             self.switches.LED.state = state;

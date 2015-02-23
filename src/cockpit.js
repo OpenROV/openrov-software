@@ -180,3 +180,9 @@ controller.start();
 server.listen(app.get('port'), function () {
   console.log('Started listening on port: ' + app.get('port'));
 });
+
+var Messaging = function(io) {
+
+  this.on
+};
+

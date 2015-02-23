@@ -63,11 +63,11 @@
 
   Motor_diags.prototype.loaded = function() {
     var motordiag = this;
-    this.cockpit.socket.on('settings', function (data) {
+    this.cockpit.rov.on('settings', function (data) {
       motordiag.LoadSettings(data);
     });
     this.cockpit.extensionPoints.rovDiagnostics.find('#callibrate_escs').click(function () {
-      motordiag.cockpit.socket.emit('callibrate_escs');
+      motordiag.cockpit.rov.emit('callibrate_escs');
       console.log('callibrate_escs sent');
     });
     motordiag.portMotorSpeed.subscribe(function (newValue) {
@@ -118,7 +118,7 @@
     var portVal = this.portMotorSpeed();
     var starbordVal = this.starbordMotorSpeed();
     var verticalVal = this.verticalMotorSpeed();
-    this.cockpit.socket.emit('motor-diag.motorTest', {
+    this.cockpit.rov.emit('motor-diag.motorTest', {
       port: portVal,
       starbord: starbordVal,
       vertical: verticalVal
@@ -139,13 +139,13 @@
       motordiag.cockpit.extensionPoints.rovDiagnostics.find('#smoothingIncriment').val(settings.smoothingIncriment);
   };
   Motor_diags.prototype.SaveDiagnostics = function() {
-    this.cockpit.socket.emit('update_settings', { reverse_port_thruster: this.reversePortThruster() });
-    this.cockpit.socket.emit('update_settings', { reverse_starbord_thruster: this.reverseStarbordThruster() });
-    this.cockpit.socket.emit('update_settings', { reverse_lift_thruster: this.reverseLiftThruster() });
+    this.cockpit.rov.emit('update_settings', { reverse_port_thruster: this.reversePortThruster() });
+    this.cockpit.rov.emit('update_settings', { reverse_starbord_thruster: this.reverseStarbordThruster() });
+    this.cockpit.rov.emit('update_settings', { reverse_lift_thruster: this.reverseLiftThruster() });
   };
   Motor_diags.prototype.SaveSettings = function() {
     var motordiag = this;
-    this.cockpit.socket.emit('update_settings', { smoothingIncriment: motordiag.cockpit.extensionPoints.rovDiagnostics.find('#smoothingIncriment').val() });
+    this.cockpit.rov.emit('update_settings', { smoothingIncriment: motordiag.cockpit.extensionPoints.rovDiagnostics.find('#smoothingIncriment').val() });
   };
   window.Cockpit.plugins.push(Motor_diags);
 }(window, jQuery));

@@ -73,17 +73,17 @@
         ready: function() {
           var self = this;
 
-          window.cockpit.on('rovpilot.depthHold.enabled', function() {
+          window.cockpit.rov.on('rovpilot.depthHold.enabled', function() {
             self.depthHoldEnabled = true;
           });
-          window.cockpit.on('rovpilot.depthHold.disabled', function() {
+          window.cockpit.rov.on('rovpilot.depthHold.disabled', function() {
             self.depthHoldEnabled = false;
           });
 
-          window.cockpit.on('rovpilot.headingHold.enabled', function() {
+          window.cockpit.rov.on('rovpilot.headingHold.enabled', function() {
             self.headingHoldEnabled = true;
           });
-          window.cockpit.on('rovpilot.headingHold.disabled', function() {
+          window.cockpit.rov.on('rovpilot.headingHold.disabled', function() {
             self.headingHoldEnabled = false;
           });
 
@@ -92,10 +92,10 @@
           return isEnabeld ? 'enabled' : '';
         },
         toggleDepthHold: function() {
-          window.cockpit.emit('rovpilot.depthHold.toggle');
+          window.cockpit.rov.emit('rovpilot.depthHold.toggle');
         },
         toggleHeadingHold: function() {
-          window.cockpit.emit('rovpilot.headingHold.toggle');
+          window.cockpit.rov.emit('rovpilot.headingHold.toggle');
         }
       })
     })();

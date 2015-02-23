@@ -14,16 +14,12 @@
   //so that the reference to this instance is available for further processing
   Telemetry.prototype.listen = function listen() {
     var self = this;
-    this.cockpit.socket.on('status', function (data) {
-      cockpit.emit('plugin.telemetry.logData', data);
-    });
-
-    self.cockpit.emit('inputController.register',
+    self.cockpit.extensionPoints.inputController.register(
       {
         name: "telemetry.cycleTextColor",
         description: "Cycle the text color of telemetry.",
         defaults: { keyboard: 'h' },
-        down: function() { cockpit.emit('plugin.telemetry.cycleTextColor'); }
+        down: function() { cockpit.rov.emit('plugin.telemetry.cycleTextColor'); }
       });
 
   };

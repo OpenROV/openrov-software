@@ -1,9 +1,28 @@
 /*jshint esnext:true */
 const PREFERENCES = 'plugins:capestatus';
 
+function msToTime(s) {
+  function addZ(n) {
+    return (n < 10 ? '0' : '') + n;
+  }
+  var ms = s % 1000;
+  s = (s - ms) / 1000;
+  var secs = s % 60;
+  s = (s - secs) / 60;
+  var mins = s % 60;
+  var hrs = (s - mins) / 60;
+  return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs);  // + '.' + ms;
+}
+
 function capestatus(name, deps) {
   console.log('Capestatus plugin started.');
   var preferences = getPreferences(deps.config);
+
+  deps.io.on('connection', function(socket) {
+    deps.rov.on('status', function(data) {
+      handleStatus(socket, data);
+    });
+  });
 
   // ## routes
 
@@ -68,6 +87,50 @@ function capestatus(name, deps) {
       res.send();
     }
   });
+  
+  function handleStatus(socket, data) {
+    if ('time' in data) {
+      var formattedRuntime = msToTime(data.time);
+      socket.emit('capestatus.time.runtime', { raw: data.time, formatted: formattedRuntime});
+    }
+
+    if ('vout' in data) {
+      var value = data.vout.toFixed(1);
+      socket.emit('capestatus.battery.voltage', value);
+    }
+
+    if ('iout' in data) {
+      var value = data.iout.toFixed(3);
+      socket.emit('capestatus.battery.current.out', value);
+    }
+
+    if ('BT1I' in data) {
+      var value = parseFloat(data['BT1I']);
+      socket.emit('capestatus.battery.current.battery1', value);
+    }
+    if ('BT2I' in data) {
+      var value = parseFloat(data['BT2I']);
+      socket.emit('capestatus.battery.current.battery2', value);
+    }
+    if ('SC1I' in data) {
+      var value = parseFloat(data['SC1I']);
+      socket.emit('capestatus.battery.current.esc1', value);
+    }
+    if ('SC2I' in data) {
+      var value = parseFloat(data['SC2I']);
+      socket.emit('capestatus.battery.current.esc2', value);
+    }
+    if ('SC3I' in data) {
+      var value = parseFloat(data['SC3I']);
+      socket.emit('capestatus.battery.current.esc3', value);
+    }
+
+    if ('cpuUsage' in data) {
+      var value = (data.cpuUsage * 100).toFixed(0);
+      socket.emit('capestatus.cpu', value);
+    }
+
+  }
 
   function Battery(name, minVoltage, maxVoltage) {
     this.name = name;
@@ -96,6 +159,5 @@ function capestatus(name, deps) {
     console.log('Capestatus loaded preferences: ' + JSON.stringify(preferences));
     return preferences;
   }
-
 }
 module.exports = capestatus;

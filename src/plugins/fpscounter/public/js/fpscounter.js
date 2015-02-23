@@ -47,7 +47,7 @@
     var _fpscounter = this;
 
     // Toggle FPS counter
-    _fpscounter.cockpit.emit('inputController.register',
+    this.cockpit.extensionPoints.inputController.register(
       {
         name: "fpsCounter.toggleFpsCounter",
         description: "Shows/hides the FPS counter for the video steam.",

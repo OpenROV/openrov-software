@@ -26,7 +26,7 @@
         googletalk.SaveSettings();
       });
     });
-    this.cockpit.socket.on('settings', function (data) {
+    this.cockpit.rov.on('settings', function (data) {
       googletalk.LoadSettings(data);
     });
   };
@@ -39,9 +39,9 @@
       settingsElement.find('#googleTalkPilotId').val(config.googletalk_rov_pilotid);
   };
   Googletalk_ipregistraion.prototype.SaveSettings = function SaveSettings() {
-    this.cockpit.socket.emit('update_settings', { googletalk_rovid: settingsElement.find('#googleTalkROVid').val() });
-    this.cockpit.socket.emit('update_settings', { googletalk_rovpassword: settingsElement.find('#googleTalkROVpassword').val() });
-    this.cockpit.socket.emit('update_settings', { googletalk_rov_pilotid: settingsElement.find('#googleTalkPilotId').val() });
+    this.cockpit.rov.emit('update_settings', { googletalk_rovid: settingsElement.find('#googleTalkROVid').val() });
+    this.cockpit.rov.emit('update_settings', { googletalk_rovpassword: settingsElement.find('#googleTalkROVpassword').val() });
+    this.cockpit.rov.emit('update_settings', { googletalk_rov_pilotid: settingsElement.find('#googleTalkPilotId').val() });
   };
   window.Cockpit.plugins.push(Googletalk_ipregistraion);
 }(window, jQuery));

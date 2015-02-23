@@ -21,7 +21,7 @@
         domReady: function () {
           var self = this;
           var list = $(this.$.serialMonitorList);
-          window.cockpit.on('plugin.serial-monitor.serial-received', function (data) {
+          window.cockpit.rov.on('plugin.serial-monitor.serial-received', function (data) {
             var text = self.tail(self.maxLines, list.val() + data);
             list.val(text);
             list.scrollTop(list[0].scrollHeight);

@@ -26,7 +26,7 @@
         ready: function() {
           var self = this;
 
-          window.cockpit.on('rovpilot.powerLevel', function(value) {
+          window.cockpit.rov.on('rovpilot.powerLevel', function(value) {
             self.powerLevel = value;
           });
         }

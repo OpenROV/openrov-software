@@ -37,7 +37,7 @@
           firmwareModal.find('#arduinoFirmware-startupload').click(function () {
             fileReader.onload = function (evnt) {
               console.log('Upload event: ' + selectedFile.name);
-              self.cockpit.socket.emit('arduinofirmware-upload', {
+              self.cockpit.rov.emit('arduinofirmware-upload', {
                 'filename': selectedFile.name,
                 data: evnt.target.result
               });
@@ -45,10 +45,10 @@
             if (!selectedFile) {
               selectedFile = {};
               selectedFile.name = 'fromSource';
-              self.cockpit.socket.emit('arduinofirmware-uploadfromsource');
+              self.cockpit.rov.emit('arduinofirmware-uploadfromsource');
             }
             console.log('Starting upload: ' + selectedFile.name);
-            self.cockpit.socket.emit('arduinofirmware-startupload', {
+            self.cockpit.rov.emit('arduinofirmware-startupload', {
               'filename': selectedFile.name,
               'size': selectedFile.size
             });
@@ -84,10 +84,10 @@
     $('#diagnostic .back-button').click(function () {
       arduinofirmware.SaveSettings();
     });
-    this.cockpit.socket.on('settings', function (data) {
+    this.cockpit.rov.on('settings', function (data) {
       arduinofirmware.LoadSettings(data);
     });
-    this.cockpit.socket.on('arduinofirmware-requestmoredata', function (data) {
+    this.cockpit.rov.on('arduinofirmware-requestmoredata', function (data) {
       arduinofirmware.arduinoFirmwareVM.uploadPercentage(data.Percent);
       var Place = data.Place * 524288;
       //The Next Blocks Starting Position
@@ -100,14 +100,14 @@
       }
       fileReader.readAsBinaryString(NewFile);
     });
-    this.cockpit.socket.on('arduinofirmware-uploaddone', function (data) {
+    this.cockpit.rov.on('arduinofirmware-uploaddone', function (data) {
       arduinofirmware.arduinoFirmwareVM.uploaded(true);
       arduinofirmware.arduinoFirmwareVM.uploadPercentage(100);
     });
-    this.cockpit.socket.on('arduinoFirmware-status', function (data) {
+    this.cockpit.rov.on('arduinoFirmware-status', function (data) {
       arduinofirmware.arduinoFirmwareVM.updateStatus(data);
     });
-    this.cockpit.socket.on('arduinoFirmware-output', function (data) {
+    this.cockpit.rov.on('arduinoFirmware-output', function (data) {
       arduinofirmware.arduinoFirmwareVM.logOutput(data);
     });
   };

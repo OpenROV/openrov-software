@@ -48,15 +48,15 @@
         domReady: function() {
           var self = this;
 
-          window.cockpit.on('plugin.laser.enabled', function() {
+          window.cockpit.rov.on('plugin.laser.enabled', function() {
             self.lasersEnabled = true;
           });
-          window.cockpit.on('plugin.laser.disabled', function() {
+          window.cockpit.rov.on('plugin.laser.disabled', function() {
             self.lasersEnabled = false;
           });
         },
         toggle: function() {
-          window.cockpit.emit('plugin.laser.toggle');
+          window.cockpit.rov.emit('plugin.laser.toggle');
         }
       })
     })();

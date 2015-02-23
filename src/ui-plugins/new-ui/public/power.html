@@ -84,14 +84,14 @@
           this.setLeftBattery(this.leftCurrent);
           this.setRightBattery(this.rightCurrent);
 
-          window.cockpit.on('capestatus.battery.voltage', function(voltage) {
+          window.cockpit.rov.on('capestatus.battery.voltage', function(voltage) {
             self.setVoltage(voltage);
           });
 
-          window.cockpit.on('capestatus.battery.current.battery1', function(current) {
+          window.cockpit.rov.on('capestatus.battery.current.battery1', function(current) {
             self.setLeftBattery(current);
           });
-          window.cockpit.on('capestatus.battery.current.battery2', function(current) {
+          window.cockpit.rov.on('capestatus.battery.current.battery2', function(current) {
             self.setRightBattery(current);
           });
 
@@ -100,8 +100,8 @@
             self.maxVoltage = config.maxVoltage;
             self.setVoltage(self.voltage);
           };
-          window.cockpit.emit('capestatus.request.battery.config', setBatteryConfig);
-          window.cockpit.on('capestatus.battery.config', setBatteryConfig)
+          window.cockpit.rov.emit('capestatus.request.battery.config', setBatteryConfig);
+          window.cockpit.rov.on('capestatus.battery.config', setBatteryConfig)
         },
         setLeftBattery: function(current) {
           this.setCurrent($(this.$.left), this.leftIndicator, current);

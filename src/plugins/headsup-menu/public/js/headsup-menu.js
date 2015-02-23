@@ -90,7 +90,7 @@
     };
 
     var enablePlugin = function() {
-      self.cockpit.emit('inputController.register',
+      self.cockpit.extensionPoints.inputController.register(
         {
           name: "headsupMenu.show",
           description: "Show the heads up menu.",
@@ -117,12 +117,12 @@
     };
 
     var disablePlugin = function() {
-      self.cockpit.emit('inputController.unregister', "headsupMenu.show");
+      self.cockpit.extensionPoints.inputController.unregister('headsupMenu.show');
     };
 
     // for plugin management:
-    this.name = "headsup-menu"; // for the settings
-    this.viewName = "Heads up menu"; // for the UI
+    this.name = 'headsup-menu'; // for the settings
+    this.viewName = 'Heads up menu'; // for the UI
     this.canBeDisabled = true;
     this.enable = function() { enablePlugin(); };
     this.disable = function() { disablePlugin(); };

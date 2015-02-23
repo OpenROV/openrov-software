@@ -131,7 +131,7 @@
               }
             });
 
-            window.cockpit.on('capestatus.connection.connected', function() {
+            window.cockpit.rov.on('capestatus.connection.connected', function() {
               if (!isRendering) {
                 videoStarted();
                 startRendering();

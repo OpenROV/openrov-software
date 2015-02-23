@@ -17,12 +17,12 @@
     cockpit.extensionPoints.buttonPanel.append('<button id="exportButton" class="btn pull-right disabled">Download Data</button><a id="exportLink" download="data.json"></a>');
     $('#keyboardInstructions').append('<p><i>r</i> to toggle recording of telemetry</p>');
     cockpit.extensionPoints.buttonPanel.find('#exportButton').click(exportData);
-    this.cockpit.on('plugin.navigationData.data', function (data) {
+    this.cockpit.rov.on('plugin.navigationData.data', function (data) {
       if (!jQuery.isEmptyObject(data)) {
         blackbox.logNavData(data);
       }
     });
-    this.cockpit.socket.on('status', function (data) {
+    this.cockpit.rov.on('status', function (data) {
       if (!jQuery.isEmptyObject(data)) {
         blackbox.logStatusData(data);
       }
@@ -34,7 +34,7 @@
   Blackbox.prototype.listen = function listen() {
     var self = this;
 
-    self.cockpit.emit('inputController.register',
+    self.cockpit.extensionPoints.inputController.register(
       {
         name: "blackbox.record",
         description: "Start recording telemetry data.",

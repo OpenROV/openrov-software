@@ -12,12 +12,9 @@
     // Listen to navdata updates
     var self = this;
     cockpit.extensionPoints.rovDiagnostics.find('#toggle_watertype').click(function () {
-      self.cockpit.emit('plugin.diveprofile.watertype.toggle');
+      self.cockpit.rov.emit('plugin.diveprofile.watertype.toggle');
     });
 
-    cockpit.messaging.register({
-      toSocket: ['plugin.diveprofile.watertype.toggle']
-    });
   };
   window.Cockpit.plugins.push(DiveProfile);
 }(window, document, undefined));

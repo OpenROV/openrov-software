@@ -28,7 +28,7 @@
     var rov = this;
 
     // Toggle tank control
-    rov.cockpit.emit('inputController.register',
+    rov.cockpit.extensionPoints.inputController.register(
       {
         name: "tankcontrol.toggleTankControl",
         description: "Toggles the tank control mode on/off",
@@ -36,8 +36,8 @@
         down: function() { rov.toggleControl(); }
       });
 
-    // regirster controls
-    rov.cockpit.emit('inputController.register',
+    // register controls
+    rov.cockpit.extensionPoints.inputController.register(
       [
         {
           name: rov.controlNames.leftLift,
@@ -53,7 +53,7 @@
               direction = -1;
             }
             rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-            rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            rov.cockpit.rov.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
           }
         },
         {
@@ -63,7 +63,7 @@
           active: false,
           axis: function (v) {
             rov.lefty = v;
-            rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            rov.cockpit.rov.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
           }
         },
         {
@@ -80,7 +80,7 @@
               direction = -1;
             }
             rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-            rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            rov.cockpit.rov.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
             console.log('rov.lift:' + rov.lift);
           }
         },
@@ -91,7 +91,7 @@
           active: false,
           axis: function (v) {
             rov.righty = v;
-            rov.cockpit.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            rov.cockpit.rov.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
           }
         }
       ]);
@@ -104,15 +104,15 @@
     }
 
     if (!this.tankControlActive) {
-      rov.cockpit.emit('inputController.activate', controls);
-      rov.cockpit.emit('tankControl.enabled');
+      self.cockpit.extensionPoints.inputController.activate(controls);
+      rov.cockpit.rov.emit('tankControl.enabled');
       rov.tankControlActive = true;
       console.log('Tank Control Active');
     }
     else {
-      rov.cockpit.emit('inputController.deactivate', controls);
+      self.cockpit.extensionPoints.inputController.deactivate(controls);
       rov.tankControlActive = false;
-      rov.cockpit.emit('tankControl.disabled');
+      rov.cockpit.rov.emit('tankControl.disabled');
       console.log('Tank Control Deactivated');
     }
   };

@@ -33,10 +33,10 @@
         domReady: function() {
           var self = this;
 
-          window.cockpit.on('capestatus.connection.connected', function() {
+          window.cockpit.rov.on('capestatus.connection.connected', function() {
             self.isConnected = true;
           });
-          window.cockpit.on('capestatus.connection.disconnected', function() {
+          window.cockpit.rov.on('capestatus.connection.disconnected', function() {
             self.isConnected = false;
           });
         }

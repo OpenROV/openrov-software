@@ -29,7 +29,7 @@
         domReady: function() {
           var self = this;
 
-          window.cockpit.on('plugin.cameraTilt.angle', function(angle) {
+          window.cockpit.rov.on('plugin.cameraTilt.angle', function(angle) {
             self.servoAngle = angle;
           });
         }

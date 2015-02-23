@@ -17,21 +17,11 @@ $( document ).ready(function() {
     cockpit.extensionPoints.menu.find('#example').click(function() {
       alert('Example plugin.\nThere will be a message sent to the ROV in 5 seconds.')
       setTimeout(function() {
-        cockpit.emit('plugin.example.foo');
+        cockpit.rov.emit('plugin.example.foo');
       }, 5000)
     });
 
-    cockpit.messaging.register({
-      toSocket: [ // what will we send to the ROV?
-        'plugin.example.foo',
-        { name: 'plugin.example.bar', signature: ['param1', 'param2'] } // for messages with values
-      ],
-      fromSocket: [ // what will we receive from the ROV?
-        { name: 'plugin.example.message', signature: ['message'] }
-      ]
-    });
-
-    this.cockpit.emit('inputController.register',
+    self.cockpit.extensionPoints.inputController.register(
       {
         name: "example.keyBoardMapping",
         description: "Example for keymapping.",
@@ -70,10 +60,6 @@ $( document ).ready(function() {
       }
     };
     rov.cockpit.emit('headsUpMenu.register', item);
-
-    rov.cockpit.on('plugin.example.message', function(message) {
-      alert('received message from rov: ' + message);
-    })
 
   };
   window.Cockpit.plugins.push(Example);

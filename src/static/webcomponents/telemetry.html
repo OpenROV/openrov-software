@@ -29,10 +29,10 @@
         textcolor: 0,
         ready: function () {
           var self = this;
-          window.cockpit.on('plugin.telemetry.cycleTextColor', function () {
+          window.cockpit.rov.on('plugin.telemetry.cycleTextColor', function () {
             self.cycleTextColor();
           });
-          window.cockpit.on('plugin.telemetry.logData', function (data) {
+          window.cockpit.rov.on('plugin.telemetry.logData', function (data) {
             self.logStatusData(data);
           });
         },
