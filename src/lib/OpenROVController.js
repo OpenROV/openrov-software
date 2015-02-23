@@ -19,21 +19,25 @@ var settingsCollection = {
     deadZone_min: 0,
     deadZone_max: 0
   };
+
 var rovsys = { capabilities: 0 };
+
 var OpenROVController = function (eventLoop) {
+  var controller = this;
   var serial;
   var globalEventLoop = eventLoop;
-  var reader = new StatusReader();
-  var physics = new ArduinoPhysics();
-  var hardware = new Hardware();
-  var controller = new EventEmitter();
+  this.physics = new ArduinoPhysics();
+  this.hardware = new Hardware();
+
   setInterval(function () {
     controller.emit('status', statusdata);
   }, 1000);
-  hardware.on('serial-recieved', function (data) {
+
+  this.hardware.on('serial-recieved', function (data) {
     globalEventLoop.emit('serial-recieved', data);
   });
-  hardware.on('status', function (status) {
+
+  this.hardware.on('status', function (status) {
     for (var i in status) {
       statusdata[i] = status[i];
     }
@@ -72,113 +76,41 @@ var OpenROVController = function (eventLoop) {
     }
   });
   setup_serial();
-  hardware.connect();
+  this.hardware.connect();
   controller.ArduinoFirmwareVersion = 0;
   controller.Capabilities = 0;
 
-  controller.requestCapabilities = function () {
-    console.log('Sending rcap to arduino');
-    var command = 'rcap();';
-    hardware.write(command);
-  };
-  controller.requestSettings = function () {
-    var command = 'reportSetting();';
-    hardware.write(command);
-    command = 'rmtrmod();';
-    hardware.write(command);
-  };
-  controller.updateSetting = function () {
-
-    var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + CONFIG.preferences.get('deadzone_neg') + ',' + CONFIG.preferences.get('deadzone_pos') + ',' + CONFIG.preferences.get('water_type') + ';';
-    hardware.write(command);
-    //This is the multiplier used to make the motor act linear fashion.
-    //for example: the props generate twice the thrust in the positive direction
-    //than the negative direction.  To make it linear we have to multiply the
-    //negative direction * 2.
-    var port = CONFIG.preferences.get('thrust_modifier_port');
-    var vertical = CONFIG.preferences.get('thrust_modifier_vertical');
-    var starbord = CONFIG.preferences.get('thrust_modifier_starbord');
-    var nport = CONFIG.preferences.get('thrust_modifier_nport');
-    var nvertical = CONFIG.preferences.get('thrust_modifier_nvertical');
-    var nstarbord = CONFIG.preferences.get('thrust_modifier_nstarbord');
-    if (CONFIG.preferences.get('reverse_port_thruster')) {
-      port = port * -1;
-      nport = nport * -1;
-    }
-    if (CONFIG.preferences.get('reverse_lift_thruster')) {
-      vertical = vertical * -1;
-      nvertical = nvertical * -1;
-    }
-    if (CONFIG.preferences.get('reverse_starbord_thruster')) {
-      starbord = starbord * -1;
-      nstarbord = nstarbord * -1;
-    }
-    //API to Arduino to pass a percent in 2 decimal accuracy requires multipling by 100 before sending.
-    command = 'mtrmod(' + port * 100 + ',' + vertical * 100 + ',' + starbord * 100 + ',' + nport * 100 + ',' + nvertical * 100 + ',' + nstarbord * 100 + ');';
-    hardware.write(command);
-  };
   controller.notSafeToControl = function () {
     //Arduino is OK to accept commands. After the Capabilities was added, all future updates require
     //being backward safe compatible (meaning you cannot send a command that does something unexpected but
     //instead it should do nothing).
-    if (this.Capabilities !== 0)
+    if (controller.Capabilities !== 0)
       return false;
     //This feature added after the swap to ms on the Arduino
     console.log('Waiting for the capability response from Arduino before sending command.');
-    console.log('Arduno Version: ' + this.ArduinoFirmwareVersion);
-    console.log('Capability bitmap: ' + this.Capabilities);
+    console.log('Arduno Version: ' + controller.ArduinoFirmwareVersion);
+    console.log('Capability bitmap: ' + controller.Capabilities);
     return true;
   };
-  controller.send = function (cmd) {
-    if (this.notSafeToControl())
-      return;
 
-    var command = cmd + ';';
-    console.log('Sending command to arduino: ' + command);
-
-    hardware.write(command);
-  };
-  controller.sendMotorTest = function (port, starbord, vertical) {
-    if (this.notSafeToControl())
-      return;
-    var command = 'go(' + physics.mapRawMotor(port) + ',' + physics.mapRawMotor(vertical) + ',' + physics.mapRawMotor(starbord) + ',1);';
-    //the 1 bypasses motor smoothing
-    hardware.write(command);
-  };
-  controller.sendCommand = function (throttle, yaw, vertical) {
-    if (this.notSafeToControl())
-      return;
-    var motorCommands = physics.mapMotors(throttle, yaw, vertical);
-    var command = 'go(' + motorCommands.port + ',' + motorCommands.vertical + ',' + motorCommands.starbord + ');';
-    hardware.write(command);
-  };
-  controller.stop = function (value) {
-    if (this.notSafeToControl())
-      return;
-    var command = 'stop();';
-    hardware.write(command);
-  };
-  controller.start = function (value) {
-    if (this.notSafeToControl())
-      return;
-    var command = 'start();';
-    hardware.write(command);
-  };
   globalEventLoop.on('register-ArdunoFirmwareVersion', function (val) {
     controller.ArduinoFirmwareVersion = val;
   });
   globalEventLoop.on('register-ArduinoCapabilities', function (val) {
     controller.Capabilities = val;
   });
+
   globalEventLoop.on('SerialMonitor_toggle_rawSerial', function () {
-    hardware.toggleRawSerialData();
+    controller.hardware.toggleRawSerialData();
   });
+
   globalEventLoop.on('serial-stop', function () {
     logger.log('Closing serial connection for firmware upload');
-    hardware.close();
+    controller.hardware.close();
   });
+
   globalEventLoop.on('serial-start', function () {
-    hardware.connect();
+    controller.hardware.connect();
     controller.updateSetting();
     logger.log('Opened serial connection after firmware upload');
   });
@@ -198,4 +130,88 @@ var OpenROVController = function (eventLoop) {
 
   return controller;
 };
+OpenROVController.prototype = new EventEmitter();
+OpenROVController.prototype.constructor = OpenROVController;
+
+OpenROVController.prototype.send = function (cmd) {
+  var controller = this;
+  if (controller.notSafeToControl())
+    return;
+
+  var command = cmd + ';';
+  console.log('Sending command to arduino: ' + command);
+
+  controller.hardware.write(command);
+};
+
+OpenROVController.prototype.requestCapabilities = function () {
+  console.log('Sending rcap to arduino');
+  var command = 'rcap();';
+  this.hardware.write(command);
+};
+
+OpenROVController.prototype.requestSettings = function () {
+  var command = 'reportSetting();';
+  this.hardware.write(command);
+  command = 'rmtrmod();';
+  this.hardware.write(command);
+};
+
+OpenROVController.prototype.updateSetting = function () {
+
+  var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + CONFIG.preferences.get('deadzone_neg') + ',' + CONFIG.preferences.get('deadzone_pos') + ',' + CONFIG.preferences.get('water_type') + ';';
+  this.hardware.write(command);
+  //This is the multiplier used to make the motor act linear fashion.
+  //for example: the props generate twice the thrust in the positive direction
+  //than the negative direction.  To make it linear we have to multiply the
+  //negative direction * 2.
+  var port = CONFIG.preferences.get('thrust_modifier_port');
+  var vertical = CONFIG.preferences.get('thrust_modifier_vertical');
+  var starbord = CONFIG.preferences.get('thrust_modifier_starbord');
+  var nport = CONFIG.preferences.get('thrust_modifier_nport');
+  var nvertical = CONFIG.preferences.get('thrust_modifier_nvertical');
+  var nstarbord = CONFIG.preferences.get('thrust_modifier_nstarbord');
+  if (CONFIG.preferences.get('reverse_port_thruster')) {
+    port = port * -1;
+    nport = nport * -1;
+  }
+  if (CONFIG.preferences.get('reverse_lift_thruster')) {
+    vertical = vertical * -1;
+    nvertical = nvertical * -1;
+  }
+  if (CONFIG.preferences.get('reverse_starbord_thruster')) {
+    starbord = starbord * -1;
+    nstarbord = nstarbord * -1;
+  }
+  //API to Arduino to pass a percent in 2 decimal accuracy requires multipling by 100 before sending.
+  command = 'mtrmod(' + port * 100 + ',' + vertical * 100 + ',' + starbord * 100 + ',' + nport * 100 + ',' + nvertical * 100 + ',' + nstarbord * 100 + ');';
+  this.hardware.write(command);
+};
+
+OpenROVController.prototype.sendMotorTest = function (port, starbord, vertical) {
+  var command = 'go(' + this.physics.mapRawMotor(port) + ',' +
+    this.physics.mapRawMotor(vertical) + ',' +
+    this.physics.mapRawMotor(starbord) + ',1)';
+  //the 1 bypasses motor smoothing
+  this.send(command);
+};
+
+OpenROVController.prototype.sendCommand = function (throttle, yaw, vertical) {
+  var motorCommands = this.physics.mapMotors(throttle, yaw, vertical);
+  var command = 'go(' + motorCommands.port + ','
+    + motorCommands.vertical + ','
+    + motorCommands.starbord + ')';
+  this.send(command);
+};
+
+OpenROVController.prototype.stop = function (value) {
+  var command = 'stop()';
+  this.send(command);
+};
+
+OpenROVController.prototype.start = function (value) {
+  var command = 'start()';
+  this.send(command);
+};
+
 module.exports = OpenROVController;
