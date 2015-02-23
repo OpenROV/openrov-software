@@ -7,8 +7,6 @@
     self.SAMPLE_PERIOD = 1000 / deps.config.sample_freq;
 
     self.rov = deps.rov;
-    self.sockets = deps.io.sockets;
-    self.io = deps.io;
     self.powerLevel = 2;
     self.sendToROVEnabled = true;
     self.sendUpdateEnabled = true;
@@ -30,118 +28,115 @@
       starbord: 0
     };
 
-    self.sockets.on('connection', function (socket) {
-      socket.on('rovpilot.allStop', function () {
-        self.allStop();
-      });
+    deps.cockpit.on('rovpilot.allStop', function () {
+      self.allStop();
+    });
 
-      socket.on('rovpilot.setThrottle', function (value) {
-        self.positions.throttle = value;
-        if (value === 0) {
-            self.positions.throttle = self.ttrim;
+    deps.cockpit.on('rovpilot.setThrottle', function (value) {
+      self.positions.throttle = value;
+      if (value === 0) {
+          self.positions.throttle = self.ttrim;
+      }
+    });
+
+    deps.cockpit.on('rovpilot.setYaw', function (value) {
+      self.positions.yaw = value;
+    });
+
+    deps.cockpit.on('rovpilot.setLift', function (value) {
+      self.positions.lift = value;
+      if (value === 0) {
+        self.positions.lift = self.vtrim;
+      }
+    });
+
+    deps.cockpit.on('rovpilot.setPitchControl', function (value) {
+      self.positions.pitch = value;
+    });
+
+    deps.cockpit.on('rovpilot.setRollControl', function (value) {
+      self.positions.roll = value;
+    });
+
+    deps.cockpit.on('rovpilot.setPowerLevel', function (v) {
+      self.setPowerLevel(v, deps.cockpit);
+    });
+
+    deps.cockpit.on('rovpilot.adjustVerticalTrim', function (value) {
+      self.vtrim += value;
+      self.positions.lift = 1 / 1000 * self.vtrim;
+    });
+
+    deps.cockpit.on('rovpilot.adjustThrottleTrim', function (value) {
+      self.ttrim += value;
+      self.positions.throttle = 1 / 1000 * self.ttrim;
+    });
+
+    deps.cockpit.on('rovpilot.incrementPowerLevel', function () {
+      var currentPowerLevel = self.powerLevel;
+      currentPowerLevel++;
+      if (currentPowerLevel > 5) {
+        currentPowerLevel = 1;
+      }
+      self.setPowerLevel(currentPowerLevel, deps.cockpit);
+    });
+
+    deps.cockpit.on('rovpilot.powerOnESCs', function () {
+      self.rov.send('escp(1)');
+
+      deps.cockpit.emit('rovpilot.esc.enabled'); // should be handled through status
+    });
+
+    deps.cockpit.on('rovpilot.powerOffESCs', function () {
+      self.rov.send('escp(0)');
+
+      deps.cockpit.emit('rovpilot.esc.disabled'); // should be handled through status
+    });
+
+    deps.cockpit.on('rovpilot.headingHold.toggle', function () {
+      deps.rov.send('holdHeading_toggle()');
+    });
+
+    deps.cockpit.on('rovpilot.headingHold.set', function (value) {
+      deps.rov.send('holdHeading_toggle('+ value +')');
+    });
+
+    deps.cockpit.on('rovpilot.depthHold.toggle', function () {
+      deps.rov.send('holdDepth_toggle()');
+    });
+
+    deps.cockpit.on('rovpilot.depthHold.set', function (value) {
+      deps.rov.send('holdDepth_toggle('+ value +')');
+    });
+
+    deps.cockpit.on('rovpilot.manualMotorThrottle', function (p, v, s) {
+      self.manualMotorThrottle(p, v, s);
+    });
+    deps.cockpit.on('rovpilot.disable', function () {
+      self.sendToROVEnabled = false;
+    });
+    deps.cockpit.on('rovpilot.enable', function () {
+      self.sendToROVEnabled = true;
+    });
+
+    deps.cockpit.on('rovpilot.powerLevel.request', function() {
+      self.setPowerLevel(self.powerLevel, deps.cockpit);
+    });
+
+    // Arduino
+    deps.rov.on('status', function (status) {
+      var enabled;
+      if ('targetDepth' in status) {
+        enabled = status.targetDepth != DISABLED;
+        deps.cockpit.emit('rovpilot.depthHold.' + (enabled ? 'enabled' : 'disabled'));
+      }
+      if ('targetHeading' in status) {
+        enabled = status.targetHeading != DISABLED;
+        deps.cockpit.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
+        if (enabled) {
+          deps.cockpit.emit('rovpilot.headingHold.target', status.targetHeading);
         }
-      });
-
-      socket.on('rovpilot.setYaw', function (value) {
-        self.positions.yaw = value;
-      });
-
-      socket.on('rovpilot.setLift', function (value) {
-        self.positions.lift = value;
-        if (value === 0) {
-          self.positions.lift = self.vtrim;
-        }
-      });
-
-      socket.on('rovpilot.setPitchControl', function (value) {
-        self.positions.pitch = value;
-      });
-
-      socket.on('rovpilot.setRollControl', function (value) {
-        self.positions.roll = value;
-      });
-
-      socket.on('rovpilot.setPowerLevel', function (v) {
-        self.setPowerLevel(v, socket);
-      });
-
-      socket.on('rovpilot.adjustVerticalTrim', function (value) {
-        self.vtrim += value;
-        self.positions.lift = 1 / 1000 * self.vtrim;
-      });
-
-      socket.on('rovpilot.adjustThrottleTrim', function (value) {
-        self.ttrim += value;
-        self.positions.throttle = 1 / 1000 * self.ttrim;
-      });
-
-      socket.on('rovpilot.incrementPowerLevel', function () {
-        var currentPowerLevel = self.powerLevel;
-        currentPowerLevel++;
-        if (currentPowerLevel > 5) {
-          currentPowerLevel = 1;
-        }
-        self.setPowerLevel(currentPowerLevel, socket);
-      });
-
-      socket.on('rovpilot.powerOnESCs', function () {
-        self.rov.send('escp(1)');
-
-        socket.emit('rovpilot.esc.enabled'); // should be handled through status
-      });
-
-      socket.on('rovpilot.powerOffESCs', function () {
-        self.rov.send('escp(0)');
-
-        socket.emit('rovpilot.esc.disabled'); // should be handled through status
-      });
-
-      socket.on('rovpilot.headingHold.toggle', function () {
-        deps.rov.send('holdHeading_toggle()');
-      });
-
-      socket.on('rovpilot.headingHold.set', function (value) {
-        deps.rov.send('holdHeading_toggle('+ value +')');
-      });
-
-      socket.on('rovpilot.depthHold.toggle', function () {
-        deps.rov.send('holdDepth_toggle()');
-      });
-
-      socket.on('rovpilot.depthHold.set', function (value) {
-        deps.rov.send('holdDepth_toggle('+ value +')');
-      });
-
-      socket.on('rovpilot.manualMotorThrottle', function (p, v, s) {
-        self.manualMotorThrottle(p, v, s);
-      });
-      socket.on('rovpilot.disable', function () {
-        self.sendToROVEnabled = false;
-      });
-      socket.on('rovpilot.enable', function () {
-        self.sendToROVEnabled = true;
-      });
-
-      socket.on('rovpilot.powerLevel.request', function() {
-        self.setPowerLevel(self.powerLevel, socket);
-      });
-      
-      // Arduino
-      deps.rov.on('status', function (status) {
-        var enabled;
-        if ('targetDepth' in status) {
-          enabled = status.targetDepth != DISABLED;
-          socket.emit('rovpilot.depthHold.' + (enabled ? 'enabled' : 'disabled'));
-        }
-        if ('targetHeading' in status) {
-          enabled = status.targetHeading != DISABLED;
-          socket.emit('rovpilot.headingHold.' + (enabled ? 'enabled' : 'disabled'));
-          if (enabled) {
-            socket.emit('rovpilot.headingHold.target', status.targetHeading);
-          }
-        }
-      });
-
+      }
     });
 
     this.startInterval  = function() {

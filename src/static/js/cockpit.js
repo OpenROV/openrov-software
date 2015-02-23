@@ -12,10 +12,8 @@
   //Cockpit is inheriting from EventEmitter2.
   var Cockpit = function Cockpit(csocket) {
     var self = this;
-    this.socket = csocket;
     this.uiLoader = new window.UiLoader();
-    this.messaging = new window.MessageManager(csocket, this);
-    this.rov = this.messaging;
+    this.rov = new window.MessageManager(csocket, this);
     this.sendUpdateEnabled = true;
     this.capabilities = 0;
     this.loadedPlugins = [];
@@ -49,7 +47,7 @@
 
   Cockpit.prototype.listen = function listen() {
     var cockpit = this;
-    cockpit.socket.on('rovsys', function (data) {
+    cockpit.rov.on('rovsys', function (data) {
       console.log('got RovSys update from Arduino');
       if ('capabilities' in data) {
         cockpit.capabilities = data.capabilities;

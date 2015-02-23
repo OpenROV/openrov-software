@@ -3,23 +3,21 @@
     console.log('Camera tilt plugin loaded');
     var tilt = 0;
 
-    deps.io.sockets.on('connection', function (socket) {
-      // Cockpit
-      socket.on('plugin.cameraTilt.set', function (angle) {
-        setCameraTilt(angle);
-      });
+    // Cockpit
+    deps.cockpit.on('plugin.cameraTilt.set', function (angle) {
+      setCameraTilt(angle);
+    });
 
-      socket.on('plugin.cameraTilt.adjust', function (value) {
-        adjustCameraTilt(value);
-      });
+    deps.cockpit.on('plugin.cameraTilt.adjust', function (value) {
+      adjustCameraTilt(value);
+    });
 
-      // Arduino
-      deps.rov.on('status', function (data) {
-        if ('servo' in data) {
-          var angle = 90 / 500 * data.servo * -1 - 90;
-          socket.emit('plugin.cameraTilt.angle', angle);
-        }
-      });
+    // Arduino
+    deps.rov.on('status', function (data) {
+      if ('servo' in data) {
+        var angle = 90 / 500 * data.servo * -1 - 90;
+        deps.cockpit.emit('plugin.cameraTilt.angle', angle);
+      }
     });
 
     var setCameraTilt = function(value) {

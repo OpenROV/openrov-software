@@ -18,12 +18,9 @@ function capestatus(name, deps) {
   console.log('Capestatus plugin started.');
   var preferences = getPreferences(deps.config);
 
-  deps.io.on('connection', function(socket) {
-    deps.rov.on('status', function(data) {
-      handleStatus(socket, data);
-    });
+  deps.rov.on('status', function(data) {
+    handleStatus(deps.cockpit, data);
   });
-
   // ## routes
 
   // GET conif
@@ -88,48 +85,47 @@ function capestatus(name, deps) {
     }
   });
   
-  function handleStatus(socket, data) {
+  function handleStatus(cockpit, data) {
     if ('time' in data) {
       var formattedRuntime = msToTime(data.time);
-      socket.emit('capestatus.time.runtime', { raw: data.time, formatted: formattedRuntime});
+      cockpit.emit('capestatus.time.runtime', { raw: data.time, formatted: formattedRuntime});
     }
 
     if ('vout' in data) {
       var value = data.vout.toFixed(1);
-      socket.emit('capestatus.battery.voltage', value);
+      cockpit.emit('capestatus.battery.voltage', value);
     }
 
     if ('iout' in data) {
       var value = data.iout.toFixed(3);
-      socket.emit('capestatus.battery.current.out', value);
+      cockpit.emit('capestatus.battery.current.out', value);
     }
 
     if ('BT1I' in data) {
       var value = parseFloat(data['BT1I']);
-      socket.emit('capestatus.battery.current.battery1', value);
+      cockpit.emit('capestatus.battery.current.battery1', value);
     }
     if ('BT2I' in data) {
       var value = parseFloat(data['BT2I']);
-      socket.emit('capestatus.battery.current.battery2', value);
+      cockpit.emit('capestatus.battery.current.battery2', value);
     }
     if ('SC1I' in data) {
       var value = parseFloat(data['SC1I']);
-      socket.emit('capestatus.battery.current.esc1', value);
+      cockpit.emit('capestatus.battery.current.esc1', value);
     }
     if ('SC2I' in data) {
       var value = parseFloat(data['SC2I']);
-      socket.emit('capestatus.battery.current.esc2', value);
+      cockpit.emit('capestatus.battery.current.esc2', value);
     }
     if ('SC3I' in data) {
       var value = parseFloat(data['SC3I']);
-      socket.emit('capestatus.battery.current.esc3', value);
+      cockpit.emit('capestatus.battery.current.esc3', value);
     }
 
     if ('cpuUsage' in data) {
       var value = (data.cpuUsage * 100).toFixed(0);
-      socket.emit('capestatus.cpu', value);
+      cockpit.emit('capestatus.cpu', value);
     }
-
   }
 
   function Battery(name, minVoltage, maxVoltage) {

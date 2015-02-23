@@ -9,6 +9,7 @@
 var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server, { log: false, origins: '*:*' }), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
 var PluginLoader = require('./lib/PluginLoader');
 var ArduinoPhysics = require('./lib/ArduinoPhysics');
+var CockpitMessaging = require('./lib/CockpitMessaging');
 app.configure(function () {
   app.use(express.static(__dirname + '/static/'));
   app.use(express.json());
@@ -34,6 +35,19 @@ var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({ delay: DELAY });
 var controller = new OpenROVController(globalEventLoop);
 var arduinoUploadController = new OpenROVArduinoFirmwareController(globalEventLoop);
+
+// Prepare dependency map for plugins
+var deps = {
+  server: server,
+  app: app,
+  rov: controller,
+  config: CONFIG,
+  globalEventLoop: globalEventLoop,
+  physics: new ArduinoPhysics(),
+  cockpit: new CockpitMessaging(io)
+};
+
+
 controller.camera = camera;
 app.get('/config.js', function (req, res) {
   res.type('application/javascript');
@@ -56,72 +70,70 @@ app.use(function (req, res, next) {
 });
 var connections = 0;
 // SOCKET connection ==============================
-io.sockets.on('connection', function (socket) {
-  connections += 1;
-  if (connections == 1)
-    controller.start();
-  socket.send('initialize');
-  // opens socket with client
-  if (camera.IsCapturing) {
-    socket.emit('videoStarted');
-    console.log('Send videoStarted to client 2');
-  } else {
-    console.log('Trying to restart mjpeg streamer');
-    camera.capture();
-    socket.emit('videoStarted');
-  }
-  socket.on('videoStatus', function(clk) {
-    clk(camera.IsCapturing);
-  });
-
-  socket.emit('settings', CONFIG.preferences.get());
-  var lastping = 0;
-  socket.on('ping', function (id) {
-    socket.emit('pong', id);
-    if (new Date().getTime() - lastping > 1000) {
-      controller.send('ping(0)');
-      lastping = new Date().getTime();
-    }
-  });
-  socket.on('update_settings', function (value) {
-    for (var property in value)
-      if (value.hasOwnProperty(property))
-        CONFIG.preferences.set(property, value[property]);
-    CONFIG.savePreferences();
-    controller.updateSetting();
-    setTimeout(function () {
-      controller.requestSettings();
-    }, 1000);
-  });
-  socket.on('disconnect', function () {
-    connections -= 1;
-    console.log('disconnect detected');
-    if (connections === 0)
-      controller.stop();
-  });
-  controller.on('status', function (status) {
-    socket.volatile.emit('status', status);
-  });
-  controller.on('rovsys', function (data) {
-    socket.emit('rovsys', data);
-  });
-  controller.on('Arduino-settings-reported', function (settings) {
-    socket.emit('settings', settings);
-    console.log('sending arduino settings to web client');
-  });
-  controller.on('settings-updated', function (settings) {
-    socket.emit('settings', settings);
-    console.log('sending settings to web client');
-  });
-  globalEventLoop.on('videoStarted', function () {
-    socket.emit('videoStarted');
-    console.log('sent videoStarted to client');
-  });
-  globalEventLoop.on('videoStopped', function () {
-    socket.emit('videoStopped');
-  });
-  arduinoUploadController.initializeSocket(socket);
+connections += 1;
+if (connections == 1)
+  controller.start();
+// opens socket with client
+if (camera.IsCapturing) {
+  deps.cockpit.emit('videoStarted');
+  console.log('Send videoStarted to client 2');
+} else {
+  console.log('Trying to restart mjpeg streamer');
+  camera.capture();
+  deps.cockpit.emit('videoStarted');
+}
+deps.cockpit.on('videoStatus', function(clk) {
+  clk(camera.IsCapturing);
 });
+
+deps.cockpit.emit('settings', CONFIG.preferences.get());
+var lastping = 0;
+deps.cockpit.on('ping', function (id) {
+  deps.cockpit.emit('pong', id);
+  if (new Date().getTime() - lastping > 1000) {
+    controller.send('ping(0)');
+    lastping = new Date().getTime();
+  }
+});
+deps.cockpit.on('update_settings', function (value) {
+  for (var property in value)
+    if (value.hasOwnProperty(property))
+      CONFIG.preferences.set(property, value[property]);
+  CONFIG.savePreferences();
+  controller.updateSetting();
+  setTimeout(function () {
+    controller.requestSettings();
+  }, 1000);
+});
+deps.cockpit.on('disconnect', function () {
+  connections -= 1;
+  console.log('disconnect detected');
+  if (connections === 0)
+    controller.stop();
+});
+controller.on('status', function (status) {
+  deps.cockpit.volatile.emit('status', status);
+});
+controller.on('rovsys', function (data) {
+  deps.cockpit.emit('rovsys', data);
+});
+controller.on('Arduino-settings-reported', function (settings) {
+  deps.cockpit.emit('settings', settings);
+  console.log('sending arduino settings to web client');
+});
+controller.on('settings-updated', function (settings) {
+  deps.cockpit.emit('settings', settings);
+  console.log('sending settings to web client');
+});
+globalEventLoop.on('videoStarted', function () {
+  deps.cockpit.emit('videoStarted');
+  console.log('sent videoStarted to client');
+});
+globalEventLoop.on('videoStopped', function () {
+  deps.cockpit.emit('videoStopped');
+});
+arduinoUploadController.initializeSocket(deps.cockpit);
+
 camera.on('started', function () {
   console.log('emitted \'videoStarted\'');
   globalEventLoop.emit('videoStarted');
@@ -149,16 +161,7 @@ if (process.platform === 'linux') {
     process.exit(0);
   });
 }
-// Prepare dependency map for plugins
-var deps = {
-    server: server,
-    app: app,
-    io: io,
-    rov: controller,
-    config: CONFIG,
-    globalEventLoop: globalEventLoop,
-    physics: new ArduinoPhysics()
-  };
+
 // Load the plugins
 function addPluginAssets(result) {
   scripts = scripts.concat(result.scripts);

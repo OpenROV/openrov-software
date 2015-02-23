@@ -40,14 +40,13 @@
             });
 
             //This is now also used for the deadman switch.
-            var socket = window.cockpit.socket;
             setInterval(function () {
               var _starttime = new Date();
               self.beagletoBrowserMeter.tickStart();
-              socket.emit('ping', _starttime);
+              window.cockpit.rov.emit('ping', _starttime);
             }, 500);
 
-            socket.on('pong', function (id) {
+            window.cockpit.rov.on('pong', function (id) {
               self.beagletoBrowserMeter.tick();
             });
 

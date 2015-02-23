@@ -3,25 +3,24 @@
     console.log('Lights plugin loaded');
     var lights = 0;
 
-    deps.io.sockets.on('connection', function (socket) {
-      // Cockpit
-      socket.on('plugin.lights.toggle', function () {
-        toggleLights();
-      });
-
-      socket.on('plugin.lights.adjust', function (value) {
-        adjustLights(value);
-      });
-
-      // Arduino
-      deps.rov.on('status', function (data) {
-        if ('LIGP' in data) {
-          var level = 'level' + Math.ceil(data.LIGP * 10);
-          socket.emit('plugin.lights.level', level);
-        }
-      });
+    // Cockpit
+    deps.cockpit.on('plugin.lights.toggle', function () {
+      toggleLights();
     });
-  
+
+    deps.cockpit.on('plugin.lights.adjust', function (value) {
+      adjustLights(value);
+      console.log('$############' + value);
+    });
+
+    // Arduino
+    deps.rov.on('status', function (data) {
+      if ('LIGP' in data) {
+        var level = 'level' + Math.ceil(data.LIGP * 10);
+        deps.cockpit.emit('plugin.lights.level', level);
+      }
+    });
+
     var adjustLights = function (value) {
       if (lights === 0 && value < 0) {
         //this code rounds the horn so to speak by jumping from zero to max and vise versa
