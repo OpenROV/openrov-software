@@ -10,7 +10,6 @@
 
     deps.cockpit.on('plugin.lights.adjust', function (value) {
       adjustLights(value);
-      console.log('$############' + value);
     });
 
     // Arduino
