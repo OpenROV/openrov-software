@@ -121,7 +121,7 @@
 
           setInterval(update, 1000);
 
-          window.cockpit.rov.on('capestatus.navigationData', function (data) {
+          window.cockpit.rov.on('plugin.navigationData.data', function (data) {
             if ('depth' in data) {
               currentDepth = data.depth;
             }

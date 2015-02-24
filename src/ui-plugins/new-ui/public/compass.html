@@ -67,9 +67,6 @@
       },
       ready: function() {
         var self = this;
-        this.setHeading(this.heading);
-        this.setBearing(this.bearing);
-        this.format(this.options);
 
         window.cockpit.rov.on('rovpilot.headingHold.target', function(target) {
           self.setBearing(target);
@@ -81,6 +78,11 @@
           self.setHeading(data.heading);
         });
 
+      },
+      domReady: function() {
+        this.setHeading(this.heading);
+        this.setBearing(this.bearing);
+        this.format(this.options);
       },
       format:  function (newOptions) {
         this.options.indicator = newOptions.indicator ? newOptions.indicator : this.options.indicator;
