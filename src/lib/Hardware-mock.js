@@ -23,24 +23,24 @@ function Hardware() {
     var commandParts = command.split(/\(|\)/);
     var commandText = commandParts[0];
     if (commandText === 'rcap') {
-      hardware.emit('status', reader.parseStatus('CAPA:255'));
+      hardware.emitStatus('CAPA:255');
     }
     if (commandText === 'ligt') {
-      hardware.emit('status', reader.parseStatus('LIGP:' + commandParts[1] / 255));
+      hardware.emitStatus('LIGP:' + commandParts[1] / 255);
       console.log('HARDWARE-MOCK return light status');
     }
     if (commandText === 'tilt') {
-      hardware.emit('status', reader.parseStatus('servo:' + commandParts[1]));
+      hardware.emitStatus('servo:' + commandParts[1]);
       console.log('HARDWARE-MOCK return servo status');
     }
     if (commandText === 'claser') {
         if (hardware.laserEnabled) {
           hardware.laserEnabled = false;
-          hardware.emit('status', reader.parseStatus('claser:0'));
+          hardware.emitStatus('claser:0');
         }
         else {
           hardware.laserEnabled = true;
-          hardware.emit('status', reader.parseStatus('claser:255'));
+          hardware.emitStatus('claser:255');
         }
     }
 
@@ -58,7 +58,7 @@ function Hardware() {
             console.log('HARDWARE-MOCK depth hold DISABLED');
         }
         var status = 'targetDepth:' + (hardware.depthHoldEnabled ? targetDepth.toString() : DISABLED);
-        hardware.emit('status', reader.parseStatus(status));
+        hardware.emitStatus(status);
     }
 
     // Heading hold
@@ -75,23 +75,27 @@ function Hardware() {
             console.log('HARDWARE-MOCK heading hold DISABLED');
         }
         var status = 'targetHeading:' + (hardware.targetHoldEnabled ? targetHeading.toString() : DISABLED);
-        hardware.emit('status', reader.parseStatus(status));
+        hardware.emitStatus(status);
     }
 
     // example tests for passthrough
     if (commandText === 'example_to_foo') {
       var status = 'example_foo:' + commandParts[1];
-      hardware.emit('status', reader.parseStatus(status));
+      hardware.emitStatus(status);
     }
     if (commandText === 'example_to_bar') {
       var status = 'example_bar:' + commandParts[1];
-      hardware.emit('status', reader.parseStatus(status));
+      hardware.emitStatus(status);
+    }
+    hardware.emitStatus('cmd:' + command);
+  };
+  hardware.emitStatus = function(status) {
+    var txtStatus = reader.parseStatus(status);
+    hardware.emit('status', txtStatus);
+    if (emitRawSerial) {
+      hardware.emit('serial-recieved', status);
     }
 
-    hardware.emit('status', reader.parseStatus('cmd:' + command));
-    if (emitRawSerial) {
-      hardware.emit('serial-recieved', command);
-    }
   };
   hardware.close = function () {
     console.log('!Serial port closed');

@@ -13,7 +13,7 @@
   var Cockpit = function Cockpit(csocket) {
     var self = this;
     this.uiLoader = new window.UiLoader();
-    this.rov = new window.MessageManager(csocket, this);
+    this.rov = new window.MessageManager(csocket);
     this.sendUpdateEnabled = true;
     this.capabilities = 0;
     this.loadedPlugins = [];

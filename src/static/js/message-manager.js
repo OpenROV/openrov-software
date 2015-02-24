@@ -1,7 +1,6 @@
 (function(jQuery) {
-  var MessageManager = function(socket, cockpit) {
+  var MessageManager = function(socket) {
     this.socket = socket;
-    this.cockpit = cockpit;
 
     this.onAny(function(data1, data2, data3, data4, data5) {
       if (this.event !== 'newListener') {

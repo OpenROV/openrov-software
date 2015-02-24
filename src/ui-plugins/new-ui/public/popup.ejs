@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <!-- The following viewport code is intended to fullscreen the cockpit and prevent scrolling -->
+  <meta id="Viewport" name="viewport" width="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <script type='text/javascript' src="/bower_components/jquery/dist/jquery.min.js"></script>
+  <script type='text/javascript' src="/bower_components/jquery-ui//jquery-ui.min.js"></script>
+  <script type='text/javascript' src="/js/libs/eventemitter2.js"></script>
+  <script type='text/javascript' src="/socket.io/socket.io.js"></script>
+  <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
+
+  <script src="/js/message-manager.js"></script>
+
+
+  <link rel="import" href="/bower_components/polymer/polymer.html">
+  <link rel="import" href="<%= webComponent %>">
+
+
+  <title><%= title %></title>
+
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+  <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+</head>
+
+<body>
+
+<<%= uiElement %>></<%= uiElement %>>
+
+  <script>
+    var socket = window.io.connect();
+    window.cockpit = {
+      rov: new window.MessageManager(socket, this)
+    }
+  </script>
+
+</body>
+</html>

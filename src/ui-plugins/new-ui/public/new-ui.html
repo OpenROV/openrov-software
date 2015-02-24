@@ -95,11 +95,33 @@
     </div>
   </template>
   <script>
+    var hostname = document.location.hostname ? document.location.hostname : 'localhost';
+
     Polymer({
       domReady: function() {
         var bodyWidth = $(this.$.newuiBody).innerWidth();
         var controlpadWidth = $(this.$.newuiControlpad).innerWidth();
         $(this.$.newuiVideo).width(bodyWidth - controlpadWidth);
+
+        window.cockpit.extensionPoints.inputController.register(
+          {
+            name: "newUi.showTelemetry",
+            description: "Show the telemetry window.",
+            defaults: { keyboard: 'alt+t' },
+            down: function() {
+              var telemetryWindow =
+                window.open('/new-ui/telemetry',
+                '__telemetry',"menubar=no, status=no, titlebar=no, toolbar=no, width=300, height=400, location=no");
+              telemetryWindow.cockpit = window.cockpit;
+            }
+          });
+
+        window.cockpit.rov.on('plugin.serial-monitor.toggle', function() {
+          var newWindow =
+            window.open('/new-ui/serial-monitor',
+              '__telemetry',"menubar=no, status=no, titlebar=no, toolbar=no, width=300, height=400, location=no");
+          newWindow.cockpit = window.cockpit;
+        })
       },
       setMenu: function(menuItem) {
         menuItem.appendTo($(this.$.menu));
