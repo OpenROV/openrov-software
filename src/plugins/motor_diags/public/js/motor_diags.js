@@ -118,7 +118,7 @@
     var portVal = this.portMotorSpeed();
     var starbordVal = this.starbordMotorSpeed();
     var verticalVal = this.verticalMotorSpeed();
-    this.cockpit.rov.emit('motor-diag.motorTest', {
+    this.cockpit.rov.emit('plugin.motorDiag.motorTest', {
       port: portVal,
       starbord: starbordVal,
       vertical: verticalVal

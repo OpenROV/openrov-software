@@ -53,7 +53,7 @@
               direction = -1;
             }
             rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-            rov.cockpit.rov.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            rov.cockpit.rov.emit('plugin.rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
           }
         },
         {
@@ -63,7 +63,7 @@
           active: false,
           axis: function (v) {
             rov.lefty = v;
-            rov.cockpit.rov.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            rov.cockpit.rov.emit('plugin.rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
           }
         },
         {
@@ -80,7 +80,7 @@
               direction = -1;
             }
             rov.lift = direction * Math.max(Math.abs(rov.leftx), Math.abs(rov.rightx));
-            rov.cockpit.rov.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            rov.cockpit.rov.emit('plugin.rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
             console.log('rov.lift:' + rov.lift);
           }
         },
@@ -91,7 +91,7 @@
           active: false,
           axis: function (v) {
             rov.righty = v;
-            rov.cockpit.rov.emit('rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
+            rov.cockpit.rov.emit('plugin.rovpilot.manualMotorThrottle', rov.lefty, rov.lift, rov.righty);
           }
         }
       ]);

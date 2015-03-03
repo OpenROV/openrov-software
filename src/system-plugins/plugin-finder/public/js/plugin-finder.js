@@ -144,26 +144,26 @@
       $('#collapsePluginFinder').on('show', function (e) {
         if (self.model.cachedAvailablePlugins.length==0){
           self.model.isLoading(true);
-          self.cockpit.socket.emit('plugin-finder.search','');
+          self.cockpit.socket.emit('plugin.pluginFinder.search','');
         }
        });
     });
 
     this.model.install.subscribe(function(plugin){
       self.model.isInstalling(true);
-      self.cockpit.socket.emit('plugin-finder.install',plugin.rawPlugin.name);
+      self.cockpit.socket.emit('plugin.pluginFinder.install',plugin.rawPlugin.name);
     });
 
     this.model.uninstall.subscribe(function(plugin){
       self.model.isInstalling(true);
-      self.cockpit.socket.emit('plugin-finder.uninstall',plugin.rawPlugin.name);
+      self.cockpit.socket.emit('plugin.pluginFinder.uninstall',plugin.rawPlugin.name);
     });
 
     this.model.requestedPluginDetail.subscribe(function(plugin){
       window.open("http://bower.io/search/?q="+plugin.name(),"bowerInfo");
     });
 
-    self.cockpit.socket.on('pluginfindersearchresults', function(results){
+    self.cockpit.socket.on('plugin.pluginFinder.searchResults', function(results){
 
       console.log('evaluating plugin for pluginmanager');
       results.forEach(function (plugin) {
@@ -174,21 +174,21 @@
       self.model.isLoading(false);
     });
 
-    self.cockpit.socket.on('pluginfinderinstallresults', function(result){
+    self.cockpit.socket.on('plugin.pluginFinder.installResults', function(result){
       console.log(result);
       self.model.isInstalling(false);
     });
 
-    self.cockpit.socket.on('pluginfinderuninstallresults', function(result){
+    self.cockpit.socket.on('plugin.pluginFinder.uninstallResults', function(result){
       console.log(result);
       self.model.isInstalling(false);
     });
 
-    self.cockpit.socket.on('pluginfinderinstallstatus', function(status){
+    self.cockpit.socket.on('plugin.pluginFinder.installStatus', function(status){
       console.log(status);
     });
 
-    self.cockpit.socket.on('pluginfinderrestartRequired', function(){
+    self.cockpit.socket.on('plugin.pluginFinder.restartRequired', function(){
       alert('Plugin Installed, you will need to refresh the browser to load the plugin. ');
     });
 

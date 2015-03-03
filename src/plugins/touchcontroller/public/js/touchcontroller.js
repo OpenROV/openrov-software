@@ -16,8 +16,8 @@
         },
         dpad: {
           touchMove: function (details) {
-            cockpit.rov.emit('rovpilot.setThrottle', details.normalizedY);
-            cockpit.rov.emit('rovpilot.setYaw', details.normalizedX);
+            cockpit.rov.emit('plugin.rovpilot.setThrottle', details.normalizedY);
+            cockpit.rov.emit('plugin.rovpilot.setYaw', details.normalizedX);
             console.log(details.dx);
             console.log(details.dy);
             console.log(details.max);
@@ -34,7 +34,7 @@
         },
         dpad: {
           touchMove: function (details) {
-            cockpit.rov.emit('rovpilot.setLift', details.normalizedY);
+            cockpit.rov.emit('plugin.rovpilot.setLift', details.normalizedY);
           }
         }
       },
@@ -57,7 +57,7 @@
               y: 0
             },
             touchStart: function () {
-              cockpit.rov.emit('rovpilot.toggleLights');
+              cockpit.rov.emit('plugin.rovpilot.toggleLights');
             }
           },
           {
@@ -72,10 +72,10 @@
               y: '-15%'
             },
             touchStart: function () {
-              cockpit.rov.emit('rovpilot.setLift', 1);
+              cockpit.rov.emit('plugin.rovpilot.setLift', 1);
             },
             touchEnd: function () {
-              cockpit.rov.emit('rovpilot.setLift', 0);
+              cockpit.rov.emit('plugin.rovpilot.setLift', 0);
             }
           },
           {
@@ -90,10 +90,10 @@
               y: '0%'
             },
             touchStart: function () {
-              cockpit.rov.emit('rovpilot.setLift', -1);
+              cockpit.rov.emit('plugin.rovpilot.setLift', -1);
             },
             touchEnd: function () {
-              cockpit.rov.emit('rovpilot.setLift', 0);
+              cockpit.rov.emit('plugin.rovpilot.setLift', 0);
             }
           },
           {
@@ -108,7 +108,7 @@
               y: '-15%'
             },
             touchStart: function () {
-              cockpit.rov.emit('rovpilot.adjustCameraTilt', 0.1);
+              cockpit.rov.emit('plugin.rovpilot.adjustCameraTilt', 0.1);
             }
           },
           {
@@ -123,7 +123,7 @@
               y: '-5%'
             },
             touchStart: function () {
-              cockpit.rov.emit('rovpilot.setCameraTilt', 0);
+              cockpit.rov.emit('plugin.rovpilot.setCameraTilt', 0);
             }
           },
           {
@@ -138,7 +138,7 @@
               y: '4%'
             },
             touchStart: function () {
-              cockpit.rov.emit('rovpilot.adjustCameraTilt', -0.1);
+              cockpit.rov.emit('plugin.rovpilot.adjustCameraTilt', -0.1);
             }
           },
           {
@@ -153,7 +153,7 @@
               y: '-15%'
             },
             touchStart: function () {
-              cockpit.rov.emit('rovpilot.toggleLasers');
+              cockpit.rov.emit('plugin.rovpilot.toggleLasers');
             }
           }
         ]

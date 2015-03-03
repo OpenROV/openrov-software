@@ -68,10 +68,10 @@
       ready: function() {
         var self = this;
 
-        window.cockpit.rov.on('rovpilot.headingHold.target', function(target) {
+        window.cockpit.rov.on('plugin.rovpilot.headingHold.target', function(target) {
           self.setBearing(target);
         });
-        window.cockpit.rov.on('rovpilot.headingHold.disabled', function() {
+        window.cockpit.rov.on('plugin.rovpilot.headingHold.disabled', function() {
           self.setBearing(undefined);
         });
         window.cockpit.rov.on('plugin.navigationData.data', function(data) {

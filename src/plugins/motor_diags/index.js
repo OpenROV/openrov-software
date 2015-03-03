@@ -6,7 +6,7 @@ function motor_diags(name, deps) {
     console.log('mcal() sent');
   });
 
-  deps.cockpit.on('motor-diag.motorTest', function(positions){
+  deps.cockpit.on('plugin.motorDiag.motorTest', function(positions){
      deps.rov.sendMotorTest(positions.port, positions.starbord, positions.vertical);
     });
 
