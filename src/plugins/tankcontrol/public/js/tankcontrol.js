@@ -105,14 +105,14 @@
 
     if (!this.tankControlActive) {
       self.cockpit.extensionPoints.inputController.activate(controls);
-      rov.cockpit.rov.emit('tankControl.enabled');
+      rov.cockpit.rov.emit('plugin.tankControl.enabled');
       rov.tankControlActive = true;
       console.log('Tank Control Active');
     }
     else {
       self.cockpit.extensionPoints.inputController.deactivate(controls);
       rov.tankControlActive = false;
-      rov.cockpit.rov.emit('tankControl.disabled');
+      rov.cockpit.rov.emit('plugin.tankControl.disabled');
       console.log('Tank Control Deactivated');
     }
   };
