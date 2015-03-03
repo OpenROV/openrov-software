@@ -71,9 +71,9 @@
     };
 
     self.settingsModel.selectedBattery.subscribe(function(battery) {
-      self.cockpit.rov.emit('capestatus.battery.config', toBatteryConfig(battery) );
+      self.cockpit.rov.emit('plugin.capestatus.battery.config', toBatteryConfig(battery) );
     });
-    self.cockpit.rov.on('capestatus.request.battery.config', function(clb) {
+    self.cockpit.rov.on('plugin.capestatus.request.battery.config', function(clb) {
       clb(toBatteryConfig(self.settingsModel.selectedBattery()));
     });
 
@@ -159,7 +159,7 @@
       self.updateConnectionStatus();
       var now = new Date();
       var nowFormatted = now.toLocaleTimeString();
-      self.cockpit.rov.emit('capestatus.time.time', { raw: now, formatted: nowFormatted});
+      self.cockpit.rov.emit('plugin.capestatus.time.time', { raw: now, formatted: nowFormatted});
     }, 1000);
 
   };
@@ -184,7 +184,7 @@
 
     var isConnected = delay <= 3000;
 
-    self.cockpit.rov.emit('capestatus.connection.' + (isConnected ? 'connected' : 'disconnected'));
+    self.cockpit.rov.emit('plugin.capestatus.connection.' + (isConnected ? 'connected' : 'disconnected'));
   };
 
   window.Cockpit.plugins.push(capestatus.Capestatus);

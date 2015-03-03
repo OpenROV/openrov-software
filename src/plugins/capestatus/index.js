@@ -88,43 +88,43 @@ function capestatus(name, deps) {
   function handleStatus(cockpit, data) {
     if ('time' in data) {
       var formattedRuntime = msToTime(data.time);
-      cockpit.emit('capestatus.time.runtime', { raw: data.time, formatted: formattedRuntime});
+      cockpit.emit('plugin.capestatus.time.runtime', { raw: data.time, formatted: formattedRuntime});
     }
 
     if ('vout' in data) {
       var value = data.vout.toFixed(1);
-      cockpit.emit('capestatus.battery.voltage', value);
+      cockpit.emit('plugin.capestatus.battery.voltage', value);
     }
 
     if ('iout' in data) {
       var value = data.iout.toFixed(3);
-      cockpit.emit('capestatus.battery.current.out', value);
+      cockpit.emit('plugin.capestatus.battery.current.out', value);
     }
 
     if ('BT1I' in data) {
       var value = parseFloat(data['BT1I']);
-      cockpit.emit('capestatus.battery.current.battery1', value);
+      cockpit.emit('plugin.capestatus.battery.current.battery1', value);
     }
     if ('BT2I' in data) {
       var value = parseFloat(data['BT2I']);
-      cockpit.emit('capestatus.battery.current.battery2', value);
+      cockpit.emit('plugin.capestatus.battery.current.battery2', value);
     }
     if ('SC1I' in data) {
       var value = parseFloat(data['SC1I']);
-      cockpit.emit('capestatus.battery.current.esc1', value);
+      cockpit.emit('plugin.capestatus.battery.current.esc1', value);
     }
     if ('SC2I' in data) {
       var value = parseFloat(data['SC2I']);
-      cockpit.emit('capestatus.battery.current.esc2', value);
+      cockpit.emit('plugin.capestatus.battery.current.esc2', value);
     }
     if ('SC3I' in data) {
       var value = parseFloat(data['SC3I']);
-      cockpit.emit('capestatus.battery.current.esc3', value);
+      cockpit.emit('plugin.capestatus.battery.current.esc3', value);
     }
 
     if ('cpuUsage' in data) {
       var value = (data.cpuUsage * 100).toFixed(0);
-      cockpit.emit('capestatus.cpu', value);
+      cockpit.emit('plugin.capestatus.cpu', value);
     }
   }
 
