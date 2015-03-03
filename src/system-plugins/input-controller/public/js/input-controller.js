@@ -51,6 +51,10 @@
   };
 
   inputController.InputController.prototype.register = function (control) {
+    this._register(control, true);
+  };
+
+  inputController.InputController.prototype._register = function (control, doCheck) {
     var self = this;
     if (control === undefined)
       return;
@@ -61,7 +65,6 @@
         return;
       var command = new inputController.Command(aControl);
       self.registerdCommands[command.name] = command;
-
 
       self.model.commands.push(command);
       console.log('InputController: Registering control ' + command.name);
@@ -75,7 +78,9 @@
       });
     });
     self.controlsToRegister = [];
-    self.checkDuplicates();
+    if (doCheck) {
+      self.checkDuplicates();
+    }
   };
 
   inputController.InputController.prototype.unregister = function (controlName) {
@@ -99,7 +104,7 @@
       commandsToRegister.push(self.registerdCommands[command]);
     }
     self.model.commands.length = 0;
-    self.register(commandsToRegister);
+    self._register(commandsToRegister, false);
   };
 
   inputController.InputController.prototype.activate = function(controlName) {
@@ -116,7 +121,7 @@
       }
 
       command.active = true;
-      self.register(command);
+      self._register(command, false);
 
       console.log("activated command " + command.name);
     });
@@ -130,7 +135,7 @@
       command.active = false;
       self.unregister(command);
       command.replaced.forEach(function(oldcommand){
-        self.register(oldcommand);
+        self._register(oldcommand, false);
         console.log("re-activated " + oldcommand.name);
       });
       command.replaced = null;
