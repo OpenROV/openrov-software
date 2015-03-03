@@ -14,13 +14,8 @@
 
     };
     this.disable = function () {
-      alert('new ui disabled');
     };
 
-    function loadNewUi(rootElement) {
-
-
-    }
   };
   window.Cockpit.UIs.push(new Ui());
 }(window, jQuery));

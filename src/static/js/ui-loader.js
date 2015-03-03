@@ -12,7 +12,7 @@
       return (ui.name === name);
     });
     if (newUi && newUi.length > 0) {
-      if (this.currentUI) {
+      if (this.currentUI && this.currentUI.disable) {
         this.currentUI.disable();
       }
 
@@ -20,6 +20,9 @@
         $('#UI').append(newUi[0].template);
         self.currentUI = newUi[0];
         $(function() {
+          if (self.currentUI.loaded) {
+            self.currentUI.loaded();
+          }
           done();
         });
       });

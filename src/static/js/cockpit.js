@@ -30,11 +30,15 @@
       };
 
       self.extensionPoints.rovSettings.registerCloseHandler = function(handler) {
+        if (self.extensionPoints.rovSettings[0]) {
           self.extensionPoints.rovSettings[0].registerCloseHandler(handler);
-        };
+        }
+       };
       self.extensionPoints.rovDiagnostics.registerCloseHandler = function(handler) {
+        if (self.extensionPoints.rovDiagnostics[0]) {
           self.extensionPoints.rovDiagnostics[0].registerCloseHandler(handler);
-        };
+        }
+      };
 
       self.loadPlugins();
       console.log('loaded plugins');
