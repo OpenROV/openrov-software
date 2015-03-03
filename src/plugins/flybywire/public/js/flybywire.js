@@ -28,7 +28,7 @@
       {
         name: "flyByWire.toggle",
         description: "Enables/disable fly-by-wire.",
-        defaults: { keyboard: 'g' },
+        defaults: { keyboard: 'g', gamepad: 'RB' },
         down: function() { rov.toggleControl();  }
       });
 

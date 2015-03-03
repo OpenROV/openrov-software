@@ -81,19 +81,6 @@ var OpenROVController = function (eventLoop, client) {
   controller.ArduinoFirmwareVersion = 0;
   controller.Capabilities = 0;
 
-  controller.notSafeToControl = function () {
-    //Arduino is OK to accept commands. After the Capabilities was added, all future updates require
-    //being backward safe compatible (meaning you cannot send a command that does something unexpected but
-    //instead it should do nothing).
-    if (controller.Capabilities !== 0)
-      return false;
-    //This feature added after the swap to ms on the Arduino
-    console.log('Waiting for the capability response from Arduino before sending command.');
-    console.log('Arduno Version: ' + controller.ArduinoFirmwareVersion);
-    console.log('Capability bitmap: ' + controller.Capabilities);
-    return true;
-  };
-
   globalEventLoop.on('register-ArdunoFirmwareVersion', function (val) {
     controller.ArduinoFirmwareVersion = val;
   });
@@ -113,26 +100,38 @@ var OpenROVController = function (eventLoop, client) {
   globalEventLoop.on('serial-start', function () {
     controller.hardware.connect();
     controller.updateSetting();
+    controller.requestSettings();
+    controller.requestCapabilities();
     logger.log('Opened serial connection after firmware upload');
   });
 
-  controller.updateSetting();
   //Every few seconds we check to see if capabilities or settings changes on the arduino.
   //This handles the cases where we have garbled communication or a firmware update of the arduino.
-  controller.requestSettings();
-  controller.requestCapabilities();
-
   setInterval(function () {
-    if (!controller.notSafeToControl()) return;
+    if (controller.notSafeToControl() === false) return;
       controller.updateSetting();
       controller.requestSettings();
       controller.requestCapabilities();
-  }, 10000);
+  }, 1000);
 
   return controller;
 };
 OpenROVController.prototype = new EventEmitter();
 OpenROVController.prototype.constructor = OpenROVController;
+
+OpenROVController.prototype.notSafeToControl = function () {
+  //Arduino is OK to accept commands. After the Capabilities was added, all future updates require
+  //being backward safe compatible (meaning you cannot send a command that does something unexpected but
+  //instead it should do nothing).
+  if (this.Capabilities !== 0)
+    return false;
+  //This feature added after the swap to ms on the Arduino
+  console.log('Waiting for the capability response from Arduino before sending command.');
+  console.log('Arduno Version: ' + this.ArduinoFirmwareVersion);
+  console.log('Capability bitmap: ' + this.Capabilities);
+  return true;
+};
+
 
 OpenROVController.prototype.send = function (cmd) {
   var controller = this;
@@ -159,7 +158,6 @@ OpenROVController.prototype.requestSettings = function () {
 };
 
 OpenROVController.prototype.updateSetting = function () {
-
   var command = 'updateSetting(' + CONFIG.preferences.get('smoothingIncriment') + ',' + CONFIG.preferences.get('deadzone_neg') + ',' + CONFIG.preferences.get('deadzone_pos') + ',' + CONFIG.preferences.get('water_type') + ';';
   this.hardware.write(command);
   //This is the multiplier used to make the motor act linear fashion.
@@ -185,7 +183,9 @@ OpenROVController.prototype.updateSetting = function () {
     nstarbord = nstarbord * -1;
   }
   //API to Arduino to pass a percent in 2 decimal accuracy requires multipling by 100 before sending.
-  command = 'mtrmod(' + port * 100 + ',' + vertical * 100 + ',' + starbord * 100 + ',' + nport * 100 + ',' + nvertical * 100 + ',' + nstarbord * 100 + ');';
+  command = 'mtrmod1(' + port * 100 + ',' + vertical * 100 + ',' + starbord * 100 + ');';
+  this.hardware.write(command);
+  command = 'mtrmod2(' + nport * 100 + ',' + nvertical * 100 + ',' + nstarbord * 100 + ');';
   this.hardware.write(command);
 };
 

@@ -15,33 +15,19 @@
     var self = this;
 
     self.showAlerts = ko.observable(false);
-    self.branches = ko.observableArray();
     self.isSaved = ko.observable(false);
-
-    self.changeSelectedBranches = function() {
-      var selected = [];
-      self.branches().forEach(function(branch) {
-        if (branch.selected() === true) {
-          selected.push(branch.name);
-        }
-      });
-      configManager.setSelectedBranches( { branches: selected });
-      self.isSaved(true);
-      setTimeout(function() {self.isSaved(false)}, 2000);
-      return true;
-    };
+    self.configLoaded = ko.observable(false);
 
     configManager.getShowAlerts(function(showAlerts){
       self.showAlerts(showAlerts);
+      self.configLoaded(true);
       subscribeToShowAlerts();
     });
-    getBranches();
 
     function subscribeToShowAlerts() {
       var showAlertsSubscription = undefined;
       showAlertsSubscription = self.showAlerts.subscribe(function(newValue){
         if (self.showAlerts()) {
-          getBranches();
           showAlertsSubscription.dispose();
         }
         configManager.setShowAlerts(self.showAlerts());
@@ -50,28 +36,6 @@
         return true;
       });
     }
-
-    function getBranches() {
-      updateChecker.getBranches(function (branches) {
-          configManager.getSelectedBranches(function (selectedBranches) {
-            self.branches.removeAll();
-            var selected = selectedBranches.branches ? selectedBranches.branches : branches;
-            if (selected.length === 0) { selected = branches; }
-            branches.forEach(function (branch) {
-              var branchConfig = selected.filter(function (b) {
-                return b == branch;
-              });
-              self.branches.push({ name: branch, selected: ko.observable(branchConfig.length > 0)});
-            });
-            self.changeSelectedBranches();
-          });
-        })
-      }
-      configManager.setShowAlerts(self.showAlerts());
-      self.isSaved(true);
-      setTimeout(function() {
-        self.isSaved(false)
-      }, 2000);
   };
 
   var SoftwareUpdater = function SoftwareUpdater(cockpit) {
@@ -84,6 +48,7 @@
 
     console.log('Loading Software update plugin.');
     this.cockpit = cockpit;
+    var packagesUpdated = false;
 
     this.cockpit.extensionPoints.rovSettings.append('<div id="software-update-settings"></div>');
     $('body').prepend('<div id="software-update-alert-container" class="alert alert-success hide"></div>');
@@ -120,7 +85,7 @@
     ko.applyBindings(logoTitleModel, $('a.brand')[0]);
 
     self.model.showAlerts.subscribe(function(newValue) {
-      if ((self.model.showAlerts() !== newValue) && newValue === true) {
+      if (self.model.configLoaded() === true && newValue === true && packagesUpdated === true) {
         setTimeout(function() {
           checkForUpdates(checker);
         }, 5000);
@@ -129,9 +94,10 @@
 
     setTimeout(
       function() {
-        $.post(configManager.dashboardUrl() + '/plugin/software/update/run')
+        $.post(configManager.dashboardUrl() + '/plugin/software/update/start')
           .done(function() {
-            console.log('Started apt-get update on cockpit');
+            packagesUpdated = true;
+            console.log('Done apt-get update on cockpit');
             checkForUpdates(checker);
            })
           .fail(function() { console.log('Error starting apt-get update on cockpit') });
@@ -151,4 +117,5 @@
 
   };
   window.Cockpit.plugins.push(SoftwareUpdater);
+
 }(window, jQuery));

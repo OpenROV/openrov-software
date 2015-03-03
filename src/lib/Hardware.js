@@ -33,12 +33,22 @@ function Hardware() {
         hardware.emit('serial-recieved', data + '\n');
     });
   };
+
+
+  // This code intentionally spaces out the serial commands so that the buffer does not overflow
+  var timesent = new Date();
   hardware.write = function (command) {
     logger.log(command);
     if (CONFIG.production && serialConnected) {
-      hardware.serial.write(command);
-      if (emitRawSerialData)
-        hardware.emit('serial-sent', command);
+      var currenttime = new Date();
+      var delay = 3-((currenttime.getTime() - timesent.getTime()));
+      if (delay < 0) delay = 0;
+      timesent = currenttime; 
+      timesent.setMilliseconds(timesent.getMilliseconds + delay);
+      setTimeout(function(){
+        hardware.serial.write(command);
+        if (emitRawSerialData)  hardware.emit('serial-sent', command);
+      }, delay);
     } else {
       logger.log('DID NOT SEND');
     }

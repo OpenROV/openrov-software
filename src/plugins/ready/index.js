@@ -34,18 +34,6 @@ function readyAyeReady(name, deps) {
   }
 
 
-  // to get the Arduino ready, request the capabilities
-  var checkId = setInterval(
-     function() {
-      if (! deps.rov.notSafeToControl()) {
-        clearInterval(checkId);
-      }
-      else {
-        deps.rov.requestCapabilities();
-      }
-    },
-    200);
-
   deps.rov.on('command', function(command) {
    lastLightCmd = command;
   });

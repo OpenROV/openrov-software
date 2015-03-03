@@ -15,20 +15,11 @@
   function SoftwareUpdateChecker(config) {
     var self = this;
 
-    self.getBranches = function(callback) {
-      setTimeout(function() {
-        $.get(config.dashboardUrl() + "/plugin/software/branches", callback );
-      }, 3000);
-    };
-
     self.checkForUpdates = function(callback){
-      config.getSelectedBranches(function(selectedBranches){
-        $.postJSON(
-          config.dashboardUrl() + "/plugin/software/updates",
-          selectedBranches,
-          function(updates) {
-            callback(updates);
-          });
+      $.get(
+        config.dashboardUrl() + "/plugin/software/updates/openrov-rov-*",
+        function(updates) {
+          callback(updates);
         });
       return { updates: false }
     };

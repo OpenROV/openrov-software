@@ -35,4 +35,9 @@ echo "# No persist!" >> /etc/udev/rules.d/70-persistent-net.rules
 # setup the 'reset' GPIO configuration
 /opt/openrov/cockpit/linux/reset.sh
 
+# delete the emmc-copy log if present
+if [ -f '/var/log/copy-to-emmc.log' ]; then
+  rm /var/log/copy-to-emmc.log
+fi
+
 exit 0

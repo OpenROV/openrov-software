@@ -11,9 +11,9 @@
         {
           name: "plugin.cameraTilt.adjust_down",
           description: "Point the camera further down.",
-          defaults: { keyboard: 'z', gamepad: 'Y' },
+          defaults: { keyboard: 'z', gamepad: 'A' },
           down: function () {
-            cockpit.rov.emit('plugin.cameraTilt.adjust', 0.1);
+            cockpit.rov.emit('plugin.cameraTilt.adjust', -0.1);
           }
         },
         {
@@ -27,9 +27,9 @@
         {
           name: "plugin.cameraTilt.adjust_up",
           description: "Point the camera further up.",
-          defaults: { keyboard: 'q', gamepad: 'A' },
+          defaults: { keyboard: 'q', gamepad: 'Y' },
           down: function () {
-            cockpit.rov.emit('plugin.cameraTilt.adjust', -0.1);
+            cockpit.rov.emit('plugin.cameraTilt.adjust', 0.1);
           }
         }
       ]);
