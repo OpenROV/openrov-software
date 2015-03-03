@@ -6,7 +6,7 @@
  * milliseconds.
  *
  */
-var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server, { log: false, origins: '*:*' }), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), OpenROVArduinoFirmwareController = require('./lib/OpenROVArduinoFirmwareController'), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
+var CONFIG = require('./lib/config'), fs = require('fs'), express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io').listen(server, { log: false, origins: '*:*' }), EventEmitter = require('events').EventEmitter, OpenROVCamera = require(CONFIG.OpenROVCamera), OpenROVController = require(CONFIG.OpenROVController), logger = require('./lib/logger').create(CONFIG), mkdirp = require('mkdirp'), path = require('path');
 var PluginLoader = require('./lib/PluginLoader');
 var ArduinoPhysics = require('./lib/ArduinoPhysics');
 var CockpitMessaging = require('./lib/CockpitMessaging');
@@ -35,7 +35,6 @@ var DELAY = Math.round(1000 / CONFIG.video_frame_rate);
 var camera = new OpenROVCamera({ delay: DELAY });
 var client = new CockpitMessaging(io);
 var controller = new OpenROVController(globalEventLoop, client);
-var arduinoUploadController = new OpenROVArduinoFirmwareController(globalEventLoop);
 
 // Prepare dependency map for plugins
 var deps = {
@@ -131,7 +130,6 @@ globalEventLoop.on('videoStarted', function () {
 globalEventLoop.on('videoStopped', function () {
   deps.cockpit.emit('videoStopped');
 });
-arduinoUploadController.initializeSocket(deps.cockpit);
 
 camera.on('started', function () {
   console.log('emitted \'videoStarted\'');

@@ -81,24 +81,11 @@
   //so that the reference to this instance is available for further processing
   Arduinofirmwareupload.prototype.listen = function listen() {
     var arduinofirmware = this;
-    $('#diagnostic .back-button').click(function () {
+    this.cockpit.extensionPoints.rovSettings.registerCloseHandler(function () {
       arduinofirmware.SaveSettings();
     });
     this.cockpit.rov.on('settings', function (data) {
       arduinofirmware.LoadSettings(data);
-    });
-    this.cockpit.rov.on('arduinofirmware-requestmoredata', function (data) {
-      arduinofirmware.arduinoFirmwareVM.uploadPercentage(data.Percent);
-      var Place = data.Place * 524288;
-      //The Next Blocks Starting Position
-      var NewFile;
-      //The Variable that will hold the new Block of Data
-      if (selectedFile.slice !== undefined) {
-        NewFile = selectedFile.slice(Place, Place + Math.min(524288, selectedFile.size - Place));
-      } else if (selectedFile.webkitSlice !== undefined) {
-        NewFile = selectedFile.webkitSlice(Place, Place + Math.min(524288, selectedFile.size - Place));
-      }
-      fileReader.readAsBinaryString(NewFile);
     });
     this.cockpit.rov.on('arduinofirmware-uploaddone', function (data) {
       arduinofirmware.arduinoFirmwareVM.uploaded(true);
