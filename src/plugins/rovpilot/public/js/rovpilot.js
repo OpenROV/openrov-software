@@ -19,16 +19,6 @@
     // =============== input settings =============
     rov.cockpit.extensionPoints.inputController.register(
       [
-        // All Trim hold toggle
-        {
-          name: "rovPilot.toggleAllTrimHold",
-          description: "Toggle all trim hold functions on/off",
-          defaults: { gamepad: 'RB' },
-          down: function () {
-            rov.cockpit.rov.emit('rovpilot.toggleAllTrimHold');
-          }
-        },
-
         // Increment power level
         {
           name: "rovPilot.incrementPowerLevel",
