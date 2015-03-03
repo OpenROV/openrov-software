@@ -21,7 +21,7 @@ PhotoCapture.prototype.listen = function listen(deps) {
 
     deps.cockpit.on('plugin.photoCapture.snapshot', function () {
       console.log('PhotoCapure:snapshot found');
-      dep.rov.camera.snapshot(function (filename) {
+      dep.camera.snapshot(function (filename) {
         console.log('Photo taken: ' + filename);
         deps.cockpit.emit('plugin.photoCapture.photos.added', '/photos/' + path.basename(filename));
       });

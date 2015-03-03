@@ -138,32 +138,32 @@
     var jsFileLocation = urlOfJsFile('plugin-finder.js');
     var finderSettings = this.cockpit.extensionPoints.rovSettings.find('#plugin-finder-settings');
       finderSettings.load(jsFileLocation + '../settings.html', function () {
-      //Get plugins from somewhere and bind them somewhere
-      ko.applyBindings(self.model, finderSettings[0]);
+        //Get plugins from somewhere and bind them somewhere
+        ko.applyBindings(self.model, finderSettings[0]);
 
-      $('#collapsePluginFinder').on('show', function (e) {
+        finderSettings.find('#collapsePluginFinder').on('show', function (e) {
         if (self.model.cachedAvailablePlugins.length==0){
           self.model.isLoading(true);
-          self.cockpit.socket.emit('plugin.pluginFinder.search','');
+          self.cockpit.rov.emit('plugin.pluginFinder.search','');
         }
        });
     });
 
     this.model.install.subscribe(function(plugin){
       self.model.isInstalling(true);
-      self.cockpit.socket.emit('plugin.pluginFinder.install',plugin.rawPlugin.name);
+      self.cockpit.rov.emit('plugin.pluginFinder.install',plugin.rawPlugin.name);
     });
 
     this.model.uninstall.subscribe(function(plugin){
       self.model.isInstalling(true);
-      self.cockpit.socket.emit('plugin.pluginFinder.uninstall',plugin.rawPlugin.name);
+      self.cockpit.rov.emit('plugin.pluginFinder.uninstall',plugin.rawPlugin.name);
     });
 
     this.model.requestedPluginDetail.subscribe(function(plugin){
       window.open("http://bower.io/search/?q="+plugin.name(),"bowerInfo");
     });
 
-    self.cockpit.socket.on('plugin.pluginFinder.searchResults', function(results){
+    self.cockpit.rov.on('plugin.pluginFinder.searchResults', function(results){
 
       console.log('evaluating plugin for pluginmanager');
       results.forEach(function (plugin) {
@@ -174,21 +174,21 @@
       self.model.isLoading(false);
     });
 
-    self.cockpit.socket.on('plugin.pluginFinder.installResults', function(result){
+    self.cockpit.rov.on('plugin.pluginFinder.installResults', function(result){
       console.log(result);
       self.model.isInstalling(false);
     });
 
-    self.cockpit.socket.on('plugin.pluginFinder.uninstallResults', function(result){
+    self.cockpit.rov.on('plugin.pluginFinder.uninstallResults', function(result){
       console.log(result);
       self.model.isInstalling(false);
     });
 
-    self.cockpit.socket.on('plugin.pluginFinder.installStatus', function(status){
+    self.cockpit.rov.on('plugin.pluginFinder.installStatus', function(status){
       console.log(status);
     });
 
-    self.cockpit.socket.on('plugin.pluginFinder.restartRequired', function(){
+    self.cockpit.rov.on('plugin.pluginFinder.restartRequired', function(){
       alert('Plugin Installed, you will need to refresh the browser to load the plugin. ');
     });
 

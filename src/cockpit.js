@@ -41,6 +41,7 @@ var deps = {
   server: server,
   app: app,
   rov: controller,
+  camera: camera,
   cockpit: client,
   config: CONFIG,
   globalEventLoop: globalEventLoop,
