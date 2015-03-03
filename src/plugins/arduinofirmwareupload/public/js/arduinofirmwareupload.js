@@ -35,24 +35,7 @@
           });
 
           firmwareModal.find('#arduinoFirmware-startupload').click(function () {
-            fileReader.onload = function (evnt) {
-              console.log('Upload event: ' + selectedFile.name);
-              self.cockpit.rov.emit('arduinofirmware-upload', {
-                'filename': selectedFile.name,
-                data: evnt.target.result
-              });
-            };
-            if (!selectedFile) {
-              selectedFile = {};
-              selectedFile.name = 'fromSource';
-              self.cockpit.rov.emit('arduinofirmware-uploadfromsource');
-            }
-            console.log('Starting upload: ' + selectedFile.name);
-            self.cockpit.rov.emit('arduinofirmware-startupload', {
-              'filename': selectedFile.name,
-              'size': selectedFile.size
-            });
-            selectedFile = null;
+            self.cockpit.rov.emit('plugin.arduinoFirmwareUpload.install');
           });
           firmwareModal.find('#arduinoFirmware-closeupload').click(function () {
             self.arduinoFirmwareVM.reset();
@@ -65,12 +48,6 @@
     /* ------------------------------------------
                firmware upload
             */
-    var selectedFile;
-    var fileReader = new FileReader();
-    //$('#arduinoFirmware').live('change', function (evnt) {
-    //  selectedFile = evnt.target.files[0];
-    //  self.selectedFile(selectedFile);
-    //});
 
     this.arduinoFirmwareVM.details.subscribe(function (data) {
       firmwareModal.find('#arduiniFirmware-details').scrollTop(
@@ -91,10 +68,10 @@
       arduinofirmware.arduinoFirmwareVM.uploaded(true);
       arduinofirmware.arduinoFirmwareVM.uploadPercentage(100);
     });
-    this.cockpit.rov.on('arduinoFirmware-status', function (data) {
+    this.cockpit.rov.on('plugin.arduinoFirmwareUpload.status', function (data) {
       arduinofirmware.arduinoFirmwareVM.updateStatus(data);
     });
-    this.cockpit.rov.on('arduinoFirmware-output', function (data) {
+    this.cockpit.rov.on('plugin.arduinoFirmwareUpload.output', function (data) {
       arduinofirmware.arduinoFirmwareVM.logOutput(data);
     });
   };
@@ -108,7 +85,6 @@ function ArduinoFirmwareViewModel() {
   var self = this;
   var numberOfSteps = 6;
   self.stepsDone = ko.observable(0);
-  self.selectedFile = ko.observable();
   self.uploadPercentage = ko.observable(0);
   self.uploaded = ko.observable(false);
   self.unpacking = ko.observable(false);
@@ -122,7 +98,6 @@ function ArduinoFirmwareViewModel() {
   self.failed = ko.observable(false);
   self.reset = function () {
     self.stepsDone(0);
-    self.selectedFile('');
     self.uploadPercentage(0);
     self.uploaded(false);
     self.unpacked(false);
@@ -135,24 +110,6 @@ function ArduinoFirmwareViewModel() {
     self.details('');
     self.failed(false);
   };
-  self.selectedFileName = ko.computed(function () {
-    if (self.selectedFile()) {
-      return self.selectedFile().name;
-    }
-    return '';
-  });
-  self.isValidFirmwareFile = ko.computed(function () {
-    var fileName = self.selectedFileName();
-    var ext = fileName.split('.').pop().toLowerCase();
-    return $.inArray(ext, [
-      'zip',
-      'ino',
-      'gz'
-    ]) != -1;
-  });
-  self.browserDoesSupportFileApi = ko.computed(function () {
-    return !(window.File && window.FileReader);
-  });
   self.overallPercentage = ko.computed(function () {
     var percentage = 100 / numberOfSteps * self.stepsDone();
     console.log('percentage: ' + numberOfSteps + ' done: ' + self.stepsDone());
