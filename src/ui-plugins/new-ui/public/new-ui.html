@@ -17,7 +17,7 @@
     <div id="newuiBody" class="full-height">
       <div id="newuiContainer">
         <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
-          <div id="newui-topbar" class="navbar-inner">
+          <div id="newuiTopbar" class="navbar-inner">
             <a class="brand" href="#"><img src="../../themes/OpenROV/img/openrov.png" class="logo"><span class="navbar-titel">Cockpit</span></a>
             <div id="menu">
               <rov-menu id="menuitems" class="nav pull-right">
@@ -28,53 +28,55 @@
           </div>
         </div>
       </div>
-      <div id="newuiVideo" class="full-height">
-        <rov-video id="videoElement"></rov-video>
-        <rov-horizon id="horizon"></rov-horizon>
-      </div>
-      <div id="newuiControlpad">
-        <div class="newui-item" id="heading-item">
-          <div class="center">
-            <H4>Heading</H4>
-            <div id="newui-compass" class="center control">
-              <newui-compass class="center" heading="0"></newui-compass>
+      <div id="mainContent">
+        <div id="newuiVideo" class="full-height">
+          <rov-video id="videoElement"></rov-video>
+          <rov-horizon id="horizon"></rov-horizon>
+        </div>
+        <div id="newuiControlpad">
+          <div class="newui-item" id="heading-item">
+            <div class="center">
+              <H4>Heading</H4>
+              <div id="newui-compass" class="center control">
+                <newui-compass class="center" heading="0"></newui-compass>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="newui-item" id="depth-item">
-          <div class="center">
-            <H4>Depth</H4>
-            <!--<div id="newui-depth" class="center control"></div>-->
-            <newui-depth id="newui-depth" class="center control"></newui-depth>
-          </div>
-        </div>
-        <div class="newui-item" id="throttle-item">
-          <div class="center">
-            <H4>Throttle</H4>
-            <div id="newui-throttle" class="center control"></div>
-          </div>
-        </div>
-        <div class="newui-item" id="power-item">
-          <div class="center">
-            <H4>Battery</H4>
-            <div id="newui-power" class="center control">
-              <newui-power id="power"></newui-power>
+          <div class="newui-item" id="depth-item">
+            <div class="center">
+              <H4>Depth</H4>
+              <!--<div id="newui-depth" class="center control"></div>-->
+              <newui-depth id="newui-depth" class="center control"></newui-depth>
             </div>
           </div>
-        </div>
-        <div class="newui-item" id="switches-item">
-          <div class="center">
-            <H4>Switches</H4>
-            <div id="newui-switches" class="center control">
-              <newui-switches id="newui-switches" class="center"></newui-switches>
+          <div class="newui-item hidden" id="throttle-item">
+            <div class="center">
+              <H4>Throttle</H4>
+              <div id="newui-throttle" class="center control"></div>
             </div>
           </div>
-        </div>
-        <div class="newui-item" id="time-item">
-          <div class="center">
-            <H4>Time</H4>
-            <div id="newui-time" class="center control">
-              <newui-time></newui-time>
+          <div class="newui-item" id="power-item">
+            <div class="center">
+              <H4>Battery</H4>
+              <div id="newui-power" class="center control">
+                <newui-power id="power"></newui-power>
+              </div>
+            </div>
+          </div>
+          <div class="newui-item" id="switches-item">
+            <div class="center">
+              <H4>Switches</H4>
+              <div id="newui-switches" class="center control">
+                <newui-switches id="newui-switches" class="center"></newui-switches>
+              </div>
+            </div>
+          </div>
+          <div class="newui-item" id="time-item">
+            <div class="center">
+              <H4>Time</H4>
+              <div id="newui-time" class="center control">
+                <newui-time></newui-time>
+              </div>
             </div>
           </div>
         </div>
@@ -99,9 +101,20 @@
 
     Polymer({
       domReady: function() {
-        var bodyWidth = $(this.$.newuiBody).innerWidth();
-        var controlpadWidth = $(this.$.newuiControlpad).innerWidth();
-        $(this.$.newuiVideo).width(bodyWidth - controlpadWidth);
+        var self = this;
+
+        var size = function() {
+          var bodyWidth = $(self.$.newuiBody).innerWidth();
+          var bodyHeight = $(self.$.newuiBody).innerHeight();
+          var topBarHeight = $(self.$.newuiTopbar).innerHeight();
+          $(self.$.mainContent).width(bodyWidth);
+          var controlpadWidth = $(self.$.newuiControlpad).innerWidth();
+          $(self.$.newuiVideo).width($(self.$.mainContent).innerWidth() - controlpadWidth);
+          $(self.$.newuiVideo).height(bodyHeight - topBarHeight);
+        };
+        size();
+
+        $(window).resize(size);
 
         window.cockpit.extensionPoints.inputController.register(
           {
