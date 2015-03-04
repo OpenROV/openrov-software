@@ -125,6 +125,7 @@
           var change = (this.maxVoltage - this.minVoltage) / (voltage - this.minVoltage);
           var percentage = 100 / change;
           var indicatorWidth = 200 / change;
+          indicatorWidth = indicatorWidth.toFixed(2);
           var fillColor = undefined;
 
           this.colors.forEach(function(color) {
@@ -133,7 +134,10 @@
             }
           });
           if (fillColor == undefined) { fillColor = this.colors[this.colors.length -1].color };
-          $(this.$.indicator).animate({svgWidth: indicatorWidth, svgFill: fillColor }, {duration: 600});
+          if (!isNaN(indicatorWidth) && indicatorWidth >= 0) {
+            $(this.$.indicator).css({fill: fillColor});
+            $(this.$.indicator).attr('width', indicatorWidth);
+          }
         },
         formatCurrent: function(value) {
           return value.toFixed(3);

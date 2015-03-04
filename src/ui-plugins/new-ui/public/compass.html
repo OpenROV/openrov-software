@@ -75,7 +75,7 @@
           self.setBearing(undefined);
         });
         window.cockpit.rov.on('plugin.navigationData.data', function(data) {
-          self.setHeading(data.heading);
+          self.setHeading(parseFloat(data.heading).toFixed(0));
         });
 
       },

@@ -29,10 +29,12 @@
         childId: '',
         settings: undefined,
         closeHandlers: [],
+        collapseHandlerRegistered: false,
         open: function() {
           this.settings.css('display', 'block');
           var self = this;
           Mousetrap.bind('esc',  function() { self.hide(); });
+          this.registerCollapseHandler();
         },
         registerCloseHandler: function(handler) {
           this.closeHandlers.push(handler);
@@ -50,6 +52,11 @@
           this.settings.find('.back-button').click(function() {
             self.hide();
           });
+        },
+        registerCollapseHandler: function() {
+          if (this.collapseHandlerRegistered) {
+            return;
+          }
           var distNodes = this.$.childItems.getDistributedNodes();
           distNodes.array().forEach(function(node) {
             var res = $(node).find('a.accordion-toggle');
@@ -61,7 +68,9 @@
                 element.collapse('toggle');
               })
             }
-          })
+          });
+          this.collapseHandlerRegistered = true;
+
         }
       })
     })();

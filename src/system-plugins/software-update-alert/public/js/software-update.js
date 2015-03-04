@@ -60,8 +60,8 @@
     });
     $('#software-update-alert-container').load(jsFileLocation + '../ui-templates.html', function () {
     });
-    $('body').append('<div id="proxy-container"  class="span12"><iframe  class="span12" style="height: 300px" ' +
-      'src="http://'+ window.location.hostname +':3000"></iframe></div>');
+    //$('body').append('<div id="proxy-container"  class="span12"><iframe  class="span12" style="height: 300px" ' +
+      //'src="http://'+ window.location.hostname +':3000"></iframe></div>');
     $('#proxy-container').hide();
 
 
