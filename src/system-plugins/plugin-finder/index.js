@@ -69,7 +69,7 @@ function pluginFinder(name, deps) {
         //that causes the CPU to max out forever. This restart
         //is as much a work-around as it is needed to load the
         //server-side aspects of the plugin.
-        console.log("intentional restart");
+        console.log('intentional restart');
         setTimeout(process.exit(17),5000);
       });
   });
@@ -92,7 +92,7 @@ function pluginFinder(name, deps) {
         //that causes the CPU to max out forever. This restart
         //is as much a work-around as it is needed to load the
         //server-side aspects of the plugin.
-        console.log("intentional restart");
+        console.log('intentional restart');
         setTimeout(process.exit(17),5000);
       });
   });
@@ -102,7 +102,7 @@ function pluginFinder(name, deps) {
 
 function getPreferences(config) {
   var preferences = config.preferences.get(PREFERENCES);
-  if (preferences == undefined) {
+  if (preferences === undefined) {
     preferences = {};
     config.preferences.set(PREFERENCES, preferences);
   }

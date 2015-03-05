@@ -16,8 +16,8 @@
       [
         // lights increment
         {
-          name: "plugin.lights.adjust_increment",
-          description: "Makes the ROV lights brighter.",
+          name: 'plugin.lights.adjust_increment',
+          description: 'Makes the ROV lights brighter.',
           defaults: { keyboard: 'p', gamepad: 'DPAD_UP' },
           down: function () {
             cockpit.rov.emit('plugin.lights.adjust', 0.1);
@@ -26,8 +26,8 @@
 
         // lights decrement
         {
-          name: "plugin.lights.adjust_increment",
-          description: "Makes the ROV lights dimmer.",
+          name: 'plugin.lights.adjust_increment',
+          description: 'Makes the ROV lights dimmer.',
           defaults: { keyboard: 'o', gamepad: 'DPAD_DOWN' },
 
           down: function () {
@@ -37,8 +37,8 @@
 
         // lights toggle
         {
-          name: "plugin.lights.toggle",
-          description: "Toggles the ROV lights on/off.",
+          name: 'plugin.lights.toggle',
+          description: 'Toggles the ROV lights on/off.',
           defaults: { keyboard: 'i' },
           down: function () {
             cockpit.rov.emit('plugin.lights.toggle');

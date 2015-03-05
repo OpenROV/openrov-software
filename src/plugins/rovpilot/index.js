@@ -1,5 +1,5 @@
 (function() {
-  var DISABLED = "DISABLED";
+  var DISABLED = 'DISABLED';
 
   var ROVPilot = function ROVPilot(deps) {
     console.log('The rovpilot plugin.');
@@ -142,7 +142,7 @@
     this.startInterval  = function() {
       setInterval(
         function() {
-          self.sendPilotingData()
+          self.sendPilotingData();
         },
         100);
     };

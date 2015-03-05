@@ -8,7 +8,7 @@
     this.viewName = 'Standard UI'; // for the UI
 
     this.polymerTemplateFile = jsFileLocation + '../standard-ui.html';
-    this.template = "<rov-ui-standard></rov-ui-standard>";
+    this.template = '<rov-ui-standard></rov-ui-standard>';
 
     this.loaded = function() {
 

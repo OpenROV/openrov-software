@@ -14,8 +14,8 @@
     self.cockpit.extensionPoints.inputController.register(
       [
         {
-          name: "plugin.laser.Toggle",
-          description: "Toggles the lasers on or off.",
+          name: 'plugin.laser.Toggle',
+          description: 'Toggles the lasers on or off.',
           defaults: { keyboard: 'l' },
           down: function () {
             cockpit.rov.emit('plugin.laser.toggle');

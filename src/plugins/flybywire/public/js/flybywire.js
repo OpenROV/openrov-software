@@ -26,8 +26,8 @@
     // Toggle fly-by-wire
     this.cockpit.extensionPoints.inputController.register(
       {
-        name: "flyByWire.toggle",
-        description: "Enables/disable fly-by-wire.",
+        name: 'flyByWire.toggle',
+        description: 'Enables/disable fly-by-wire.',
         defaults: { keyboard: 'g', gamepad: 'RB' },
         down: function() { rov.toggleControl();  }
       });

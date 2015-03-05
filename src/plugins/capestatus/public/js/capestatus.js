@@ -23,7 +23,7 @@
         var result = ko.validation.group(model.newBattery(), {deep: true});
         if (!model.newBattery().isValid())
         {
-          alert("Please fix all errors before preceding");
+          alert('Please fix all errors before preceding');
           result.showAllMessages(true);
 
           return false;
@@ -89,13 +89,13 @@
                 return ko.utils.unwrapObservable(opt.name) === selectedVal;
               }
             },
-            message: "The battery name must be unique!"
+            message: 'The battery name must be unique!'
           }
         });
       bat.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0);
       bat.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0);
       bat.description = ko.computed(function() {
-        return bat.name() + " (min: " + bat.minVoltage() + "v - max: " + bat.maxVoltage() + "v)";
+        return bat.name() + ' (min: ' + bat.minVoltage() + 'v - max: ' + bat.maxVoltage() + 'v)';
       });
 
       bat.maxVoltage

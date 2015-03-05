@@ -19,7 +19,7 @@ function pluginManager(name, deps) {
 }
 function getPreferences(config) {
   var preferences = config.preferences.get(PREFERENCES);
-  if (preferences == undefined) {
+  if (preferences === undefined) {
     preferences = {};
     config.preferences.set(PREFERENCES, preferences);
   }

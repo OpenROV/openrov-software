@@ -1,11 +1,14 @@
+
 $( document ).ready(function() {
   'use strict';
 
+  /* jshint ignore:start */
   window.examplePlugin = this;
   // to prevent intererence, we disable this plugin.
   // to see the things working, comment the following statement
   return;
 
+  /* jshint ignore:end */
   var Example;
   Example = function Example(cockpit) {
 
@@ -15,10 +18,10 @@ $( document ).ready(function() {
     // Add required UI elements
     cockpit.extensionPoints.menu.append('<li><a href="/#"><div id="example">Example</div></a></li>');
     cockpit.extensionPoints.menu.find('#example').click(function() {
-      alert('Example plugin.\nThere will be a message sent to the ROV in 5 seconds.')
+      alert('Example plugin.\nThere will be a message sent to the ROV in 5 seconds.');
       setTimeout(function() {
         cockpit.rov.emit('plugin.example.foo');
-      }, 5000)
+      }, 5000);
     });
 
     cockpit.rov.on('plugin.example.message', function(message) {
@@ -30,7 +33,7 @@ $( document ).ready(function() {
       if (showMessageFoo) {
         showMessageFoo = false;
         alert('Message from arduino "example_foo": ' + data);
-        cockpit.rov.emit('plugin.example.example_to_bar', 'foobar')
+        cockpit.rov.emit('plugin.example.example_to_bar', 'foobar');
       }
     });
 
@@ -44,15 +47,15 @@ $( document ).ready(function() {
 
     self.cockpit.extensionPoints.inputController.register(
       [{
-        name: "example.keyBoardMapping",
-        description: "Example for keymapping.",
+        name: 'example.keyBoardMapping',
+        description: 'Example for keymapping.',
         defaults: { keyboard: 'alt+0', gamepad: 'X' },
         down: function() { console.log('0 down'); },
         up: function() { console.log('0 up'); },
         secondary: [
           {
-            name: "example.keyBoardMappingDepdent",
-            dependency: "example.keyBoardMapping",
+            name: 'example.keyBoardMappingDepdent',
+            dependency: 'example.keyBoardMapping',
             defaults: { keyboard: '9', gamepad: 'RB' },
             down: function() { console.log('####'); }
           }
@@ -82,10 +85,10 @@ $( document ).ready(function() {
 
   Example.prototype.listen = function listen() {
     var item = {
-      label: ko.observable("Example menu"),
+      label: ko.observable('Example menu'),
       callback: function () {
         alert('example menu item from heads up menu');
-        item.label(this.label() + " Foo Bar");
+        item.label(this.label() + ' Foo Bar');
       }
     };
     if (this.cockpit.extensionPoints.headsUpMenu) {

@@ -21,24 +21,24 @@ describe('Example plugin constructor', function() {
   });
 
   it('the example calls console.log', function () {
-    console.log.called.should.be.false;
+    console.log.called.should.be.false; /* jshint ignore:line */
     new testee('', deps);
-    console.log.called.should.be.true;
+    console.log.called.should.be.true; /* jshint ignore:line */
   });
 
   it('calls console.foo with right argument', function () {
     new testee('', deps);
-    console.log.calledOnce.should.be.true;
-    console.log.firstCall.calledWith(sinon.match(/^This/)).should.be.ok;
+    console.log.calledOnce.should.be.true; /* jshint ignore:line */
+    console.log.firstCall.calledWith(sinon.match(/^This/)).should.be.ok; /* jshint ignore:line */
   });
 
   it('registers on events from cockpit', function() {
     new testee('', deps);
-    deps.cockpit.on.calledOnce.should.be.true;
+    deps.cockpit.on.calledOnce.should.be.true; /* jshint ignore:line */
   });
 
   it('registers passthrough commands', function() {
     new testee('', deps);
-    deps.rov.registerPassthrough.calledOnce.should.be.true;
+    deps.rov.registerPassthrough.calledOnce.should.be.true; /* jshint ignore:line */
   });
 });

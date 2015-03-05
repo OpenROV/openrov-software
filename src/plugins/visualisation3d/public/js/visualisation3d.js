@@ -12,14 +12,14 @@
     var jsFileLocation = urlOfJsFile('visualisation3d.js');
     style.load(jsFileLocation + '../css/style.css', function () {});
 
-    var canvas = cockpit.extensionPoints.videoContainer.find("#renderCanvas")[0];
-    console.log("1");
+    var canvas = cockpit.extensionPoints.videoContainer.find('#renderCanvas')[0];
+    console.log('1');
     var engine = new BABYLON.Engine(canvas, true);
-    console.log("2");
+    console.log('2');
     console.log(engine);
     var scene = new BABYLON.Scene(engine);
 
-    this.rotation_x = .3;
+    this.rotation_x = 0.3;
     this.rotation_y = 0;
     this.rotation_z = 0;
 
@@ -60,21 +60,21 @@
 
   Visualisation3d.prototype.runScript =  function runScript(scene, canvas) {
     // Create a rotating camera
-    var camera = new BABYLON.ArcRotateCamera("Camera", 0, Math.PI / 2, 12, BABYLON.Vector3.Zero(), scene);
+    var camera = new BABYLON.ArcRotateCamera('Camera', 0, Math.PI / 2, 12, BABYLON.Vector3.Zero(), scene);
 
     // Attach it to handle user inputs (keyboard, mouse, touch)
     camera.attachControl(canvas, false);
 
     // Add a light
-    var light = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+    var light = new BABYLON.HemisphericLight('hemi', new BABYLON.Vector3(0, 1, 0), scene);
 
     // Create a builtin shape
-    var knot = BABYLON.Mesh.CreateBox("mesh", 4, scene);
+    var knot = BABYLON.Mesh.CreateBox('mesh', 4, scene);
 
     knot.scaling.z = 2;
 
     // Define a simple material
-    var material = new BABYLON.StandardMaterial("std", scene);
+    var material = new BABYLON.StandardMaterial('std', scene);
     material.diffuseColor = new BABYLON.Color3(0.5, 0, 0.5);
 
     knot.material = material;

@@ -9,24 +9,24 @@
       [
         // camera up/centre/down
         {
-          name: "plugin.cameraTilt.adjust_down",
-          description: "Point the camera further down.",
+          name: 'plugin.cameraTilt.adjust_down',
+          description: 'Point the camera further down.',
           defaults: { keyboard: 'z', gamepad: 'A' },
           down: function () {
             cockpit.rov.emit('plugin.cameraTilt.adjust', -0.1);
           }
         },
         {
-          name: "plugin.cameraTilt.adjust_centre",
-          description: "Point the camera straight ahead.",
+          name: 'plugin.cameraTilt.adjust_centre',
+          description: 'Point the camera straight ahead.',
           defaults: { keyboard: 'a', gamepad: 'B' },
           down: function () {
             cockpit.rov.emit('plugin.cameraTilt.set', 0);
           }
         },
         {
-          name: "plugin.cameraTilt.adjust_up",
-          description: "Point the camera further up.",
+          name: 'plugin.cameraTilt.adjust_up',
+          description: 'Point the camera further up.',
           defaults: { keyboard: 'q', gamepad: 'Y' },
           down: function () {
             cockpit.rov.emit('plugin.cameraTilt.adjust', 0.1);

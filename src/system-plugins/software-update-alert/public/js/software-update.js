@@ -25,14 +25,14 @@
     });
 
     function subscribeToShowAlerts() {
-      var showAlertsSubscription = undefined;
+      var showAlertsSubscription;
       showAlertsSubscription = self.showAlerts.subscribe(function(newValue){
         if (self.showAlerts()) {
           showAlertsSubscription.dispose();
         }
         configManager.setShowAlerts(self.showAlerts());
         self.isSaved(true);
-        setTimeout(function() {self.isSaved(false)}, 2000);
+        setTimeout(function() {self.isSaved(false);}, 2000);
         return true;
       });
     }
@@ -76,12 +76,12 @@
           console.log('Cockpit version: ' + logoTitleModel.cockpitVersion());
         }
        })
-      .fail(function() { console.log('Error getting the cockpit version') });
+      .fail(function() { console.log('Error getting the cockpit version'); });
     $.get(configManager.dashboardUrl() + '/plugin/software/bbserial', function(data) {
          logoTitleModel.bbSerial(data.bbSerial);
          console.log('BB Serial: ' + logoTitleModel.bbSerial());
        })
-      .fail(function() { console.log('Error getting the cockpit version') });
+      .fail(function() { console.log('Error getting the cockpit version'); });
     ko.applyBindings(logoTitleModel, $('a.brand')[0]);
 
     self.model.showAlerts.subscribe(function(newValue) {
@@ -100,13 +100,13 @@
             console.log('Done apt-get update on cockpit');
             checkForUpdates(checker);
            })
-          .fail(function() { console.log('Error starting apt-get update on cockpit') });
+          .fail(function() { console.log('Error starting apt-get update on cockpit'); });
       }, 2 * 60 * 1000); //two minutes
 
     function checkForUpdates(checker) {
       checker.checkForUpdates(function (updates) {
         if (updates && updates.length > 0) {
-          var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
+          var model = { packages: updates, dashboardUrl: configManager.dashboardUrl };
           var container = $('#software-update-alert-container');
           ko.applyBindings(model, container[0]);
           container.removeClass('hide');

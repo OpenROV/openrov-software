@@ -17,11 +17,11 @@
 
     self.checkForUpdates = function(callback){
       $.get(
-        config.dashboardUrl() + "/plugin/software/updates/openrov-rov-*",
+        config.dashboardUrl() + '/plugin/software/updates/openrov-rov-*',
         function(updates) {
           callback(updates);
         });
-      return { updates: false }
+      return { updates: false };
     };
 
     return self;

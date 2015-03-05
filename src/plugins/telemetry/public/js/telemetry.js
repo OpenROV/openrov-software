@@ -16,8 +16,8 @@
     var self = this;
     self.cockpit.extensionPoints.inputController.register(
       {
-        name: "telemetry.cycleTextColor",
-        description: "Cycle the text color of telemetry.",
+        name: 'telemetry.cycleTextColor',
+        description: 'Cycle the text color of telemetry.',
         defaults: { keyboard: 'h' },
         down: function() { cockpit.rov.emit('plugin.telemetry.cycleTextColor'); }
       });

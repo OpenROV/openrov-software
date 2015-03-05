@@ -36,8 +36,8 @@
 
     self.cockpit.extensionPoints.inputController.register(
       {
-        name: "blackbox.record",
-        description: "Start recording telemetry data.",
+        name: 'blackbox.record',
+        description: 'Start recording telemetry data.',
         defaults: { keyboard: 'r' },
         down: function() { self.keyDown();  }
       });
@@ -72,9 +72,9 @@
   Blackbox.prototype.keyDown = function keyDown(ev) {
     var self = this;
     if (!this.recording) {
-      this.openDB(function() {self.toggleRecording()});
+      this.openDB(function() {self.toggleRecording();});
     } else {
-      this.closeDB(function() {self.toggleRecording()});
+      this.closeDB(function() {self.toggleRecording();});
     }
   };
   Blackbox.prototype.logNavData = function logNavData(navdata) {
@@ -147,13 +147,23 @@
     //Ok, so we begin by creating the root object:
     var data = {};
     var promises = [];
+    var content = [];
+
+    var handleResult = function (event) {
+      var cursor = event.target.result;
+      if (cursor) {
+        content.push(cursor.value);
+        cursor.continue();
+      }
+    };
+
     for (var i = 0; i < idb.objectStoreNames.length; i++) {
       //thanks to http://msdn.microsoft.com/en-us/magazine/gg723713.aspx
       promises.push($.Deferred(function (defer) {
         var objectstore = idb.objectStoreNames[i];
         console.log(objectstore);
         var transaction = idb.transaction([objectstore], 'readonly');
-        var content = [];
+        content = [];
         transaction.oncomplete = function (event) {
           console.log('trans oncomplete for ' + objectstore + ' with ' + content.length + ' items');
           defer.resolve({
@@ -165,18 +175,9 @@
           // Don't forget to handle errors!
           console.dir(event);
         };
-        var handleResult = function (event) {
-          var cursor = event.target.result;
-          if (cursor) {
-            //content.push({key:cursor.key,value:cursor.value});
-            content.push(cursor.value);
-            //the key is in the object so flatten the array out
-            cursor.continue();
-          }
-        };
         var objectStore = transaction.objectStore(objectstore);
         objectStore.openCursor().onsuccess = handleResult;
-      }).promise());
+      }).promise()); /* jshint ignore:line */
     }
     $.when.apply(null, promises).then(function (result) {
       //arguments is an array of structs where name=objectstorename and data=array of crap

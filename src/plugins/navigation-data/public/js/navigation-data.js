@@ -16,7 +16,7 @@
       cockpit.extensionPoints.rovDiagnostics.find('#calibrate_compass').click(function () {
         cockpit.rov.emit('plugin.navigationData.calibrateCompass');
       });
-    })
+    });
   };
 
   //This pattern will hook events in the cockpit and pull them all back

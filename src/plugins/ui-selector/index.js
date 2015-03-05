@@ -8,7 +8,7 @@
 
   var UiSelector = function(name, deps) {
     var self = this;
-    console.log("loading Ui Selector plugin");
+    console.log('loading Ui Selector plugin');
     this.config = deps.config;
     this.preferences = this.getPreferences();
 

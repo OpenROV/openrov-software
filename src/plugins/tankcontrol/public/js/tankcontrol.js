@@ -15,10 +15,10 @@
 
     //inputControl names
     this.controlNames = {
-      leftLift: "tankControl.leftLift",
-      portThrottle: "tankControl.portThrottle",
-      rightLift: "tankControl.rightLift",
-      starboardThrottle: "tankControl.starboardThrottle"
+      leftLift: 'tankControl.leftLift',
+      portThrottle: 'tankControl.portThrottle',
+      rightLift: 'tankControl.rightLift',
+      starboardThrottle: 'tankControl.starboardThrottle'
     };
 
     // Add required UI elements
@@ -30,8 +30,8 @@
     // Toggle tank control
     rov.cockpit.extensionPoints.inputController.register(
       {
-        name: "tankcontrol.toggleTankControl",
-        description: "Toggles the tank control mode on/off",
+        name: 'tankcontrol.toggleTankControl',
+        description: 'Toggles the tank control mode on/off',
         defaults: { keyboard: 't' },
         down: function() { rov.toggleControl(); }
       });
@@ -41,7 +41,7 @@
       [
         {
           name: rov.controlNames.leftLift,
-          description: "Tankcontrol: Lift control control for the left hand gamepad.",
+          description: 'Tankcontrol: Lift control control for the left hand gamepad.',
           defaults: { gamepad: 'LEFT_STICK_X' },
           active: false,
           axis: function (v) {
@@ -58,7 +58,7 @@
         },
         {
           name: rov.controlNames.portThrottle,
-          description: "Tankcontrol: Throttle control for the port prop.",
+          description: 'Tankcontrol: Throttle control for the port prop.',
           defaults: { gamepad: 'LEFT_STICK_Y' },
           active: false,
           axis: function (v) {
@@ -68,7 +68,7 @@
         },
         {
           name: rov.controlNames.rightLift,
-          description: "Tankcontrol: Lift control control for the right hand gamepad.",
+          description: 'Tankcontrol: Lift control control for the right hand gamepad.',
           defaults: { gamepad: 'RIGHT_STICK_X' },
           active: false,
           axis: function (v) {
@@ -86,7 +86,7 @@
         },
         {
           name: rov.controlNames.starboardThrottle,
-          description: "Tankcontrol: Throttle control for the starboard prop.",
+          description: 'Tankcontrol: Throttle control for the starboard prop.',
           defaults: { gamepad: 'RIGHT_STICK_Y' },
           active: false,
           axis: function (v) {

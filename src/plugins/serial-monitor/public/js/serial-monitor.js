@@ -12,8 +12,8 @@
     // Toggle serial monitor
     cockpit.extensionPoints.inputController.register(
       {
-        name: "serialMonitor.toggleSerialMonitor",
-        description: "Shows/hides raw serial monitor.",
+        name: 'serialMonitor.toggleSerialMonitor',
+        description: 'Shows/hides raw serial monitor.',
         defaults: { keyboard: 'u' },
         down: function() {
           serialMonitorPanel.toggleClass('hidden');

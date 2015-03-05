@@ -7,7 +7,7 @@
 
     self.cockpit = cockpit;
     self.items = ko.observableArray();
-    self.getTemplateName = function(item) { return "menuRow-" + item.type };
+    self.getTemplateName = function(item) { return 'menuRow-' + item.type; };
 
     cockpit.extensionPoints.headsUpMenu = self;
 
@@ -37,8 +37,8 @@
         ko.applyBindings(self, headsUpMenu[0]);
 
         headsUpMenu.find('.menuRow').hover(
-          function(){ $(this).find('.btn').addClass('btn-primary') },
-          function(){ $(this).find('.btn').removeClass('btn-primary') }
+          function(){ $(this).find('.btn').addClass('btn-primary'); },
+          function(){ $(this).find('.btn').removeClass('btn-primary'); }
         );
         menuItems = headsUpMenu.find('.menuRow');
       });
@@ -77,8 +77,8 @@
     var enablePlugin = function() {
       self.cockpit.extensionPoints.inputController.register(
         {
-          name: "headsupMenu.show",
-          description: "Show the heads up menu.",
+          name: 'headsupMenu.show',
+          description: 'Show the heads up menu.',
           defaults: { keyboard: 'e', gamepad: 'START' },
           down: function () {
             headsUpMenu.show();
@@ -86,14 +86,14 @@
           up: executeMenuItem,
           secondary: [
             {
-              name: "headsupMenu.next",
-              description: "select the next element of the heads up menu",
+              name: 'headsupMenu.next',
+              description: 'select the next element of the heads up menu',
               defaults: { keyboard: 'c', gamepad: 'DPAD_DOWN' },
               down: moveSelectionNext
             },
             {
-              name: "headsupMenu.prev",
-              description: "select the previous element of the heads up menu",
+              name: 'headsupMenu.prev',
+              description: 'select the previous element of the heads up menu',
               defaults: { keyboard: 'd', gamepad: 'DPAD_UP' },
               down: moveSelectionPrev
             }
@@ -120,10 +120,10 @@
     var items = [].concat(item); // item can be a single object or an array
     items.forEach(function (anItem) {
       anItem.uniqueId = generateUUID();
-      if (anItem['type'] == undefined) {
-        anItem.type = "button";
+      if (anItem.type === undefined) {
+        anItem.type = 'button';
       }
-      if (anItem['type'] == 'custom') {
+      if (anItem.type == 'custom') {
         anItem.headsUpTemplateId = 'custom-' + anItem.uniqueId;
       }
       self.items.push(anItem);
@@ -139,7 +139,7 @@
       return (c=='x' ? r : (r&0x7|0x8)).toString(16);
     });
     return uuid;
-  };
+  }
 
   window.Cockpit.plugins.push(HeadsUpMenu);
 }(window, jQuery));

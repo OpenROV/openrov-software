@@ -34,8 +34,8 @@ function capestatus(name, deps) {
 
     if (battery.name === undefined || battery.minVoltage === undefined || battery.maxVoltage === undefined) {
       res.status(400);
-      res.send("Supplied battery object does not follow specification: " +
-        JSON.stringify(new Battery("", 0, 0)));
+      res.send('Supplied battery object does not follow specification: ' +
+        JSON.stringify(new Battery('', 0, 0)));
       return;
     }
 
@@ -61,8 +61,8 @@ function capestatus(name, deps) {
 
     if (battery.name === undefined || battery.minVoltage === undefined || battery.maxVoltage === undefined) {
       res.status(400);
-      var demo = new Battery("", 0, 0);
-      res.send("Supplied battery object does not follow specification: '" + demo + "'");
+      var demo = new Battery('', 0, 0);
+      res.send('Supplied battery object does not follow specification: \'' + demo + '\'');
       return;
     }
 
@@ -92,39 +92,47 @@ function capestatus(name, deps) {
     }
 
     if ('vout' in data) {
-      var value = data.vout.toFixed(1);
-      cockpit.emit('plugin.capestatus.battery.voltage', value);
+      cockpit.emit(
+        'plugin.capestatus.battery.voltage',
+        data.vout.toFixed(1));
     }
 
     if ('iout' in data) {
-      var value = data.iout.toFixed(3);
-      cockpit.emit('plugin.capestatus.battery.current.out', value);
+      cockpit.emit(
+        'plugin.capestatus.battery.current.out',
+        data.iout.toFixed(3));
     }
 
     if ('BT1I' in data) {
-      var value = parseFloat(data['BT1I']);
-      cockpit.emit('plugin.capestatus.battery.current.battery1', value);
+      cockpit.emit(
+        'plugin.capestatus.battery.current.battery1',
+        parseFloat(data.BT1I));
     }
     if ('BT2I' in data) {
-      var value = parseFloat(data['BT2I']);
-      cockpit.emit('plugin.capestatus.battery.current.battery2', value);
+      cockpit.emit(
+        'plugin.capestatus.battery.current.battery2',
+        parseFloat(data.BT2I));
     }
     if ('SC1I' in data) {
-      var value = parseFloat(data['SC1I']);
-      cockpit.emit('plugin.capestatus.battery.current.esc1', value);
+      cockpit.emit(
+        'plugin.capestatus.battery.current.esc1',
+        parseFloat(dataSC1I));
     }
     if ('SC2I' in data) {
-      var value = parseFloat(data['SC2I']);
-      cockpit.emit('plugin.capestatus.battery.current.esc2', value);
+      cockpit.emit(
+        'plugin.capestatus.battery.current.esc2',
+        parseFloat(data.SC2I));
     }
     if ('SC3I' in data) {
-      var value = parseFloat(data['SC3I']);
-      cockpit.emit('plugin.capestatus.battery.current.esc3', value);
+      cockpit.emit(
+        'plugin.capestatus.battery.current.esc3',
+        parseFloat(data.SC3I));
     }
 
     if ('cpuUsage' in data) {
-      var value = (data.cpuUsage * 100).toFixed(0);
-      cockpit.emit('plugin.capestatus.cpu', value);
+      cockpit.emit(
+        'plugin.capestatus.cpu',
+        (data.cpuUsage * 100).toFixed(0));
     }
   }
 

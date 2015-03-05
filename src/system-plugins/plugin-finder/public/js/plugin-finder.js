@@ -46,38 +46,38 @@
       init: function (element) {
           var
               $element = $(element),
-              currentPosition = $element.css("position"),
-              $loader = $("<div>").addClass("loader").hide();
+              currentPosition = $element.css('position'),
+              $loader = $('<div>').addClass('loader').hide();
 
           //add the loader
           $element.append($loader);
 
           //make sure that we can absolutely position the loader against the original element
-          if (currentPosition == "auto" || currentPosition == "static")
-              $element.css("position", "relative");
+          if (currentPosition == 'auto' || currentPosition == 'static')
+              $element.css('position', 'relative');
 
           //center the loader
           $loader.css({
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              "margin-left": -($loader.width() / 2) + "px",
-              "margin-top": -($loader.height() / 2) + "px"
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              'margin-left': -($loader.width() / 2) + 'px',
+              'margin-top': -($loader.height() / 2) + 'px'
           });
       },
       update: function (element, valueAccessor) {
           var isLoading = ko.utils.unwrapObservable(valueAccessor()),
               $element = $(element),
-              $childrenToHide = $element.children(":not(div.loader)"),
-              $loader = $element.find("div.loader");
+              $childrenToHide = $element.children(':not(div.loader)'),
+              $loader = $element.find('div.loader');
 
           if (isLoading) {
-              $childrenToHide.css("visibility", "hidden").attr("disabled", "disabled");
+              $childrenToHide.css('visibility', 'hidden').attr('disabled', 'disabled');
               $loader.show();
           }
           else {
-              $loader.fadeOut("fast");
-              $childrenToHide.css("visibility", "visible").removeAttr("disabled").show();
+              $loader.fadeOut('fast');
+              $childrenToHide.css('visibility', 'visible').removeAttr('disabled').show();
           }
       }
   };
@@ -108,7 +108,7 @@
     });*/
     //Update data to server when changed
     self.isEnabled.subscribe(function (newIsEnabled) {
-      if (newIsEnabled == true) {
+      if (newIsEnabled === true) {
         self.rawPlugin.enable();
       } else {
         self.rawPlugin.disable();
@@ -117,11 +117,14 @@
       configManager.set(self.name(), self.config);
     });
 
-    var giturl = self.rawPlugin.url.replace('.git','').replace('git://github.com/','https://api.github.com/repos/')
+    var giturl = self.rawPlugin
+      .url
+      .replace('.git','')
+      .replace('git://github.com/','https://api.github.com/repos/');
     $.getJSON( giturl, function( data ) {
       self.description(data.description);
       self.raiting(data.stargazers_count);
-      self.homepage(data.homepage != null ? data.homepage : data.html_url);
+      self.homepage(data.homepage !== null ? data.homepage : data.html_url);
     });
   };
 
@@ -142,7 +145,7 @@
         ko.applyBindings(self.model, finderSettings[0]);
 
         finderSettings.find('#collapsePluginFinder').on('show', function (e) {
-        if (self.model.cachedAvailablePlugins.length==0){
+        if (self.model.cachedAvailablePlugins.length===0){
           self.model.isLoading(true);
           self.cockpit.rov.emit('plugin.pluginFinder.search','');
         }
@@ -160,7 +163,7 @@
     });
 
     this.model.requestedPluginDetail.subscribe(function(plugin){
-      window.open("http://bower.io/search/?q="+plugin.name(),"bowerInfo");
+      window.open('http://bower.io/search/?q='+plugin.name(),'bowerInfo');
     });
 
     self.cockpit.rov.on('plugin.pluginFinder.searchResults', function(results){

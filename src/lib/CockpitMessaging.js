@@ -9,7 +9,7 @@
       emit: function(event, data1, data2, data3, data4, data5) {
         sockets.forEach(function(socket) {
           socket.volatile.emit(event, data1, data2, data3, data4, data5);
-        })
+        });
       }
     };
 
@@ -18,7 +18,7 @@
       if (event !== 'newListener') {
         sockets.forEach(function(socket) {
           socket.emit(event, data1, data2, data3, data4, data5);
-        })
+        });
       }
     });
 

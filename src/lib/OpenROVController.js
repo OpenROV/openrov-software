@@ -199,9 +199,10 @@ OpenROVController.prototype.sendMotorTest = function (port, starbord, vertical) 
 
 OpenROVController.prototype.sendCommand = function (throttle, yaw, vertical) {
   var motorCommands = this.physics.mapMotors(throttle, yaw, vertical);
-  var command = 'go(' + motorCommands.port + ','
-    + motorCommands.vertical + ','
-    + motorCommands.starbord + ')';
+  var command =
+    'go(' + motorCommands.port + ',' +
+    motorCommands.vertical + ',' +
+    motorCommands.starbord + ')';
   this.send(command);
 };
 
@@ -238,8 +239,8 @@ OpenROVController.prototype.registerPassthrough = function(config) {
       if (Array.isArray(config.toROV)) {
         config.toROV.forEach(function(item) {
           self.cockpit.on(messagePrefix+'.'+item, function(data) {
-            var arguments = Array.isArray(data) ? data.join() : data;
-            var command = item + '(' + arguments + ')';
+            var args = Array.isArray(data) ? data.join() : data;
+            var command = item + '(' + args + ')';
             self.send(command);
           });
         });

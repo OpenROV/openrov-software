@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter, StatusReader = require('./StatusReader'), CONFIG = require('./config');
 function Hardware() {
-  var DISABLED = "DISABLED";
+  var DISABLED = 'DISABLED';
   var hardware = new EventEmitter();
   var reader = new StatusReader();
   var emitRawSerial = false;
@@ -54,11 +54,13 @@ function Hardware() {
         }
         else {
             targetDepth = -500;
-            hardware.depthHoldEnabled = false
+            hardware.depthHoldEnabled = false;
             console.log('HARDWARE-MOCK depth hold DISABLED');
         }
-        var status = 'targetDepth:' + (hardware.depthHoldEnabled ? targetDepth.toString() : DISABLED);
-        hardware.emitStatus(status);
+        hardware.emitStatus(
+          'targetDepth:' +
+          (hardware.depthHoldEnabled ? targetDepth.toString() : DISABLED)
+        );
     }
 
     // Heading hold
@@ -74,18 +76,17 @@ function Hardware() {
             hardware.targetHoldEnabled = false;
             console.log('HARDWARE-MOCK heading hold DISABLED');
         }
-        var status = 'targetHeading:' + (hardware.targetHoldEnabled ? targetHeading.toString() : DISABLED);
-        hardware.emitStatus(status);
+        hardware.emitStatus(
+          'targetHeading:' + (hardware.targetHoldEnabled ? targetHeading.toString() : DISABLED)
+        );
     }
 
     // example tests for passthrough
     if (commandText === 'example_to_foo') {
-      var status = 'example_foo:' + commandParts[1];
-      hardware.emitStatus(status);
+      hardware.emitStatus('example_foo:' + commandParts[1]);
     }
     if (commandText === 'example_to_bar') {
-      var status = 'example_bar:' + commandParts[1];
-      hardware.emitStatus(status);
+      hardware.emitStatus('example_bar:' + commandParts[1]);
     }
     hardware.emitStatus('cmd:' + command);
   };

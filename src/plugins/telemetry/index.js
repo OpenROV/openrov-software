@@ -3,6 +3,6 @@ function telemetry(name, deps) {
 
   deps.rov.on('status', function(data){
     deps.cockpit.emit('plugin.telemetry.logData', data);
-  })
+  });
 }
 module.exports = telemetry;

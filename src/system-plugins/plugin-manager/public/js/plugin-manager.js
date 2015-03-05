@@ -29,7 +29,7 @@
     var self = this;
     self.rawPlugin = rawPlugin;
     self.config = {};
-    self.isEnabled = ko.observable(typeof  self.rawPlugin.defaultEnabled !== "undefined" ? self.rawPlugin.defaultEnabled : 1);
+    self.isEnabled = ko.observable(typeof  self.rawPlugin.defaultEnabled !== 'undefined' ? self.rawPlugin.defaultEnabled : 1);
     self.name = ko.computed(function () {
       return self.rawPlugin.name;
     });
@@ -38,14 +38,14 @@
     });
     //Get data from server
     configManager.get(self.name(), function (pluginConfig) {
-      if (pluginConfig != undefined && pluginConfig.isEnabled != undefined) {
+      if (pluginConfig !== undefined && pluginConfig.isEnabled !== undefined) {
         self.config = pluginConfig;
         self.isEnabled(pluginConfig.isEnabled.toBool());
       }
     });
     //Update data to server when changed
     self.isEnabled.subscribe(function (newIsEnabled) {
-      if (newIsEnabled == true) {
+      if (newIsEnabled === true) {
         self.rawPlugin.enable();
       } else {
         self.rawPlugin.disable();

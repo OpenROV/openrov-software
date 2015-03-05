@@ -72,7 +72,7 @@
         if (command.active) {
           controller.register(command);
           for(var property in command.bindings) {
-            self.registerdControls[property+":"+command.bindings[property]] = command;
+            self.registerdControls[property+':'+command.bindings[property]] = command;
           }
         }
       });
@@ -91,8 +91,8 @@
       delete self.registerdCommands[control];
       for(var property in control.bindings) {
         //it is possible that a different control actually owns a particular binding
-        if (self.registerdControls[property+":"+control.bindings[property]] === control){
-          delete self.registerdControls[property+":"+control.bindings[property]];
+        if (self.registerdControls[property+':'+control.bindings[property]] === control){
+          delete self.registerdControls[property+':'+control.bindings[property]];
         }
       }
     });
@@ -114,16 +114,16 @@
       var command = self.registerdCommands[commandName];
       command.replaced = [];
       for(var property in command.bindings) {
-        if (self.registerdControls[property+":"+command.bindings[property]] !== undefined){
-          console.log("There is a conflict with " + self.registerdControls[property+":"+command.bindings[property]].name);
-          command.replaced.push(self.registerdControls[property+":"+command.bindings[property]]);
+        if (self.registerdControls[property+':'+command.bindings[property]] !== undefined){
+          console.log('There is a conflict with ' + self.registerdControls[property+':'+command.bindings[property]].name);
+          command.replaced.push(self.registerdControls[property+':'+command.bindings[property]]);
         }
       }
 
       command.active = true;
       self._register(command, false);
 
-      console.log("activated command " + command.name);
+      console.log('activated command ' + command.name);
     });
   };
 
@@ -136,10 +136,10 @@
       self.unregister(command);
       command.replaced.forEach(function(oldcommand){
         self._register(oldcommand, false);
-        console.log("re-activated " + oldcommand.name);
+        console.log('re-activated ' + oldcommand.name);
       });
       command.replaced = null;
-      console.log("Deactivated command " + command.name);
+      console.log('Deactivated command ' + command.name);
     });
 
   };
