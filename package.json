@@ -8,7 +8,7 @@
     "url": "git://github.com/OpenROV/openrov-software.git"
   },
   "scripts": {
-    "test": "./node_modules/grunt-cli/bin/grunt test"
+    "test": "./node_modules/grunt-cli/bin/grunt test --debug"
   },
   "dependencies": {
     "bower": "",
