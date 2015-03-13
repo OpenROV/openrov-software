@@ -277,6 +277,15 @@ copy_rootfs () {
 	echo "${root_uuid}  /  ${root_filesystem}  data=writeback,commit=600,nodiratime,noatime,norelatime  0  1" >> /tmp/rootfs/etc/fstab
 	echo "${boot_uuid}  /boot/uboot  auto  defaults  0  0" >> /tmp/rootfs/etc/fstab
 	echo "debugfs         /sys/kernel/debug  debugfs  defaults          0  0" >> /tmp/rootfs/etc/fstab
+	echo "tmpfs   /tmp         tmpfs   nodev,nosuid          0  0" >> /tmp/rootfs/etc/fstab
+	echo "tmpfs   /var/log         tmpfs   nodev,nosuid          0  0" >> /tmp/rootfs/etc/fstab
+	
+	echo "# Injected by OpenROV_Customize_Image" >> /tmp/rootfs/etc/sysctl.conf
+	echo "vm.dirty_background_ratio = 5" >> /tmp/rootfs/etc/sysctl.conf
+	echo "vm.dirty_ratio = 10" >> /tmp/rootfs/etc/sysctl.conf
+	echo "# End Injected by OpenROV_Customize_Image" >> /tmp/rootfs/etc/sysctl.conf
+	
+	
 	flush_cache
 
 	#OPENROV
