@@ -1,4 +1,5 @@
-var serialPort = require('serialport'), EventEmitter = require('events').EventEmitter, StatusReader = require('./StatusReader'), CONFIG = require('./config'), logger = require('./logger').create(CONFIG);
+var crc = require('crc'); var serialPort = require('serialport'), EventEmitter = require('events').EventEmitter,
+StatusReader = require('./StatusReader'), CONFIG = require('./config'), logger = require('./logger').create(CONFIG);
 function Hardware() {
   var hardware = new EventEmitter();
   var reader = new StatusReader();
@@ -39,14 +40,23 @@ function Hardware() {
   var timesent = new Date();
   hardware.write = function (command) {
     logger.log(command);
+    var crc8 = crc.crc81wire(command);
+    var commandBuffer = new Buffer(command,'utf8');
+    var crcBuffer = new Buffer(1);
+    crcBuffer[0]=crc8;
+    console.log(crcBuffer[0] + ":" + crc8.toString(16));
+    console.log(command);
+
+    var messagebuffer = Buffer.concat([crcBuffer,commandBuffer]);
+    console.log(messagebuffer.toString('hex'));
     if (CONFIG.production && serialConnected) {
       var currenttime = new Date();
       var delay = 3-((currenttime.getTime() - timesent.getTime()));
       if (delay < 0) delay = 0;
-      timesent = currenttime; 
+      timesent = currenttime;
       timesent.setMilliseconds(timesent.getMilliseconds + delay);
       setTimeout(function(){
-        hardware.serial.write(command);
+        hardware.serial.write(messagebuffer);
         if (emitRawSerialData)  hardware.emit('serial-sent', command);
       }, delay);
     } else {
