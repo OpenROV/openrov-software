@@ -25,7 +25,8 @@
     "sync": "",
     "os-utils": "",
     "jquery-file-upload-middleware": "",
-    "bower": ""
+    "bower": "",
+    "crc" : ""
   },
   "bundleDependencies": [
     "express",
