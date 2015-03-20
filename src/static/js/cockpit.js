@@ -6,7 +6,7 @@
   const CAMERA_MOUNT_1_AXIS_CAPABLE = 3;
   const COMPASS_CAPABLE = 4;
   const ORIENTATION_CAPABLE = 5;
-  const DEAPTH_CAPABLE = 6;
+  const DEPTH_CAPABLE = 6;
   var hostname = document.location.hostname ? document.location.hostname : 'localhost';
 
   //Cockpit is inheriting from EventEmitter2.

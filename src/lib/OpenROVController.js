@@ -18,7 +18,7 @@ var navdata = {
     pitch: 0,
     yaw: 0,
     thrust: 0,
-    deapth: 0,
+    depth: 0,
     hdgd: 0
   };
 var statusdata = {};
@@ -78,8 +78,8 @@ var OpenROVController = function (eventLoop) {
     if ('hdgd' in status) {
       navdata.hdgd = status.hdgd;
     }
-    if ('deap' in status) {
-      navdata.deapth = status.deap;
+    if ('deep' in status) {
+      navdata.depth = status.deep;
     }
     if ('pitc' in status) {
       navdata.pitch = status.pitc;
