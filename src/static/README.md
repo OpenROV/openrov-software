@@ -23,7 +23,7 @@ In the javascript console execute
 
 `window.frames[0].window.simevents.status.forEach(function(x){x({vout: 2.00})})`
 
-`window.frames[0].window.simevents.status.forEach(function(x){x({hdgd: "0.00", deap: "0.00", pitc: "0.00", roll: "0.00", yaw: "0.00", AVCC: "4892" ,
+`window.frames[0].window.simevents.status.forEach(function(x){x({hdgd: "0.00", deep: "0.00", pitc: "0.00", roll: "0.00", yaw: "0.00", AVCC: "4892" ,
 BRDI: "0.25",
 BRDT: "28.81",
 BRDV: "11.63",
@@ -40,7 +40,7 @@ atmp: "0.00",
 cmd: "rmtrmod()",
 cmpd: "Jul 28 2014, 01",
 cpuUsage: 0.17000000000000004,
-deap: "0.00",
+deep: "0.00",
 dlms: "0|316321|307462|311223|254734|551015|369616|4900",
 elevons: "1502,1502",
 elevtarg: "1500.00,1500.00",
