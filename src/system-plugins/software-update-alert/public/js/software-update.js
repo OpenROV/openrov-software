@@ -68,6 +68,7 @@
     var logoTitleModel = {};
     logoTitleModel.cockpitVersion = ko.observable('N/A');
     logoTitleModel.bbSerial = ko.observable('N/A');
+    //todo: we should get rid of the /deep/ reference 
     $('html /deep/ a.brand').attr('data-bind', 'attr: {title: "Version: " + cockpitVersion() + "\\nBB Serial: " + bbSerial()}');
 
     $.get(configManager.dashboardUrl() + '/plugin/software/installed/openrov-cockpit', function(data) {
