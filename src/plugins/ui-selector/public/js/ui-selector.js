@@ -2,7 +2,7 @@
   /*
     This plugin enables the user to select the UI Theme that is
     used for the UI.
-    
+
    */
 
   var UiSelector = function(cockpit) {

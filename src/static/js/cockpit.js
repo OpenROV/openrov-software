@@ -18,7 +18,7 @@
     this.capabilities = 0;
     this.loadedPlugins = [];
 
-    this.loadUi(function() {
+    this.loadUiTheme(function() {
       self.extensionPoints = {
         rovSettings: $('html /deep/ rov-settings'),
         rovDiagnostics: $('html /deep/ rov-diagnostics /deep/ #dropIn'),
@@ -59,7 +59,7 @@
     });
   };
 
-  Cockpit.prototype.loadUi = function(done) {
+  Cockpit.prototype.loadUiTheme = function(done) {
     var defaultUiName = 'standard-ui'; //temp
     var self = this;
     $.get('/plugin/ui-selector', function (config) {
