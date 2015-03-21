@@ -1,0 +1,144 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<polymer-element name="newui-switches">
+  <template>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style type="text/css">
+      #switchesContainer {
+        display: table;
+        border-collapse: collapse;
+      }
+      .switches-header-row {
+        display: table-row;
+      }
+      .switches-row {
+        display: table-row;
+        font-size: 1em;
+        line-height: 1em;
+      }
+      .switches-switch-on,
+      .switches-switch-off {
+        display: table-cell;
+        width: 30%;
+      }
+      .switches-switch-on {
+        text-align: right;
+        padding-right: 0.4em;
+        border-right: solid 1px white;
+      }
+      .switches-switch-off {
+        text-align: left;
+        padding-left: 0.4em;
+      }
+      .switches-header-row > div,
+      .switches-row > div {
+        padding-top: 0.1em;
+      }
+      .switches-header-row {
+        border-bottom: solid 1px #ffffff;
+        font-weight: bold;
+      }
+      .switch-on > .switches-switch-on { color: #ffffff }
+      .switch-on > .switches-switch-off { color: transparent }
+      .switch-off > .switches-switch-on { color: transparent }
+      .switch-off > .switches-switch-off { color: #ffffff }
+
+    </style>
+    <div id="switchesContainer" class="center">
+      <div class="switches-header-row">
+        <div class="switches-switch-on">ON</div>
+        <div class="switches-switch-off">OFF</div>
+      </div>
+
+    </div>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        lastPing: new Date(),
+        switches: {
+          COM: {switchable: false, state: false, message: { enabled: 'plugin.capestatus.connection.connected', disabled: 'capestatus.connection.disconnected'} },
+          GPD: {switchable: false, state: false, message: { enabled: 'plugin.input.gamepad.connected', disabled: 'plugin.input.gamepad.disconnected'} },
+          TNK: {switchable: false, state: false, message: 'plugin.tankControl'},
+          DLK: {switchable: false, state: false, message: 'plugin.rovpilot.depthHold'},
+          HLK: {switchable: false, state: false, message: 'plugin.rovpilot.headingHold'},
+          LSR: {switchable: false, state: false, message: 'plugin.laser' },
+          LED: {switchable: false, state: false},
+          ESC: {switchable: false, state: true, message: 'plugin.rovpilot.esc' }
+        },
+        update: function() {
+          for (var aSwitch in this.switches) {
+            var theSwitch = $(this.$.switchesContainer).find('#' + aSwitch);
+            var toRemove = this.switches[aSwitch].state ? "switch-off" : 'switch-on';
+            var toAdd = this.switches[aSwitch].state ? "switch-on" : 'switch-off';
+            theSwitch.removeClass(toRemove);
+            theSwitch.addClass(toAdd);
+          }
+        },
+        switch: function(aSwitch) {
+          var self = this;
+          self.switches[aSwitch].state = !self.switches[aSwitch].state;
+          self.update();
+        },
+        registerListeners: function(aSwitch) {
+          var self = this;
+          // register the enabled/disabled messages
+          if (self.switches[aSwitch].message){
+            var enabledKey;
+            var disabledKey;
+            if (typeof self.switches[aSwitch].message == 'string') {
+              enabledKey = self.switches[aSwitch].message + '.enabled';
+              disabledKey = self.switches[aSwitch].message + '.disabled';
+            }
+            else {
+              enabledKey = self.switches[aSwitch].message.enabled;
+              disabledKey = self.switches[aSwitch].message.disabled;
+            }
+            window.cockpit.rov.on(enabledKey, function () {
+              self.switches[aSwitch].state = true;
+              self.update();
+            });
+            window.cockpit.rov.on(disabledKey, function () {
+              self.switches[aSwitch].state = false;
+              self.update();
+            });
+
+          }
+
+        },
+        domReady: function() {
+          var self = this;
+          var container = $(this.$.switchesContainer);
+
+          self.onSwitch = function(aSwitch) { };
+
+          for (var aSwitch in self.switches) {
+            container.append(
+              '<div class="switches-row" id="' + aSwitch + '">'+
+              '<div class="switches-switch-on">' + aSwitch + '</div>'+
+              '<div class="switches-switch-off">'+ aSwitch + '</div>'+
+              '</div>');
+            if (self.switches[aSwitch].switchable) {
+              container.find('#' + aSwitch).click(function () {
+                var property = $(this).attr('id');
+                self.switch(property);
+                self.onSwitch(property);
+              })
+            }
+            this.registerListeners(aSwitch);
+          }
+
+          window.cockpit.rov.on('plugin.lights.level', function(level) {
+            var state = false;
+            if (level !== 'level0') { state = true; }
+            self.switches.LED.state = state;
+            self.update();
+          });
+        }
+      });
+    })();
+
+  </script>
+</polymer-element>

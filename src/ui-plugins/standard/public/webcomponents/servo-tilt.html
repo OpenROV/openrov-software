@@ -1,0 +1,40 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<polymer-element name="servo-tilt" attributes="">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <style>
+      img {
+        width: 32px;
+        height: 32px;
+      }
+    </style>
+
+    <img
+      id="servoTiltImage"
+      src="/themes/OpenROV/img/servo_tilt.png"
+      style="
+        -webkit-transform: rotate( {{servoAngle }}deg);
+        -moz-transform: rotate( {{servoAngle }}deg);
+        transform: rotate( {{servoAngle }}deg);
+        ">
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        servoAngle: 0,
+        domReady: function() {
+          var self = this;
+
+          window.cockpit.rov.on('plugin.cameraTilt.angle', function(angle) {
+            self.servoAngle = angle;
+          });
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>

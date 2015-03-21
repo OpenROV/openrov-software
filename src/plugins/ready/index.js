@@ -1,6 +1,6 @@
 function readyAyeReady(name, deps) {
   var done = false;
-  var lastLightCmd = "";
+  var lastLightCmd = '';
 
   //rovsys comes up when arduino starts
   deps.rov.on('rovsys', function(s){
@@ -21,17 +21,17 @@ function readyAyeReady(name, deps) {
        }
        else {
          clearInterval(chk);
-         setTimeout(function() { deps.rov.send('ligt(24.5)')}, 500);
-         setTimeout(function() { deps.rov.send('ligt(40.5)')}, 1000);
-         setTimeout(function() { deps.rov.send('ligt(24.5)')}, 1500);
-         setTimeout(function() { deps.rov.send('ligt(12.5)')}, 2000);
-         setTimeout(function() { deps.rov.send('ligt(0)')}, 2500);
-         setTimeout(function() { deps.rov.send('ligt(50)')}, 3500);
-         setTimeout(function() { deps.rov.send('ligt(0)')}, 4000);
-         setTimeout(function() { deps.rov.send('ligt(50)')}, 4500);
-         setTimeout(function() { deps.rov.send('ligt(0)')}, 5000);
+         setTimeout(function() { deps.rov.send('ligt(24.5)');}, 500);
+         setTimeout(function() { deps.rov.send('ligt(40.5)');}, 1000);
+         setTimeout(function() { deps.rov.send('ligt(24.5)');}, 1500);
+         setTimeout(function() { deps.rov.send('ligt(12.5)');}, 2000);
+         setTimeout(function() { deps.rov.send('ligt(0)');}, 2500);
+         setTimeout(function() { deps.rov.send('ligt(50)');}, 3500);
+         setTimeout(function() { deps.rov.send('ligt(0)');}, 4000);
+         setTimeout(function() { deps.rov.send('ligt(50)');}, 4500);
+         setTimeout(function() { deps.rov.send('ligt(0)');}, 5000);
         }}, 400);
-  }
+  };
 
 
   deps.rov.on('command', function(command) {

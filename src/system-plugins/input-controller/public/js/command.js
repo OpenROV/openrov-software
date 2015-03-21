@@ -6,8 +6,8 @@ inputController.Command = function(control) {
   if (control.name === undefined ||
       control.name.constructor != String ||
       control.name.trim().length === 0) {
-    alert("The passed InputController command does not have a valid string as property 'name'!\n" +
-          "Object: " + JSON.stringify(control));
+    alert('The passed InputController command does not have a valid string as property \'name\'!\n' +
+          'Object: ' + JSON.stringify(control));
   }
   else {
     self.name = control.name;

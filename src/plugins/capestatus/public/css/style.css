@@ -2,13 +2,3 @@
 //css for the plugin
 */
 
-#connectionHealth{
-    margin:5px 10px;
-    width:30px;
-    height: 30px;
-    background: url('../../../themes/OpenROV/img/bbconnection.png') no-repeat 0 0;
-}
-
-#connectionHealth.connected {
-    background-position: -29px 0;
-}

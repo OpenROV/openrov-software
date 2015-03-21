@@ -13,22 +13,22 @@ function softwareUpdate(name, deps) {
   });
 
   deps.app.get('/system-plugin/software-update/config/showAlerts', function (req, res) {
-    res.send(preferences['showAlerts']);
+    res.send(preferences.showAlerts);
   });
 
   deps.app.post('/system-plugin/software-update/config/showAlerts', function (req, res) {
-    preferences['showAlerts'] = req.body;
+    preferences.showAlerts = req.body;
     deps.config.preferences.set(PREFERENCES, preferences);
     deps.config.savePreferences();
     res.status(200);
-    res.send(preferences['showAlerts']);
+    res.send(preferences.showAlerts);
   });
 }
 
 function getPreferences(config) {
   var preferences = config.preferences.get(PREFERENCES);
-  if (preferences == undefined) {
-    preferences = { showAlerts: { showAlerts: true}, selectedBranches: { branches: "stable"} };
+  if (preferences === undefined) {
+    preferences = { showAlerts: { showAlerts: true}};
     config.preferences.set(PREFERENCES, preferences);
   }
   console.log('Software Update plugin loaded preferences: ' + JSON.stringify(preferences));

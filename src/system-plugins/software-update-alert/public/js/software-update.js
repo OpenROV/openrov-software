@@ -25,18 +25,17 @@
     });
 
     function subscribeToShowAlerts() {
-      var showAlertsSubscription = undefined;
+      var showAlertsSubscription;
       showAlertsSubscription = self.showAlerts.subscribe(function(newValue){
         if (self.showAlerts()) {
           showAlertsSubscription.dispose();
         }
         configManager.setShowAlerts(self.showAlerts());
         self.isSaved(true);
-        setTimeout(function() {self.isSaved(false)}, 2000);
+        setTimeout(function() {self.isSaved(false);}, 2000);
         return true;
       });
     }
-
   };
 
   var SoftwareUpdater = function SoftwareUpdater(cockpit) {
@@ -51,12 +50,13 @@
     this.cockpit = cockpit;
     var packagesUpdated = false;
 
-    $('#plugin-settings').append('<div id="software-update-settings"></div>');
+    this.cockpit.extensionPoints.rovSettings.append('<div id="software-update-settings"></div>');
     $('body').prepend('<div id="software-update-alert-container" class="alert alert-success hide"></div>');
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('software-update.js');
-    $('#software-update-settings').load(jsFileLocation + '../settings.html', function () {
-      ko.applyBindings(self.model, document.getElementById('software-update-settings'));
+    var updateSettings = this.cockpit.extensionPoints.rovSettings.find('#software-update-settings');
+      updateSettings.load(jsFileLocation + '../settings.html', function () {
+      ko.applyBindings(self.model, updateSettings[0]);
     });
     $('#software-update-alert-container').load(jsFileLocation + '../ui-templates.html', function () {
     });
@@ -68,7 +68,8 @@
     var logoTitleModel = {};
     logoTitleModel.cockpitVersion = ko.observable('N/A');
     logoTitleModel.bbSerial = ko.observable('N/A');
-    $('a.brand').attr('data-bind', 'attr: {title: "Version: " + cockpitVersion() + "\\nBB Serial: " + bbSerial()}');
+    //todo: we should get rid of the /deep/ reference 
+    $('html /deep/ a.brand').attr('data-bind', 'attr: {title: "Version: " + cockpitVersion() + "\\nBB Serial: " + bbSerial()}');
 
     $.get(configManager.dashboardUrl() + '/plugin/software/installed/openrov-cockpit', function(data) {
         if (data.length > 0) {
@@ -76,12 +77,12 @@
           console.log('Cockpit version: ' + logoTitleModel.cockpitVersion());
         }
        })
-      .fail(function() { console.log('Error getting the cockpit version') });
+      .fail(function() { console.log('Error getting the cockpit version'); });
     $.get(configManager.dashboardUrl() + '/plugin/software/bbserial', function(data) {
          logoTitleModel.bbSerial(data.bbSerial);
          console.log('BB Serial: ' + logoTitleModel.bbSerial());
        })
-      .fail(function() { console.log('Error getting the cockpit version') });
+      .fail(function() { console.log('Error getting the cockpit version'); });
     ko.applyBindings(logoTitleModel, $('a.brand')[0]);
 
     self.model.showAlerts.subscribe(function(newValue) {
@@ -100,13 +101,13 @@
             console.log('Done apt-get update on cockpit');
             checkForUpdates(checker);
            })
-          .fail(function() { console.log('Error starting apt-get update on cockpit') });
+          .fail(function() { console.log('Error starting apt-get update on cockpit'); });
       }, 2 * 60 * 1000); //two minutes
 
     function checkForUpdates(checker) {
       checker.checkForUpdates(function (updates) {
         if (updates && updates.length > 0) {
-          var model = { packages: updates, dashboardUrl: configManager.dashboardUrl }
+          var model = { packages: updates, dashboardUrl: configManager.dashboardUrl };
           var container = $('#software-update-alert-container');
           ko.applyBindings(model, container[0]);
           container.removeClass('hide');

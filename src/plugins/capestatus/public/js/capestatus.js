@@ -9,18 +9,6 @@
     var Battery = function() {};
     var batteryConfig = new capestatus.BatteryConfig();
 
-    self.bindingModel = {
-      cockpit: self.cockpit,
-      theLocaltime: ko.observable("localtime"),
-      formattedRunTime: ko.observable('runtime'),
-      currentCpuUsage: ko.observable(''),
-      currentVoltage: ko.observable(0),
-      currentCurrent: ko.observable(''),
-      isConnected: ko.observable(false),
-      brightnessLevel: ko.observable('level0'),
-      servoAngle: ko.observable(0)
-    };
-
     self.settingsModel = {
       batteryTypes: ko.observableArray(),
       batteryType: ko.observable(),
@@ -35,7 +23,7 @@
         var result = ko.validation.group(model.newBattery(), {deep: true});
         if (!model.newBattery().isValid())
         {
-          alert("Please fix all errors before preceding");
+          alert('Please fix all errors before preceding');
           result.showAllMessages(true);
 
           return false;
@@ -65,13 +53,28 @@
       if (existing.length > 0) { return existing[0]; }
       return null;
     });
-    self.bindingModel.batteryLevel = ko.computed(function() {
-      return self.batteryLevel(self.bindingModel.currentVoltage(), self.settingsModel.selectedBattery());
-    });
 
     //add manual subscriptions
     self.settingsModel.batteryType.subscribe(function(newValue) {
       batteryConfig.setSelected(newValue);
+    });
+
+    var toBatteryConfig = function(battery) {
+      if (battery) {
+        return {
+          name: battery.name(),
+          minVoltage: battery.minVoltage(),
+          maxVoltage: battery.maxVoltage()
+        };
+      }
+      return { name: '', minVoltage: 0, maxVoltage: 0 };
+    };
+
+    self.settingsModel.selectedBattery.subscribe(function(battery) {
+      self.cockpit.rov.emit('plugin.capestatus.battery.config', toBatteryConfig(battery) );
+    });
+    self.cockpit.rov.on('plugin.capestatus.request.battery.config', function(clb) {
+      clb(toBatteryConfig(self.settingsModel.selectedBattery()));
     });
 
     Battery = function(name, minVoltage, maxVoltage) {
@@ -86,13 +89,13 @@
                 return ko.utils.unwrapObservable(opt.name) === selectedVal;
               }
             },
-            message: "The battery name must be unique!"
+            message: 'The battery name must be unique!'
           }
         });
       bat.maxVoltage = ko.observable(maxVoltage !== undefined ? maxVoltage : 0);
       bat.minVoltage = ko.observable(minVoltage !== undefined ? minVoltage : 0);
       bat.description = ko.computed(function() {
-        return bat.name() + " (min: " + bat.minVoltage() + "v - max: " + bat.maxVoltage() + "v)";
+        return bat.name() + ' (min: ' + bat.minVoltage() + 'v - max: ' + bat.maxVoltage() + 'v)';
       });
 
       bat.maxVoltage
@@ -133,26 +136,15 @@
       self.settingsModel.batteryType(batteryConfig.selectedBattery);
     });
 
-    // Add required UI elements
-    var jsFileLocation = urlOfJsFile('capestatus.js');
-    $('body').append('<div id="capestatus-templates"></div>');
-    $('#capestatus-templates').load(jsFileLocation + '../ui-templates.html', function () {
-      $('#footercontent').prepend('<div id="capestatus_footercontent" data-bind="template: {name: \'template_capestatus_footercontent\'}"></div>');
-      ko.applyBindings(self.bindingModel, document.getElementById('capestatus_footercontent'));
-      $('#footercontent').prepend('<div id="capestatus_connectionHealth" data-bind="template: {name: \'template_capestatus_connectionHealth\'}"></div>');
-      ko.applyBindings(self.bindingModel, document.getElementById('capestatus_connectionHealth'));
-      // these don't belong here IMHO as the rovPilot controls them
-      $('#servoTilt').attr("data-bind", "template: { name: 'template_capestatus_servotilt' }");
-      $('#navtoolbar').append('<li id="brightnessIndicator" data-bind="attr: { class: $data.brightnessLevel }" ></li>');
-      ko.applyBindings(self.bindingModel, document.getElementById('brightnessIndicator'));
-      ko.applyBindings(self.bindingModel, document.getElementById('servoTilt'));
-    });
-    $('#plugin-settings').append('<div id="capestatus-settings"></div>');
-    $('#capestatus-settings').load(jsFileLocation + '../settings.html', function () {
 
+    var jsFileLocation = urlOfJsFile('capestatus.js');
+    cockpit.extensionPoints.rovSettings.append('<div id="capestatus-settings"></div>');
+
+    var statusSettings = cockpit.extensionPoints.rovSettings.find('#capestatus-settings');
+    statusSettings.load(jsFileLocation + '../settings.html', function () {
       ko.applyBindingsWithValidation(
         self.settingsModel,
-        document.getElementById('capestatus-settings'),
+        statusSettings[0],
         {
           insertMessages: true,
           decorateElement: true,
@@ -165,7 +157,9 @@
 
     setInterval(function () {
       self.updateConnectionStatus();
-      self.bindingModel.theLocaltime(new Date().toLocaleTimeString());
+      var now = new Date();
+      var nowFormatted = now.toLocaleTimeString();
+      self.cockpit.rov.emit('plugin.capestatus.time.time', { raw: now, formatted: nowFormatted});
     }, 1000);
 
   };
@@ -173,51 +167,12 @@
   //so that the reference to this instance is available for further processing
   capestatus.Capestatus.prototype.listen = function listen() {
     var capes = this;
-    this.cockpit.socket.on('status', function (data) {
+    this.cockpit.rov.on('status', function (data) {
       capes.UpdateStatusIndicators(data);
     });
   };
-  capestatus.Capestatus.prototype.batteryLevel = function batteryLevel(voltage, battery) {
-    if (battery === null) { return 'level1'; }
-
-    var minVoltage = parseFloat(battery.minVoltage());
-    var maxVoltage = parseFloat(battery.maxVoltage());
-    var difference = maxVoltage - minVoltage;
-    var steps = difference / 5;
-
-    if (voltage < (minVoltage + steps))
-      return 'level1';
-    if (voltage < (minVoltage + (steps *2)))
-      return 'level2';
-    if (voltage < (minVoltage + (steps *3)))
-      return 'level3';
-    if (voltage < (minVoltage + (steps *4)))
-      return 'level4';
-    return 'level5';
-  };
   capestatus.Capestatus.prototype.UpdateStatusIndicators = function UpdateStatusIndicators(data) {
     var self = this;
-    if ('time' in data) {
-      self.bindingModel.formattedRunTime(msToTime(data.time));
-    }
-
-    if ('vout' in data) {
-      self.bindingModel.currentVoltage(data.vout.toFixed(1));
-    }
-
-    if ('iout' in data)
-      self.bindingModel.currentCurrent(data.iout.toFixed(3) + 'A');
-
-    if ('servo' in data) {
-      var angle = 90 / 500 * data.servo * -1 - 90;
-      self.bindingModel.servoAngle(angle);
-    }
-
-    if ('cpuUsage' in data)
-      self.bindingModel.currentCpuUsage((data.cpuUsage * 100).toFixed(0) + '%');
-
-    if ('LIGP' in data)
-      self.bindingModel.brightnessLevel('level' + Math.ceil(data.LIGP * 10));
 
     this.lastPing = new Date();
   };
@@ -227,8 +182,11 @@
     var now = new Date();
     var delay = now - this.lastPing;
 
-    self.bindingModel.isConnected(delay <= 3000);
+    var isConnected = delay <= 3000;
+
+    self.cockpit.rov.emit('plugin.capestatus.connection.' + (isConnected ? 'connected' : 'disconnected'));
   };
+
   window.Cockpit.plugins.push(capestatus.Capestatus);
 
 }(window, jQuery));

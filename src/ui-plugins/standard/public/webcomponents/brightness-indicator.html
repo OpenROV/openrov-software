@@ -1,0 +1,29 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<polymer-element name="brightness-indicator" attributes="">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <style>
+    </style>
+
+    <div id="brightnessIndicator" class="{{brightnessLevel}}" ></div>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        brightnessLevel: 'level0',
+        domReady: function() {
+          var self = this;
+
+          window.cockpit.rov.on('plugin.lights.level', function(level) {
+            self.brightnessLevel = level;
+          });
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>

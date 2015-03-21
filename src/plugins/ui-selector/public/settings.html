@@ -1,0 +1,21 @@
+
+<div id="capeStatus-settings">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#capestatus-settings" href="#collapseCapestatus">
+        UI Configuration
+      </a>
+    </div>
+    <div id="collapseCapestatus" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <div>
+          <label for="UIs">Select a UI:</label>
+          <select id="UIs" data-bind="options: availableUIs,
+                       optionsText: 'viewName',
+                       value: selectedUi"></select>
+          <button data-bind="click: apply">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

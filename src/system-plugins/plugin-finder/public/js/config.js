@@ -1,10 +1,11 @@
+(function() {
 'use strict';
 var PluginFinderConfig;
 PluginFinderConfig = function PluginFinderConfig() {
   var self = this;
   self.get = function (pluginName, callback) {
     $.get('/system-plugin/plugin-finder/config/' + pluginName, function (config) {
-      if (callback != undefined)
+      if (callback !== undefined)
         callback(config);
     });
   };
@@ -12,3 +13,4 @@ PluginFinderConfig = function PluginFinderConfig() {
     $.post('/system-plugin/plugin-finder/config/' + pluginName, config);
   };
 };
+})();

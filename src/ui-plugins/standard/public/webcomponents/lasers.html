@@ -1,0 +1,65 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<polymer-element name="rov-lasers" attributes="">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <style>
+      .indicator {
+        top: 5px;
+        height: 20px;
+        line-height: 20px;
+        padding: 10px 2px;
+        background-color: transparent;
+      }
+
+      #laser {
+        color: white;
+        border: 1px solid #cd0a0a;
+        display: list-item;
+      }
+
+      #laser.enabled {
+        background-color: #cd0a0a;
+      }
+
+      #laserIcon {
+        width: 40px;
+        height: 35px;
+        margin-top: -7px;
+        background-image: url("./img/laser_off.png");
+      }
+
+      #laser.enabled #laserIcon {
+        background-image: url("./img/laser_on.png");
+      }
+    </style>
+
+    <a href="/#" on-click="{{ toggle }}" class="indicator {{ lasersEnabled ? 'enabled' : '' }}" id="laser" class="indicator">
+      <div id="laserIcon"></div>
+    </a>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        lasersEnabled: false,
+        domReady: function() {
+          var self = this;
+
+          window.cockpit.rov.on('plugin.laser.enabled', function() {
+            self.lasersEnabled = true;
+          });
+          window.cockpit.rov.on('plugin.laser.disabled', function() {
+            self.lasersEnabled = false;
+          });
+        },
+        toggle: function() {
+          window.cockpit.rov.emit('plugin.laser.toggle');
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>

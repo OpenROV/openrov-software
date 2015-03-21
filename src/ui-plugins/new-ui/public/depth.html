@@ -1,0 +1,137 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<polymer-element name="newui-depth">
+  <template>
+    <style type="text/css">
+
+      .unit { font-size: 0.95em; }
+      .text-center { text-align: center;}
+      #depthContainer {
+        width: 100%;
+        margin-bottom: -1.3vw;
+      }
+      #depth {
+        font-size: 2.1vw;
+        font-weight: bold;
+      }
+      .depth-line-container,
+      #depth-change-container {
+        display:table;
+        width:100%;
+      }
+      .depth-line-container span,
+      #depth-change-container>div {
+        display:table-cell;
+        text-align:center;
+      }
+      .depth-line { width: 50%; height: 5px}
+      .depth-line-text {
+        padding-left: 4px;
+        padding-right: 4px;
+        font-size: 0.9em;
+      }
+      .depth-line hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 0.2em solid white;
+        margin: 0 0 .2em;
+        padding: 0;
+      }
+    
+      #depthChangeUp { padding-left: 1em }
+      #depthChangeDown { padding-right: 1em }
+      #depth-change-value { vertical-align: middle; font-size: 1.4em }
+      #depth-change-unit { margin-top: -6px; }
+      .depth-change-indicator { width: 20px; height: 20px }
+      svg { width: 100%; }
+    </style>
+    <div id="depthContainer">
+      <div id="depth" class="center text-center">
+        {{depth}}
+      </div>
+      <div id="depth-unit" class="center text-center unit">m</div>
+      <div class="depth-line-container">
+        <span class="depth-line"><hr /></span>
+        <span class="depth-line-text">VSI</span>
+        <span class="depth-line"><hr /></span>
+      </div>
+      <div id="depth-change-container">
+        <div id="depthChangeUp" class="depth-change-indicator">
+          <svg viewBox="0 0 100 100">
+            <polygon points="0,100 50,0 100,100" style="fill:black;stroke:black;stroke-width:4" />
+          </svg>
+        </div>
+        <div id="depth-change-value">{{ change }}</div>
+        <div id="depthChangeDown" class="depth-change-indicator">
+          <svg viewBox="0 0 100 100">
+            <polygon points="0,0 50,100 100,0 " style="fill:none;stroke:black;stroke-width:4" />
+          </svg>
+        </div>
+      </div>
+      <div id="depth-change-unit" class="center text-center unit">m/s</div>
+    </div>
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        depth: 0.0,
+        change: "0.0",
+        options: {
+          indicatorActive: "#ffffff",
+          indicatorInactive: "#000000",
+          strokeActive: "#ffffff",
+          strokeInactive: "#ffffff"
+        },
+        domReady: function () {
+          var self = this;
+
+          var oldDepth = 0;
+          var currentDepth = 0;
+
+          var depthChangeUp = $(this.$.depthChangeUp).find('svg polygon');
+          var depthChangeDown = $(this.$.depthChangeDown).find('svg polygon');
+
+          var update = function () {
+            if (currentDepth > oldDepth) { // descending
+              depthChangeUp.animate({svgFill: self.options.indicatorInactive}, {duration: 600});
+              depthChangeDown.animate({svgFill: self.options.indicatorActive}, {duration: 600});
+            }
+            else if (currentDepth < oldDepth) { // ascending
+              depthChangeUp.animate({svgFill: self.options.indicatorActive}, {duration: 600});
+              depthChangeDown.animate({svgFill: self.options.indicatorInactive}, {duration: 600});
+
+            }
+            else { // neutral
+              depthChangeUp.animate({svgFill: self.options.indicatorInactive}, {duration: 600});
+              depthChangeDown.animate({svgFill: self.options.indicatorInactive}, {duration: 600});
+            }
+            self.depth =  currentDepth;
+            var difference = oldDepth - currentDepth;
+
+            var changeText = "";
+            if (difference > 0) {
+              changeText = "+";
+            }
+            changeText += difference.toFixed(2);
+            self.change = changeText;
+
+            oldDepth = currentDepth;
+          };
+
+          depthChangeUp.css({fill: self.options.indicatorInactive, stroke: self.options.strokeInactive});
+          depthChangeDown.css({fill: self.options.indicatorInactive, stroke: self.options.strokeInactive});
+
+          setInterval(update, 1000);
+
+          window.cockpit.rov.on('plugin.navigationData.data', function (data) {
+            if ('depth' in data) {
+              currentDepth = data.depth;
+            }
+          });
+        }
+      });
+    })();
+
+  </script>
+
+</polymer-element>

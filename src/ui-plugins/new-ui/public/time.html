@@ -1,0 +1,80 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="newui-time" attributes="time">
+  <template>
+    <style type="text/css">
+
+      #time-container {
+        display: table;
+        color: #ffffff;
+        width: 100%;
+      }
+      .time-row {
+        display: table-row;
+      }
+      .time-cell {
+        display: table-cell;
+      }
+      #time-container #time,
+      #time-container #runtime
+      {
+        font-size: 1.6vw;
+      }
+      .line-cell {
+        display: table-cell;
+        width: 50%; height: 5px
+      }
+      .description-cell {
+        padding-left: 4px;
+        padding-right: 4px;
+        font-size: 0.9em;
+      }
+      .line-cell hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 0.1em solid white;
+        margin: 0 0 .2em;
+        padding: 0;
+      }
+      .text-center { text-align: center;}
+
+    </style>
+    <div id="time-container" class="center">
+      <div class="time-row">
+        <div id="time" class="time-cell text-center">{{time}}</div>
+      </div>
+      <div class="time-row">
+        <div class="time-cell">
+          <span class="line-cell"><hr /></span>
+          <span class="time-cell description-cell text-center">RUN</span>
+          <span class="line-cell"><hr /></span>
+        </div>
+      </div>
+      <div class="time-row">
+        <div id="runtime" class="time-cell text-center">{{ runtime }}</div>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      time: new Date().toLocaleTimeString(),
+      runtime: "00:00:00",
+      ready: function() {
+        var self = this;
+
+        window.cockpit.rov.on('plugin.capestatus.time.time', function(time) {
+          self.time = time.formatted;
+        });
+        window.cockpit.rov.on('plugin.capestatus.time.runtime', function(runtime) {
+          self.runtime = runtime.formatted;
+        })
+      }
+    });
+  </script>
+
+</polymer-element>
+  
+
+

@@ -21,9 +21,9 @@ var ArduinoPhysics = function () {
     port += yaw;
     starbord -= yaw;
     return {
-      port: physics.mapMotor(port),
-      starbord: physics.mapMotor(starbord),
-      vertical: physics.mapMotor(vertical)
+      port: physics.mapRawMotor(port),
+      starbord: physics.mapRawMotor(starbord),
+      vertical: physics.mapRawMotor(vertical)
     };
   };
   physics.mapVoltageReading = function (voltage) {

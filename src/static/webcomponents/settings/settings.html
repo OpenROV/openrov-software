@@ -1,0 +1,30 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../drop-in-dialog/drop-in-dialog.html">
+
+
+<polymer-element name="rov-settings" attributes="" extends="drop-in-dialog">
+  <template>
+    <shadow></shadow>
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        header: 'Settings',
+        childId: 'settings-container',
+        open: function() {
+          window.cockpit.sendUpdateEnabled = false;
+          this.super();
+          $('html /deep/ #capestatus-settings').collapse('show');
+        },
+        hide: function () {
+          window.cockpit.sendUpdateEnabled = true;
+          this.super();
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>
+  
+
+

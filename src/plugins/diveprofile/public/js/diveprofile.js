@@ -7,12 +7,14 @@
     // Instance variables
     this.cockpit = cockpit;
     // Add required UI elements
-    $('#diagnostic H4:contains(\'Callibration\')').after('<a href="#" class="btn" id="toggle_watertype">Switch Water Type</a>');
+    var calibrations = cockpit.extensionPoints.rovDiagnostics.find('#calibrations');
+    calibrations.append('<a href="#" class="btn" style="z-index: 100" id="toggle_watertype">Switch Water Type</a>');
     // Listen to navdata updates
     var self = this;
-    $('#toggle_watertype').click(function () {
-      self.cockpit.socket.emit('depth_togglewatertype');
+    cockpit.extensionPoints.rovDiagnostics.find('#toggle_watertype').click(function () {
+      self.cockpit.rov.emit('plugin.diveprofile.watertype.toggle');
     });
+
   };
   window.Cockpit.plugins.push(DiveProfile);
 }(window, document, undefined));

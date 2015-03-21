@@ -11,25 +11,66 @@
 
   //Cockpit is inheriting from EventEmitter2.
   var Cockpit = function Cockpit(csocket) {
-    this.socket = csocket;
+    var self = this;
+    this.uiLoader = new window.UiLoader();
+    this.rov = new window.MessageManager(csocket);
     this.sendUpdateEnabled = true;
     this.capabilities = 0;
     this.loadedPlugins = [];
-    this.loadPlugins();
-    console.log('loaded plugins');
-    // Register the various event handlers
-    this.listen();
+
+    this.loadUiTheme(function() {
+      self.extensionPoints = {
+        rovSettings: $('html /deep/ rov-settings'),
+        rovDiagnostics: $('html /deep/ rov-diagnostics /deep/ #dropIn'),
+        videoContainer: $('html /deep/ rov-video'),
+        keyboardInstructions: $('html /deep/ #keyboardInstructions'),
+        buttonPanel: $('html /deep/ #buttonPanel'),
+        menu: $('html /deep/ rov-menu'),
+        inputController: undefined //will be set by the plugin
+      };
+
+      self.extensionPoints.rovSettings.registerCloseHandler = function(handler) {
+        if (self.extensionPoints.rovSettings[0]) {
+          self.extensionPoints.rovSettings[0].registerCloseHandler(handler);
+        }
+       };
+      self.extensionPoints.rovDiagnostics.registerCloseHandler = function(handler) {
+        if (self.extensionPoints.rovDiagnostics[0]) {
+          self.extensionPoints.rovDiagnostics[0].registerCloseHandler(handler);
+        }
+      };
+
+      self.loadPlugins();
+      console.log('loaded plugins');
+      // Register the various event handlers
+      self.listen();
+    });
   };
   Cockpit.prototype = new EventEmitter2();
   Cockpit.prototype.constructor = Cockpit;
 
   Cockpit.prototype.listen = function listen() {
     var cockpit = this;
-    cockpit.socket.on('rovsys', function (data) {
+    cockpit.rov.on('rovsys', function (data) {
       console.log('got RovSys update from Arduino');
       if ('capabilities' in data) {
         cockpit.capabilities = data.capabilities;
       }
+    });
+  };
+
+  Cockpit.prototype.loadUiTheme = function(done) {
+    var defaultUiName = 'standard-ui'; //temp
+    var self = this;
+    $.get('/plugin/ui-selector', function (config) {
+      if (config.selectedUi && config.selectedUi.trim().length > 0) {
+        self.uiLoader.load(config.selectedUi, done);
+      }
+      else {
+        self.uiLoader.load(defaultUiName, done);
+      }
+    }).fail(function() {
+      self.uiLoader.load(defaultUiName, done);
     });
   };
 
@@ -58,7 +99,7 @@
     });
 
     Cockpit.plugins = [];  //flush them out for now. May move to a loaded array if we use in the future
-    cockpit.emit('cockpit.pluginsLoaded');
+    cockpit.rov.emit('cockpit.pluginsLoaded');
   };
   Cockpit.prototype.addPlugin = function addPlugin(plugin) {
     var cockpit = this;
@@ -67,5 +108,6 @@
   };
   // Static array containing all plugins to load
   Cockpit.plugins = [];
+  Cockpit.UIs = [];
   window.Cockpit = Cockpit;
 }(window, document));

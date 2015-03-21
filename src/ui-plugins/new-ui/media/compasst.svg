@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="svg3988" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 989.19 980.61" height="100%" width="100%" version="1.2" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <metadata id="metadata4078">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="g4986" transform="translate(22.040901,12.197624)">
+  <g id="rose">
+   <circle id="circle" r="360" d="m 832.5,472.5 c 0,198.82251 -161.17749,360 -360,360 -198.82251,0 -360,-161.17749 -360,-360 0,-198.82251 161.17749,-360 360,-360 198.82251,0 360,161.17749 360,360 z" stroke="#000" cy="472.5" cx="472.5" stroke-width="10" fill="none"/>
+   <rect id="rect4935" y="96" width="10" height="30" x="467.5"/>
+   <rect id="rect4937" transform="matrix(-1,0,0,-1,945,945)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4943" transform="matrix(0,1,-1,0,945,0)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4949" transform="matrix(0,-1,1,0,0,945)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4951" transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,-195.71591,472.5)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4953" transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,472.5,1140.7159)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4955" transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,1140.7159,472.5)" height="30" width="10" y="96" x="467.5"/>
+   <rect id="rect4957" transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,472.5,-195.71591)" height="30" width="10" y="96" x="467.5"/>
+   <g id="indicators" font-size="100px" font-weight="bold" style="word-spacing:0;letter-spacing:0;" letter-spacing="0" word-spacing="0" font-family="Sans">
+    <text id="indicator_n" y="90.702766" x="471.9191" style="text-anchor:middle;text-align:center;" line-height="125%">N</text>
+    <text id="text4961" style="text-anchor:middle;text-align:center;" transform="matrix(-1,0,0,-1,943.74133,945)" y="80.803268" x="471.90582" line-height="125%">S</text>
+    <text id="text4965" style="text-anchor:middle;text-align:center;" transform="matrix(0,1,-1,0,0,0)" y="-864.25293" x="471.84961" line-height="125%">E</text>
+    <text id="text4967" style="text-anchor:middle;text-align:center;" transform="matrix(0,-1,1,0,0,0)" y="80.859489" x="-473.15039" line-height="125%">W</text>
+    <text id="text4969" style="text-anchor:middle;text-align:center;" transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" font-size="72px" y="278.64713" x="-4.2105641" line-height="125%">NW</text>
+    <text id="text4971" style="text-anchor:middle;text-align:center;" transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)" font-size="72px" y="-393.78027" x="-670.0802" line-height="125%">SW</text>
+    <text id="text4973" style="text-anchor:middle;text-align:center;" transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)" font-size="72px" y="-1060.8452" x="1.1167512" line-height="125%">SE</text>
+    <text id="text4975" style="text-anchor:middle;text-align:center;" transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)" font-size="72px" y="-391.12482" x="667.26764" line-height="125%">NE</text>
+   </g>
+  </g>
+  <text id="heading" letter-spacing="0" font-weight="bold" style="word-spacing:0;letter-spacing:0;text-anchor:middle;text-align:center;" line-height="125%" word-spacing="0" font-size="305.56399536px" y="578.01447" x="460.67117" font-family="Sans">0</text>
+  <g id="indicator" stroke="#000" transform="matrix(1.7501572,0,0,0.99584517,-324.5931,33.432827)">
+   <rect id="rect4935-9" height="76.511" width="10" y="85.057" x="450.31" stroke-width="1.5523"/>
+  </g>
+  <circle id="bearing" cy="80" cx="472.5" r="20" d="m 492.5,80 c 0,11.045695 -8.95431,20 -20,20 -11.04569,0 -20,-8.954305 -20,-20 0,-11.045695 8.95431,-20 20,-20 11.04569,0 20,8.954305 20,20 z"/>
+ </g>
+</svg>

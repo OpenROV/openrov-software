@@ -40,10 +40,18 @@
                     id="arduiniFirmware-details" readonly="readonly" data-bind="text: details"></textarea></div>
         </div>
     </div>
-    <div class="modal-footer"><a href="#" class="btn" data-toggle="modal" data-target="#firmware-upload-dialog"
-                                 data-bind="css: { disabled: inProgress() }, visible: ! arduinoUploaded()">Cancel</a> <a
-            href="#" class="btn btn-primary" id="arduinoFirmware-startupload" data-bind="visible: ! arduinoUploaded()">Apply
-        new firmware</a> <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal"
+    <div class="modal-footer">
+      <a href="#"
+         class="btn"
+         data-toggle="modal"
+         data-target="#firmware-upload-dialog"
+         data-bind="css: { disabled: inProgress() }, visible: ! arduinoUploaded()">Cancel</a>
+      <a href="#"
+         class="btn btn-primary"
+         id="arduinoFirmware-startupload"
+         data-bind="visible: ! arduinoUploaded(), css: { disabled: inProgress() }">
+          Apply new firmware</a>
+      <a href="#" class="btn btn-primary" id="arduinoFirmware-closeupload" data-toggle="modal"
                             data-target="#firmware-upload-dialog" data-bind="visible: arduinoUploaded() || failed()">Close</a>
     </div>
 </div>

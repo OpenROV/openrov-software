@@ -17,7 +17,7 @@ function Hardware() {
       parser: serialPort.parsers.readline('\r\n')
     });
 
-    hardware.serial.on("open", function () {
+    hardware.serial.on('open', function () {
       serialConnected = true;
       logger.log('Serial port open');
     });

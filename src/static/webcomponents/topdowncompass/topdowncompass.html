@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="rov-topdowncompass">
+  <template>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/topdowncompass.css">
+
+    <style type="text/css">
+    </style>
+
+    <div id="compass" class="topdowncompass pull-left">
+      <div id="needle" class="compassNeedle"></div>
+    </div>
+
+  </template>
+  <script>
+    (function() {
+
+      Polymer({
+        ready: function () {
+          var compass = this;
+          window.cockpit.rov.on('plugin.navigationData.data', function(data) {
+            compass.moveTo(data.heading);
+          });
+        },
+        moveTo: function(degrees) {
+
+          var aR;
+          this.heading = this.heading || 0; // if rot undefined or 0, make 0, else rot
+          aR = this.heading % 360;
+          if ( aR < 0 ) { aR += 360; }
+          if ( aR < 180 && (degrees > (aR + 180)) ) { this.heading -= 360; }
+          if ( aR >= 180 && (degrees <= (aR - 180)) ) { this.heading += 360; }
+          this.heading  += (degrees - aR);
+
+
+          var cp = $(this.$.needle);
+
+          cp.css({
+            "transform" : "rotate(" + (this.heading) + "deg)",
+            "-ms-transform" : "rotate(" + (this.heading) + "deg)",
+            "-webkit-transform" : "rotate(" + (this.heading) + "deg)"
+          })
+        }
+      });
+    })();
+  </script>
+
+</polymer-element>
+  
+
+

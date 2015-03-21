@@ -1,0 +1,140 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="video-compass">
+  <template>
+    <style type="text/css">
+      #container {
+        width: 100%;
+        height: 30px;
+        bottom: 0;
+        margin-top: -20px;
+      }
+      #compass {
+        position: absolute;
+        width: 100%;
+        height: 30px;
+        z-index: 5;
+        background-image: -webkit-radial-gradient(50% 50%, circle cover, rgb(68, 68, 68) 0%, black 100%);
+        overflow: hidden;
+      }
+
+      .hud {
+        width: 100%;
+      }
+    </style>
+    <div id="container">
+      <div id="compass" class="hud">
+        <canvas id="compassCanvas"></canvas>
+        <canvas id="needle"></canvas>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    (function() {
+
+      var headings = [
+        'N',
+        'E',
+        'S',
+        'W'
+        ];
+
+      Polymer({
+        domReady: function () {
+
+          var div = this.$.compass;
+          // Listen to navdata updates
+          var compass = this;
+
+          window.cockpit.rov.on('plugin.navigationData.data', function(data) {
+            if (compass.canvas) { //make sure we're loaded already
+              compass.moveTo(data.heading);
+            }
+          });
+
+          // Setup compass canvas
+          var divRect = div.getBoundingClientRect(), ctx, x, i, needle;
+          this.visibleWidth = divRect.width * (720 / 120);
+          this.canvas = this.$.compassCanvas;
+          this.canvas.width = this.visibleWidth * 2;
+          this.canvas.height = divRect.height + 30;
+          ctx = this.canvas.getContext('2d');
+          x = 0;
+          ctx.textAlign = 'center';
+
+          for (i = 0; i < 360 * 2; i += 1) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            if (i % 90 === 0) {
+              ctx.fillStyle = 'white';
+              ctx.font = 'bold';
+              ctx.fillText(headings[i / 90 % 4], x, 24);
+              ctx.strokeStyle = 'white';
+              ctx.lineTo(x, 10);
+              ctx.lineWidth = 2;
+            } else if (i % 10 === 0) {
+              ctx.fillStyle = '#CCC';
+              ctx.font = 'normal';
+              ctx.fillText(i % 360, x, 24);
+              ctx.strokeStyle = 'white';
+              ctx.lineWidth = 1;
+              ctx.lineTo(x, 7);
+            } else {
+              ctx.strokeStyle = 'white';
+              ctx.lineTo(x, 5);
+              ctx.lineWidth = 0.5;
+            }
+            ctx.stroke();
+            x += this.visibleWidth / 720;
+          }
+          needle = this.$.needle;
+          needle.width = 15;
+          needle.height = 15;
+          needle.style.top = 0;
+          needle.style.left = Math.floor(this.visibleWidth / 2 * (120 / 720) - needle.width / 2) + 'px';
+          needle.style.position = 'absolute';
+          ctx = needle.getContext('2d');
+          ctx.fillStyle = 'red';
+          ctx.moveTo(0, 0);
+          ctx.lineTo(Math.ceil(needle.width / 2), needle.height);
+          ctx.lineTo(needle.width, 0);
+          ctx.lineTo(0, 0);
+          ctx.fill();
+          this.moveTo(0);
+
+          // Bind on window events to resize
+          $(window).resize(function (event) {
+
+            //Bandaid. The entire compass should be moved in to a draw function that gets cleared and redrawn on resize.
+            var divRect = div.getBoundingClientRect();
+            var visibleWidth = divRect.width * (720 / 120);
+            needle.style.left = Math.floor(visibleWidth / 2 * (120 / 720) - needle.width / 2) + 'px';
+          });
+
+        },
+        moveTo: function (angle) {
+          var offset, compass = this;
+          while (angle > 180) {
+            angle -= 360;
+          }
+          while (angle < -180) {
+            angle += 360;
+          }
+          offset = -angle * (this.visibleWidth / 720);
+          offset -= this.visibleWidth / 2;
+          // '-webkit-transform'
+          window.requestAnimationFrame(function () {
+            // compass.canvas.getContext('2d').scale((10),1);
+            compass.canvas.style.webkitTransform = 'scale(,1)' + offset + 'px)';
+            compass.canvas.style.webkitTransform = 'translateX(' + offset + 'px)';
+          });
+        }
+      });
+    })();
+  </script>
+
+</polymer-element>
+  
+
+

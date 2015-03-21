@@ -5,8 +5,8 @@
 
     <!-- The following viewport code is intended to fullscreen the cockpit and prevent scrolling -->
     <meta id="Viewport" name="viewport" width="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <script type='text/javascript' src="js/libs/jquery.min.js"></script>
-    <script type='text/javascript' src="js/libs/jquery-ui.min.js"></script>
+    <script type='text/javascript' src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type='text/javascript' src="bower_components/jquery-ui//jquery-ui.min.js"></script>
 
     <script type="text/javascript">
     // this code again helps prevent scrolling and sets viewport for mobile
@@ -37,96 +37,37 @@
   <script type='text/javascript' src="js/libs/eventemitter2.js"></script>
   <script type='text/javascript' src="js/libs/bootstrap.min.js"></script>
   <script type='text/javascript' src="js/libs/mousetrap.min.js"></script>
-  <script type='text/javascript' src='js/libs/knockout-2.1.0.js'></script>
+
+  <script type='text/javascript' src='bower_components/knockoutjs/dist/knockout.js'></script>
+  <script type='text/javascript' src="bower_components/knockout.validation/Dist/knockout.validation.js"></script>
+
   <script type='text/javascript' src='js/libs/gamepad.js'></script>
   <script type='text/javascript' src='js/utilities.js'></script>
-  <script type='text/javascript' src="js/frame.js"></script>
+  <script type='text/javascript' src='js/ui-loader.js'></script>
+  <script type='text/javascript' src='js/message-manager.js'></script>
   <script type='text/javascript' src="js/cockpit.js"></script>
   <script type='text/javascript' src='js/libs/db.js'></script>
   <script type='text/javascript' src="js/libs/IndexedDBShim.min.js"></script>
   <script type='text/javascript' src="/config.js"></script>
   <script type='text/javascript' src="/socket.io/socket.io.js"></script>
 
-  <script type='text/javascript' src="bower_components/knockout.validation/Dist/knockout.validation.js"></script>
   <script type='text/javascript' src='js/knockout-extentions.js'></script>
+  <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="bower_components/polymer/polymer.html">
 
   <% for(var i=0; i<scripts.length; i++) {%>
   <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
 
+  <style>
+    #UI > * {
+      z-index: 1030;
+    }
+  </style>
+
   <body>
 
+    <div id="UI" class="full-height"></div> <!--Placeholder for the UI plugin-->
 
-      <div class="navbar navbar-inverse navbar-fixed-top nav-collapse">
-      <div class="navbar-inner">
-        <a class="brand" href="#"><img src="themes/OpenROV/img/openrov.png" class="logo"/><span class="navbar-titel">Cockpit</span></a>
-        <ul class="nav" id="navtoolbar">
-          <li><a href="#"><img id="keyboardpopover" src="themes/OpenROV/img/keyboard.png" data-trigger="hover" data-placement="bottom" rel='popover' title="keyboard commands" html="true" /></a></li>
-          <li><a href="#" id="servoTilt"></a></li>
-        </ul>
-        <ul id="menuitems" class="nav pull-right">
-          <li><a href="#" id="show-settings">Settings</a></li>
-          <li><a href="#" id="show-diagnostic">Diagnostic</a></li>
-        </ul>
-      </div>
-    </div>
-
-        <!-- Main ROW -->
-        <div id="main-row" class="container-fluid full-height">
-          <div class="row-fluid full-height">
-            <div class="span9 border full-height" id="outter-videocontainer">
-              <div id="video-container" class="full-height center pagination-centered" border='1'>
-                <img class="hidden" id="video" src="themes/OpenROV/img/no_camera.jpg"/>
-                <canvas id='video-canvas'/>
-              </div>
-            </div>
-            <div id="rov_status_panel" class="span3 pull-right visible-desktop" style="overflow: auto; height: 100%">
-              <div id="buttonPanel" class="controller well well-small"></div>
-          </div>
-            </div>
-          </div>
-        </div>
-        <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom nav-collapse collapse visible-desktop">
-	    <div class="navbar-inner">
-		<div id="footercontent" class="container-fluid" style="height: 100%">
-		</div>
-	    </div>
-        </div>
-
-
-        <!-- SETTINGS -->
-        <div class="drop-in-right" id="settings">
-          <div class="back-button"></div>
-            <h2>Settings</h2>
-            <div class="accordion" id="plugin-settings"></div>
-          </div>
-        </div>
-
-        <div class="drop-in-right" id="diagnostic">
-            <div class="back-button"></div><h3>Diagnostics</h3>
-            <div class="settings-block">
-                <h4>Pre-Flight Check</h4>
-            </div>
-	    <div class="settings-block">
-	      <h4>Calibration</h4>
-	      <a href="#" class="btn" id="callibrate_compass">Calibrate Compass</a>
-	      <a href="#" class="btn" id="zero_depth">Zero Depth</a>
-	    </div>
-
-        </div>
-        <div class="hidden" id="keyboardInstructions">
-            <p>
-                Use the <i>Up</i>, <i>Down</i>, <i>Left</i>, <i>Right</i>, <i>Shift</i> and <i>Ctrl</i> keys to maneuver.
-                Use <i>1</i>-<i>5</i> to set power.
-            </p>
-            <p>Use <i>Q</i>, <i>A</i>, <i>Z</i> to tilt servo.</p>
-            <p>Use <i>o</i>, <i>p</i> to increase brightness of lights.</p>
-		    <p>Use <i>l</i> to toggle callibration lasers.</p>
-        </div>
-
-
-
-
-    </body>
-<script type='text/javascript' src="js/view_index.js"></script>
-
+  </body>
+  <script type='text/javascript' src="js/view_index.js"></script>
 </html>

@@ -1,0 +1,109 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<polymer-element name="newui-compass" attributes="heading bearing">
+  <template>
+    <style>
+      #compass-container {
+        width: 90%;
+      }
+      .center {
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
+      }
+    </style>
+    <div id="compass-container" class="center">
+      <svg id="svg3988" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 989.19 980.61" version="1.2" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <metadata id="metadata4078">
+      <rdf:RDF>
+      <cc:Work rdf:about="">
+      <dc:format>image/svg+xml</dc:format>
+      <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+      <dc:title/>
+      </cc:Work>
+      </rdf:RDF>
+      </metadata>
+      <g id="g4986" transform="translate(22.040901,12.197624)">
+      <g id="rose">
+      <circle id="circle" stroke-width="10" d="m 832.5,472.5 c 0,198.82251 -161.17749,360 -360,360 -198.82251,0 -360,-161.17749 -360,-360 0,-198.82251 161.17749,-360 360,-360 198.82251,0 360,161.17749 360,360 z" cy="472.5" stroke="{{ options.bezel }}" cx="472.5" r="360" fill="none"/>
+      <rect id="rect4935" y="96" width="10" x="467.5" height="30" fill="{{ options.bezel }}"/>
+      <rect id="rect4937" transform="matrix(-1,0,0,-1,945,945)" fill="{{ options.bezel }}" height="30" width="10" y="96" x="467.5"/>
+      <rect id="rect4943" transform="matrix(0,1,-1,0,945,0)" fill="{{ options.bezel }}" height="30" width="10" y="96" x="467.5"/>
+      <rect id="rect4949" transform="matrix(0,-1,1,0,0,945)" fill="{{ options.bezel }}" height="30" width="10" y="96" x="467.5"/>
+      <rect id="rect4951" transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,-195.71591,472.5)" fill="{{ options.bezel }}" height="30" width="10" y="96" x="467.5"/>
+      <rect id="rect4953" transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,472.5,1140.7159)" fill="{{ options.bezel }}" height="30" width="10" y="96" x="467.5"/>
+      <rect id="rect4955" transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,1140.7159,472.5)" fill="{{ options.bezel }}" height="30" width="10" y="96" x="467.5"/>
+      <rect id="rect4957" transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,472.5,-195.71591)" fill="{{ options.bezel }}" height="30" width="10" y="96" x="467.5"/>
+      <g id="indicators" font-size="72px" font-family="Sans" style="word-spacing:0;letter-spacing:0;" letter-spacing="0" word-spacing="0" font-weight="bold">
+      <text id="indicator_n" fill="{{ options.bezel }}" style="text-anchor:middle;text-align:center;" line-height="125%" y="90.702766" x="471.9191">N</text>
+      <text id="text4961" fill="{{ options.bezel }}" style="text-anchor:middle;text-align:center;" transform="matrix(-1,0,0,-1,943.74133,945)" line-height="125%" y="80.803268" x="471.90582">S</text>
+      <text id="text4965" fill="{{ options.bezel }}" style="text-anchor:middle;text-align:center;" transform="matrix(0,1,-1,0,0,0)" line-height="125%" y="-864.25293" x="471.84961">E</text>
+      <text id="text4967" fill="{{ options.bezel }}" style="text-anchor:middle;text-align:center;" transform="matrix(0,-1,1,0,0,0)" line-height="125%" y="80.859489" x="-473.15039">W</text>
+      <text id="text4969" fill="{{ options.bezel }}" style="text-anchor:middle;text-align:center;" transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" line-height="125%" font-size="72px" y="278.64713" x="-4.2105641">NW</text>
+      <text id="text4971" fill="{{ options.bezel }}" style="text-anchor:middle;text-align:center;" transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)" line-height="125%" font-size="72px" y="-393.78027" x="-670.0802">SW</text>
+      <text id="text4973" fill="{{ options.bezel }}" style="text-anchor:middle;text-align:center;" transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)" line-height="125%" font-size="72px" y="-1060.8452" x="1.1167512">SE</text>
+      <text id="text4975" fill="{{ options.bezel }}" style="text-anchor:middle;text-align:center;" transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)" line-height="125%" font-size="72px" y="-391.12482" x="667.26764">NE</text>
+      </g>
+      </g>
+      <text id="heading" fill="{{ options.bezel }}" style="letter-spacing:0;text-anchor:middle;word-spacing:0;text-align:center;" font-family="Sans" font-size="250px" letter-spacing="0" line-height="125%" word-spacing="0" y="578.01447" x="460.67117" font-weight="bold">{{heading}}</text>
+      <g id="indicator" stroke="{{ options.indicator }}" fill="{{ options.indicator }}" transform="translate(17.197253,32.920483)">
+        <rect id="rect4935-9" height="76.511" width="15" y="85.057" x="450.31" stroke-width="3"/>
+      </g>
+      <circle id="bearing" fill="{{ options.bearing }}" cy="80" cx="472.5" r="20"/>
+      </g>
+      </svg>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      heading: 0,
+      bearing: undefined,
+      options: {
+        indicator: "white",
+        bezel: 'white',
+        bearing: 'red',
+        background: 'black'
+      },
+      ready: function() {
+        var self = this;
+
+        window.cockpit.rov.on('plugin.rovpilot.headingHold.target', function(target) {
+          self.setBearing(target);
+        });
+        window.cockpit.rov.on('plugin.rovpilot.headingHold.disabled', function() {
+          self.setBearing(undefined);
+        });
+        window.cockpit.rov.on('plugin.navigationData.data', function(data) {
+          self.setHeading(parseFloat(data.heading).toFixed(0));
+        });
+
+      },
+      domReady: function() {
+        this.setHeading(this.heading);
+        this.setBearing(this.bearing);
+        this.format(this.options);
+      },
+      format:  function (newOptions) {
+        this.options.indicator = newOptions.indicator ? newOptions.indicator : this.options.indicator;
+        this.options.bezel = newOptions.bezel ? newOptions.bezel : this.options.bezel;
+        this.options.bearing = newOptions.bearing ? newOptions.bearing : this.options.bearing;
+        this.options.background = newOptions.background ? newOptions.background : this.options.background;
+      },
+      setHeading: function (value) {
+        this.heading = value;
+        $(this.$.indicator).animate({svgTransform: 'rotate(' + value + ', 472.5, 472.5)'}, 20);
+      },
+      setBearing: function (value) {
+        var bearing = $(this.$.bearing);
+        if (value) {
+          bearing.animate({svgTransform: 'rotate(' + value + ', 472.5, 472.5)'}, 20);
+          bearing.animate({svgOpacity: '100'}, 10)
+        }
+        else {
+          bearing.animate({svgOpacity: '0'}, 10)
+        }
+      }
+    });
+  </script>
+</polymer-element>

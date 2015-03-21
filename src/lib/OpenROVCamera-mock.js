@@ -17,6 +17,7 @@ var OpenROVCamera = function (options) {
   var camera = new EventEmitter();
   var _capturing = false;
   var captureProcess;
+  camera.IsCapturing = false;
   // End camera process gracefully
   camera.close = function () {
     _capturing = false;
@@ -33,6 +34,7 @@ var OpenROVCamera = function (options) {
       logger.log('Got \'error\' message from camera child. Error: ' + err);
     });
     camera.emit('started');
+    camera.IsCapturing = true;
   };
   camera.snapshot = function(callback) {
     logger.log('Snapshot function called. Not implemented in the mock');

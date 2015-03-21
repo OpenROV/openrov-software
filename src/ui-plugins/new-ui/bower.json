@@ -1,0 +1,23 @@
+{
+  "name": "new-ui",
+  "main": "index.js",
+  "version": "1.0",
+  "homepage": "https://github.com/codewithpassion/openrov-software",
+  "authors": [
+    "codewithpassion <dominik.fretz@gmail.com>"
+  ],
+  "description": "Alternate UI for OpenROV",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "core-elements": "Polymer/core-elements#~0.4.0",
+    "paper-elements": "Polymer/paper-elements#~0.4.0"
+  }
+}

@@ -1,0 +1,104 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<polymer-element name="rov-depth-and-heading-hold" attributes="">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <style>
+      .indicator {
+        top: 5px;
+        height: 20px;
+        line-height: 20px;
+        padding: 10px 2px;
+        background-color: transparent;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      ul > li {
+        float: left;
+      }
+
+      .nav>li>a:hover {
+        background-color: transparent;
+      }
+
+      #rovPilot_holdLabel {
+        font-weight: bold;
+        font-size: medium;
+        padding-right: 5px;
+        line-height: 52px;
+        height: 52px;
+      }
+
+      #depthHold {
+        color: white;
+        border: 1px solid green;
+      }
+
+      #depthHold.enabled {
+        background-color: green;
+      }
+
+      #headingHold {
+        color: white;
+        border: 1px solid #005580;
+      }
+
+      #headingHold.enabled {
+        background-color: #005580;
+      }
+
+
+    </style>
+    <ul class="nav">
+      <li id="rovPilot_holdLabel"><span>Hold:</span></li>
+      <li>
+        <a href="/#" on-click="{{ toggleDepthHold }}" id="depthHold" class="{{ depthHoldEnabled | isEnabled }} indicator">Depth</a>
+      </li>
+      <li>
+        <a href="/#" on-click="{{ toggleHeadingHold }}" id="headingHold" class="{{ headingHoldEnabled | isEnabled }} indicator">Heading</a>
+      </li>
+    </ul>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        depthHoldEnabled: false,
+        headingHoldEnabled: false,
+        ready: function() {
+          var self = this;
+
+          window.cockpit.rov.on('plugin.rovpilot.depthHold.enabled', function() {
+            self.depthHoldEnabled = true;
+          });
+          window.cockpit.rov.on('plugin.rovpilot.depthHold.disabled', function() {
+            self.depthHoldEnabled = false;
+          });
+
+          window.cockpit.rov.on('plugin.rovpilot.headingHold.enabled', function() {
+            self.headingHoldEnabled = true;
+          });
+          window.cockpit.rov.on('plugin.rovpilot.headingHold.disabled', function() {
+            self.headingHoldEnabled = false;
+          });
+
+        },
+        isEnabled : function(isEnabeld) {
+          return isEnabeld ? 'enabled' : '';
+        },
+        toggleDepthHold: function() {
+          window.cockpit.rov.emit('plugin.rovpilot.depthHold.toggle');
+        },
+        toggleHeadingHold: function() {
+          window.cockpit.rov.emit('plugin.rovpilot.headingHold.toggle');
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>

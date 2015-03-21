@@ -29,7 +29,7 @@ describe('Example plugin constructor', function() {
           throw err;
         }
         res.body.should.have.property('showAlerts');
-        res.body.showAlerts.showAlerts.should.be.true;
+        res.body.showAlerts.showAlerts.should.be.true; /* jshint ignore:line */
         done();
       });
   });
@@ -39,7 +39,7 @@ describe('Example plugin constructor', function() {
       .expect(200)
       .end(function (err, res) {
         if (err) { throw err; }
-        res.body.showAlerts.should.be.true;
+        res.body.showAlerts.should.be.true; /* jshint ignore:line */
         done();
       });
   });
@@ -49,11 +49,11 @@ describe('Example plugin constructor', function() {
       .post('/system-plugin/software-update/config/showAlerts')
       .send({showAlerts: false})
       .expect(200, false, function() {
-        deps.config.preferences.set.called.should.be.true;
-        deps.config.savePreferences.called.should.be.true;
+        deps.config.preferences.set.called.should.be.true; /* jshint ignore:line */
+        deps.config.savePreferences.called.should.be.true; /* jshint ignore:line */
         var arg = deps.config.preferences.set.lastCall.args[1];
         arg.should.have.property('showAlerts');
-        arg.showAlerts.showAlerts.should.be.false;
+        arg.showAlerts.showAlerts.should.be.false; /* jshint ignore:line */
 
         done();
       });

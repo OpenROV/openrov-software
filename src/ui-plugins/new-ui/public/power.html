@@ -1,0 +1,154 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<polymer-element name="newui-power">
+  <template>
+    <style type="text/css">
+
+      svg {
+        width: 100%;
+        margin-bottom: -0.6vw;
+      }
+
+    </style>
+    <div id="batteryContainer">
+      <svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 95" height="100%" width="100%" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <metadata id="metadata7">
+          <rdf:RDF>
+            <cc:Work rdf:about="">
+              <dc:format>image/svg+xml</dc:format>
+              <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+              <dc:title/>
+            </cc:Work>
+          </rdf:RDF>
+        </metadata>
+        <g id="layer1" transform="translate(4.40625,-21.3125)">
+          <rect id="indicator" height="17.431" width="102.93" y="98.468" x="-4.1823" fill="#09531d"/>
+          <text id="voltage" style="word-spacing:0px;letter-spacing:0px;text-anchor:middle;text-align:center;" font-family="Sans" xml:space="preserve" font-size="12.9946394px" line-height="125%" font-style="normal" y="114.32999" x="95.878906" font-weight="normal" fill="#ffffff"><tspan id="tspan3893" y="114.32999" x="95.878906"><tspan id="tspan3895" font-size="20px" y="114.32999" x="95.878906" font-weight="bold" fill="#ffffff">{{ voltage }}v</tspan></tspan></text>
+          <path id="path3005" stroke-linejoin="miter" d="m81.992,90.313,27.188,0,0,0" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="2.79675651" fill="none"/>
+          <path id="path3775" stroke-linejoin="miter" d="m86.513,80.302,18.135,0,0,0" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="2.28410721" fill="none"/>
+          <path id="path3777" stroke-linejoin="miter" d="m81.992,70.313,27.188,0,0,0" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="2.79675651" fill="none"/>
+          <path id="path3779" stroke-linejoin="miter" d="m86.513,60.302,18.135,0,0,0" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="2.28410721" fill="none"/>
+          <path id="path3781" stroke-linejoin="miter" d="m81.992,50.313,27.188,0,0,0" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="2.79675651" fill="none"/>
+          <path id="path3783" stroke-linejoin="miter" d="m86.513,40.302,18.135,0,0,0" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="2.28410721" fill="none"/>
+          <path id="path3785" stroke-linejoin="miter" d="m81.992,30.313,27.188,0,0,0" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="2.79675651" fill="none"/>
+          <rect id="rect3789" height="18.276" width="201.47" stroke="#FFF" stroke-miterlimit="4" x="-4.4282" y="98.058" stroke-dasharray="none" stroke-width="0.95604" fill="none"/>
+          <g id="left" transform="translate(14.107143,-6.2)">
+            <text id="text3903" style="letter-spacing:0px;text-anchor:end;word-spacing:0px;text-align:end;" font-family="Sans" xml:space="preserve" font-size="12.9946394px" line-height="125%" y="43.799999" font-style="normal" x="52.053917" font-weight="normal" fill="#ffffff"><tspan id="tspan3905" y="43.873199" x="52.053917"><tspan id="tspan3907" font-size="20px" y="43.873199" x="52.053917" font-weight="bold" fill="#ffffff">{{ leftCurrent | formatCurrent }}</tspan></tspan></text>
+            <g id="g3825" stroke-linejoin="miter" transform="matrix(-0.81642344,0,0,-0.69560403,168.39252,81.485994)" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" fill="none">
+              <path id="path3827" stroke-width="1.80998755" d="m131.8,64.41,9.8628,5.6943,0,0"/>
+              <path id="path3829" stroke-width="1.81007576" d="m131.8,64.702,9.8628-5.6943,0,0"/>
+            </g>
+          </g>
+          <g id="right" transform="translate(-16.428571,-6.2)">
+            <text id="text3897" style="letter-spacing:0px;text-anchor:middle;word-spacing:0px;text-align:center;" font-family="Sans" xml:space="preserve" font-size="12.9946394px" line-height="125%" font-style="normal" y="43.799999" x="141.93175" font-weight="normal" fill="#ffffff"><tspan id="tspan3899" y="43.829426" x="141.93175"><tspan id="tspan3901" style="text-anchor:start;text-align:start;" font-size="20px" y="43.829426" x="141.93175" font-weight="bold" fill="#ffffff">{{ rightCurrent | formatCurrent }}</tspan></tspan></text>
+            <g id="g3821" stroke-linejoin="miter" transform="matrix(0.81642344,0,0,0.69560403,25.136018,-8.467932)" stroke="#FFF" stroke-linecap="butt" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="1.81007576" fill="none">
+              <path id="path3815" d="m131.8,64.41,9.8628,5.6943,0,0"/>
+              <path id="path3817" d="m131.8,64.702,9.8628-5.6943,0,0"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </template>
+  <script>
+    (function() {
+      Number.prototype.map = function ( in_min , in_max , out_min , out_max ) {
+        return ( this - in_min ) * ( out_max - out_min ) / ( in_max - in_min ) + out_min;
+      };
+
+      Polymer({
+        voltage: 5,
+        leftCurrent: 0.1,
+        rightCurrent: 0.1,
+        minVoltage: 4,
+        maxVoltage: 8,
+        colors: [
+          { value: 10, color: '#ff001d' },
+          { value: 20, color: '#e87d24' },
+          { value: 30, color: '#e87d24' },
+          { value: 40, color: '#09531d' },
+          { value: 50, color: '#09531d' },
+          { value: 60, color: '#09531d' },
+          { value: 70, color: '#09531d' },
+          { value: 80, color: '#09531d' },
+          { value: 90, color: '#09531d' },
+          { value: 100, color: '#09531d' }
+        ],
+        leftIndicator: {
+          X: 14.1,
+          Y: { min: 55, max: -6.1}
+        },
+        rightIndicator: {
+          X: -16.43,
+          Y: { min: 56, max: -6.1}
+        },
+        current: { min: 0.0, max: 1.0 },
+        domReady: function () {
+          var self = this;
+          this.setVoltage(this.voltage);
+          this.setLeftBattery(this.leftCurrent);
+          this.setRightBattery(this.rightCurrent);
+
+          window.cockpit.rov.on('plugin.capestatus.battery.voltage', function(voltage) {
+            self.setVoltage(voltage);
+          });
+
+          window.cockpit.rov.on('plugin.capestatus.battery.current.battery1', function(current) {
+            self.setLeftBattery(current);
+          });
+          window.cockpit.rov.on('plugin.capestatus.battery.current.battery2', function(current) {
+            self.setRightBattery(current);
+          });
+
+          var setBatteryConfig = function(config) {
+            self.minVoltage = config.minVoltage;
+            self.maxVoltage = config.maxVoltage;
+            self.setVoltage(self.voltage);
+          };
+          window.cockpit.rov.emit('plugin.capestatus.request.battery.config', setBatteryConfig);
+          window.cockpit.rov.on('plugin.capestatus.battery.config', setBatteryConfig)
+        },
+        setLeftBattery: function(current) {
+          this.setCurrent($(this.$.left), this.leftIndicator, current);
+          this.leftCurrent = current;
+        },
+        setRightBattery: function(current) {
+          this.setCurrent($(this.$.right), this.rightIndicator, current);
+          this.rightCurrent = current;
+        },
+        setCurrent: function(element, config, current) {
+          var val = current.map(
+            this.current.min,
+            this.current.max,
+            config.Y.min,
+            config.Y.max);
+          element.animate({svgTransform: 'translate(' + config.X + ',' + val + ')'});
+        },
+        setVoltage: function(voltage) {
+          voltage = parseFloat(voltage);
+          this.voltage = voltage;
+          var change = (this.maxVoltage - this.minVoltage) / (voltage - this.minVoltage);
+          var percentage = 100 / change;
+          var indicatorWidth = 200 / change;
+          indicatorWidth = indicatorWidth.toFixed(2);
+          var fillColor = undefined;
+
+          this.colors.forEach(function(color) {
+            if ((fillColor === undefined) && (percentage <= color.value)) {
+              fillColor = color.color;
+            }
+          });
+          if (fillColor == undefined) { fillColor = this.colors[this.colors.length -1].color };
+          if (!isNaN(indicatorWidth) && indicatorWidth >= 0) {
+            $(this.$.indicator).css({fill: fillColor});
+            $(this.$.indicator).attr('width', indicatorWidth);
+          }
+        },
+        formatCurrent: function(value) {
+          return value.toFixed(3);
+        }
+      });
+    })();
+
+  </script>
+
+</polymer-element>

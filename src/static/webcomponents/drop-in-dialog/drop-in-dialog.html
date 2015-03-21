@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="drop-in-dialog" attributes="header, childId">
+  <template>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+
+    <style>
+      .contentContainer {
+        height: 90%;
+        overflow: auto;
+      }
+    </style>
+
+      <div class="drop-in-right" id="{{childId}}">
+      <div class="back-button"></div>
+      <h2>{{ header }}</h2>
+      <div class="accordion contentContainer" id="{{childId}}_">
+        <content id="childItems" select="div"></content>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        header: '',
+        childId: '',
+        settings: undefined,
+        closeHandlers: [],
+        collapseHandlerRegistered: false,
+        open: function() {
+          this.settings.css('display', 'block');
+          var self = this;
+          Mousetrap.bind('esc',  function() { self.hide(); });
+          this.registerCollapseHandler();
+        },
+        registerCloseHandler: function(handler) {
+          this.closeHandlers.push(handler);
+        },
+        hide: function () {
+          this.settings.css('display', 'none');
+          Mousetrap.unbind('esc');
+          this.closeHandlers.forEach(function(handler) {
+            handler();
+          });
+        },
+        domReady: function () {
+          var self = this;
+          this.settings = $(this.$[this.childId]);
+          this.settings.find('.back-button').click(function() {
+            self.hide();
+          });
+        },
+        registerCollapseHandler: function() {
+          if (this.collapseHandlerRegistered) {
+            return;
+          }
+          var distNodes = this.$.childItems.getDistributedNodes();
+          distNodes.array().forEach(function(node) {
+            var res = $(node).find('a.accordion-toggle');
+            if (res && res.length > 0) {
+              var href= res.attr('href');
+              var element = $(node).find(href);
+
+              res.click(function() {
+                element.collapse('toggle');
+              })
+            }
+          });
+          this.collapseHandlerRegistered = true;
+
+        }
+      })
+    })();
+  </script>
+
+</polymer-element>
+  
+
+
