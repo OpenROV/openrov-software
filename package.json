@@ -28,6 +28,7 @@
     "serialport": ">= 1.0.8",
     "socket.io": "~1.1.0",
     "sync": ""
+    "crc" : ""
   },
   "bundleDependencies": [
     "express",
