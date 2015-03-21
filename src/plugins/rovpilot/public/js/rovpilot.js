@@ -3,6 +3,7 @@
   var ROVpilot;
   ROVpilot = function ROVpilot(cockpit) {
     console.log('Loading ROVpilot plugin in the browser.');
+    var SAMPLE_PERIOD = 1000 / CONFIG.sample_freq;
     var rov = this;
     // Instance variables
     rov.cockpit = cockpit;
