@@ -31,10 +31,6 @@
       if ('fthr' in status) {
         navdata.thrust = status.fthr;
       }
-      if ('mtrmod' in status){
-        console.log('mtrmod: ' + status.mtrmod);
-        navdata.mtrmod = status.mtrmod;
-      }
     });
 
     deps.cockpit.on('plugin.navigationData.zeroDepth', function () {

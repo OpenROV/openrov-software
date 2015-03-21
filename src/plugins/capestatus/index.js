@@ -116,7 +116,7 @@ function capestatus(name, deps) {
     if ('SC1I' in data) {
       cockpit.emit(
         'plugin.capestatus.battery.current.esc1',
-        parseFloat(dataSC1I));
+        parseFloat(data.SC1I));
     }
     if ('SC2I' in data) {
       cockpit.emit(

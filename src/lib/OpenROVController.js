@@ -151,6 +151,7 @@ OpenROVController.prototype.requestCapabilities = function () {
 };
 
 OpenROVController.prototype.requestSettings = function () {
+  //todo: Move to motor-diag plugin
   var command = 'reportSetting();';
   this.hardware.write(command);
   command = 'rmtrmod();';
@@ -182,6 +183,7 @@ OpenROVController.prototype.updateSetting = function () {
     starbord = starbord * -1;
     nstarbord = nstarbord * -1;
   }
+  //todo: Move to motor-diag plugin
   //API to Arduino to pass a percent in 2 decimal accuracy requires multipling by 100 before sending.
   command = 'mtrmod1(' + port * 100 + ',' + vertical * 100 + ',' + starbord * 100 + ');';
   this.hardware.write(command);
