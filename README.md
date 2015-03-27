@@ -113,7 +113,7 @@ Contributions require that you sign a [CLA](http://wiki.openrov.com/index.php/Sp
 
 1) Fork the project in github
 
-2) Add an issue to the issue list for the changes you want to make.  Browser the issues lists for many of the fixes and enhancement requests if your looking for ideas.
+2) Add an issue to the issue list for the changes you want to make.  Browse the issues lists for many of the fixes and enhancement requests if you are looking for ideas.
 
 3) Make your changes and or fixes.
 
