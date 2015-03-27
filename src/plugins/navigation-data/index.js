@@ -16,8 +16,8 @@
       if ('hdgd' in status) {
         navdata.heading = status.hdgd;
       }
-      if ('deap' in status) {
-        navdata.depth = status.deap;
+      if ('deep' in status) {
+        navdata.depth = status.deep;
       }
       if ('pitc' in status) {
         navdata.pitch = status.pitc;
