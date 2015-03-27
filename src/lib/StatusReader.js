@@ -33,6 +33,9 @@ var StatusReader = function () {
     if ('iout' in status) {
       status.iout = parseFloat(status.iout);
     }
+    if ('btti' in status) {
+      status.btti = parseFloat(status.btti);
+    }
     if ('vout' in status) {
       status.vout = parseFloat(status.vout);
       status.cpuUsage = currCpuUsage;

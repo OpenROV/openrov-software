@@ -84,7 +84,7 @@ function capestatus(name, deps) {
       res.send();
     }
   });
-  
+
   function handleStatus(cockpit, data) {
     if ('time' in data) {
       var formattedRuntime = msToTime(data.time);
@@ -97,11 +97,11 @@ function capestatus(name, deps) {
         data.vout.toFixed(1));
     }
 
-    if ('iout' in data) {
+    if ('btti' in status) {
       cockpit.emit(
         'plugin.capestatus.battery.current.out',
-        data.iout.toFixed(3));
-    }
+      data.btti.toFixed(3));
+    } 
 
     if ('BT1I' in data) {
       cockpit.emit(
