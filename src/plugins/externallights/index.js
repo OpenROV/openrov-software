@@ -49,7 +49,7 @@
       if (lights < 0)
         lights = 0;
 
-      var command = 'eligt(' + deps.Arduino.AsPercent(value) + ')';
+      var command = 'eligt(' + deps.ArduinoHelper.serial.packPercent(value) + ')';
       deps.rov.send(command);
 
     };

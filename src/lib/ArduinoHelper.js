@@ -1,6 +1,7 @@
 var OFFSET = 1500;
-var ArduinoPhysics = function () {
+var ArduinoHelper = function () {
   var physics = {};
+  var serial = {};
   var CONFIG = require('./config');
   //For mapping to the motor Microseconds range from 1000 to 2000. This
   //is mostly a pass through for now as we want to keep the numbers consistent
@@ -41,6 +42,10 @@ var ArduinoPhysics = function () {
     return mapA(value, 0, 1, 0, 255);
   };
   return physics;
+
+  serial.packPercent = function (value) {
+    return Math.floor(value*100);
+  }
 };
 function mapA(x, in_min, in_max, out_min, out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -49,4 +54,4 @@ function limit(value, l, h) {
   // truncate anything that goes outside of max and min value
   return Math.max(l, Math.min(h, value));
 }
-module.exports = ArduinoPhysics;
+module.exports = ArduinoHelper;

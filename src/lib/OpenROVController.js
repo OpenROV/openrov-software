@@ -4,7 +4,7 @@
  * This file holds the controller logic.  It manages the connection to the Atmega328.
  *
  */
-var path = require('path'), spawn = require('child_process').spawn, CONFIG = require('./config'), StatusReader = require('./StatusReader'), ArduinoPhysics = require('./ArduinoPhysics'), logger = require('./logger').create(CONFIG), EventEmitter = require('events').EventEmitter, Hardware = require('../' + CONFIG.Hardware);
+var path = require('path'), spawn = require('child_process').spawn, CONFIG = require('./config'), StatusReader = require('./StatusReader'), ArduinoHelper = require('./ArduinoHelper'), logger = require('./logger').create(CONFIG), EventEmitter = require('events').EventEmitter, Hardware = require('../' + CONFIG.Hardware);
 var setup_serial = function () {
   var location = path.join(__dirname, '..', './linux');
   logger.log('Starting the script from ' + location + ' to setup UART1...');
@@ -26,7 +26,7 @@ var OpenROVController = function (eventLoop, client) {
   var controller = this;
   var serial;
   var globalEventLoop = eventLoop;
-  this.physics = new ArduinoPhysics();
+  this.physics = new ArduinoHelper();
   this.hardware = new Hardware();
   this.cockpit = client;
 
