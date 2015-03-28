@@ -1,6 +1,6 @@
 
-#ifndef __LIGHTS_H_
-#define __LIGHTS_H_
+#ifndef __ELIGHTS_H_
+#define __ELIGHTS_H_
 #include <Arduino.h>
 #include "Device.h"
 #include "Pin.h"
@@ -14,12 +14,14 @@
 
 #if(HAS_OROV_CONTROLLERBOARD_25)
   #include "controllerboard25.h"
+  #ifndef ELIGHTS_PIN
+  #define ELIGHTS_PIN 46 //to override, add a define to the AConfig.h file.
 #endif
 
 
-class Lights : public Device {
+class ELights : public Device {
   public:
-    Lights():Device(){};
+    ELights():Device(){};
     void device_setup();
     void device_loop(Command cmd);
 };
