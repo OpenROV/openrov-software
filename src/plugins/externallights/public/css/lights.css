@@ -1,0 +1,57 @@
+#lightindicators{
+  width:250px;
+  height: 22px;
+  margin-top: 14px;
+}
+
+#internal_lights_indicator, #external_lights_indicator {
+    width:248px;
+    height: 10px;
+    border:1px solid black;
+    background-image: url('../img/brightness.png');
+    background-repeat:no-repeat;
+}
+
+#internal_lights_indicator.level0, #external_lights_indicator.level0 {
+    background-image: none;
+}
+
+#internal_lights_indicator.level1, #external_lights_indicator.level1 {
+    background-position: 0px -471px;
+}
+
+#internal_lights_indicator.level2, #external_lights_indicator.level2 {
+    background-position: 0px -418px;
+}
+
+#internal_lights_indicator.level3, #external_lights_indicator.level3 {
+    background-position: 0px -366px;
+}
+
+#internal_lights_indicator.level4, #external_lights_indicator.level4 {
+    background-position: 0px -313px;
+}
+
+#internal_lights_indicator.level5, #external_lights_indicator.level5 {
+    background-position: 0px -261px;
+}
+
+#internal_lights_indicator.level6, #external_lights_indicator.level6 {
+    background-position: 0px -209px;
+}
+
+#internal_lights_indicator.level7, #external_lights_indicator.level7 {
+    background-position: 0px -157px;
+}
+
+#internal_lights_indicator.level8, #external_lights_indicator.level8 {
+    background-position: 0px -104px;
+}
+
+#internal_lights_indicator.level9, #external_lights_indicator.level9 {
+    background-position: 0px -52px;
+}
+
+#internal_lights_indicator.level10, #external_lights_indicator.level10 {
+    background-position: 0px 0px;
+}
