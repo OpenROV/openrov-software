@@ -97,11 +97,11 @@ function capestatus(name, deps) {
         data.vout.toFixed(1));
     }
 
-    if ('btti' in status) {
+    if ('btti' in data) {
       cockpit.emit(
         'plugin.capestatus.battery.current.out',
       data.btti.toFixed(3));
-    } 
+    }
 
     if ('BT1I' in data) {
       cockpit.emit(
