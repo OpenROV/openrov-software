@@ -1,7 +1,9 @@
 (function() {
   'use strict';
-  var PluginManagerConfig;
-  PluginManagerConfig = function PluginManagerConfig() {
+
+  window.Plugins = window.Plugins || { PluginManager: {} };
+  window.Plugins.PluginManager = window.Plugins.PluginManager || { };
+  window.Plugins.PluginManager.Config = function () {
     var self = this;
     self.get = function (pluginName, callback) {
       $.get('/system-plugin/plugin-manager/config/' + pluginName, function (config) {

@@ -129,13 +129,12 @@
   };
 
 
-
   var PluginFinder = function PluginFinder(cockpit) {
     console.log('Loading Plugin Finder plugin.');
     this.cockpit = cockpit;
     this.model = new PluginFinderModel();
     var self = this;
-    var configManager = new PluginFinderConfig();
+    var configManager = new window.Plugins.PluginFinder.Config();
     this.cockpit.extensionPoints.rovSettings.append('<div id="plugin-finder-settings"></div>');
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('plugin-finder.js');
