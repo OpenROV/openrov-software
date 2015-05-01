@@ -34,8 +34,7 @@ function setup_arm_chroot {
   chmod a+x envvars.sh
 
   # Install dependencies inside chroot
-  wget https://github.com/OpenROV/openrov-image/blob/v2.5.1-rc1/contrib/qemu-arm-static.gz?raw=true
-
+  wget https://github.com/OpenROV/openrov-image/blob/stable/contrib/qemu-arm-static.gz?raw=true
 
   # Load a known good version of qemu-arm-static
   sudo cp qemu-arm-static.gz?raw=true ${CHROOT_DIR}/usr/bin/qemu-arm-static.gz
