@@ -59,7 +59,7 @@
     this.cockpit = cockpit;
     this.model = new PluginManagerModel();
     var self = this;
-    var configManager = new PluginManagerConfig();
+    var configManager = new window.Plugins.PluginManager.Config();
     this.cockpit.extensionPoints.rovSettings.append('<div id="plugin-manager-settings"></div>');
     //this technique forces relative path to the js file instead of the excution directory
     var jsFileLocation = urlOfJsFile('plugin-manager.js');

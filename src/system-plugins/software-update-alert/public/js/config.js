@@ -1,7 +1,8 @@
 (function() {
 'use strict';
-var SoftwareUpdaterConfig;
-SoftwareUpdaterConfig = function SoftwareUpdaterConfig() {
+  window.Plugins = window.Plugins || { SoftwareUpdater: {} };
+  window.Plugins.SoftwareUpdater = window.Plugins.SoftwareUpdater|| { };
+  window.Plugins.SoftwareUpdater.Config = function () {
   var self = this;
 
   self.dashboardUrl = ko.observable(undefined);

@@ -41,7 +41,7 @@
   var SoftwareUpdater = function SoftwareUpdater(cockpit) {
     var self = this;
 
-    var configManager = new SoftwareUpdaterConfig();
+    var configManager = new window.Plugins.SoftwareUpdater.Config();
 
     var checker = new SoftwareUpdateChecker(configManager);
     this.model = new SoftwareUpdateModel(checker, configManager);
