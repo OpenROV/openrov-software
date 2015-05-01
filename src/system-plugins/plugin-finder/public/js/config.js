@@ -1,7 +1,8 @@
 (function() {
 'use strict';
-var PluginFinderConfig;
-PluginFinderConfig = function PluginFinderConfig() {
+  window.Plugins = window.Plugins || { PluginFinder: {} };
+  window.Plugins.PluginFinder = window.Plugins.PluginFinder || { };
+  window.Plugins.PluginFinder.Config = function () {
   var self = this;
   self.get = function (pluginName, callback) {
     $.get('/system-plugin/plugin-finder/config/' + pluginName, function (config) {
