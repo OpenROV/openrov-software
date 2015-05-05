@@ -6,7 +6,7 @@ $( document ).ready(function() {
   window.examplePlugin = this;
   // to prevent intererence, we disable this plugin.
   // to see the things working, comment the following statement
-  return;
+//  return;
 
   /* jshint ignore:end */
   var Example;
@@ -85,15 +85,25 @@ $( document ).ready(function() {
 
   Example.prototype.listen = function listen() {
     var item = {
-      label: ko.observable('Example menu'),
+      counter: 0,
+      labelText: "Example menu",
+      label: ko.observable(),
       callback: function () {
         alert('example menu item from heads up menu');
-        item.label(this.label() + ' Foo Bar');
+      },
+      left: function() {
+        item.counter = item.counter -1;
+        item.label(item.labelText + ' ' + item.counter.toString());
+      },
+      right: function() {
+        item.counter = item.counter +1;
+        item.label(item.labelText + ' ' + item.counter.toString());
       }
     };
     if (this.cockpit.extensionPoints.headsUpMenu) {
       this.cockpit.extensionPoints.headsUpMenu.register(item);
     }
+    item.label(item.labelText);
   };
   window.Cockpit.plugins.push(Example);
 });
