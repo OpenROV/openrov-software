@@ -33,6 +33,8 @@
 
     var registerHeadsUpMenuItem = function(servo) {
       var shouldTrigger = true;
+      var leftInterval = null;
+      var rightInterval = null;
       var item = {
         name: 'aux-servo.' + servo.name(),
         enabled: servo.enabled, // pass the enabled observable over to the headsup menu
@@ -53,20 +55,42 @@
         },
         left: function () {
           shouldTrigger = false;
-          var newValue = servo.currentValue() - servo.stepWidth();
-          if (newValue < servo.min()) {
-            newValue = servo.min();
-          }
-          servo.setValue(newValue);
+          var currentValue = servo.currentValue();
+          if (leftInterval) { clearInterval(leftInterval);}
+          var setter = function() {
+            var newValue = currentValue - servo.stepWidth();
+            if (newValue < servo.min()) {
+              newValue = servo.min();
+            }
+            servo.setValue(newValue);
+            currentValue = newValue;
+          };
+          setter();
+          leftInterval = setInterval(setter, 100);
+
+        },
+        leftUp: function() {
+          clearInterval(leftInterval);
+          leftInterval = null;
         },
         right: function () {
           shouldTrigger = false;
-          var newValue = parseInt(servo.currentValue()) + parseInt(servo.stepWidth());
-          console.log(newValue);
-          if (newValue > servo.max()) {
-            newValue = servo.max();
-          }
-          servo.setValue(newValue);
+          var curentValue = servo.currentValue();
+          if(rightInterval) { clearInterval(rightInterval); }
+          var setter = function() {
+            var newValue = parseInt(curentValue) + parseInt(servo.stepWidth());
+            console.log(newValue);
+            if (newValue > servo.max()) {
+              newValue = servo.max();
+            }
+            servo.setValue(newValue);
+            curentValue = newValue;
+          };
+          setter();
+          rightInterval = setInterval(setter, 100);
+        },
+        rightUp: function() {
+          clearInterval(rightInterval);
         }
       };
       if (auxs.cockpit.extensionPoints.headsUpMenu) {
@@ -113,15 +137,15 @@
   auxServoNs.AuxServo.prototype.listen = function listen() {
     var self = this;
 
-    self.cockpit.on('auxservo-config', function(config) {
-      self.cockpit.rov.emit('auxservo-config', config);
+    self.cockpit.on('plugin.aux-servo.config', function(config) {
+      self.cockpit.rov.emit('plugin.aux-servo.config', config);
     });
 
-    self.cockpit.on('auxservo-execute', function(command) {
-      self.cockpit.rov.emit('auxservo-execute', command);
+    self.cockpit.on('plugin.aux-servo.execute', function(command) {
+      self.cockpit.rov.emit('plugin.aux-servo.execute', command);
     });
 
-    self.cockpit.rov.on('auxservo-executed', function(result) {
+    self.cockpit.rov.on('plugin.aux-servo.executed', function(result) {
       var subParts = result.split(',');
       if (self.settingsModel.servos().length > 0) {
         self.settingsModel.servos().forEach(function (servo) {

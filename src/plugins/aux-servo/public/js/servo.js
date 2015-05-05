@@ -48,21 +48,22 @@ auxServoNs.Servo = function(eventEmitter, name, pin, enabled) {
   };
 
   self.apply = function() {
-    self.eventEmitter.emit('auxservo-config', self.toJs());
+    self.eventEmitter.emit('plugin.aux-servo.config', self.toJs());
     self.isChanged(false);
   };
 
   self.setValue = function(newValue) {
     self.executing(true);
-    self.eventEmitter.emit('auxservo-execute', {
+    self.eventEmitter.emit('plugin.aux-servo.execute', {
       pin: self.pin(),
       value: newValue
     });
+    console.log(newValue);
   };
 
   self.executeTest = function() {
     self.isExecuted(false);
-    self.eventEmitter.emit('auxservo-execute', {
+    self.eventEmitter.emit('plugin.aux-servo.execute', {
       pin: self.pin(),
       value: self.testValue()
     });

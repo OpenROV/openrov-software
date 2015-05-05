@@ -33,6 +33,6 @@ inputController.Command = function(control) {
   return this;
 };
 
-inputController.Command.prototype.down = function() {};
-inputController.Command.prototype.up = function() {};
+//inputController.Command.prototype.down = function() {};
+//inputController.Command.prototype.up = function() {};
 inputController.Command.prototype.axis = function(v) {};

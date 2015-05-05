@@ -89,28 +89,19 @@
       currentSelected = nextIndex;
     };
 
-    var leftHook = function() {
-      var currentId = $(menuItems[currentSelected]).attr('id');
-      self.items()
-        .forEach(function(item) {
-          if (item.uniqueId == currentId) {
-            if (item.left !== undefined) {
-              item.left();
+    var createHook = function(name) {
+      return function () {
+        var hookName = name;
+        var currentId = $(menuItems[currentSelected]).attr('id');
+        self.items()
+          .forEach(function (item) {
+            if (item.uniqueId == currentId) {
+              if (item[hookName] !== undefined) {
+                item[hookName]();
+              }
             }
-          }
-        });
-    };
-
-    var rightHook = function() {
-      var currentId = $(menuItems[currentSelected]).attr('id');
-      self.items()
-        .forEach(function(item) {
-          if (item.uniqueId == currentId) {
-            if (item.right !== undefined) {
-              item.right();
-            }
-          }
-        });
+          });
+      }
     };
 
     var enablePlugin = function() {
@@ -140,13 +131,21 @@
               name: "headsupMenu.left",
               description: "Hook for additional functions for a menu entry.",
               defaults: { keyboard: 'r', gamepad: 'DPAD_LEFT' },
-              down: leftHook
+              down: function() {
+                console.log('left down');
+                createHook('left')();
+              },
+              up: function() {
+                console.log('left up');
+                createHook('leftUp')();
+              }
             },
             {
               name: "headsupMenu.right",
               description: "Hook for additional functions for a menu entry.",
               defaults: { keyboard: 't', gamepad: 'DPAD_RIGHT' },
-              down: rightHook
+              down: createHook('right'),
+              up: createHook('rightUp')
             }
           ]
         });

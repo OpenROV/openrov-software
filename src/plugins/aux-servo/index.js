@@ -16,19 +16,30 @@ function auxServo(name, deps) {
 
   deps.rov.on('status', function(status){
     if ('xsrv.ext' in status) {
-      deps.cockpit.emit('auxservo-executed', status['xsrv.ext']);
-      delete status['xsrv.ext'];
+      deps.cockpit.emit('plugin.aux-servo.executed', status['xsrv.ext']);
+      setTimeout(function() {delete status['xsrv.ext'];}, 1000);
     }
   });
 
-  deps.cockpit.on('auxservo-config', function (config) {
-    console.log('auxservo-config');
+  deps.cockpit.on('plugin.aux-servo.config', function (config) {
+    console.log('plugin.aux-servo.config ' + config);
     configureServo(config);
   });
 
-  deps.cockpit.on('auxservo-execute', function (command) {
-    console.log('auxservo-execute');
+  deps.cockpit.on('plugin.aux-servo.execute', function (command) {
+    console.log('plugin.aux-servo.execute ' + command);
     execute(command);
+  });
+
+  deps.rov.registerPassthrough({
+    messagePrefix: 'plugin.aux-servo',
+    fromROV: [
+      'xsrv.ext'
+    ],
+    toROV: [
+      'xsrv.cfg',
+      'example_to_bar'
+    ]
   });
 }
 module.exports = auxServo;

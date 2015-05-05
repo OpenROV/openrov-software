@@ -27,15 +27,17 @@ inputController.GamepadAbstraction = function (cockpit) {
     else {
       control = gp.currentButton + '+' + e.control;
     }
-    if (gp.assignment[control] !== undefined)
+    if (gp.assignment[control] !== undefined && gp.assignment[control].BUTTON_DOWN)
       gp.assignment[control].BUTTON_DOWN();
   });
   gamepad.bind(Gamepad.Event.BUTTON_UP, function (e) {
+    var control = e.control;
     if (gp.currentButton === e.control) { gp.currentButton = undefined; }
-    if (gp.assignment[e.control] !== undefined) {
-      if (gp.assignment[e.control].BUTTON_UP !== undefined) {
-        gp.assignment[e.control].BUTTON_UP();
-      }
+    else {
+      control = gp.currentButton + '+' + e.control;
+    }
+    if (gp.assignment[control] !== undefined && gp.assignment[control].BUTTON_UP) {
+      gp.assignment[control].BUTTON_UP();
     }
   });
   gamepad.bind(Gamepad.Event.AXIS_CHANGED, function (e) {
