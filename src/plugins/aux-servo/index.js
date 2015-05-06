@@ -31,15 +31,5 @@ function auxServo(name, deps) {
     execute(command);
   });
 
-  deps.rov.registerPassthrough({
-    messagePrefix: 'plugin.aux-servo',
-    fromROV: [
-      'xsrv.ext'
-    ],
-    toROV: [
-      'xsrv.cfg',
-      'example_to_bar'
-    ]
-  });
 }
 module.exports = auxServo;

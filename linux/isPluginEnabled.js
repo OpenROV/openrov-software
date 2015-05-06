@@ -11,7 +11,6 @@ else if (fs.existsSync(__dirname && '../etc/rovconfig.json')) {
   nconf.use('file', { file: __dirname && '../etc/rovconfig.json' });
 }
 
-
 String.prototype.toBool = function () {
   switch (this.toLowerCase()) {
     case 'false':
