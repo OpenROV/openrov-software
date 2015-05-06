@@ -1,10 +1,16 @@
 #!/usr/bin/env node
-console._log = console.log;
-console.log = function() {};
-var CONFIG = require('../src/lib/config');
-console.log = console._log;
 var path = require('path');
+var fs = require('fs');
 var PREFERENCES = 'plugins:plugin-manager';
+var nconf = require('nconf');
+
+if (fs.existsSync('/etc/rovconfig.json')) {
+  nconf.use('file', { file: '/etc/rovconfig.json' });
+}
+else if (fs.existsSync(__dirname && '../etc/rovconfig.json')) {
+  nconf.use('file', { file: __dirname && '../etc/rovconfig.json' });
+}
+
 
 String.prototype.toBool = function () {
   switch (this.toLowerCase()) {
@@ -18,18 +24,9 @@ String.prototype.toBool = function () {
   }
 };
 
-function getPreferences(config) {
-  var preferences = config.preferences.get(PREFERENCES);
-  if (preferences === undefined) {
-    preferences = {};
-    config.preferences.set(PREFERENCES, preferences);
-  }
-  return preferences;
-}
-
 var plugin = process.argv[2];
 
-var pref = getPreferences(CONFIG);
+var pref = nconf.get(PREFERENCES);
 if (plugin in pref) {
   process.exit(pref[plugin].isEnabled.toString().toBool() ? 0 : 1);
 }
