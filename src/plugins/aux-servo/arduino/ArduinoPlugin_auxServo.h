@@ -2,7 +2,7 @@
 #define __ArduinoPluginAuxServo_H_
 
 #include "auxServo.h"
-Example example; 
+AuxServo auxServo;
 
 
 #endif

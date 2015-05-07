@@ -6,7 +6,7 @@ function settings(deps) {
   function getPreferences(config) {
     var preferences = config.preferences.get(PREFERENCES);
     if (preferences == undefined) {
-      preferences = { '1': { name: '1', enabled: false, pin: 13 }, '2': { name: '2', enabled: false, pin: 14} };
+      preferences = { '1': { name: '1', enabled: false, pin: 9 }, '2': { name: '2', enabled: false, pin: 10} };
       config.preferences.set(PREFERENCES, preferences);
     }
     console.log('Aux Servo settings loaded preferences: ' + JSON.stringify(preferences));
