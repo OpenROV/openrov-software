@@ -41,14 +41,19 @@ void AuxServo::device_loop(Command command){
     if (command.cmp("xsrv.exe")) {
       if (command.args[1] == servo1Pin) {
         servo1.write(command.args[2]);
-        Serial.print(F("xsrv.ext:1,"));
+        Serial.print(F("xsrv.ext:"));
+        Serial.print(servo1Pin);
+        Serial.print(',');
         Serial.print(command.args[2]);
       }
       if (command.args[1] == servo2Pin) {
         servo2.write(command.args[2]);
-        Serial.print(F("xsrv.ext:1,"));
+        Serial.print(F("xsrv.ext:"));
+        Serial.print(servo2Pin);
+        Serial.print(',');
         Serial.print(command.args[2]);
       }
       Serial.print(';');
     }
 }
+

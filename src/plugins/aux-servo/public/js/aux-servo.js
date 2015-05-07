@@ -35,6 +35,26 @@
       var shouldTrigger = true;
       var leftInterval = null;
       var rightInterval = null;
+      var moveRight = function(curentValue) {
+            var newValue = parseInt(curentValue) + parseInt(servo.stepWidth());
+            console.log(newValue);
+            if (newValue > servo.max()) {
+              newValue = servo.max();
+            }
+            servo.setValue(newValue);
+            curentValue = newValue;
+            return curentValue
+          };
+      var moveLeft = function(curentValue) {
+            var newValue = curentValue - servo.stepWidth();
+            if (newValue < servo.min()) {
+              newValue = servo.min();
+            }
+            servo.setValue(newValue);
+            curentValue = newValue;
+            return curentValue;
+          };
+
       var item = {
         name: 'aux-servo.' + servo.name(),
         enabled: servo.enabled, // pass the enabled observable over to the headsup menu
@@ -55,18 +75,12 @@
         },
         left: function () {
           shouldTrigger = false;
-          var currentValue = servo.currentValue();
+          var curentValue = servo.currentValue();
           if (leftInterval) { clearInterval(leftInterval);}
-          var setter = function() {
-            var newValue = currentValue - servo.stepWidth();
-            if (newValue < servo.min()) {
-              newValue = servo.min();
-            }
-            servo.setValue(newValue);
-            currentValue = newValue;
-          };
-          setter();
-          leftInterval = setInterval(setter, 100);
+          curentValue  = moveLeft(curentValue);
+          leftInterval = setInterval(function() { 
+            if (leftInterval) curentValue  = moveLeft(curentValue);
+          }, 100);
 
         },
         leftUp: function() {
@@ -77,20 +91,14 @@
           shouldTrigger = false;
           var curentValue = servo.currentValue();
           if(rightInterval) { clearInterval(rightInterval); }
-          var setter = function() {
-            var newValue = parseInt(curentValue) + parseInt(servo.stepWidth());
-            console.log(newValue);
-            if (newValue > servo.max()) {
-              newValue = servo.max();
-            }
-            servo.setValue(newValue);
-            curentValue = newValue;
-          };
-          setter();
-          rightInterval = setInterval(setter, 100);
+          curentValue  = moveRight(curentValue) 
+          rightInterval = setInterval(function() { 
+            if (rightInterval) curentValue  = moveRight(curentValue) 
+          }, 100);
         },
         rightUp: function() {
           clearInterval(rightInterval);
+          rightInterval = null;
         }
       };
       if (auxs.cockpit.extensionPoints.headsUpMenu) {
