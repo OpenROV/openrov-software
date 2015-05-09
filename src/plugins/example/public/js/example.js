@@ -6,7 +6,7 @@ $( document ).ready(function() {
   window.examplePlugin = this;
   // to prevent intererence, we disable this plugin.
   // to see the things working, comment the following statement
-//  return;
+  return;
 
   /* jshint ignore:end */
   var Example;
