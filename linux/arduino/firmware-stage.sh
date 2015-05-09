@@ -42,16 +42,20 @@ echo "#define __PLUGINSCONFIG_H_" >> $BUILDDIR/src/PluginConfig.h
 for OUTPUT in $(find $SEARCHPATH -type f -name 'ArduinoPlugin_*.h')
 do
 
-        PLUGIN_NAME=$(echo $OUTPUT | sed 's#.*ArduinoPlugin_\(.*\).h#\1#')
-        PLUGIN_PATH=$(echo $OUTPUT | sed 's#\(.*\)/.*#\1#')
+	PLUGIN_NAME=$(echo $OUTPUT | sed 's#.*ArduinoPlugin_\(.*\).h#\1#')
+	PLUGIN_PATH=$(echo $OUTPUT | sed 's#\(.*\)/.*#\1#')
+	PLUGIN_ENABLED=$($SEARCHPATH/linux/isPluginEnabled.js $PLUGIN_NAME && echo 1);
 
-	mkdir $BUILDDIR/src/$PLUGIN_NAME || error_exit "Could not create plugin directory in source dir"
+	if test "$PLUGIN_ENABLED" = "1"
+	then
+		mkdir $BUILDDIR/src/$PLUGIN_NAME || error_exit "Could not create plugin directory in source dir"
 
-	cp -r $PLUGIN_PATH/* $BUILDDIR/src/$PLUGIN_NAME/ || error_exit "Could not copy plugin source code"
+		cp -r $PLUGIN_PATH/* $BUILDDIR/src/$PLUGIN_NAME/ || error_exit "Could not copy plugin source code"
 
-	echo "#include \"$PLUGIN_NAME/ArduinoPlugin_${PLUGIN_NAME}.h\"" >> $BUILDDIR/src/PluginConfig.h
+		echo "#include \"$PLUGIN_NAME/ArduinoPlugin_${PLUGIN_NAME}.h\"" >> $BUILDDIR/src/PluginConfig.h
 
-	echo copied plugin \'$PLUGIN_NAME\' to $BUILDDIR/src/$PLUGIN_NAME 1>&2
+		echo copied plugin \'$PLUGIN_NAME\' to $BUILDDIR/src/$PLUGIN_NAME 1>&2
+	fi
 done
 
 echo "#endif" >> $BUILDDIR/src/PluginConfig.h

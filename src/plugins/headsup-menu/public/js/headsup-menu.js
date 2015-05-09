@@ -7,6 +7,11 @@
 
     self.cockpit = cockpit;
     self.items = ko.observableArray();
+    self.enabledItems = ko.computed(function() {
+      return self.items().filter(function(item) {
+        item._enableObservableDummy(); //to update on enable/disable
+        return item.enabled === undefined || ko.utils.unwrapObservable(item.enabled); } );
+    });
     self.getTemplateName = function(item) { return 'menuRow-' + item.type; };
 
     cockpit.extensionPoints.headsUpMenu = self;
@@ -15,6 +20,16 @@
     cockpit.extensionPoints.videoContainer.append('<div id="headsup-menu-base"></div>');
     var headsUpMenu = cockpit.extensionPoints.videoContainer.find('#headsup-menu-base');
     headsUpMenu.hide();
+    self.getTemplateName = function(item) { return "menuRow-" + item.type };
+
+    self.filterItmesByName = function(name) {
+      return self.items().filter(
+        function(item) {
+          if (item.name !== undefined && ko.utils.unwrapObservable(item.name) === name) {
+            return item;
+          }
+        });
+    };
 
     var menuItems = [];
     var currentSelected = -1;
@@ -74,6 +89,21 @@
       currentSelected = nextIndex;
     };
 
+    var createHook = function(name) {
+      return function () {
+        var hookName = name;
+        var currentId = $(menuItems[currentSelected]).attr('id');
+        self.items()
+          .forEach(function (item) {
+            if (item.uniqueId == currentId) {
+              if (item[hookName] !== undefined) {
+                item[hookName]();
+              }
+            }
+          });
+      }
+    };
+
     var enablePlugin = function() {
       self.cockpit.extensionPoints.inputController.register(
         {
@@ -96,6 +126,26 @@
               description: 'select the previous element of the heads up menu',
               defaults: { keyboard: 'd', gamepad: 'DPAD_UP' },
               down: moveSelectionPrev
+            },
+            {
+              name: "headsupMenu.left",
+              description: "Hook for additional functions for a menu entry.",
+              defaults: { keyboard: 'r', gamepad: 'DPAD_LEFT' },
+              down: function() {
+                console.log('left down');
+                createHook('left')();
+              },
+              up: function() {
+                console.log('left up');
+                createHook('leftUp')();
+              }
+            },
+            {
+              name: "headsupMenu.right",
+              description: "Hook for additional functions for a menu entry.",
+              defaults: { keyboard: 't', gamepad: 'DPAD_RIGHT' },
+              down: createHook('right'),
+              up: createHook('rightUp')
             }
           ]
         });
@@ -120,16 +170,39 @@
     var items = [].concat(item); // item can be a single object or an array
     items.forEach(function (anItem) {
       anItem.uniqueId = generateUUID();
+      anItem._enableObservableDummy = ko.observable(); // if the enabled property is not observable we can force the enabledItems updated via this
       if (anItem.type === undefined) {
         anItem.type = 'button';
       }
       if (anItem.type == 'custom') {
         anItem.headsUpTemplateId = 'custom-' + anItem.uniqueId;
+        $('body').append('<script type="text/html" id="' + anItem.headsUpTemplateId + '">' + anItem.content + '</script>');
       }
       self.items.push(anItem);
     });
   };
 
+  HeadsUpMenu.prototype.enable = function(name) {
+    var self = this;
+    self.filterItmesByName(name).forEach(function(item) {
+        if (ko.isObservable(item.enabled)) { item.enabled(true); }
+        else {
+          item.enabled = true;
+          item._enableObservableDummy(Date.now());
+        }
+      });
+    };
+
+  HeadsUpMenu.prototype.disable = function(name) {
+    var self = this;
+    self.filterItmesByName(name).forEach(function(item) {
+        if (ko.isObservable(item.enabled)) { item.enabled(false); }
+        else {
+          item.enabled = false;
+          item._enableObservableDummy(Date.now());
+        }
+      });
+  };
 
   function generateUUID(){
     var d = Date.now();

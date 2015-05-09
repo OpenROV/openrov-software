@@ -1,0 +1,19 @@
+<div id="auxServo-settings">
+
+  <!-- Settings -->
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#plugin-settings" href="#collapseAuxServo">
+        Auxiliary servos
+      </a>
+    </div>
+    <div id="collapseAuxServo" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <div>
+          <div data-bind="template: { name: 'aux-servo-template', foreach: servos }">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

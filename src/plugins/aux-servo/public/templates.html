@@ -1,0 +1,60 @@
+<!-- Template -->
+<script type="text/html" id="aux-servo-template">
+  <div>
+    <h4>Aux servo <span data-bind="text: $data.name"></span>:</h4>
+    <fieldset>
+      <label class="checkbox">
+        <input type="checkbox" data-bind="checked: $data.enabled">Enabled
+      </label>
+      <div data-bind="visible: $data.enabled">
+        <div class="row" data-bind="visible: $data.enabled">
+          <div class="span5">
+            <label class="textbox">
+              Min degrees: <input type="number" class="input-small"  data-bind="value: $data.min">
+            </label>
+
+            <label class="textbox">
+              Mid point degrees: <input type="number" class="input-small" data-bind="value: $data.midPoint">
+            </label>
+
+            <label class="textbox">
+              Max degrees: <input type="number" class="input-small" data-bind="value: $data.max">
+            </label>
+
+            <label class="textbox">
+              Step width: <input type="number" class="input-small" data-bind="value: $data.stepWidth">
+            </label>
+          </div>
+
+          <div class="span1">
+            <a class="btn" data-bind="css: { disabled: ! $data.isChanged() }, click: $data.apply">Apply</a>
+          </div>
+          <span data-bind="visible: $data.showApllied"><i class="icon-ok" title="Applied!"></i> Applied!</span>
+        </div>
+        <div class="row-fluid">
+          <div class="span1">
+            <a class="btn btn-link" data-bind="click: $data.toggleTestVisible">Test</a>
+          </div>
+        </div>
+      </div>
+      <div class="row-fluid">
+        <div class='span12 well' data-bind="visible: $data.showTest">
+          <div class="row-fluid">
+            <label class="span12">
+              <span class="span12">Value in degrees:</span>
+              <div class="input-append span6"><input type="number" class="input-small" data-bind="value: $data.testValue">
+                <button class="btn" type="button" data-bind="click: $data.executeTest">Test</button>
+              </div>
+              <span class="span4" data-bind="visible: $data.isExecuted"><i class="icon-ok" title="Executed!"></i> Executed!</span>
+            </label>
+          </div>
+          <label class="checkbox" title="Automatically apply test value">
+            <input type="checkbox" data-bind="checked: $data.liveTest">Live test
+          </label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</script>
+<script type="text/html" id="aux-servo-headsup-template">
+</script>
