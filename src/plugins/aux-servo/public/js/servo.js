@@ -79,7 +79,7 @@ auxServoNs.Servo = function(eventEmitter, name, pin, enabled) {
   return self;
 };
 auxServoNs.Servo.fromJs = function(eventEmitter, jsObject) {
-  var servo = new auxServoNs.Servo(eventEmitter, jsObject.name, jsObject.pin, jsObject.enabled);
+  var servo = new auxServoNs.Servo(eventEmitter, jsObject.name, jsObject.pin, jsObject.enabled == 'true');
   if (jsObject.min !== undefined) servo.min(jsObject.min);
   if (jsObject.max !== undefined) servo.max(jsObject.max);
   if (jsObject.midPoint !== undefined) servo.midPoint(jsObject.midPoint);
