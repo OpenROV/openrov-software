@@ -9,5 +9,12 @@ class AuxServo: public Device {
     AuxServo():Device(){};
     void device_setup();
     void device_loop(Command cmd);
+    
+  private:
+  	int tilt_val = 1500;
+    int new_tilt = 1500;
+    const int tiltrate = 1;
+    void tiltServo(long milliseconds);
+	  int smoothAdjustedCameraPosition(int target, int current);
 };
 #endif
