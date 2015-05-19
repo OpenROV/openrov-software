@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rovpilot api</title>
+</head>
+<xmp theme="united" style="display:none;">
+# ROV Pilot
+
+
+The rovpilot plugin handles all of the thruster interfaces that make the ROV move.
+It supports 9 axis of movement but not all ROVs will be capable of such.
+
+Socket.io API:
+
+| Type     | Message
+| -----    | ----
+| Messages | [allStop](#plugin.rovpilot.allStop), [setThrottle](#plugin.rovpilot.setThrottle), [setYaw](#plugin.rovpilot.setYaw), [setLift](#plugin.rovpilot.setLift), [setPitchControl](#plugin.rovpilot.setPitchControl), [setRollControl](#plugin.rovpilot.setRollControl), [setPowerLevel](#plugin.rovpilot.setPowerLevel), [incrementPowerLevel](#plugin.rovpilot.incrementPowerLevel), [decrementPowerLevel](#plugin.rovpilot.decrementPowerLevel), [powerOnESCs](#plugin.rovpilot.powerOnESCs), [powerOffESCs](#plugin.rovpilot.powerOffESCs), [headingHold.toggle](#plugin.rovpilot.headingHold.toggle), [headingHold.set](#plugin.rovpilot.headingHold.set), [depthHold.toggle](#plugin.rovpilot.depthHold.toggle), [depthHold.set](#plugin.rovpilot.depthHold.set), [manualMotorThrottle](#plugin.rovpilot.manualMotorThrottle)
+| Events   | [esc.enabled](#plugin.rovpilot.esc.enabled), [esc.disabled](#plugin.rovpilot.esc.disabled), [depthHold.enabled](#plugin.rovpilot.depthHold.enabled'), [depthHold.disabled](#plugin.rovpilot.depthHold.disabled'), [headingHold.enabled](#plugin.rovpilot.headingHold.enabled'), [headingHold.disabled](#plugin.rovpilot.headingHold.disabled'), [headingHold.target](#plugin.rovpilot.headingHold.target), [powerLevel](#plugin.rovpilot.powerLevel)
+| Telemetry| [targetDepth](#targetDepth), [targetHeading](#targetHeading)
+
+## Sequence Diagram to Stop ROV:
+
+<div class="diagram">
+
+input->rovpilot.js: rovPilot.stop
+rovpilot.js->index.js: plugin.rovpilot.allStop
+index.js->thrusters.cpp: stop();
+thrusters.cpp->motor[0]: goms(0)
+thrusters.cpp->motor[1]: goms(0)
+thrusters.cpp->motor[2]: goms(0)
+thrusters.cpp->index.js: motors(0,0,0);
+index.js->rovpilot.js: status(motors,0,0,0)
+Note over thrusters.cpp: AtMega/Arduino
+Note over index.js: BBB/Node.js
+Note over rovpilot.js: Browser
+
+</div>
+
+
+# Socket.io API (/plugins/rovpilot/index.js)
+
+## Telemetry
+
+<a id="targetDepth"></a>
+[targetDepth](#targetDepth)
+---------------------------------------------------
+> The setpoint for depth
+
+Value: floating point in meters
+
+Example:
+```
+socket.on('status', function status(data) {
+  if ('targetDepth' in data) {
+    ...
+  }
+```
+Last update:
+<span class=".targetDepth"></span>
+
+<a id="targetHeading"></a>
+[targetHeading](#targetHeading)
+---------------------------------------------------
+> The setpoint for heading
+
+Value: floating point in degrees [0.0 .. 359.9]
+
+Example:
+```
+socket.on('status', function status(data) {
+  if ('targetHeading' in data) {
+    ...
+  }
+```
+Last update:
+<span class=".targetHeading"></span>
+
+## Events
+
+<a id="plugin.rovpilot.esc.enabled"></a>
+[plugin.rovpilot.esc.enabled](#plugin.rovpilot.esc.enabled)
+---------------------------------------------------
+
+> Indicates the escs are recieving power
+
+Arguments: None
+
+Example:
+```
+  socket.on('plugin.rovpilot.esc.enabled',function(){});
+```
+Last emission:
+<div class='plugin_rovpilot_esc_enabled'></div>
+
+<a id="plugin.rovpilot.esc.disabled"></a>
+[plugin.rovpilot.esc.disabled](#plugin.rovpilot.esc.disabled)
+---------------------------------------------------
+
+> Indicates the escs are powered off.
+
+Arguments: None
+
+Example:
+```
+  socket.on('plugin.rovpilot.esc.disabled',function(){});
+```
+Last emission:
+<div class='plugin_rovpilot_esc_disabled'></div>
+
+<a id="plugin.rovpilot.depthHold.enabled"></a>
+[plugin.rovpilot.depthHold.enabled](#plugin.rovpilot.depthHold.enabled)
+---------------------------------------------------
+
+> Indicates that depth hold has been enabled
+
+Arguments: None
+
+Example:
+```
+  socket.on('plugin.rovpilot.depthHold.enabled',function(){});
+```
+Last emission:
+<div class='plugin_rovpilot_depthHold_enabled'></div>
+
+<a id="plugin.rovpilot.depthHold.disabled"></a>
+[plugin.rovpilot.depthHold.disabled](#plugin.rovpilot.depthHold.disabled)
+---------------------------------------------------
+
+> Indicates that depth hold has been disabled
+
+Arguments: None
+
+Example:
+```
+  socket.on('plugin.rovpilot.depthHold.disabled',function(){});
+```
+Last emission:
+<div class='plugin_rovpilot_depthHold_disabled'></div>
+
+<a id="plugin.rovpilot.headingHold.enabled"></a>
+[plugin.rovpilot.headingHold.enabled](#plugin.rovpilot.headingHold.enabled)
+---------------------------------------------------
+
+> Indicates that heading hold has been enabled
+
+Arguments: None
+
+Example:
+```
+  socket.on('plugin.rovpilot.headingHold.enabled',function(){});
+```
+Last emission:
+<div class='plugin_rovpilot_headingHold_enabled'></div>
+
+<a id="plugin.rovpilot.headingHold.disabled"></a>
+[plugin.rovpilot.headingHold.disabled](#plugin.rovpilot.headingHold.disabled)
+---------------------------------------------------
+
+> Indicates that heading hold has been disabled
+
+Arguments: None
+
+Example:
+```
+  socket.on('plugin.rovpilot.headingHold.disabled',function(){});
+```
+Last emission:
+<div class='plugin_rovpilot_headingHold_disabled'></div>
+
+<a id="plugin.rovpilot.headingHold.target"></a>
+[plugin.rovpilot.headingHold.target](#plugin.rovpilot.headingHold.target)
+---------------------------------------------------
+
+> Indicates the heading setpoint has been changed
+
+*Arguments:*
+
+| index | Argument  |  description
+| ---   |  ---      |  ---
+| 0     | heading   |  [0..359] new heading setpoint
+
+Example:
+```
+  socket.on('plugin.rovpilot.headingHold.target',function(heading){});
+```
+Last emission:
+<div class='plugin.rovpilot.headingHold.target'></div>
+
+<a id="plugin.rovpilot.powerLevel"></a>
+[plugin.rovpilot.powerLevel](#plugin.rovpilot.powerLevel)
+---------------------------------------------------
+
+> Indicates the powerlevel govenor of the ROV has been adjusted
+
+*Arguments:*
+
+| index | Argument  |  description
+| ---   |  ---      |  ---
+| 0     | level     |  [0 .. 4] new level
+
+Example:
+```
+  socket.on('plugin.rovpilot.powerLevel',function(level){});
+```
+Last emission:
+<div class='plugin.rovpilot.powerLevel'></div>
+
+## Messages
+
+<a id="plugin.rovpilot.allStop"></a>
+[plugin.rovpilot.allStop](#plugin.rovpilot.allStop)
+---------------------------------------------------
+
+> _(not currently implimented)_ Shuts down all motor activity
+
+Parameter: None
+
+Example: <button onclick="
+  socket.emit('plugin.rovpilot.allStop')">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.allStop');
+```
+
+
+  | Related Telemetry | Value
+  | -- | --
+  | Motors: | <span class='motors'></span>
+
+<a id="plugin.rovpilot.setThrottle"></a>
+[plugin.rovpilot.setThrottle](#plugin.rovpilot.setThrottle)
+---------------------------------------------------
+
+> Sets the rate of forward/reverse translation
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | thrust    | <input id='setThrottle_percent_thrust' value=.5 /> | percentage of total thrust is a float between -1 and 1.  0 indicates stop.
+
+*Example:* <button onclick="
+  socket.emit('throttle',$('#setThrottle_percent_thrust')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.setThrottle', .5); //half forward throttle
+```
+| Related Telemetry | Value
+| -- | --
+| Motors: | <span class='motors'></span>
+
+
+<a id="plugin.rovpilot.setYaw"></a>
+[plugin.rovpilot.setYaw](#plugin.rovpilot.setYaw)
+---------------------------------------------------
+
+> Sets the rate of Yaw change
+
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | thrust    | <input id='setYaw_precent_yaw' value=.5 /> | amount is a float between -1 and 1.  0 indicates no rotation.
+
+Example: <button onclick="
+  socket.emit('yaw',$('#setYaw_precent_yaw')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.setYaw', .5); //Turn at 50% rate to starboard
+```
+| Related Telemetry | Value
+| -- | --
+| Motors: | <span class='motors'></span>
+| Yaw: | <span class='yaw'></span>
+
+<a id="plugin.rovpilot.setLift"></a>
+[plugin.rovpilot.setLift](#plugin.rovpilot.setLift)
+---------------------------------------------------
+
+> Sets the vertical thrust to drive rate of depth change
+
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | thrust    | <input id='setLift_precent_lift' value=.5 /> | amount is a float between -1 and 1.  0 indicates no lift.
+
+Example:<button onclick="
+  socket.emit('lift',$('#setLift_precent_lift')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.setLift', .5); //Reduce depth at 50% of total power
+```
+
+| Related Telemetry | Value
+| -- | --
+| Motors: | <span class='motors'></span>
+
+
+<a id="plugin.rovpilot.setPitchControl"></a>
+[plugin.rovpilot.setPitchControl](#plugin.rovpilot.setPitchControl)
+---------------------------------------------------
+
+> Sets the rate of pitch change
+
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | rate      | <input id='setPitchControl_precent_rate' value=.5 /> | is a float between -1 and 1.  0 indicates no pitch.
+
+Example:<button onclick="
+  socket.emit('setPitchControl',$('#setPitchControl_precent_rate')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.setPitch', .5); //Start pitching up at 50% of possible rate
+```
+
+| Related Telemetry | Value
+| -- | --
+| Pitch: | <span class='pitch'></span>
+| Elevons: | <span class='elevons'></span>
+
+
+<a id="plugin.rovpilot.setRollControl"></a>
+[plugin.rovpilot.setRollControl](#plugin.rovpilot.setRollControl)
+---------------------------------------------------
+
+> Sets the rate of roll change
+
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | rate      | <input id='setRollControl_precent_rate' value=.5 /> | is a float between -1 and 1.  0 indicates no roll.
+
+Example:<button onclick="
+  socket.emit('setRollControl',$('#setRollControl_precent_rate')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.setRollControl', .5); //Start rolling clockwise at 50% of of possible rate
+```
+
+| Related Telemetry | Value
+| -- | --
+| Roll: | <span class='roll'></span>
+| Elevons: | <span class='elevons'></span>
+
+
+<a id="plugin.rovpilot.setPowerLevel"></a>
+[plugin.rovpilot.setPowerLevel](#plugin.rovpilot.setPowerLevel)
+---------------------------------------------------
+
+> Limits the control authority of the thrusters to a percentage of total available
+> thrust.
+
+> 1 = 12%
+> 2 = 25%
+> 3 = 40%
+> 4 = 70%
+> 5 = 100%
+
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | rate      | <input id='setPowerLevel_level' value=2 /> | Value between [1 .. 5] to indicate power level
+
+Example:<button onclick="
+  socket.emit('setPowerLevel',$('#setPowerLevel_level')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.setPowerLevel', 2); //Set power level to 2
+```
+
+Related Telemetry: None
+
+
+<a id="plugin.rovpilot.incrementPowerLevel"></a>
+[plugin.rovpilot.incrementPowerLevel](#plugin.rovpilot.incrementPowerLevel)
+---------------------------------------------------
+
+> Moves the PowerLevel of the ROV to the next highest setting
+
+
+*Parameters:* none
+
+Example:<button onclick="
+  socket.emit('incrementPowerLevel');
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.incrementPowerLevel'); //Incriment power level by 1
+```
+
+Related Telemetry: None
+
+<a id="plugin.rovpilot.decrementPowerLevel"></a>
+[plugin.rovpilot.decrementPowerLevel](#plugin.rovpilot.decrementPowerLevel)
+---------------------------------------------------
+
+> Moves the PowerLevel of the ROV to the next lowest setting
+
+
+*Parameters:* none
+
+Example:<button onclick="
+  socket.emit('decrementPowerLevel');
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.decrementPowerLevel'); //decrement power level by 1
+```
+
+Related Telemetry: None
+
+
+<a id="plugin.rovpilot.powerOnESCs"></a>
+[plugin.rovpilot.powerOnESCs](#plugin.rovpilot.powerOnESCs)
+---------------------------------------------------
+
+> Turn on power to the electronic speed controllers
+
+*Parameters:* none
+
+Example:<button onclick="
+  socket.emit('powerOnESCs');
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.powerOnESCs');
+```
+
+| Related Telemetry | Value
+| -- | --
+| ?: | <span class='?'></span>
+
+
+<a id="plugin.rovpilot.powerOffESCs"></a>
+[plugin.rovpilot.powerOffESCs](#plugin.rovpilot.powerOffESCs)
+---------------------------------------------------
+
+> Turn off power to the electronic speed controllers
+
+*Parameters:* none
+
+Example:<button onclick="
+  socket.emit('powerOffESCs');
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.powerOffESCs');
+```
+
+| Related Telemetry | Value
+| -- | --
+| ?: | <span class='?'></span>
+
+
+<a id="plugin.rovpilot.headingHold.toggle"></a>
+[plugin.rovpilot.headingHold.toggle](#plugin.rovpilot.headingHold.toggle)
+---------------------------------------------------
+
+> Toggles the heading hold settings on or off.
+
+*Parameters:* none
+
+Example:<button onclick="
+  socket.emit('headingHold.toggle');
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.headingHold.toggle');
+```
+
+| Related Telemetry | Value
+| -- | --
+| ?: | <span class='?'></span>
+
+
+<a id="plugin.rovpilot.headingHold.set"></a>
+[plugin.rovpilot.headingHold.set](#plugin.rovpilot.headingHold.set)
+---------------------------------------------------
+
+> Changes the heading hold set point.
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | degrees   | <input id='headingHold_yaw' value=30 /> | Value between [0 .. 360] to indicate new heading target
+
+
+Example:<button onclick="
+  socket.emit('headingHold.set',$('#headingHold_yaw')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.headingHold.set',30);
+```
+
+| Related Telemetry | Value
+| -- | --
+| heading: | <span class='heading'></span>
+
+
+<a id="plugin.rovpilot.depthHold.toggle"></a>
+[plugin.rovpilot.depthHold.toggle](#plugin.rovpilot.depthHold.toggle)
+---------------------------------------------------
+
+> Toggles the depth hold settings on or off.
+
+*Parameters:* none
+
+Example:<button onclick="
+  socket.emit('holdDepth_toggle');
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.depthHold.toggle');
+```
+
+| Related Telemetry | Value
+| -- | --
+| ?: | <span class='?'></span>
+
+
+<a id="plugin.rovpilot.depthHold.set"></a>
+[plugin.rovpilot.depthHold.set](#plugin.rovpilot.depthHold.set)
+---------------------------------------------------
+
+> Changes the heading hold set point.
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | degrees   | <input id='depthHold_meters' value=30 /> | float value > 0.0 to indicate new depth target
+
+
+Example:<button onclick="
+  socket.emit('depthHold.set',$('#depthHold_meters')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.depthHold.set',30.0); //30 meter
+```
+
+| Related Telemetry | Value
+| -- | --
+| depth: | <span class='depth'></span>
+
+<a id="plugin.rovpilot.manualMotorThrottle"></a>
+[plugin.rovpilot.manualMotorThrottle](#plugin.rovpilot.manualMotorThrottle)
+---------------------------------------------------
+
+> (Depricated) Will set raw PWM microseconds on the motors on the ROV.
+
+*Parameters:*
+
+| index | Parameter | value| description
+| ---   |  ---      |  --- | ---
+| 0     | port      | <input id='manualMotorThrottle_port_us' value=1600 /> | Value between [1000 .. 2000] to indicate PWM microseconds to send to ESC
+| 1     | vertical  | <input id='manualMotorThrottle_vertical_us' value=1600 /> | Value between [1000 .. 2000] to indicate PWM microseconds to send to ESC
+| 2     | starboard | <input id='manualMotorThrottle_starboard_us' value=1600 /> | Value between [1000 .. 2000] to indicate PWM microseconds to send to ESC
+
+
+Example:<button onclick="
+  socket.emit('manualMotorThrottle',$('#manualMotorThrottle_port_us')[0].value,$('#manualMotorThrottle_vertical_us')[0].value,$('#manualMotorThrottle_starboard_us')[0].value);
+">Try it:</button>
+```
+  socket.emit('plugin.rovpilot.manualMotorThrottle',1600,1600,1600);
+```
+
+| Related Telemetry | Value
+| -- | --
+| motors: | <span class='motors'></span>
+
+</xmp>
+
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+
+<script src="https://raw.githubusercontent.com/bramp/js-sequence-diagrams/master/build/sequence-diagram-min.js"></script>
+<script>
+$(".diagram").sequenceDiagram({theme: 'simple'});
+</script>
+<!--script type='text/javascript' src="/socket.io/socket.io.js"></script-->
+<script type='text/javascript' src="http://192.168.254.1:8080/socket.io/socket.io.js"></script>
+<script>
+var socket = window.io.connect('http://192.168.254.1:8080');
+socket.on('status', function status(data) {
+  if ('motors' in data) {
+    $(".motors").text(data.motors);
+  }
+  if ('yaw' in data) {
+    $(".yaw").text(data.yaw);
+  }
+  if ('pitch' in data) {
+    $(".pitch").text(data.pitch);
+  }
+  if ('roll' in data) {
+    $(".roll").text(data.roll);
+  }
+  if ('elev' in data) {
+    $(".elevons").text(data.elev);
+  }
+  if ('hdgd' in data) {
+    $(".heading").text(data.hdgd);
+  }
+  if ('dept' in data) {
+    $(".depth").text(data.dept);
+  }
+  if ('targetDepth' in data) {
+    $(".targetDepth").text(data.targetDepth);
+  }
+  if ('targetHeading' in data) {
+    $(".targetHeading").text(data.targetHeading);
+  }
+});
+socket.on('plugin.rovpilot.esc.enabled',function(){
+  var d = new Date();
+  $(".plugin_rovpilot_esc_enabled").text=d.now();
+});
+socket.on('plugin.rovpilot.esc.disabled',function(){
+  var d = new Date();
+  $(".plugin_rovpilot_esc_disabled").text=d.now();
+});
+
+socket.on('plugin.rovpilot.headingHold.target',function(heading){
+  var d = new Date();
+  $(".plugin_rovpilot_headingHold_target").text=d.now() + ', heading:' + heading;
+});
+socket.on('plugin.rovpilot.powerLevel',function(level){
+  var d = new Date();
+  $(".plugin_rovpilot_powerLevel").text=d.now() + ', level:' + level;
+});
+</script>
+</html>
