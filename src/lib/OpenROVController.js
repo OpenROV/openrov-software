@@ -30,18 +30,17 @@ var OpenROVController = function (eventLoop, client) {
   this.hardware = new Hardware();
   this.cockpit = client;
 
-  setInterval(function () {
-    controller.emit('status', statusdata);
-  }, 1000);
-
   this.hardware.on('serial-recieved', function (data) {
     globalEventLoop.emit('serial-recieved', data);
   });
 
   this.hardware.on('status', function (status) {
+    statusdata = {};
+
     for (var i in status) {
       statusdata[i] = status[i];
     }
+    controller.emit('status', statusdata);
     if ('ver' in status) {
       controller.ArduinoFirmwareVersion = status.ver;
     }
