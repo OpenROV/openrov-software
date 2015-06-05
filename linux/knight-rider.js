@@ -20,12 +20,23 @@ var ledState = [
 	"0,0,0,0"
 ];
 
-var leds = [
-	"/sys/class/leds/beaglebone:green:heartbeat/brightness",
-	"/sys/class/leds/beaglebone:green:mmc0/brightness",
-	"/sys/class/leds/beaglebone:green:usr2/brightness",
-	"/sys/class/leds/beaglebone:green:usr3/brightness"
-];
+var leds;
+if (fs.existsSync('/sys/class/leds/beaglebone:green:heartbeat/')){
+   leds = [
+        "/sys/class/leds/beaglebone:green:heartbeat/brightness",
+        "/sys/class/leds/beaglebone:green:mmc0/brightness",
+        "/sys/class/leds/beaglebone:green:usr2/brightness",
+        "/sys/class/leds/beaglebone:green:usr3/brightness"
+  ];
+} else {
+   leds = [
+        "/sys/class/leds/beaglebone:green:usr0/brightness",
+        "/sys/class/leds/beaglebone:green:usr1/brightness",
+        "/sys/class/leds/beaglebone:green:usr2/brightness",
+        "/sys/class/leds/beaglebone:green:usr3/brightness"
+  ];
+}
+
 var patternIndex = 0;
 var buffer0 = new Buffer('0');
 var buffer255 = new Buffer('255');
@@ -64,4 +75,3 @@ function closeLeds() {
 	}
 
 };
-
