@@ -16,6 +16,6 @@ sed -i '/function getLocalAddresses() {/a return' /usr/lib/node_modules/npm/node
 npm install --loglevel error --production --unsafe-perm
 
 cd src/static
-npm install --loglevel error
+npm install --loglevel error --production
 npm run bower
 cd ../..
