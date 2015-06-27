@@ -9,7 +9,7 @@ echo 'nameserver 208.67.220.220' >> /etc/resolv.conf
 
 # install node.js
 apt-get update -qq
-apt-get install -y curl build-essential
+apt-get install -y curl build-essential git
 curl -sL https://deb.nodesource.com/setup | bash -
 apt-get install -y nodejs
 sed -i '/function getLocalAddresses() {/a return' /usr/lib/node_modules/npm/node_modules/npmconf/config-defs.js
