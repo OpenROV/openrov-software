@@ -13,7 +13,7 @@ apt-get install -y curl build-essential
 curl -sL https://deb.nodesource.com/setup | bash -
 apt-get install -y nodejs
 sed -i '/function getLocalAddresses() {/a return' /usr/lib/node_modules/npm/node_modules/npmconf/config-defs.js
-npm install --loglevel silly
+npm install --loglevel error
 
 cd src/static
 npm install --loglevel error
