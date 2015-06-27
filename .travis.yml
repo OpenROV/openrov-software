@@ -9,7 +9,6 @@ env:
   - ARCH=arm
 script:
 - cat /etc/hosts
-- npm install --arch=armhf
 - "bash -ex .travis-ci.sh"
 
 after_success:
