@@ -2,7 +2,7 @@
 
 <polymer-element name="bb-ping">
   <template>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 
     <style type="text/css">
     </style>
@@ -16,7 +16,7 @@
       Polymer({
         ready: function () {
           var self = this;
-          $.getScript('/bower_components/fpsmeter/dist/fpsmeter.js', function () {
+          $.getScript('bower_components/fpsmeter/dist/fpsmeter.js', function () {
 
             self.beagletoBrowserMeter = new FPSMeter(self.$.fpsmeter, {
               interval: 1000,

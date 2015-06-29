@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!--link rel="import" href="../../webcomponents/video/video.html"-->
-<link rel="import" href="/bower_components/mjpeg-video-webcomponents/mjpeg-video.html">
+<link rel="import" href="../../bower_components/mjpeg-video-webcomponents/mjpeg-video.html">
 <link rel="import" href="../../webcomponents/horizon/horizon.html">
 <link rel="import" href="../../webcomponents/settings/settings.html">
 <link rel="import" href="../../webcomponents/diagnostics/diagnostics.html">
@@ -21,8 +21,8 @@
 
 <polymer-element name="rov-ui-standard">
   <template>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/themes/OpenROV/css/style.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../themes/OpenROV/css/style.css">
 
     <div id="header" class="navbar navbar-inverse navbar-fixed-top nav-collapse">
       <div class="navbar-inner">
@@ -52,7 +52,7 @@
     <!--        <rov-video>
             </rov-video>
     -->
-            <mjpeg-video src='http://192.168.254.1:8090/?action=stream'  border='1' style='width: 100%; height:100%' menuState='on'></mjpeg-video>
+            <mjpeg-video src='/cockpit/camera1'  border='1' style='width: 100%; height:100%' menuState='on'></mjpeg-video>
             <video-compass></video-compass>
             <rov-horizon id="horizon"></rov-horizon>
 

@@ -28,7 +28,7 @@
 
   UiSelector.prototype.listen = function() {
     var self = this;
-    $.get('/plugin/ui-selector', function (config) {
+    $.get('plugin/ui-selector', function (config) {
       if (config.selectedUi) {
         self.model.setSelectedUiByName(config.selectedUi);
       }
