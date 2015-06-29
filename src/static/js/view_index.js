@@ -24,7 +24,8 @@ $(function () {
     CONFIG = {};
     CONFIG.sample_freq = 20;
   } else {
-    var socket = window.io.connect();
+    var socket = window.io.connect(window.location.protocol + '//' +
+                 window.location.host+ ':8080');
   }
 
 

@@ -165,15 +165,16 @@ function addPluginAssets(result) {
   scripts = scripts.concat(result.scripts);
   styles = styles.concat(result.styles);
   result.assets.forEach(function (asset) {
-    app.use(asset.path, express.static(asset.assets));
+    console.log("TEST: " + asset.path);
+    app.use('/' + asset.path, express.static(asset.assets));
   });
 }
 var loader = new PluginLoader();
-loader.loadPlugins(path.join(__dirname, 'ui-plugins'), '/ui-plugin', deps, addPluginAssets);
-loader.loadPlugins(path.join(__dirname, 'system-plugins'), '/system-plugin', deps, addPluginAssets);
-loader.loadPlugins(path.join(__dirname, 'plugins'), '/plugin', deps, addPluginAssets);
+loader.loadPlugins(path.join(__dirname, 'ui-plugins'), 'ui-plugin', deps, addPluginAssets);
+loader.loadPlugins(path.join(__dirname, 'system-plugins'), 'system-plugin', deps, addPluginAssets);
+loader.loadPlugins(path.join(__dirname, 'plugins'), 'plugin', deps, addPluginAssets);
 mkdirp.sync('/usr/share/cockpit/bower_components');
-loader.loadPlugins('/usr/share/cockpit/bower_components', '/community-plugin', deps, addPluginAssets, function (file) {
+loader.loadPlugins('/usr/share/cockpit/bower_components', 'community-plugin', deps, addPluginAssets, function (file) {
   return file.substring(0, 15) === 'openrov-plugin-';
 });
 controller.start();

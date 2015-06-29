@@ -9,18 +9,18 @@
   getDashboardUrl();
 
   self.getShowAlerts = function (callback) {
-    $.get('/system-plugin/software-update/config/showAlerts', function (settings) {
+    $.get('system-plugin/software-update/config/showAlerts', function (settings) {
       if (callback !== undefined)
         callback(settings.showAlerts === 'true' || settings.showAlerts === true);
     });
   };
   self.setShowAlerts = function (value) {
-    $.post('/system-plugin/software-update/config/showAlerts', { showAlerts: value });
+    $.post('system-plugin/software-update/config/showAlerts', { showAlerts: value });
   };
 
   function getDashboardUrl() {
     $.ajax({
-      url: '/system-plugin/software-update/config/dashboardUrl',
+      url: 'system-plugin/software-update/config/dashboardUrl',
       success: function(result) {
         var url = result.url;
         if (url.trim().length === 0 || url.trim().indexOf('http') === -1)
