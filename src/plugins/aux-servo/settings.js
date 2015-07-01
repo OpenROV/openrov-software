@@ -14,6 +14,7 @@ function settings(deps) {
   }
 
   self.saveServoConfig = function(config) {
+    config.enabled = config.enabled.toString();
     self.preferences[config.name] = config;
     deps.config.preferences.set(PREFERENCES, self.preferences);
     deps.config.savePreferences();
