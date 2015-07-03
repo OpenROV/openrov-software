@@ -168,9 +168,19 @@
     self.cockpit.extensionPoints.inputController.register(
     [
       {
-        name: 'plugin.aux-servo.toggle',
+        name: 'plugin.aux-servo.toggle_servo_1',
         description: 'toggle min/max of servo 1.',
-        defaults: { gamepad: 'RIGHT_STICK' },
+        defaults: { },
+        down: function () {
+          var servo = self.settingsModel.servos()[0];
+          var newValue = (servo.currentValue() == servo.min()) ? servo.max() : servo.min();
+          servo.setValue(newValue);
+        }
+      },
+      {
+        name: 'plugin.aux-servo.toggle_servo_2',
+        description: 'toggle min/max of servo 2.',
+        defaults: { },
         down: function () {
           var servo = self.settingsModel.servos()[0];
           var newValue = (servo.currentValue() == servo.min()) ? servo.max() : servo.min();
@@ -178,10 +188,7 @@
         }
       }
       ]);
-
-    
-
   };
-
+  
   window.Cockpit.plugins.push(auxServoNs.AuxServo);
 }(window, jQuery));
