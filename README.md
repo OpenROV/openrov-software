@@ -1,139 +1,50 @@
-[![Views in the last 24 hours](https://sourcegraph.com/api/repos/github.com/OpenROV/openrov-software/counters/views-24h.png)](https://sourcegraph.com/github.com/OpenROV/openrov-software)
-[![Build Status](https://secure.travis-ci.org/OpenROV/openrov-software.png?branch=master)](http://travis-ci.org/OpenROV/openrov-software)
-[![Code Climate](https://codeclimate.com/github/OpenROV/openrov-software.png)](https://codeclimate.com/github/OpenROV/openrov-software)
-[![Coverage Status](https://coveralls.io/repos/OpenROV/openrov-software/badge.png)](https://coveralls.io/r/OpenROV/openrov-software)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/OpenROV/openrov-software/badges/quality-score.png?s=c24130cbf17aaa23f2680e3b45a0ec675ef2037f)](https://scrutinizer-ci.com/g/OpenROV/openrov-software/)
-[![Code Coverage](https://scrutinizer-ci.com/g/OpenROV/openrov-software/badges/coverage.png?s=e356e3047940fb7ea47e36477c6064e23fee12c0)](https://scrutinizer-ci.com/g/OpenROV/openrov-software/)
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/OpenROV/discuss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-OpenROV Cockpit
-================
+#OpenROV Software
 
-"[OpenROV](http://openrov.com/) is a DIY telerobotics community centered around underwater exploration & adventure."  One goal of OpenROV is to have onboard video for live viewing as the user operates the ROV.  Enter: OpenROV Cockpit.
+"[OpenROV](http://openrov.com/) is a DIY telerobotics community centered around underwater exploration & adventure."
 
-Getting started
----------------
+There are many projects that make up the software suites used in the OpenROV products which include the ROV (remote operated vehicles), the control system, and cloud services.
 
-**If you just getting started and want to have working environment for the OpenROV Cockpit, we recommend that you start with using our last stable release from our [releases page](https://github.com/OpenROV/openrov-software/releases).  If you want to explore building your own image from scratch, refer to our  
-[OpenROV disk Image](https://github.com/OpenROV/openrov-image/blob/master/README.md) project.  The latest development image (from master) can be downloaded from http://54.187.8.25:8080/job/OpenROV-Image_BuildImage_master/.
+###On the ROV###
+- [openrov-rov-suite](https://github.com/OpenROV/openrov-rov-suite) : Ties together the various projects in to a single distributable package.
+- [openrov-cockpit](https://github.com/OpenROV/openrov-cockpit) : For piloting and ROV control
+- [openrov-dashboard](https://github.com/OpenROV/openrov-dashboard) : For managing the services on the ROV
+- [openrov-image-customization](https://github.com/OpenROV/openrov-image-customization) : The customizations made to the Debian image to turn it in to an ROV image
+- [openrov-proxy](https://github.com/OpenROV/openrov-proxy) : A service that lets the ROV tunnel its internet connections through the connected browser
+- [openrov-software-arduino](https://github.com/OpenROV/openrov-software-arduino) : The firmware for the cape and controller board used in the ROV
 
-Introduction
-------------
+###Tools###
+- [openrov-image](https://github.com/OpenROV/openrov-image) : For generating a custom base image in lew of the Debian image provided by beagleboard.org
+- [openrov-grunt-init-plugin](https://github.com/OpenROV/openrov-grunt-init-plugin) : For creating scaffolding to quick start development of a plugin for the openrov-cockpit.
 
-We designed the onboard video platform using several key technologies:
+##Related Non-Software repos##
+- [openrov-hardware](https://github.com/OpenROV/openrov-hardware)
+- [openrov-electronics](https://github.com/OpenROV/electronics)
 
-- [MJPEG_Streamer](https://code.google.com/p/mjpg-streamer/)
-- [Node.js](http://nodejs.org/)
-- [Socket.io](http://socket.io/)
+##Getting latest software
 
-Combining these great technologies provides a lot of power and room for future growth.  But is also provides well documented means to extend OpenROV.  With Node.js and Socket.io, not only are we able to stream video to a web browser by updating an image, but we are also able to control the ROV and view valuable sensor information.  This is just the beginning.  
+If your looking for the latest stable software bundle for the ROV, it is listed on the ROV product page.
+- [2.x series Mini Observation Class ROV product page](http://www.openrov.com/products/2-7.html#downloads)
 
-Key Related Projects
-----------------
+If your looking for the latest development image, please refer to the [openrov-rov-suite readme.md](https://github.com/OpenROV/openrov-rov-suite/blob/master/readme.md)
 
-* The firmware for the arduino can be found in [openrov/openrov-software-arduino](https://github.com/OpenROV/openrov-software-arduino) in the /OpenROV project.
-* The dashboard project can be found in [openrov/openrov-dashboard](https://github.com/OpenROV/openrov-dashboard)
+##Reporting issues
 
-Note on Repository Branches
----------------------------
+All **software** issues, regardless should be reported to [this repositories issue list](https://github.com/OpenROV/openrov-software/issues).
 
-The "master" branch is the most current development branch of the code.  All work is done outside and submited as pull requests that *should* be working before they are merged.  There will also be a `<release>`-maintanence branch that has the code from the last stable release.  There may also be a `<release>`-alpha|beta|rc1 which is the next release that is being stabalized.  This will more than likely change as committers come and go, but that it what it looks like today.
+##How to Contribute##
 
-Requirements
-------------
-- BeagleBone: [http://beagleboard.org/bone](http://beagleboard.org/bone)
-- USB webcam:  we're using the Genius F100 HD
-- Ubuntu for BeagleBone:  [http://elinux.org/BeagleBoardUbuntu#Demo_Image](http://elinux.org/BeagleBoardUbuntu#Demo_Image) or [https://github.com/codewithpassion/openrov-image](https://github.com/codewithpassion/openrov-image)
-- mjpg-streamer:  [http://sourceforge.net/projects/mjpg-streamer/](http://sourceforge.net/projects/mjpg-streamer/)
-- Node.js :  [http://nodejs.org/](http://nodejs.org/)
-- Socket.io:  [http://socket.io/](http://socket.io/)
+Contributions require that you sign a [CLA](https://www.clahub.com/agreements/OpenROV/openrov-software) before the project can accept your pull requests.
 
-Installation
-------------
-
-Step 1
-------
-
-Follow the instructions from our image project to get a starting image: https://github.com/OpenROV/openrov-image.  The default user is *rov* and password is *OpenROV*
-
-Step 2
-------
-
-Go ahead and start up the image in the beaglebone.  If you connect the rov to a router it will use DHCP to get an address. You many need to login to your router and examine the dhcp logs to figure out what IP was assigned.  If you connect directly to a laptop, a static IP of 192.168.254.1 is used.
-Go ahead and SSH on to you rov
-
-a) ssh rov@<address of rov>
-
-Step 3
-------
-
-Customize the name of the image to match your rov#.
-
-
-Change from "openrov" (without quotes) to "openrov-XXXX" (without quotes) - where XXXX is your serial number.
-
-    vi /etc/hosts
-    exit
-
-Step 4
-------
-
-Upload the right firmware on to the arduino that is driving the motors and sensors.  The source code for the arduino is actually installed in the git repo on the beaglebone. The beaglebone has a full arduino development environment and the ability to upload the firmware to the arduino.
-
-Since there are multiple versions of the ROV with multiple possible configurations you have to first tailor the options for the firmware to match your ROV.  It defaults to the stock installation for the *current* shipping ROV kit.
-
-a) from the ssh session: sudo pico /opt/openrov/arduino/OpenROV/Aconfig.h
-
-b) put a 1 for the options you have, a 0 if you don't have the option and save. For most folks you don't need to do anything because the type of board will be automatically detected. In case you could
-
-c) Login to the web session for the rov, choose settings, and select the upload firmware to arduino option.
-
-Updating
-------------
-NOTE: This is changing and may not be working properly.  
-The easiest way to upgrade your installation is to ssh on to
-
-1) ssh on to your rov
-
-2) cd /opt/openrov/cockpit
-
-3) sudo ./update.sh
-
-This will go to the github repository and pull the latest code. You may need to reboot after the update.  There is a known issue where the serial.io project sometimes fails to compile.  You can ignore that, but you may have to try again if it aborts the update.
-
-Plugins
-------------
-You can create your own plugins and share them with the community. Take a look at our [openrov-grunt-init-plugin](https://github.com/openrov/openrov-grunt-init-plugin) project.  
-
-
-How to Contribute
-------------
-
-Contributions require that you sign a [CLA](http://wiki.openrov.com/index.php/Special:SignDocument?doc=9) before the project can accept your pull requests.
-
-1) Fork the project in github
-
-2) Add an issue to the issue list for the changes you want to make.  Browse the issues lists for many of the fixes and enhancement requests if you are looking for ideas.
-
-3) Make your changes and or fixes.
-
-4) Test them locally on your ROV or using the mock framework for node if you don't have one.
-
-5) Send a pull request back to the Master repository.
-
-More details can be found on the [OpenROV Wiki](http://wiki.openrov.com/index.php/Contributing).
-
-Someone on the team will review the pull request and ensure the changes work on the ROVs before approving the pull request.
+For details on how to contribute please review the [Contibuting guide](https://github.com/OpenROV/openrov-rov-suite/blob/master/CONTRIBUTING.md)
 
 License
 -------
 
-MIT License
+There are multiple licenses involved. Please refer to the individual projects for details.
 
-Copyright (C) 2013 OpenROV Inc.
+Our intent is to provide dual licensed software that is free and hackable for non-commerical use and an option for those that do want to use it as part of a commercial offering.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Our documentation, hardware and electronics are licensed with Creative Commons licenses.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Please contact us with an issue on our [forums](https://forum.openrov.com) if you need clarification about the licenses. You can send a Private Message to @badevguru via the forum if you have questions about other licensing options.
