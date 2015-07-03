@@ -26,7 +26,7 @@ There are many projects that make up the software suites used in the OpenROV pro
 If your looking for the latest stable software bundle for the ROV, it is listed on the ROV product page.
 - [2.x series Mini Observation Class ROV product page](http://www.openrov.com/products/2-7.html#downloads)
 
-If your looking for the latest development image, please refer to the [openrov-image readme.md](https://github.com/OpenROV/openrov-image/blob/master/readme.md)
+If your looking for the latest development image, please refer to the [openrov-image readme.md](https://github.com/OpenROV/openrov-image/blob/master/README.md)
 
 ##Reporting issues
 
