@@ -29,12 +29,21 @@ cd src/static
 npm install
 ```
 
-Start the node process in debug mode.
-From the root openrov-cockpit\src folder (modify the settings as needed to change ports or folder locations):
+Start the node process in debug mode.  You can debug the node.js code running in the middleware several different ways. From the root openrov-cockpit\src folder (modify the settings as needed to change ports or folder locations):
+
+using [node-inspector](https://github.com/node-inspector/node-inspector) which uses the debug ide built in to chrome/opera:
+Install node-inspector: `npm install -g node-inspector`
+
+```
+USE_MOCK=true video_port=8092 photoDirectory=/tmp node_debug cockpit.js
+```
+
+Using a command-line debugger: https://nodejs.org/api/debugger.html
+You place a debug `debugger;` statement in your code and the console will break at that point and give you control
+
 ```
 USE_MOCK=true video_port=8092 photoDirectory=/tmp node cockpit.js --debug
 ```
 
-You can debug the node.js code running in the middleware several different ways:
-Using a command-line debugger: https://nodejs.org/api/debugger.html
+
 
