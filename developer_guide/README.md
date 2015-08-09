@@ -3,9 +3,38 @@ The OpenROV suite of software is intended for hacking, extending, and modificati
 
 The ROV images comes fully loaded with an integrated development envionment for making code changes baked in.  
 
-Were going to get started with creating a new image from scratch.  
+Were going to get started with creating a new image from scratch that we can use on the beaglebone.  
 
 We are using a base image that is provided by beaglebone.org and modifying it with custom changes and software loads for OpenROV.  The detailed instructions can be found here: https://github.com/OpenROV/openrov-image/blob/master/build-dev-image.md
 
 So now you have an image with the latest version of both our customizations for the linux rootfs image as well as for the OpenROV software that comes with it.
+
+
+###Local development front-end/middleware without a beaglebone 
+
+You can also develop without any external hardware.  Such development requires mocking out the actual hardware interfaces.
+
+Pre-requistis:
+[node.js](https://nodejs.org)
+
+Begin by forking the [cockpit](https://github.com/openrov/openrov-cockpit) project to your own account on github.
+
+Clone your forked repository to your local computer
+
+From the local folder, install the npm and browser depenencies (2nd call to npm install)
+
+```
+npm install
+cd src/static
+npm install
+```
+
+Start the node process in debug mode.
+From the root openrov-cockpit\src folder (modify the settings as needed to change ports or folder locations):
+```
+USE_MOCK=true video_port=8092 photoDirectory=/tmp node cockpit.js --debug
+```
+
+You can debug the node.js code running in the middleware several different ways:
+Using a command-line debugger: https://nodejs.org/api/debugger.html
 
