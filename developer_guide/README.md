@@ -35,7 +35,7 @@ using [node-inspector](https://github.com/node-inspector/node-inspector) which u
 Install node-inspector: `npm install -g node-inspector`
 
 ```
-USE_MOCK=true video_port=8092 photoDirectory=/tmp node_debug cockpit.js
+USE_MOCK=true video_port=8092 photoDirectory=/tmp node_debug --web-port 3080 cockpit.js
 ```
 
 Using a command-line debugger: https://nodejs.org/api/debugger.html
