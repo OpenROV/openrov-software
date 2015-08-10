@@ -37,6 +37,8 @@ Install node-inspector: `npm install -g node-inspector`
 ```
 USE_MOCK=true video_port=8092 photoDirectory=/tmp node_debug --web-port 3080 cockpit.js
 ```
+The system will attempt to open your browser to the debug url. It also displays the url in your console so that you can connect manually.  You can then open a second browser instant to localhost:8080 to connect to the cockpit web server.  
+
 
 Using a command-line debugger: https://nodejs.org/api/debugger.html
 You place a debug `debugger;` statement in your code and the console will break at that point and give you control
@@ -44,6 +46,3 @@ You place a debug `debugger;` statement in your code and the console will break 
 ```
 USE_MOCK=true video_port=8092 photoDirectory=/tmp node cockpit.js --debug
 ```
-
-
-
