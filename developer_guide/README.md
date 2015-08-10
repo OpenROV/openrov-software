@@ -31,7 +31,7 @@ npm install
 
 Start the node process in debug mode.  You can debug the node.js code running in the middleware several different ways. From the root openrov-cockpit\src folder (modify the settings as needed to change ports or folder locations):
 
-using [node-inspector](https://github.com/node-inspector/node-inspector) which uses the debug ide built in to chrome/opera:
+using [node-inspector](https://github.com/node-inspector/node-inspector) which uses the debug ide built in to chrome/opera.  It has the nice feature of [live editing of running code](https://github.com/node-inspector/node-inspector/wiki/LiveEdit) that are reflected almost instantly in the running applicaiton:
 Install node-inspector: `npm install -g node-inspector`
 
 ```
