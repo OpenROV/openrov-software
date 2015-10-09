@@ -58,6 +58,7 @@ Open a terminal and start node-inspector on a an alternate port
 node-instpector --web-port 3080
 ```
 
+And then in another terminal start the node process
 ```
 USE_MOCK=true video_port=8092 photoDirectory="/tmp" video_url="http://localhost:8092/?action=stream" forever -w -c 'node --debug' cockpit.js
 ```
