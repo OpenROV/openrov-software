@@ -46,3 +46,18 @@ You place a debug `debugger;` statement in your code and the console will break 
 ```
 USE_MOCK=true video_port=8092 photoDirectory=/tmp node cockpit.js --debug
 ```
+
+Another way to debug is to have the system watch for changes to files and to automatically restat the node.js process.
+
+You need to install forever ahead of time `npm install -g forever`
+
+You can then combine node-inspector and forever this way:  (use --debug-brk instead of --debug is you want it to pause and wait for the node-inspector to connect up before starting).
+
+Open a terminal and start node-inspector on a an alternate port
+```
+node-instpector --web-port 3080
+```
+
+```
+USE_MOCK=true video_port=8092 photoDirectory="/tmp" video_url="http://localhost:8092/?action=stream" forever -w -c 'node --debug' cockpit.js
+```
