@@ -55,7 +55,7 @@ You can then combine node-inspector and forever this way:  (use --debug-brk inst
 
 Open a terminal and start node-inspector on a an alternate port
 ```
-node-instpector --web-port 3080
+node-inspector --web-port 3080
 ```
 
 And then in another terminal start the node process
