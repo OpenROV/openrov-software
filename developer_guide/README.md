@@ -62,3 +62,10 @@ And then in another terminal start the node process
 ```
 USE_MOCK=true video_port=8092 photoDirectory="/tmp" video_url="http://localhost:8092/?action=stream" forever -w -c 'node --debug' cockpit.js
 ```
+#### Overriding settings
+All of the settings as saved to the rovconfig.json settings file can be overridden from the command line:
+
+Set environmental variables such as:
+plugins__video__forward_camera_url="http://localhost:8092/?action=stream" plugins__ui_manager__selectedUI="theme_r2"
+
+if the variable name has a '-' in it, on linux, you can use the env command to set the value, env 'plugins__ui-manager__selectedUI=theme_r2'
