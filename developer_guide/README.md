@@ -70,7 +70,7 @@ plugins__video__forward_camera_url="http://localhost:8092/?action=stream" plugin
 
 if the variable name has a '-' in it, on linux, you can use the env command to set the value, env 'plugins__ui-manager__selectedUI=theme_r2'
 
-### System-D Tips
+### System-D Tips (https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs)
 By default the BBB logs in UTC time.  You can see the list of available timezones using:
 
 `timedatectl list-timezones`
