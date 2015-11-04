@@ -69,3 +69,19 @@ Set environmental variables such as:
 plugins__video__forward_camera_url="http://localhost:8092/?action=stream" plugins__ui_manager__selectedUI="theme_r2"
 
 if the variable name has a '-' in it, on linux, you can use the env command to set the value, env 'plugins__ui-manager__selectedUI=theme_r2'
+
+### System-D Tips
+By default the BBB logs in UTC time.  You can see the list of available timezones using:
+
+`timedatectl list-timezones`
+
+See the current timezone: `timedatectl status`
+
+Change the timezone:  `timedatectl set-timezone America/Los_Angeles`
+
+Use journalctl to view the logs
+
+To view the logs of a particular process: `journalctl -u orov-cockpit.service`
+
+
+
