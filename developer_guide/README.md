@@ -25,8 +25,6 @@ From the local folder, install the npm and browser depenencies (2nd call to npm 
 
 ```
 npm install
-cd src/static
-npm install
 ```
 
 Start the node process in debug mode.  You can debug the node.js code running in the middleware several different ways. From the root openrov-cockpit\src folder (modify the settings as needed to change ports or folder locations):
