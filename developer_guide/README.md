@@ -5,7 +5,9 @@ The ROV images comes fully loaded with an integrated development envionment for 
 
 Were going to get started with creating a new image from scratch that we can use on the beaglebone.  
 
-We are using a base image that is provided by beaglebone.org and modifying it with custom changes and software loads for OpenROV.  The detailed instructions can be found here: https://github.com/OpenROV/openrov-image/blob/master/build-dev-image.md
+Build your own image: The detailed instructions can be found here: https://github.com/OpenROV/openrov-image/blob/master/build-dev-image.md
+
+We provide pre-built images that have the current snapshots of our github repos.  You can find those by looking for the dev image announcements in our forum: https://forum.openrov.com/tags/release-notice.
 
 So now you have an image with the latest version of both our customizations for the linux rootfs image as well as for the OpenROV software that comes with it.
 
