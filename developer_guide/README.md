@@ -1,5 +1,5 @@
 
-The OpenROV suite of software is intended for hacking, extending, and modification by everyone.  This guide is intended to get you started on making those changes.  This is a work in progress, feel fee to update this guide and submit pull requests back through github!
+The OpenROV suite of software is intended for hacking, extending, and modification by everyone.  This guide is intended to get you started on making those changes.  This is a work in progress, feel free to update this guide and submit pull requests back through github!
 
 The ROV images comes fully loaded with an integrated development envionment for making code changes baked in.  
 
