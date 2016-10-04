@@ -14,7 +14,7 @@ There are many projects that make up the software suites used in the OpenROV pro
 - [openrov-software-arduino](https://github.com/OpenROV/openrov-software-arduino) : The firmware for the cape and controller board used in the ROV
 
 ###Tools###
-- [openrov-image](https://github.com/OpenROV/openrov-image) : For generating SD card images for the ROV
+- [omap-image-builder](https://github.com/OpenROV-forks/omap-image-builder) : For generating SD card images for the ROV for BeagleBone boards
 - [openrov-grunt-init-plugin](https://github.com/OpenROV/openrov-grunt-init-plugin) : For creating scaffolding to quick start development of a plugin for the openrov-cockpit.
 
 ##Related Non-Software repos##
