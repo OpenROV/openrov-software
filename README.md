@@ -32,6 +32,10 @@ If your looking for the latest development image, please refer to the [openrov-i
 
 All **software** issues, regardless should be reported to [this repositories issue list](https://github.com/OpenROV/openrov-software/issues).
 
+##Roadmap
+
+* For the overal releases for the ROV software: [OpenROVSuite Roadmap](https://github.com/OpenROV/openrov-software/issues/570)
+
 ##How to Contribute##
 
 Contributions require that you sign a [CLA](https://www.clahub.com/agreements/OpenROV/openrov-software) before the project can accept your pull requests.
