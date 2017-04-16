@@ -1,11 +1,12 @@
 
-#OpenROV Software
+# OpenROV Software
 
 "[OpenROV](http://openrov.com/) is a DIY telerobotics community centered around underwater exploration & adventure."
 
+## The various projects
 There are many projects that make up the software suites used in the OpenROV products which include the ROV (remote operated vehicles), the control system, and cloud services.
 
-###On the ROV###
+### On the ROV
 - [openrov-rov-suite](https://github.com/OpenROV/openrov-rov-suite) : Ties together the various projects in to a single distributable package.
 - [openrov-cockpit](https://github.com/OpenROV/openrov-cockpit) : For piloting and ROV control
 - [openrov-dashboard](https://github.com/OpenROV/openrov-dashboard) : For managing the services on the ROV
@@ -13,30 +14,30 @@ There are many projects that make up the software suites used in the OpenROV pro
 - [openrov-proxy](https://github.com/OpenROV/openrov-proxy) : A service that lets the ROV tunnel its internet connections through the connected browser
 - [openrov-software-arduino](https://github.com/OpenROV/openrov-software-arduino) : The firmware for the cape and controller board used in the ROV
 
-###Tools###
+### Tools
 - [omap-image-builder](https://github.com/OpenROV-forks/omap-image-builder) : For generating SD card images for the ROV for BeagleBone boards
 - [openrov-grunt-init-plugin](https://github.com/OpenROV/openrov-grunt-init-plugin) : For creating scaffolding to quick start development of a plugin for the openrov-cockpit.
 
-##Related Non-Software repos##
+### Related Non-Software repos
 - [openrov-hardware](https://github.com/OpenROV/openrov-hardware)
 - [openrov-electronics](https://github.com/OpenROV/electronics)
 
-##Getting latest software
+## Getting latest software
 
 If your looking for the latest stable software bundle for the ROV, it is listed on the ROV product page.
 - [2.x series Mini Observation Class ROV product page](http://www.openrov.com/products/2-7.html#downloads)
 
 If your looking for the latest development image, please refer to the [openrov-image readme.md](https://github.com/OpenROV/openrov-image/blob/master/README.md)
 
-##Reporting issues
+## Reporting issues
 
 All **software** issues, regardless should be reported to [this repositories issue list](https://github.com/OpenROV/openrov-software/issues).
 
-##Roadmap
+## Roadmap
 
 * For the overal releases for the ROV software: [OpenROVSuite Roadmap](https://github.com/OpenROV/openrov-software/issues/570)
 
-##How to Contribute##
+## How to Contribute
 
 Contributions require that you sign a [CLA](https://www.clahub.com/agreements/OpenROV/openrov-software) before the project can accept your pull requests.
 
